@@ -1,0 +1,33 @@
+# Instrucciones para trabajar en este proyecto
+
+@AGENTS.md
+
+1. Antes de empezar, lee `CONTEXTO.md` (qué es H3, qué está decidido y qué no) y `AVANCE.md`.
+2. No inventes datos del negocio. Si algo no está decidido, escríbelo como «sin decidir» y pregúntalo.
+3. **El repositorio es público:** nunca subas llaves, contraseñas, tokens, `.env` ni datos de clientes.
+4. Cada vez que avances, agrega una entrada **arriba** en `AVANCE.md` con:
+   - la fecha;
+   - de 2 a 4 líneas sencillas de lo que se hizo;
+   - una línea «Falta: …».
+
+   Haz commit y push seguido.
+5. Si cambia una decisión o se responde una pregunta abierta, actualiza `CONTEXTO.md`.
+6. Todo el texto visible del sitio va en español de México.
+7. Antes de subir cambios, verifica:
+
+   ```bash
+   npx tsc --noEmit
+   npx eslint .
+   npx next build
+   ```
+
+   Pruebas de punta a punta, con el sitio corriendo:
+
+   ```bash
+   npm run dev
+   node scripts/e2e-public.mjs http://localhost:3000
+   node scripts/e2e-admin.mjs http://localhost:3000
+   ```
+
+   La prueba del panel usa la contraseña de desarrollo local y modifica `data/cars.local.json`;
+   ese archivo está ignorado por git.

@@ -1,36 +1,123 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# H3 Seminuevos — sitio web + panel de administración
 
-## Getting Started
+Sitio para **H3 Seminuevos** (Villahermosa, Tabasco) que reemplaza la tienda de Shopify.
+Muestra el catálogo de autos, manda a los interesados a WhatsApp con el auto ya escrito en el
+mensaje, recibe solicitudes de "Vende tu auto" y tiene un panel donde el dueño sube y edita
+autos desde el celular.
 
-First, run the development server:
+## Qué incluye
+
+**Sitio público** (pensado primero para celular)
+- **Inicio**: hero con fotos del inventario que van rotando, franja animada de marcas, autos destacados,
+  exploración por tipo (SUV, Pickup, Deportivos, Blindados…) y por rango de precio, "¿Por qué H3?",
+  "Vende tu auto", "Recién vendidos" y ubicación/contacto con horario.
+- **Catálogo** (`/autos`): búsqueda, filtros (tipo, marca, precio, año, transmisión) y orden. Los
+  filtros viven en el URL (`/autos?tipo=SUV`), así que se pueden compartir.
+- **Detalle de cada auto** (`/autos/bmw-m3-2018`): galería que se desliza con el dedo, pantalla completa,
+  ficha técnica, etiquetas, descripción, autos similares y botones de WhatsApp ("Me interesa",
+  "Agendar visita"), llamada y compartir. En celular aparece una barra fija de WhatsApp al hacer scroll.
+- **Vende tu auto** (`/vende-tu-auto`): formulario de 3 pasos que arma el mensaje de WhatsApp con los
+  datos del auto. Guarda el borrador en el teléfono.
+- Microanimaciones: aparición al hacer scroll, destellos en botones, transición de la foto de la
+  tarjeta al detalle, líneas de velocidad, etc. Se respetan las preferencias de "reducir movimiento".
+- SEO local: títulos y descripciones por auto, datos estructurados (AutoDealer y Car), `sitemap.xml`,
+  `robots.txt`, imagen para compartir en redes y metadatos en español de México.
+
+**Panel** (`/admin`, protegido con contraseña)
+- Lista del inventario con búsqueda y pestañas (Disponibles / Apartados / Vendidos).
+- Cambiar estado y marcar como destacado con un toque.
+- Alta y edición de autos: fotos (se comprimen solas en el teléfono antes de subir, ~300 KB c/u),
+  reordenar y elegir portada, datos, características, etiquetas, descripción.
+- **Importar de Shopify**: copia los autos y sus fotos del Shopify actual al sitio nuevo con un clic.
+- Al guardar, el sitio público se actualiza al instante.
+
+Estados de un auto:
+- **Disponible**: visible en el catálogo.
+- **Apartado**: visible con etiqueta amarilla "Apartado".
+- **Vendido**: sale del catálogo y aparece en "Recién vendidos" en el inicio (prueba social). Su página
+  sigue existiendo y el botón cambia a "Búscame uno similar".
+
+## Tecnología
+
+- Next.js 16 (App Router, Cache Components) + React 19 + Tailwind CSS 4.
+- **Upstash Redis** (integración gratuita del Marketplace de Vercel) para guardar el inventario.
+- **Vercel Blob** para las fotos.
+- Sin base de datos ni servicios de pago adicionales.
+
+Las páginas públicas se generan estáticas y se sirven desde el CDN; solo se regeneran cuando cambias
+algo en el panel. Eso las hace muy rápidas y casi no consumen recursos del plan.
+
+## Publicar en Vercel (paso a paso)
+
+> El hosting final está **sin decidir** (Vercel Pro o Netlify; ver `CONTEXTO.md`). Estos pasos son
+> para Vercel, que es para lo que está preparado el código hoy.
+
+1. **Sube el código a GitHub** (un repositorio privado está bien).
+2. En [vercel.com](https://vercel.com) → **Add New → Project** → importa el repositorio → **Deploy**.
+   El primer despliegue funciona en "modo demo" con el inventario actual de ejemplo.
+3. **Base de datos**: en el proyecto → pestaña **Storage** → **Create Database** →
+   **Upstash for Redis** (plan Free) → conéctala al proyecto (deja el prefijo de variables por defecto,
+   `KV`).
+4. **Fotos**: en **Storage** → **Create** → **Blob** (acceso público) → conéctalo al proyecto.
+5. **Variables de entorno**: en **Settings → Environment Variables** agrega:
+   - `ADMIN_PASSWORD`: la contraseña del panel (larga, por ejemplo 4 palabras al azar).
+   - `AUTH_SECRET`: texto largo y aleatorio (`openssl rand -base64 32`).
+   - `NEXT_PUBLIC_SITE_URL`: `https://www.h3seminuevos.com`
+6. **Redeploy** (Deployments → ⋯ → Redeploy) para que tome las variables.
+7. Entra a `https://TU-PROYECTO.vercel.app/admin` → **Importar de Shopify** → **Buscar** →
+   **Importar seleccionados**. Revisa los autos importados y ajusta lo que haga falta.
+8. **Dominio**: en **Settings → Domains** agrega `h3seminuevos.com` y `www.h3seminuevos.com` y cambia
+   los DNS donde esté registrado el dominio según lo que indique Vercel.
+   - Si el dominio se compró **dentro de Shopify**, primero transfiérelo a otro registrador
+     (o apunta sus DNS a Vercel) **antes** de cancelar Shopify.
+9. Cuando todo funcione con el dominio, **cancela Shopify**. Importa los autos *antes* de cancelar:
+   después las fotos de Shopify dejan de existir.
+
+## Costos
+
+| Concepto | Costo |
+| --- | --- |
+| Upstash Redis (Free) | $0 (sobra para cientos de autos) |
+| Vercel Blob | Incluido en el plan (Hobby: ~1 GB de fotos; con fotos comprimidas caben miles) |
+| Dominio `.com` | ~$12–20 USD al año (el que ya tienen) |
+| Hosting Vercel | Ver nota ↓ |
+
+> **Importante sobre el plan de Vercel**: el plan gratuito **Hobby** es solo para uso personal y no
+> comercial según las reglas de uso de Vercel; un negocio que vende autos cuenta como uso comercial.
+> El plan que lo permite es **Pro** ($20 USD/mes). Antes de publicar, decidan entre:
+> 1. **Vercel Pro**: lo más simple y oficial, pero cuesta casi lo mismo que Shopify.
+> 2. **Otro hosting con plan gratuito comercial** (por ejemplo Netlify): el sitio es Next.js estándar y
+>    Redis funciona igual; solo hay que cambiar Vercel Blob por otro almacenamiento de fotos
+>    (`lib/images.ts`, `lib/upload-client.ts` y `app/api/upload`).
+
+## Editar datos del negocio
+
+Todo está en [`lib/site.ts`](lib/site.ts): WhatsApp, teléfono, dirección, horario (`hours` y
+`openingHours`), redes sociales y ciudades que atienden.
+
+## Desarrollo local
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Sin variables de entorno, el sitio usa `data/seed.json` (el inventario actual).
+- En local, el panel (`/admin`, contraseña `h3admin`) guarda en `data/cars.local.json` y las fotos en
+  `public/uploads/` (ambos ignorados por git).
+- Para usar los servicios reales en local: `vercel env pull .env.local`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Estructura
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+app/(site)/          páginas públicas (inicio, catálogo, detalle, vende tu auto)
+app/admin/           panel de administración
+app/api/upload/      tokens para subir fotos directo a Vercel Blob
+components/          interfaz (tarjetas, galería, filtros, formularios…)
+lib/site.ts          datos del negocio
+lib/cars.ts          tipos, formatos y mensajes de WhatsApp
+lib/data.ts          lecturas cacheadas para el sitio público
+lib/storage.ts       inventario en Redis (o archivo local en demo)
+lib/actions.ts       acciones del panel (guardar, borrar, importar…)
+proxy.ts             protege /admin
+```
