@@ -33,11 +33,11 @@ const FEATURE_IDEAS = [
 ];
 
 const field =
-  "h-12 w-full rounded-xl border border-line bg-ink-3 px-4 text-fg placeholder:text-dim focus:border-brand focus:outline-none";
+  "h-12 w-full rounded-xl border border-line bg-soft px-4 text-fg placeholder:text-dim focus:border-brand focus:outline-none";
 
 function Section({ title, hint, children }: { title: string; hint?: string; children: ReactNode }) {
   return (
-    <section className="rounded-3xl border border-line bg-ink-2 p-4 sm:p-6">
+    <section className="rounded-3xl border border-line bg-card p-4 sm:p-6">
       <h2 className="font-display text-xl">{title}</h2>
       {hint && <p className="mt-1 text-sm text-mute">{hint}</p>}
       <div className="mt-5 space-y-4">{children}</div>
@@ -82,7 +82,7 @@ function Pills<T extends string>({
             aria-checked={value === o}
             onClick={() => onChange(value === o && allowEmpty ? undefined : o)}
             className={`h-10 rounded-full border px-4 text-sm font-medium transition-colors ${
-              value === o ? "border-brand bg-brand text-white" : "border-line bg-ink-3 text-fg/80"
+              value === o ? "border-brand bg-brand text-white" : "border-line bg-soft text-fg/80"
             }`}
           >
             {o}
@@ -243,7 +243,7 @@ export function CarForm({ initial, uploadMode }: { initial?: Car; uploadMode: "b
 
       <Section title="Fotos" hint="La primera es la portada. Se comprimen solas antes de subir.">
         {uploadMode === "none" ? (
-          <p className="rounded-xl bg-ink-3 p-4 text-sm text-mute">
+          <p className="rounded-xl bg-soft p-4 text-sm text-mute">
             Conecta Vercel Blob para poder subir fotos (ver README).
           </p>
         ) : (
@@ -267,7 +267,7 @@ export function CarForm({ initial, uploadMode }: { initial?: Car; uploadMode: "b
                 e.preventDefault();
                 addFiles(e.dataTransfer.files);
               }}
-              className="flex w-full flex-col items-center gap-2 rounded-2xl border-2 border-dashed border-line bg-ink-3/50 px-4 py-8 text-center transition-colors hover:border-brand/60"
+              className="flex w-full flex-col items-center gap-2 rounded-2xl border-2 border-dashed border-line bg-soft/50 px-4 py-8 text-center transition-colors hover:border-brand/60"
             >
               <ImagePlus className="size-8 text-brand-hi" />
               <span className="font-semibold">Agregar fotos</span>
@@ -287,7 +287,7 @@ export function CarForm({ initial, uploadMode }: { initial?: Car; uploadMode: "b
                   if (dragIndex !== null) move(dragIndex, i);
                   setDragIndex(null);
                 }}
-                className={`group relative aspect-[3/4] overflow-hidden rounded-xl bg-ink-3 ring-2 ${
+                className={`group relative aspect-[3/4] overflow-hidden rounded-xl bg-soft ring-2 ${
                   i === 0 ? "ring-brand" : "ring-transparent"
                 } ${dragIndex === i ? "opacity-40" : ""}`}
               >
@@ -306,9 +306,9 @@ export function CarForm({ initial, uploadMode }: { initial?: Car; uploadMode: "b
                   </div>
                 )}
                 {p.error && (
-                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-ink/80 p-2 text-center text-[11px] text-brand-hi">
+                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-paper/80 p-2 text-center text-[11px] text-brand-hi">
                     {p.error}
-                    <button type="button" onClick={() => setPhotos((ps) => ps.filter((x) => x.key !== p.key))} className="rounded-full bg-ink-3 px-3 py-1 text-fg">
+                    <button type="button" onClick={() => setPhotos((ps) => ps.filter((x) => x.key !== p.key))} className="rounded-full bg-soft px-3 py-1 text-fg">
                       Quitar
                     </button>
                   </div>
@@ -324,21 +324,21 @@ export function CarForm({ initial, uploadMode }: { initial?: Car; uploadMode: "b
                         setPhotos((ps) => ps.filter((x) => x.key !== p.key));
                         setDirty(true);
                       }}
-                      className="absolute top-1 right-1 grid size-7 place-items-center rounded-full bg-ink/80 text-brand-hi"
+                      className="absolute top-1 right-1 grid size-7 place-items-center rounded-full bg-paper/80 text-brand-hi"
                       aria-label="Quitar foto"
                     >
                       <Trash2 className="size-3.5" />
                     </button>
                     <div className="absolute inset-x-1 bottom-1 flex items-center justify-between">
-                      <button type="button" onClick={() => move(i, i - 1)} disabled={i === 0} className="grid size-7 place-items-center rounded-full bg-ink/80 disabled:opacity-30" aria-label="Mover a la izquierda">
+                      <button type="button" onClick={() => move(i, i - 1)} disabled={i === 0} className="grid size-7 place-items-center rounded-full bg-paper/80 disabled:opacity-30" aria-label="Mover a la izquierda">
                         <ArrowLeft className="size-3.5" />
                       </button>
                       {i !== 0 && (
-                        <button type="button" onClick={() => move(i, 0)} className="grid size-7 place-items-center rounded-full bg-ink/80" aria-label="Usar como portada">
+                        <button type="button" onClick={() => move(i, 0)} className="grid size-7 place-items-center rounded-full bg-paper/80" aria-label="Usar como portada">
                           <Star className="size-3.5" />
                         </button>
                       )}
-                      <button type="button" onClick={() => move(i, i + 1)} disabled={i === photos.length - 1} className="grid size-7 place-items-center rounded-full bg-ink/80 disabled:opacity-30" aria-label="Mover a la derecha">
+                      <button type="button" onClick={() => move(i, i + 1)} disabled={i === photos.length - 1} className="grid size-7 place-items-center rounded-full bg-paper/80 disabled:opacity-30" aria-label="Mover a la derecha">
                         <ArrowRight className="size-3.5" />
                       </button>
                     </div>
@@ -375,7 +375,7 @@ export function CarForm({ initial, uploadMode }: { initial?: Car; uploadMode: "b
               <input className={`${field} pl-8`} value={withCommas(v.price)} onChange={(e) => set("price", digits(e.target.value).slice(0, 9))} inputMode="numeric" placeholder="650,000" required />
             </div>
           </Field>
-          <Field label="Kilometraje" hint="Vacío = «Consultar»">
+          <Field label="Kilometraje" hint="Vacío = «Pregúntanos» por WhatsApp">
             <input className={field} value={withCommas(v.mileage)} onChange={(e) => set("mileage", digits(e.target.value).slice(0, 7))} inputMode="numeric" placeholder="45,000" />
           </Field>
         </div>
@@ -399,7 +399,7 @@ export function CarForm({ initial, uploadMode }: { initial?: Car; uploadMode: "b
             <input className={field} value={v.doors} onChange={(e) => set("doors", digits(e.target.value).slice(0, 1))} inputMode="numeric" placeholder="4" />
           </Field>
         </div>
-        <label className="flex items-center justify-between gap-4 rounded-xl bg-ink-3 p-4">
+        <label className="flex items-center justify-between gap-4 rounded-xl bg-soft p-4">
           <span>
             <span className="block font-medium">Blindado</span>
             <span className="text-sm text-mute">Aparece en la categoría «Blindados»</span>
@@ -433,7 +433,7 @@ export function CarForm({ initial, uploadMode }: { initial?: Car; uploadMode: "b
             placeholder="Ej. Escape modificado"
             maxLength={60}
           />
-          <button type="button" onClick={() => addFeature(featureDraft)} className="grid size-12 shrink-0 place-items-center rounded-xl bg-ink-4" aria-label="Agregar">
+          <button type="button" onClick={() => addFeature(featureDraft)} className="grid size-12 shrink-0 place-items-center rounded-xl bg-soft-2" aria-label="Agregar">
             <Plus className="size-5" />
           </button>
         </div>
@@ -473,7 +473,7 @@ export function CarForm({ initial, uploadMode }: { initial?: Car; uploadMode: "b
               ? "sigue visible con la etiqueta «Apartado»."
               : "visible en el catálogo."}
         </p>
-        <label className="flex items-center justify-between gap-4 rounded-xl bg-ink-3 p-4">
+        <label className="flex items-center justify-between gap-4 rounded-xl bg-soft p-4">
           <span>
             <span className="block font-medium">Destacado</span>
             <span className="text-sm text-mute">Aparece primero en el inicio</span>
@@ -482,7 +482,7 @@ export function CarForm({ initial, uploadMode }: { initial?: Car; uploadMode: "b
         </label>
       </Section>
 
-      <div className="sticky bottom-0 z-30 -mx-4 border-t border-line bg-ink/90 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur-xl">
+      <div className="sticky bottom-0 z-30 -mx-4 border-t border-line bg-paper/90 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur-xl">
         <div className="flex gap-3">
           <Link href="/admin" className="inline-flex h-14 items-center rounded-full border border-line px-5 font-medium">
             Cancelar

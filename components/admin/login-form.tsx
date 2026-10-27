@@ -18,7 +18,7 @@ export function LoginForm() {
           required
           autoFocus
           placeholder="Contraseña"
-          className={`h-14 w-full rounded-2xl border bg-ink-2 pr-14 pl-5 text-fg placeholder:text-dim focus:border-brand focus:outline-none ${
+          className={`h-14 w-full rounded-2xl border bg-card pr-14 pl-5 text-fg placeholder:text-dim focus:border-brand focus:outline-none ${
             state?.error ? "border-brand" : "border-line"
           }`}
         />

@@ -47,7 +47,7 @@ export function Gallery({ images, alt, carId, sold }: Props) {
 
   return (
     <div className="relative">
-      <div className="group relative overflow-hidden bg-ink-3 lg:rounded-3xl">
+      <div className="group relative overflow-hidden bg-soft lg:rounded-3xl">
         <div
           ref={track}
           className="no-scrollbar flex aspect-[4/5] snap-x snap-mandatory overflow-x-auto overscroll-x-contain lg:aspect-[5/6]"
@@ -70,7 +70,7 @@ export function Gallery({ images, alt, carId, sold }: Props) {
                     fill
                     preload
                     fetchPriority="high"
-                    sizes="(min-width: 1024px) 56vw, 100vw"
+                    sizes="(min-width: 1024px) 56vw, 70vw"
                     quality={70}
                     className={`object-cover ${sold ? "grayscale" : ""}`}
                   />
@@ -80,7 +80,7 @@ export function Gallery({ images, alt, carId, sold }: Props) {
                   src={src}
                   alt={`${alt}, foto ${i + 1}`}
                   fill
-                  sizes="(min-width: 1024px) 56vw, 100vw"
+                  sizes="(min-width: 1024px) 56vw, 70vw"
                   quality={70}
                   className={`object-cover ${sold ? "grayscale" : ""}`}
                 />
@@ -91,7 +91,7 @@ export function Gallery({ images, alt, carId, sold }: Props) {
           ))}
         </div>
 
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-ink/80 to-transparent lg:h-20" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-night/45 to-transparent lg:h-20" />
 
         {/* Progreso */}
         <div className="pointer-events-none absolute inset-x-4 bottom-10 flex gap-1 lg:bottom-4">
@@ -105,7 +105,7 @@ export function Gallery({ images, alt, carId, sold }: Props) {
             </span>
           ))}
         </div>
-        <span className="font-tech pointer-events-none absolute right-4 bottom-14 rounded-full bg-ink/70 px-2.5 py-1 text-[11px] backdrop-blur-md lg:top-4 lg:bottom-auto">
+        <span className="font-tech pointer-events-none absolute right-4 bottom-14 rounded-full bg-card/90 px-2.5 py-1 text-[11px] shadow-sm backdrop-blur-md lg:top-4 lg:bottom-auto">
           {index + 1} / {total}
         </span>
 
@@ -115,7 +115,7 @@ export function Gallery({ images, alt, carId, sold }: Props) {
               type="button"
               onClick={() => go(-1)}
               disabled={index === 0}
-              className="absolute top-1/2 left-4 hidden size-12 -translate-y-1/2 place-items-center rounded-full bg-ink/70 opacity-0 backdrop-blur-md transition-all group-hover:opacity-100 hover:bg-ink disabled:invisible lg:grid"
+              className="absolute top-1/2 left-4 hidden size-12 -translate-y-1/2 place-items-center rounded-full bg-card/90 opacity-0 shadow-md backdrop-blur-md transition-all group-hover:opacity-100 hover:bg-paper disabled:invisible lg:grid"
               aria-label="Foto anterior"
             >
               <ChevronLeft className="size-6" />
@@ -124,7 +124,7 @@ export function Gallery({ images, alt, carId, sold }: Props) {
               type="button"
               onClick={() => go(1)}
               disabled={index === total - 1}
-              className="absolute top-1/2 right-4 hidden size-12 -translate-y-1/2 place-items-center rounded-full bg-ink/70 opacity-0 backdrop-blur-md transition-all group-hover:opacity-100 hover:bg-ink disabled:invisible lg:grid"
+              className="absolute top-1/2 right-4 hidden size-12 -translate-y-1/2 place-items-center rounded-full bg-card/90 opacity-0 shadow-md backdrop-blur-md transition-all group-hover:opacity-100 hover:bg-paper disabled:invisible lg:grid"
               aria-label="Foto siguiente"
             >
               <ChevronRight className="size-6" />
@@ -134,7 +134,7 @@ export function Gallery({ images, alt, carId, sold }: Props) {
         <button
           type="button"
           onClick={() => setLightbox(index)}
-          className="absolute top-4 left-4 hidden size-10 place-items-center rounded-full bg-ink/70 backdrop-blur-md transition-transform hover:scale-110 lg:grid"
+          className="absolute top-4 left-4 hidden size-10 place-items-center rounded-full bg-card/90 shadow-md backdrop-blur-md transition-transform hover:scale-110 lg:grid"
           aria-label="Pantalla completa"
         >
           <Expand className="size-4" />

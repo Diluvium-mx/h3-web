@@ -12,7 +12,8 @@ export const SOCIALS = [
 
 export function Footer() {
   return (
-    <footer className="relative overflow-hidden border-t border-line bg-ink-2">
+    <footer className="relative overflow-hidden border-t border-line bg-card">
+      <div className="h-1.5 bg-gradient-to-r from-brand from-60% to-volt" aria-hidden="true" />
       <div className="pointer-events-none absolute -bottom-6 left-0 right-0 select-none overflow-hidden">
         <p className="font-display text-outline whitespace-nowrap text-[22vw] leading-none opacity-[0.07] md:text-[16vw]">
           Ready to drive
@@ -20,7 +21,7 @@ export function Footer() {
       </div>
       <div className="relative mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
-          <Image src="/brand/logo.png" alt={site.name} width={344} height={220} className="h-16 w-auto" />
+          <Image src="/brand/logo-dark.png" alt={site.name} width={344} height={220} className="h-16 w-auto" />
           <p className="mt-5 max-w-sm text-sm leading-relaxed text-mute">{site.description}</p>
           <div className="mt-6 flex gap-2">
             {SOCIALS.map(({ href, label, Icon }) => (
@@ -70,9 +71,9 @@ export function Footer() {
                 href={whatsappUrl(`Hola ${site.name} 👋`)}
                 target="_blank"
                 rel="noopener"
-                className="flex items-center gap-2 hover:text-wa"
+                className="flex items-center gap-2 hover:text-wa-dark"
               >
-                <WhatsAppIcon className="size-4 text-wa" /> WhatsApp
+                <WhatsAppIcon className="size-4 text-wa-dark" /> WhatsApp
               </a>
             </li>
             {site.hours && <li className="text-mute">{site.hours}</li>}

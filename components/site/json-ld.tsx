@@ -21,7 +21,7 @@ export function LocalBusinessJsonLd() {
         description: site.description,
         url: site.url,
         image: `${site.url}/opengraph-image.jpg`,
-        logo: `${site.url}/brand/logo.png`,
+        logo: `${site.url}/brand/logo-dark.png`,
         telephone: "+52 993 246 7572",
         address: {
           "@type": "PostalAddress",
@@ -36,7 +36,7 @@ export function LocalBusinessJsonLd() {
           opens: site.openingHours.opens,
           closes: site.openingHours.closes,
         },
-        areaServed: site.serviceArea.map((name) => ({ "@type": "City", name })),
+        areaServed: { "@type": "City", name: `${site.address.city}, ${site.address.state}` },
         sameAs: Object.values(site.socials),
       }}
     />

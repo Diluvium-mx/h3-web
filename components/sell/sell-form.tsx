@@ -16,7 +16,6 @@ type Data = {
   factura: string;
   duenos: string;
   nombre: string;
-  ciudad: string;
   precio: string;
   comentarios: string;
 };
@@ -32,7 +31,6 @@ const INITIAL: Data = {
   factura: "",
   duenos: "",
   nombre: "",
-  ciudad: "Villahermosa",
   precio: "",
   comentarios: "",
 };
@@ -41,7 +39,7 @@ const STORAGE_KEY = "h3-vende-borrador";
 const STEPS = ["Tu auto", "Detalles", "Contacto"];
 
 const field =
-  "h-13 w-full rounded-2xl border border-line bg-ink-3 px-4 text-fg placeholder:text-dim transition-colors focus:border-brand focus:outline-none";
+  "h-13 w-full rounded-2xl border border-line bg-soft px-4 text-fg placeholder:text-dim transition-colors focus:border-brand focus:outline-none";
 
 function Options({
   value,
@@ -64,7 +62,7 @@ function Options({
           aria-checked={value === o}
           onClick={() => onChange(value === o ? "" : o)}
           className={`h-11 rounded-full border px-4 text-sm font-medium transition-all duration-300 active:scale-95 ${
-            value === o ? "border-brand bg-brand text-white" : "border-line bg-ink-3 text-fg/80 hover:border-fg/30"
+            value === o ? "border-brand bg-brand text-white" : "border-line bg-soft text-fg/80 hover:border-fg/30"
           }`}
         >
           {o}
@@ -141,7 +139,7 @@ export function SellForm() {
       d.precio ? `💰 Precio esperado: $${d.precio}` : null,
       d.comentarios ? `📝 ${d.comentarios}` : null,
       "",
-      `Soy ${d.nombre}, de ${d.ciudad}. Les envío fotos por aquí 📸`,
+      `Soy ${d.nombre}. Les envío fotos por aquí 📸`,
     ];
     return lines.filter((l) => l !== null).join("\n");
   }
@@ -160,7 +158,7 @@ export function SellForm() {
   }
 
   return (
-    <form onSubmit={submit} className="rounded-[2rem] border border-line bg-ink-2 p-5 sm:p-8" noValidate>
+    <form onSubmit={submit} className="rounded-[2rem] border border-line bg-card p-5 sm:p-8" noValidate>
       {/* Progreso */}
       <ol className="mb-8 grid grid-cols-3 gap-2" aria-label="Pasos">
         {STEPS.map((label, i) => (
@@ -171,7 +169,7 @@ export function SellForm() {
               className="w-full text-left"
               aria-current={i === step ? "step" : undefined}
             >
-              <span className="block h-1.5 overflow-hidden rounded-full bg-ink-4">
+              <span className="block h-1.5 overflow-hidden rounded-full bg-soft-2">
                 <span
                   className={`block h-full origin-left bg-brand transition-transform duration-700 ease-[var(--ease-out-expo)] ${
                     i <= step ? "scale-x-100" : "scale-x-0"
@@ -253,15 +251,6 @@ export function SellForm() {
               <input className={field} value={d.nombre} onChange={(e) => set("nombre")(e.target.value)} placeholder="¿Cómo te llamas?" autoComplete="given-name" />
             </label>
             <label className="block">
-              <Label>Ciudad</Label>
-              <select className={field} value={d.ciudad} onChange={(e) => set("ciudad")(e.target.value)}>
-                {site.serviceArea.map((c) => (
-                  <option key={c}>{c}</option>
-                ))}
-                <option>Otra</option>
-              </select>
-            </label>
-            <label className="block">
               <Label hint="Opcional">¿Cuánto esperas recibir?</Label>
               <input
                 className={field}
@@ -284,8 +273,8 @@ export function SellForm() {
                 rows={3}
               />
             </label>
-            <p className="flex items-start gap-2 rounded-2xl bg-ink-3 p-4 text-sm text-mute">
-              <Camera className="mt-0.5 size-4 shrink-0 text-volt" />
+            <p className="flex items-start gap-2 rounded-2xl bg-soft p-4 text-sm text-mute">
+              <Camera className="mt-0.5 size-4 shrink-0 text-brand" />
               Se abrirá WhatsApp con tus datos listos. Después solo envía 4–6 fotos de tu auto (frente, lados, interior y tablero).
             </p>
           </>
@@ -324,7 +313,7 @@ export function SellForm() {
         ) : (
           <button
             type="submit"
-            className="btn-shine group inline-flex h-14 flex-1 items-center justify-center gap-2 rounded-full bg-wa font-bold text-ink active:scale-[0.98]"
+            className="btn-shine group inline-flex h-14 flex-1 items-center justify-center gap-2 rounded-full bg-wa font-bold text-night active:scale-[0.98]"
           >
             <WhatsAppIcon className="size-6 transition-transform group-hover:-rotate-12" />
             Enviar por WhatsApp

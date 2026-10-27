@@ -30,22 +30,6 @@ export const site = {
     facebook: "https://www.facebook.com/H3Seminuevos",
     tiktok: "https://www.tiktok.com/@homeronatal",
   },
-  // Ciudades que atienden (SEO local y formulario de venta)
-  serviceArea: [
-    "Villahermosa",
-    "Nacajuca",
-    "Cárdenas",
-    "Comalcalco",
-    "Cunduacán",
-    "Paraíso",
-    "Jalpa de Méndez",
-    "Macuspana",
-    "Teapa",
-    "Huimanguillo",
-    "Ciudad del Carmen",
-    "Coatzacoalcos",
-    "Palenque",
-  ],
 } as const;
 
 export function whatsappUrl(message: string) {

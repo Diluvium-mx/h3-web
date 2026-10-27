@@ -8,8 +8,8 @@ import { deleteCarAction, updateCarAction } from "@/lib/actions";
 import { STATUS_LABEL, STATUSES, carName, formatKm, formatPrice, type Car, type CarStatus } from "@/lib/cars";
 
 const STATUS_STYLE: Record<CarStatus, string> = {
-  disponible: "bg-wa/15 text-wa",
-  apartado: "bg-volt/15 text-volt",
+  disponible: "bg-wa/15 text-wa-dark",
+  apartado: "bg-volt text-night",
   vendido: "bg-fg/10 text-mute",
 };
 
@@ -39,7 +39,7 @@ export function AdminCarList({ cars }: { cars: Car[] }) {
             type="button"
             onClick={() => setTab(s)}
             className={`h-10 shrink-0 rounded-full border px-4 text-sm font-medium transition-colors ${
-              tab === s ? "border-fg bg-fg text-ink" : "border-line text-fg/80"
+              tab === s ? "border-night bg-night text-white" : "border-line text-fg/80"
             }`}
           >
             {s === "todos" ? "Todos" : STATUS_LABEL[s] + "s"} <span className="opacity-60">{counts[s]}</span>
@@ -54,7 +54,7 @@ export function AdminCarList({ cars }: { cars: Car[] }) {
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Buscar por marca, modelo o año"
-          className="h-12 w-full rounded-2xl border border-line bg-ink-2 pr-4 pl-11 focus:border-brand focus:outline-none"
+          className="h-12 w-full rounded-2xl border border-line bg-card pr-4 pl-11 focus:border-brand focus:outline-none"
         />
       </label>
       {error && (
@@ -86,14 +86,14 @@ function Row({ car, onError }: { car: Car; onError: (e: string) => void }) {
 
   return (
     <li
-      className={`relative flex gap-3 rounded-2xl border border-line bg-ink-2 p-3 transition-opacity ${pending ? "opacity-60" : ""}`}
+      className={`relative flex gap-3 rounded-2xl border border-line bg-card p-3 transition-opacity ${pending ? "opacity-60" : ""}`}
     >
-      <Link href={`/admin/autos/${car.id}`} className="relative size-20 shrink-0 overflow-hidden rounded-xl bg-ink-3 sm:size-24">
+      <Link href={`/admin/autos/${car.id}`} className="relative size-20 shrink-0 overflow-hidden rounded-xl bg-soft sm:size-24">
         {car.images[0] && (
           <Image src={car.images[0]} alt="" fill sizes="96px" quality={70} className="object-cover" />
         )}
         {car.featured && (
-          <span className="absolute top-1 left-1 grid size-6 place-items-center rounded-full bg-volt text-ink">
+          <span className="absolute top-1 left-1 grid size-6 place-items-center rounded-full bg-volt text-night">
             <Star className="size-3.5 fill-current" />
           </span>
         )}
@@ -119,7 +119,7 @@ function Row({ car, onError }: { car: Car; onError: (e: string) => void }) {
               className={`h-9 appearance-none rounded-full border-0 px-3 pr-7 text-xs font-semibold ${STATUS_STYLE[car.status]}`}
             >
               {STATUSES.map((s) => (
-                <option key={s} value={s} className="bg-ink-2 text-fg">
+                <option key={s} value={s} className="bg-card text-fg">
                   {STATUS_LABEL[s]}
                 </option>
               ))}
@@ -130,7 +130,7 @@ function Row({ car, onError }: { car: Car; onError: (e: string) => void }) {
             type="button"
             onClick={() => run(() => updateCarAction(car.id, { featured: !car.featured }))}
             className={`inline-flex h-9 items-center gap-1 rounded-full border px-3 text-xs font-medium ${
-              car.featured ? "border-volt/50 text-volt" : "border-line text-mute"
+              car.featured ? "border-volt bg-volt text-night" : "border-line text-mute"
             }`}
             aria-pressed={car.featured}
           >
@@ -141,14 +141,14 @@ function Row({ car, onError }: { car: Car; onError: (e: string) => void }) {
             <Link
               href={`/autos/${car.slug}`}
               target="_blank"
-              className="grid size-9 place-items-center rounded-full text-mute hover:bg-ink-3 hover:text-fg"
+              className="grid size-9 place-items-center rounded-full text-mute hover:bg-soft hover:text-fg"
               aria-label="Ver en el sitio"
             >
               <ExternalLink className="size-4" />
             </Link>
             <Link
               href={`/admin/autos/${car.id}`}
-              className="grid size-9 place-items-center rounded-full text-mute hover:bg-ink-3 hover:text-fg"
+              className="grid size-9 place-items-center rounded-full text-mute hover:bg-soft hover:text-fg"
               aria-label="Editar"
             >
               <Pencil className="size-4" />
@@ -165,7 +165,7 @@ function Row({ car, onError }: { car: Car; onError: (e: string) => void }) {
         </div>
       </div>
       {confirm && (
-        <div className="absolute inset-0 z-10 flex items-center justify-between gap-3 rounded-2xl bg-ink-3/95 px-4 backdrop-blur-sm animate-fade">
+        <div className="absolute inset-0 z-10 flex items-center justify-between gap-3 rounded-2xl bg-soft/95 px-4 backdrop-blur-sm animate-fade">
           <p className="text-sm">
             ¿Eliminar <b>{car.model}</b> y sus fotos?
           </p>

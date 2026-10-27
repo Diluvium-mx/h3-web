@@ -30,14 +30,14 @@ export function FeaturedCars({ cars }: { cars: Car[] }) {
             key={car.id}
             car={car}
             className="w-[80vw] max-w-[340px] shrink-0 snap-start lg:w-auto lg:max-w-none"
-            sizes="(min-width: 1024px) 24vw, 80vw"
+            sizes="(min-width: 1024px) 24vw, 45vw"
           />
         ))}
       </div>
       <div className="mt-6 px-4 sm:hidden">
         <Link
           href="/autos"
-          className="flex h-14 items-center justify-center gap-2 rounded-full border border-line bg-ink-3 font-semibold active:scale-95"
+          className="flex h-14 items-center justify-center gap-2 rounded-full border border-line bg-soft font-semibold active:scale-95"
         >
           Ver todo el catálogo <ArrowRight className="size-4" />
         </Link>
@@ -73,7 +73,7 @@ export function Categories({ cars }: { cars: Car[] }) {
           <Link
             key={t.name}
             href={`/autos?tipo=${encodeURIComponent(t.name)}`}
-            className="reveal group relative aspect-[3/4] w-40 shrink-0 snap-start overflow-hidden rounded-2xl bg-ink-3 ring-1 ring-line sm:w-48 lg:w-[calc((100%-5*0.75rem)/6)]"
+            className="reveal group relative aspect-[3/4] w-40 shrink-0 snap-start overflow-hidden rounded-2xl bg-soft ring-1 ring-line sm:w-48 lg:w-[calc((100%-5*0.75rem)/6)]"
             style={vars({ "--i": i })}
           >
             {t.cover && (
@@ -83,13 +83,13 @@ export function Categories({ cars }: { cars: Car[] }) {
                 fill
                 sizes="200px"
                 quality={70}
-                className="object-cover object-[50%_60%] opacity-70 transition-all duration-700 ease-[var(--ease-out-expo)] group-hover:scale-110 group-hover:opacity-90"
+                className="object-cover object-[50%_60%] transition-transform duration-700 ease-[var(--ease-out-expo)] group-hover:scale-110"
               />
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-night/85 via-night/25 to-transparent" />
             <div className="absolute inset-x-0 bottom-0 p-4">
-              <p className="font-display text-xl">{t.name === "Deportivo" ? "Deportivos" : t.name === "Blindado" ? "Blindados" : t.name}</p>
-              <p className="mt-1 text-xs text-mute">
+              <p className="font-display text-xl text-white">{t.name === "Deportivo" ? "Deportivos" : t.name === "Blindado" ? "Blindados" : t.name}</p>
+              <p className="mt-1 text-xs text-white/85">
                 {t.list.length} {t.list.length === 1 ? "auto" : "autos"}
               </p>
             </div>
@@ -102,7 +102,7 @@ export function Categories({ cars }: { cars: Car[] }) {
           <Link
             key={r.value}
             href={`/autos?precio=${r.value}`}
-            className="rounded-full border border-line bg-ink-2 px-4 py-2.5 text-sm font-medium text-fg/85 transition-all hover:-translate-y-0.5 hover:border-brand hover:text-fg active:scale-95"
+            className="rounded-full border border-line bg-card px-4 py-2.5 text-sm font-medium text-fg/85 transition-all hover:-translate-y-0.5 hover:border-brand hover:text-fg active:scale-95"
           >
             {r.label}
           </Link>
@@ -139,7 +139,7 @@ export function WhyUs() {
           {REASONS.map(({ Icon, title, text }, i) => (
             <article
               key={title}
-              className="reveal group relative overflow-hidden rounded-3xl border border-line bg-ink-2 p-6 transition-colors duration-500 hover:border-brand/40 sm:p-8"
+              className="reveal group relative overflow-hidden rounded-3xl border border-line bg-card p-6 transition-colors duration-500 hover:border-brand/40 sm:p-8"
             >
               <span className="font-display text-outline absolute -top-3 right-4 text-8xl opacity-40 transition-transform duration-700 ease-[var(--ease-out-expo)] group-hover:-translate-y-1 group-hover:opacity-70">
                 0{i + 1}
@@ -167,19 +167,19 @@ export function SellBanner() {
           $$$
         </p>
         <div className="relative max-w-xl">
-          <p className="font-tech text-xs text-white/80">Vende con nosotros</p>
-          <h2 id="vende" className="font-display mt-3 text-5xl sm:text-6xl">
-            ¿Vendes tu auto?
+          <p className="font-tech text-xs text-white/80">Vende tu auto</p>
+          <h2 id="vende" className="font-display mt-3 text-5xl text-white sm:text-6xl">
+            ¿Quieres vender tu auto?
           </h2>
           <p className="mt-4 text-lg leading-relaxed text-white/85">
-            Cuéntanos de tu auto en menos de un minuto y te contactamos por WhatsApp con una propuesta.
+            Cuéntanos de tu auto en menos de un minuto y te atendemos por WhatsApp.
           </p>
           <Link
             href="/vende-tu-auto"
-            className="btn-shine group mt-8 inline-flex h-14 items-center gap-3 rounded-full bg-white pr-2 pl-6 font-semibold text-ink transition-transform active:scale-95"
+            className="btn-shine group mt-8 inline-flex h-14 items-center gap-3 rounded-full bg-white pr-2 pl-6 font-semibold text-night transition-transform active:scale-95"
           >
-            Cotizar mi auto
-            <span className="grid size-10 place-items-center rounded-full bg-ink text-white transition-transform duration-500 ease-[var(--ease-spring)] group-hover:translate-x-1">
+            Vender mi auto
+            <span className="grid size-10 place-items-center rounded-full bg-night text-white transition-transform duration-500 ease-[var(--ease-spring)] group-hover:translate-x-1">
               <ArrowRight className="size-5" />
             </span>
           </Link>
@@ -212,8 +212,8 @@ export function Contact() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <SectionHeading id="contacto-title" eyebrow="Visítanos" title="Estamos en Villahermosa" />
         <div className="grid gap-4 lg:grid-cols-[1.2fr_1fr]">
-          <div className="reveal relative overflow-hidden rounded-3xl border border-line bg-ink-2 p-6 sm:p-8">
-            <div className="pointer-events-none absolute inset-0 opacity-[0.15] [background-image:linear-gradient(rgb(255_255_255/.2)_1px,transparent_1px),linear-gradient(90deg,rgb(255_255_255/.2)_1px,transparent_1px)] [background-size:32px_32px]" />
+          <div className="reveal relative overflow-hidden rounded-3xl border border-line bg-card p-6 sm:p-8">
+            <div className="pointer-events-none absolute inset-0 opacity-[0.15] [background-image:linear-gradient(rgb(20_20_23/.15)_1px,transparent_1px),linear-gradient(90deg,rgb(20_20_23/.15)_1px,transparent_1px)] [background-size:32px_32px]" />
             <div className="relative">
               <span className="relative grid size-14 place-items-center rounded-full bg-brand">
                 <span className="absolute inset-0 rounded-full bg-brand animate-pulse-ring" />
@@ -229,7 +229,7 @@ export function Contact() {
                   href={site.mapsUrl}
                   target="_blank"
                   rel="noopener"
-                  className="inline-flex h-12 items-center gap-2 rounded-full bg-fg px-5 font-semibold text-ink transition-transform active:scale-95"
+                  className="inline-flex h-12 items-center gap-2 rounded-full bg-night px-5 font-semibold text-white transition-transform active:scale-95"
                 >
                   <Navigation className="size-4" /> Google Maps
                 </a>
@@ -242,9 +242,6 @@ export function Contact() {
                   Waze
                 </a>
               </div>
-              <p className="mt-8 text-sm text-dim">
-                Atendemos clientes de {site.serviceArea.slice(0, 6).join(", ")} y alrededores.
-              </p>
             </div>
           </div>
           <div className="grid gap-4">
@@ -252,7 +249,7 @@ export function Contact() {
               href={whatsappUrl(`Hola ${site.name} 👋 Vengo de su página web.`)}
               target="_blank"
               rel="noopener"
-              className="reveal group flex items-center gap-4 rounded-3xl bg-wa p-6 text-ink transition-transform duration-300 hover:-translate-y-1 active:scale-[0.98]"
+              className="reveal group flex items-center gap-4 rounded-3xl bg-wa p-6 text-night transition-transform duration-300 hover:-translate-y-1 active:scale-[0.98]"
             >
               <WhatsAppIcon className="size-10 shrink-0 transition-transform duration-500 group-hover:-rotate-12" />
               <div className="min-w-0">
@@ -263,7 +260,7 @@ export function Contact() {
             </a>
             <a
               href={site.phoneHref}
-              className="reveal group flex items-center gap-4 rounded-3xl border border-line bg-ink-2 p-6 transition-colors hover:border-fg/30"
+              className="reveal group flex items-center gap-4 rounded-3xl border border-line bg-card p-6 transition-colors hover:border-fg/30"
             >
               <Phone className="size-8 shrink-0 text-brand" />
               <div>
@@ -278,7 +275,7 @@ export function Contact() {
                   href={href}
                   target="_blank"
                   rel="noopener"
-                  className="group flex flex-col items-center gap-2 rounded-3xl border border-line bg-ink-2 py-5 text-sm transition-all hover:-translate-y-1 hover:border-brand/50"
+                  className="group flex flex-col items-center gap-2 rounded-3xl border border-line bg-card py-5 text-sm transition-all hover:-translate-y-1 hover:border-brand/50"
                 >
                   <Icon className="size-6 transition-transform duration-500 group-hover:scale-110" />
                   {label}

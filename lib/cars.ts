@@ -66,7 +66,27 @@ export function formatPrice(n: number) {
 }
 
 export function formatKm(n?: number) {
-  return n == null ? "Consultar" : `${numberFormatter.format(n)} km`;
+  return n == null ? "Pregúntanos" : `${numberFormatter.format(n)} km`;
+}
+
+// Texto que se muestra cuando falta un dato (decisión del dueño, 27-oct-2026)
+export const MISSING_INFO_TEXT = "Para más información, mándanos un mensaje; te respondemos de inmediato.";
+
+// Datos clave del resumen de cada auto; si alguno falta se invita a preguntar por WhatsApp
+export const KEY_SPECS = [
+  { key: "mileage", label: "Kilometraje" },
+  { key: "transmission", label: "Transmisión" },
+  { key: "fuel", label: "Combustible" },
+  { key: "engine", label: "Motor" },
+] as const;
+
+export function missingSpecs(car: Car) {
+  return KEY_SPECS.filter(({ key }) => car[key] == null || car[key] === "").map((s) => s.label);
+}
+
+export function infoMessage(car: Car, fields: string[]) {
+  const what = fields.length ? fields.map((f) => f.toLowerCase()).join(", ") : "más detalles";
+  return `Hola ${site.name} 👋 Me interesa el *${carTitle(car)}*. ¿Me pueden dar información de: ${what}?\n${carUrl(car)}`;
 }
 
 export function shortPrice(n: number) {

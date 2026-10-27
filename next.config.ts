@@ -24,8 +24,8 @@ const nextConfig: NextConfig = {
       // Fotos del inventario original en Shopify (demo / migración)
       { protocol: "https", hostname: "cdn.shopify.com" },
     ],
-    // Menos tamaños = menos transformaciones en el plan gratuito de Vercel
-    deviceSizes: [640, 828, 1080, 1440, 1920],
+    // Pocos tamaños = menos transformaciones y menos tráfico (importante en planes gratuitos)
+    deviceSizes: [640, 828, 1080, 1440],
     imageSizes: [96, 256, 384],
     qualities: [70, 80],
     // Las fotos subidas tienen nombre único, se pueden cachear mucho tiempo

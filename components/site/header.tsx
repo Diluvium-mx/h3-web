@@ -47,8 +47,8 @@ export function Header() {
           hidden && !open ? "-translate-y-full" : ""
         } ${
           scrolled || open
-            ? "border-b border-line bg-ink/80 backdrop-blur-xl"
-            : "border-b border-transparent bg-gradient-to-b from-ink/70 to-transparent"
+            ? "border-b border-line bg-paper/85 shadow-sm backdrop-blur-xl"
+            : "border-b border-transparent bg-gradient-to-b from-paper/85 to-transparent"
         }`}
       >
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
@@ -59,7 +59,7 @@ export function Header() {
             onClick={() => setOpen(false)}
           >
             <Image
-              src="/brand/mark.png"
+              src="/brand/mark-dark.png"
               alt=""
               width={344}
               height={186}
@@ -91,7 +91,7 @@ export function Header() {
               href={whatsappUrl(`Hola ${site.name} 👋 Vengo de su página web.`)}
               target="_blank"
               rel="noopener"
-              className="btn-shine inline-flex h-10 items-center gap-2 rounded-full bg-wa px-3 text-sm font-semibold text-ink transition-transform active:scale-95 sm:px-4"
+              className="btn-shine inline-flex h-10 items-center gap-2 rounded-full bg-wa px-3 text-sm font-semibold text-night transition-transform active:scale-95 sm:px-4"
             >
               <WhatsAppIcon className="size-5" />
               <span className="hidden sm:inline">Escríbenos</span>
@@ -100,7 +100,7 @@ export function Header() {
             <button
               type="button"
               onClick={() => setOpen((v) => !v)}
-              className="relative grid size-10 place-items-center rounded-full border border-line bg-ink-3/60 md:hidden"
+              className="relative grid size-10 place-items-center rounded-full border border-line bg-card/80 shadow-sm md:hidden"
               aria-expanded={open}
               aria-controls="mobile-menu"
               aria-label={open ? "Cerrar menú" : "Abrir menú"}
@@ -122,7 +122,7 @@ export function Header() {
       {open && (
         <div
           id="mobile-menu"
-          className="fixed inset-0 z-40 flex flex-col bg-ink/95 px-6 pt-24 pb-10 backdrop-blur-xl md:hidden animate-fade"
+          className="fixed inset-0 z-40 flex flex-col bg-paper/95 px-6 pt-24 pb-10 backdrop-blur-xl md:hidden animate-fade"
         >
           <div className="speed-lines pointer-events-none absolute inset-0 opacity-60" />
           <nav className="stagger relative flex flex-col gap-2" aria-label="Menú móvil">

@@ -1,19 +1,19 @@
 import type { Metadata } from "next";
-import { Camera, ClipboardList, Handshake } from "lucide-react";
+import { Camera, ClipboardList, MessageCircle } from "lucide-react";
 import { SellForm } from "@/components/sell/sell-form";
 import { vars } from "@/lib/ui";
 
 export const metadata: Metadata = {
   title: "Vende tu auto en Villahermosa",
   description:
-    "¿Quieres vender tu auto en Villahermosa o Tabasco? Cuéntanos de él en un minuto y te contactamos por WhatsApp con una propuesta.",
+    "¿Quieres vender tu auto en Villahermosa, Tabasco? Cuéntanos de él en un minuto y te atendemos por WhatsApp.",
   alternates: { canonical: "/vende-tu-auto" },
 };
 
 const STEPS = [
   { Icon: ClipboardList, title: "Cuéntanos de tu auto", text: "Marca, modelo, año y kilometraje. Toma menos de un minuto." },
   { Icon: Camera, title: "Envía fotos por WhatsApp", text: "El mensaje se arma solo; tú agregas las fotos." },
-  { Icon: Handshake, title: "Recibe una propuesta", text: "Te contactamos para revisar tu auto y platicar opciones." },
+  { Icon: MessageCircle, title: "Te atendemos por WhatsApp", text: "El encargado revisa tus datos y te responde por ahí." },
 ];
 
 export default function SellPage() {
@@ -34,14 +34,14 @@ export default function SellPage() {
               <span className="text-brand">Véndelo fácil.</span>
             </h1>
             <p className="mt-5 max-w-md text-lg leading-relaxed text-mute" style={vars({ "--i": 2 })}>
-              Sin anuncios, sin perder el tiempo con curiosos. Cuéntanos de tu auto y te contactamos por WhatsApp.
+              Llena tus datos en menos de un minuto y te atendemos por WhatsApp.
             </p>
           </header>
           <ol className="mt-10 space-y-3">
             {STEPS.map(({ Icon, title, text }, i) => (
               <li
                 key={title}
-                className="group flex gap-4 rounded-3xl border border-line bg-ink-2/60 p-5 backdrop-blur-sm transition-colors hover:border-brand/40 animate-rise"
+                className="group flex gap-4 rounded-3xl border border-line bg-card/60 p-5 backdrop-blur-sm transition-colors hover:border-brand/40 animate-rise"
                 style={{ animationDelay: `${300 + i * 100}ms` }}
               >
                 <span className="relative grid size-12 shrink-0 place-items-center rounded-2xl bg-brand/15 text-brand-hi transition-transform duration-500 ease-[var(--ease-spring)] group-hover:-rotate-6">

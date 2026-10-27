@@ -16,6 +16,7 @@
 7. Antes de subir cambios, verifica:
 
    ```bash
+   npx next typegen   # genera los tipos de rutas (PageProps, LayoutProps)
    npx tsc --noEmit
    npx eslint .
    npx next build

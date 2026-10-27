@@ -71,7 +71,6 @@ const step = (m) => console.log('✔', m);
     await page.click('[aria-label="Factura"] >> text=Original');
     await page.click('button:has-text("Continuar")');
     await page.fill('input[placeholder="¿Cómo te llamas?"]', 'Carlos');
-    await page.selectOption('select', 'Cárdenas');
     await page.click('button:has-text("Enviar por WhatsApp")');
     const opened = await page.evaluate(() => window.__opened);
     console.log('  mensaje:\n' + decodeURIComponent(opened[0].split('text=')[1]).split('\n').map(l => '    ' + l).join('\n'));

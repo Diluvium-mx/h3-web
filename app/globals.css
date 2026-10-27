@@ -1,19 +1,24 @@
 @import "tailwindcss";
 
 @theme {
-  --color-ink: #0a0a0b;
-  --color-ink-2: #111113;
-  --color-ink-3: #19191d;
-  --color-ink-4: #232328;
-  --color-line: rgb(255 255 255 / 0.09);
-  --color-fg: #f5f5f4;
-  --color-mute: #a3a3ad;
-  --color-dim: #8e8e99;
-  --color-brand: #e3141f;
-  --color-brand-hi: #ff3a44;
-  --color-volt: #fad116;
+  /* Tema claro */
+  --color-paper: #f4f4f0; /* fondo de página */
+  --color-card: #ffffff; /* tarjetas y paneles */
+  --color-soft: #ecece6; /* campos, chips */
+  --color-soft-2: #deded6;
+  --color-line: rgb(20 20 23 / 0.1);
+  --color-fg: #141417; /* texto */
+  --color-mute: #55555e;
+  --color-dim: #6a6a73;
+  --color-night: #111114; /* superficies oscuras y texto sobre colores brillantes */
+  /* Marca */
+  --color-brand: #e3141f; /* rojo H3 */
+  --color-brand-hi: #c40f19; /* rojo para texto pequeño sobre fondo claro */
+  --color-brand-soft: #fde8e9;
+  --color-volt: #fad116; /* amarillo H3 */
+  --color-volt-soft: #fff6cc;
   --color-wa: #25d366;
-  --color-wa-dark: #128c4b;
+  --color-wa-dark: #0f7a40;
 
   --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-saira), var(--font-geist), ui-sans-serif, sans-serif;
@@ -81,19 +86,19 @@
 }
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
   --header-h: 64px;
 }
 
 html {
-  background: var(--color-ink);
+  background: var(--color-paper);
   scroll-behavior: smooth;
   -webkit-tap-highlight-color: transparent;
 }
 
 body {
   overflow-x: clip;
-  background: var(--color-ink);
+  background: var(--color-paper);
   color: var(--color-fg);
   font-family: var(--font-sans);
   text-rendering: optimizeLegibility;
@@ -121,7 +126,7 @@ body {
 }
 .text-outline {
   color: transparent;
-  -webkit-text-stroke: 1.5px rgb(255 255 255 / 0.55);
+  -webkit-text-stroke: 1.5px rgb(20 20 23 / 0.35);
 }
 
 /* Botón con destello al pasar el mouse */
@@ -151,7 +156,7 @@ body {
   background-image: repeating-linear-gradient(
     100deg,
     transparent 0 46px,
-    rgb(255 255 255 / 0.05) 46px 48px,
+    rgb(20 20 23 / 0.045) 46px 48px,
     transparent 48px 120px
   );
   background-size: 400px 100%;
@@ -160,6 +165,16 @@ body {
 @keyframes speed {
   to {
     background-position: -400px 0;
+  }
+}
+
+/* Franjas que entran deslizándose */
+@keyframes stripe {
+  from {
+    transform: translateX(110%) skewX(-12deg);
+  }
+  to {
+    transform: skewX(-12deg);
   }
 }
 
@@ -233,7 +248,7 @@ body {
 }
 
 .skeleton {
-  background: linear-gradient(90deg, var(--color-ink-3) 0%, var(--color-ink-4) 50%, var(--color-ink-3) 100%);
+  background: linear-gradient(90deg, var(--color-soft) 0%, var(--color-soft-2) 50%, var(--color-soft) 100%);
   background-size: 200% 100%;
   animation: var(--animate-shimmer);
 }

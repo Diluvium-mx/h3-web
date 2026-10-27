@@ -31,7 +31,11 @@ import {
   carWhatsApp,
   formatKm,
   formatPrice,
+  infoMessage,
+  MISSING_INFO_TEXT,
+  missingSpecs,
   visitMessage,
+  type Car,
 } from "@/lib/cars";
 import { getAllCars, getCarBySlug, similarCars } from "@/lib/data";
 import { site, whatsappUrl } from "@/lib/site";
@@ -48,9 +52,14 @@ export async function generateMetadata({ params }: PageProps<"/autos/[slug]">): 
   const car = await getCarBySlug(slug);
   if (!car) return { title: "Auto no encontrado" };
   const title = `${carTitle(car)} en Villahermosa`;
-  const description = `${carTitle(car)} · ${formatPrice(car.price)} · ${formatKm(car.mileage)}${
-    car.transmission ? ` · ${car.transmission}` : ""
-  }. ${car.description.replace(/\s+/g, " ").slice(0, 110)}…`;
+  const description = `${[
+    carTitle(car),
+    formatPrice(car.price),
+    car.mileage != null && formatKm(car.mileage),
+    car.transmission,
+  ]
+    .filter(Boolean)
+    .join(" · ")}. ${car.description.replace(/\s+/g, " ").slice(0, 110)}…`;
   return {
     title,
     description,
@@ -79,19 +88,27 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
   const similar = similarCars(car, all);
   const sold = car.status === "vendido";
 
-  const specs = [
-    { Icon: Calendar, label: "Año", value: String(car.year) },
-    { Icon: Gauge, label: "Kilometraje", value: formatKm(car.mileage) },
-    car.transmission && { Icon: Cog, label: "Transmisión", value: car.transmission },
-    car.engine && { Icon: Zap, label: "Motor", value: car.engine },
-    car.fuel && { Icon: Fuel, label: "Combustible", value: car.fuel },
-    { Icon: CarIcon, label: "Tipo", value: car.body },
+  // Resumen: los datos que más pregunta la gente. Si falta uno, se invita a preguntar por WhatsApp.
+  const summary: Spec[] = [
+    { Icon: Calendar, label: "Año", value: String(car.year), tone: "volt" },
+    { Icon: Gauge, label: "Kilometraje", value: car.mileage != null ? formatKm(car.mileage) : undefined, tone: "brand" },
+    { Icon: Cog, label: "Transmisión", value: car.transmission, tone: "night" },
+    { Icon: Fuel, label: "Combustible", value: car.fuel, tone: "brand" },
+  ];
+  const extras = [
     car.drivetrain && { Icon: Waypoints, label: "Tracción", value: car.drivetrain },
     car.color && { Icon: Palette, label: "Color", value: car.color },
     car.doors && { Icon: DoorOpen, label: "Puertas", value: String(car.doors) },
     car.armored && { Icon: Shield, label: "Blindaje", value: "Sí" },
-    { Icon: MapPin, label: "Ubicación", value: site.address.city },
-  ].filter(Boolean) as { Icon: typeof Calendar; label: string; value: string }[];
+    { Icon: MapPin, label: "Ubicación", value: `${site.address.city}, ${site.address.state}`, wide: true },
+  ].filter(Boolean) as Spec[];
+  const details: Spec[] = [
+    ...summary,
+    { Icon: Zap, label: "Motor", value: car.engine },
+    { Icon: CarIcon, label: "Tipo", value: car.body },
+    ...extras,
+  ];
+  const missing = missingSpecs(car);
 
   return (
     <>
@@ -110,7 +127,7 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
             <Gallery images={car.images} alt={carTitle(car)} carId={car.id} sold={sold} />
             <Link
               href="/autos"
-              className="absolute top-20 left-4 grid size-11 place-items-center rounded-full bg-ink/70 backdrop-blur-md active:scale-95 lg:hidden"
+              className="absolute top-20 left-4 grid size-11 place-items-center rounded-full bg-card/90 shadow-md backdrop-blur-md active:scale-95 lg:hidden"
               aria-label="Volver al catálogo"
             >
               <ChevronLeft className="size-6" />
@@ -118,7 +135,7 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
           </div>
 
           {/* Panel de información */}
-          <div className="relative -mt-6 min-w-0 rounded-t-[2rem] bg-ink px-4 pt-7 sm:px-6 lg:sticky lg:top-24 lg:mt-0 lg:rounded-3xl lg:border lg:border-line lg:bg-ink-2 lg:p-8">
+          <div className="relative -mt-6 min-w-0 rounded-t-[2rem] bg-paper px-4 pt-7 sm:px-6 lg:sticky lg:top-24 lg:mt-0 lg:rounded-3xl lg:border lg:border-line lg:bg-card lg:p-8">
             <div className="stagger">
               <div className="flex flex-wrap items-center gap-2">
                 <p className="font-tech text-xs text-brand-hi">
@@ -142,13 +159,11 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
               </p>
             </div>
 
-            <div className="mt-5 flex flex-wrap gap-2">
-              {[formatKm(car.mileage), car.transmission, car.fuel].filter(Boolean).map((t) => (
-                <span key={t} className="rounded-full bg-ink-3 px-3 py-1.5 text-sm text-fg/85">
-                  {t}
-                </span>
+            <dl className="mt-5 grid grid-cols-2 gap-2">
+              {summary.map((spec) => (
+                <SpecTile key={spec.label} spec={spec} car={car} compact />
               ))}
-            </div>
+            </dl>
 
             {/* Acciones (escritorio y debajo del precio en móvil) */}
             <div className="mt-7 grid gap-3">
@@ -157,7 +172,7 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
                 href={carWhatsApp(car)}
                 target="_blank"
                 rel="noopener"
-                className="btn-shine group inline-flex h-14 items-center justify-center gap-3 rounded-full bg-wa px-6 text-base font-bold text-ink shadow-[0_14px_40px_-12px_rgb(37_211_102/0.7)] transition-transform active:scale-[0.97]"
+                className="btn-shine group inline-flex h-14 items-center justify-center gap-3 rounded-full bg-wa px-6 text-base font-bold text-night shadow-[0_14px_40px_-12px_rgb(37_211_102/0.7)] transition-transform active:scale-[0.97]"
               >
                 <WhatsAppIcon className="size-6 transition-transform duration-500 group-hover:-rotate-12" />
                 {sold ? "Búscame uno similar" : "Me interesa este auto"}
@@ -168,13 +183,13 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
                     href={whatsappUrl(visitMessage(car))}
                     target="_blank"
                     rel="noopener"
-                    className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-line bg-ink-3 text-sm font-semibold transition-colors hover:border-fg/30"
+                    className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-line bg-soft text-sm font-semibold transition-colors hover:border-fg/30"
                   >
                     <CalendarCheck className="size-4 text-brand-hi" /> Agendar visita
                   </a>
                   <a
                     href={site.phoneHref}
-                    className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-line bg-ink-3 text-sm font-semibold transition-colors hover:border-fg/30"
+                    className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-line bg-soft text-sm font-semibold transition-colors hover:border-fg/30"
                   >
                     <Phone className="size-4 text-brand-hi" /> Llamar
                   </a>
@@ -195,17 +210,26 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
                 Ficha técnica
               </h2>
               <dl className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
-                {specs.map(({ Icon, label, value }) => (
-                  <div
-                    key={label}
-                    className="reveal group rounded-2xl border border-line bg-ink-2 p-4 transition-colors hover:border-brand/40"
-                  >
-                    <Icon className="size-5 text-brand-hi transition-transform duration-500 ease-[var(--ease-spring)] group-hover:scale-125" />
-                    <dt className="font-tech mt-3 text-[10px] text-dim">{label}</dt>
-                    <dd className="mt-1 font-semibold">{value}</dd>
-                  </div>
+                {details.map((spec) => (
+                  <SpecTile key={spec.label} spec={spec} car={car} />
                 ))}
               </dl>
+              {missing.length > 0 && (
+                <div className="mt-4 flex flex-col gap-4 rounded-3xl bg-wa/10 p-5 ring-1 ring-wa/30 sm:flex-row sm:items-center">
+                  <p className="flex-1 text-sm text-fg">
+                    <b>{MISSING_INFO_TEXT}</b>
+                    <span className="mt-1 block text-mute">Datos por confirmar: {missing.join(", ").toLowerCase()}.</span>
+                  </p>
+                  <a
+                    href={whatsappUrl(infoMessage(car, missing))}
+                    target="_blank"
+                    rel="noopener"
+                    className="btn-shine inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-full bg-wa px-5 font-bold text-night active:scale-95"
+                  >
+                    <WhatsAppIcon className="size-5" /> Preguntar
+                  </a>
+                </div>
+              )}
             </section>
 
             {car.features.length > 0 && (
@@ -217,7 +241,7 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
                   {car.features.map((f) => (
                     <li
                       key={f}
-                      className="reveal flex items-center gap-2 rounded-full border border-line bg-ink-2 px-4 py-2.5 text-sm"
+                      className="reveal flex items-center gap-2 rounded-full border border-line bg-card px-4 py-2.5 text-sm"
                     >
                       <span className="size-1.5 rotate-45 bg-brand" />
                       {f}
@@ -232,7 +256,7 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
                 <h2 id="descripcion" className="font-display text-3xl">
                   Descripción
                 </h2>
-                <div className="mt-5 rounded-3xl border border-line bg-ink-2 p-5 leading-relaxed whitespace-pre-line text-fg/85 sm:p-7">
+                <div className="mt-5 rounded-3xl border border-line bg-card p-5 leading-relaxed whitespace-pre-line text-fg/85 sm:p-7">
                   {car.description}
                 </div>
               </section>
@@ -247,7 +271,7 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
             </h2>
             <div className="no-scrollbar -mx-4 mt-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 sm:mx-0 sm:grid sm:grid-cols-2 sm:px-0 lg:grid-cols-4">
               {similar.map((c) => (
-                <CarCard key={c.id} car={c} className="w-[75vw] max-w-[320px] shrink-0 snap-start sm:w-auto sm:max-w-none" sizes="(min-width: 1024px) 24vw, (min-width: 640px) 45vw, 75vw" />
+                <CarCard key={c.id} car={c} className="w-[75vw] max-w-[320px] shrink-0 snap-start sm:w-auto sm:max-w-none" sizes="(min-width: 1024px) 24vw, (min-width: 640px) 45vw, 45vw" />
               ))}
             </div>
           </section>
@@ -268,7 +292,7 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
             target="_blank"
             rel="noopener"
             tabIndex={-1}
-            className="btn-shine inline-flex h-12 items-center gap-2 rounded-full bg-wa px-5 font-bold text-ink active:scale-95"
+            className="btn-shine inline-flex h-12 items-center gap-2 rounded-full bg-wa px-5 font-bold text-night active:scale-95"
           >
             <WhatsAppIcon className="size-5" />
             {sold ? "Similar" : "Lo quiero"}
@@ -277,6 +301,63 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
       </StickyCta>
       <div className="h-24 lg:hidden" />
     </>
+  );
+}
+
+type Spec = {
+  Icon: typeof Calendar;
+  label: string;
+  value?: string;
+  tone?: "brand" | "volt" | "night";
+  wide?: boolean;
+};
+
+const TONE: Record<NonNullable<Spec["tone"]>, string> = {
+  brand: "bg-brand-soft text-brand-hi",
+  volt: "bg-volt text-night",
+  night: "bg-night text-white",
+};
+
+// Un dato del auto. Si no se tiene, invita a preguntarlo por WhatsApp (nunca se inventa).
+function SpecTile({ spec, car, compact }: { spec: Spec; car: Car; compact?: boolean }) {
+  const { Icon, label, value, tone = "brand", wide } = spec;
+  if (!value) {
+    return (
+      <a
+        href={whatsappUrl(infoMessage(car, [label]))}
+        target="_blank"
+        rel="noopener"
+        className={`group flex items-center gap-3 rounded-2xl bg-wa/10 ring-1 ring-wa/30 transition-transform active:scale-[0.97] ${
+          compact ? "p-3" : "p-4"
+        }`}
+        aria-label={`${label}: ${MISSING_INFO_TEXT}`}
+      >
+        <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-wa text-night">
+          <WhatsAppIcon className="size-5" />
+        </span>
+        <span className="min-w-0">
+          <dt className="font-tech text-[10px] text-wa-dark">{label}</dt>
+          <dd className="text-sm leading-tight font-semibold text-fg">Pregúntanos</dd>
+        </span>
+      </a>
+    );
+  }
+  return (
+    <div
+      className={`group flex items-center gap-3 rounded-2xl bg-card ring-1 ring-line transition-transform duration-300 hover:-translate-y-0.5 ${
+        compact ? "p-3" : "p-4"
+      } ${wide ? "col-span-2 sm:col-span-1" : ""}`}
+    >
+      <span
+        className={`grid size-10 shrink-0 place-items-center rounded-xl transition-transform duration-500 ease-[var(--ease-spring)] group-hover:-rotate-6 ${TONE[tone]}`}
+      >
+        <Icon className="size-5" />
+      </span>
+      <span className="min-w-0">
+        <dt className="font-tech text-[10px] text-dim">{label}</dt>
+        <dd className="leading-tight font-semibold text-fg">{value}</dd>
+      </span>
+    </div>
   );
 }
 

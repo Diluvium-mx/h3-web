@@ -53,21 +53,21 @@ export function ShopifyImport({ defaultStore }: { defaultStore: string }) {
 
   return (
     <div className="space-y-5">
-      <div className="rounded-3xl border border-line bg-ink-2 p-4 sm:p-6">
+      <div className="rounded-3xl border border-line bg-card p-4 sm:p-6">
         <label className="block">
           <span className="mb-1.5 block text-sm font-medium">Dirección de la tienda Shopify</span>
           <div className="flex gap-2">
             <input
               value={store}
               onChange={(e) => setStore(e.target.value)}
-              className="h-12 w-full rounded-xl border border-line bg-ink-3 px-4 focus:border-brand focus:outline-none"
+              className="h-12 w-full rounded-xl border border-line bg-soft px-4 focus:border-brand focus:outline-none"
               placeholder="https://www.h3seminuevos.com"
             />
             <button
               type="button"
               onClick={load}
               disabled={loading || running}
-              className="inline-flex h-12 shrink-0 items-center gap-2 rounded-xl bg-fg px-4 font-semibold text-ink disabled:opacity-60"
+              className="inline-flex h-12 shrink-0 items-center gap-2 rounded-xl bg-night px-4 font-semibold text-white disabled:opacity-60"
             >
               {loading && <Loader2 className="size-4 animate-spin" />}
               Buscar
@@ -103,7 +103,7 @@ export function ShopifyImport({ defaultStore }: { defaultStore: string }) {
               const st = status[item.handle];
               const disabled = item.imported || st?.state === "done";
               return (
-                <li key={item.handle} className="flex items-center gap-3 rounded-2xl border border-line bg-ink-2 p-3">
+                <li key={item.handle} className="flex items-center gap-3 rounded-2xl border border-line bg-card p-3">
                   <input
                     type="checkbox"
                     checked={selected.has(item.handle)}
@@ -119,7 +119,7 @@ export function ShopifyImport({ defaultStore }: { defaultStore: string }) {
                     className="size-5 accent-[var(--color-brand)]"
                     aria-label={`Seleccionar ${item.title}`}
                   />
-                  <div className="relative size-14 shrink-0 overflow-hidden rounded-lg bg-ink-3">
+                  <div className="relative size-14 shrink-0 overflow-hidden rounded-lg bg-soft">
                     {item.image && <Image src={item.image} alt="" fill sizes="56px" quality={70} className="object-cover" />}
                   </div>
                   <div className="min-w-0 flex-1">
@@ -132,7 +132,7 @@ export function ShopifyImport({ defaultStore }: { defaultStore: string }) {
                   <span className="shrink-0">
                     {item.imported && !st && <span className="text-xs text-mute">Ya importado</span>}
                     {st?.state === "working" && <Loader2 className="size-5 animate-spin text-mute" />}
-                    {st?.state === "done" && <Check className="size-5 text-wa" />}
+                    {st?.state === "done" && <Check className="size-5 text-wa-dark" />}
                     {st?.state === "error" && <X className="size-5 text-brand-hi" />}
                   </span>
                 </li>

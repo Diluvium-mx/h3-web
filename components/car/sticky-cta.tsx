@@ -20,7 +20,7 @@ export function StickyCta({ targetId, children }: { targetId: string; children: 
     <div
       data-sticky-cta
       aria-hidden={!show}
-      className={`fixed inset-x-0 bottom-0 z-40 border-t border-line bg-ink/85 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur-xl transition-transform duration-500 ease-[var(--ease-out-expo)] lg:hidden ${
+      className={`fixed inset-x-0 bottom-0 z-40 border-t border-line bg-paper/85 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur-xl transition-transform duration-500 ease-[var(--ease-out-expo)] lg:hidden ${
         show ? "translate-y-0" : "pointer-events-none translate-y-full"
       }`}
     >

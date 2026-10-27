@@ -10,11 +10,11 @@ export const metadata: Metadata = {
 
 export default function AdminLayout({ children }: LayoutProps<"/admin">) {
   return (
-    <div className="min-h-dvh bg-ink">
-      <header className="sticky top-0 z-40 border-b border-line bg-ink/85 backdrop-blur-xl">
+    <div className="min-h-dvh bg-paper">
+      <header className="sticky top-0 z-40 border-b border-line bg-paper/85 backdrop-blur-xl">
         <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
           <Link href="/admin" className="flex items-center gap-3">
-            <Image src="/brand/mark.png" alt="H3" width={344} height={186} className="h-6 w-auto" />
+            <Image src="/brand/mark-dark.png" alt="H3" width={344} height={186} className="h-6 w-auto" />
             <span className="font-tech text-xs text-mute">Panel</span>
           </Link>
           <Link

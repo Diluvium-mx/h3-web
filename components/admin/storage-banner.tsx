@@ -11,7 +11,7 @@ export function StorageBanner({ mode, blob }: { mode: "redis" | "local" | "demo"
   return (
     <div
       className={`mb-6 flex gap-3 rounded-2xl border p-4 text-sm ${
-        demo || mode === "redis" ? "border-brand/40 bg-brand/10 text-fg" : "border-line bg-ink-2 text-mute"
+        demo || mode === "redis" ? "border-brand/40 bg-brand/10 text-fg" : "border-line bg-card text-mute"
       }`}
     >
       {demo || mode === "redis" ? (

@@ -47,10 +47,12 @@ Estados de un auto:
 Las páginas públicas se generan estáticas y se sirven desde el CDN; solo se regeneran cuando cambias
 algo en el panel. Eso las hace muy rápidas y casi no consumen recursos del plan.
 
-## Publicar en Vercel (paso a paso)
+## Publicar en Vercel (referencia)
 
-> El hosting final está **sin decidir** (Vercel Pro o Netlify; ver `CONTEXTO.md`). Estos pasos son
-> para Vercel, que es para lo que está preparado el código hoy.
+> **Decisión del dueño (27-oct-2026): hosting solo gratis; primera opción Netlify Free.** Ver números y
+> plan en `CONTEXTO.md`. El código todavía guarda las fotos en Vercel Blob; falta cambiarlo (propuesta:
+> Cloudinary Free) y adaptar el despliegue a Netlify. Los pasos de abajo son para Vercel y quedan solo
+> como referencia.
 
 1. **Sube el código a GitHub** (un repositorio privado está bien).
 2. En [vercel.com](https://vercel.com) → **Add New → Project** → importa el repositorio → **Deploy**.
@@ -75,20 +77,15 @@ algo en el panel. Eso las hace muy rápidas y casi no consumen recursos del plan
 
 ## Costos
 
+Meta: **$0 al mes en hosting**. Comparación con números (Netlify Free vs Railway Free) en `CONTEXTO.md`,
+sección 5.
+
 | Concepto | Costo |
 | --- | --- |
 | Upstash Redis (Free) | $0 (sobra para cientos de autos) |
-| Vercel Blob | Incluido en el plan (Hobby: ~1 GB de fotos; con fotos comprimidas caben miles) |
-| Dominio `.com` | ~$12–20 USD al año (el que ya tienen) |
-| Hosting Vercel | Ver nota ↓ |
-
-> **Importante sobre el plan de Vercel**: el plan gratuito **Hobby** es solo para uso personal y no
-> comercial según las reglas de uso de Vercel; un negocio que vende autos cuenta como uso comercial.
-> El plan que lo permite es **Pro** ($20 USD/mes). Antes de publicar, decidan entre:
-> 1. **Vercel Pro**: lo más simple y oficial, pero cuesta casi lo mismo que Shopify.
-> 2. **Otro hosting con plan gratuito comercial** (por ejemplo Netlify): el sitio es Next.js estándar y
->    Redis funciona igual; solo hay que cambiar Vercel Blob por otro almacenamiento de fotos
->    (`lib/images.ts`, `lib/upload-client.ts` y `app/api/upload`).
+| Netlify Free | $0 con 300 créditos al mes; si se acaban, el sitio se pausa hasta el mes siguiente |
+| Fotos (propuesta: Cloudinary Free) | $0 con 25 créditos al mes |
+| Dominio `.com` | El que ya tienen (se verá después) |
 
 ## Editar datos del negocio
 
