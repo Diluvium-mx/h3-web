@@ -1,8 +1,8 @@
 import "server-only";
-import { blobEnabled } from "./images";
+import { cloudinaryEnabled } from "./images";
 import { storageMode } from "./storage";
 
-export function uploadMode(): "blob" | "local" | "none" {
-  if (blobEnabled) return "blob";
+export function uploadMode(): "cloudinary" | "local" | "none" {
+  if (cloudinaryEnabled) return "cloudinary";
   return storageMode === "local" ? "local" : "none";
 }

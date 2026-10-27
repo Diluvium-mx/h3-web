@@ -24,7 +24,7 @@ import {
   recordLoginFailure,
   removeCar,
 } from "./storage";
-import { deleteImages, isAllowedImageUrl, saveImage } from "./images";
+import { deleteImages, isAllowedImageUrl, saveImage, storeRemoteImage } from "./images";
 import { shopifyToCar, type ShopifyProduct } from "./shopify";
 
 export type ActionResult<T = object> = ({ ok: true } & T) | { ok: false; error: string };
@@ -295,14 +295,10 @@ export async function importShopifyAction(
     // Si el auto está en el inventario curado, usa esos datos (más completos)
     const curated = (await getSeedCars()).find((c) => c.shopifyHandle === handle);
 
-    const images = await mapLimit(draft.sourceImages, 6, async (src, i) => {
-      const r = await fetch(`${src}${src.includes("?") ? "&" : "?"}width=1600`, {
-        headers: { Accept: "image/webp,image/jpeg" },
-      });
-      if (!r.ok) return null;
-      const type = r.headers.get("content-type") ?? "image/jpeg";
-      return saveImage(`${draft.slugBase}-${i + 1}`, await r.arrayBuffer(), type);
-    });
+    // Cloudinary descarga cada foto directo de Shopify (no pasa por el hosting)
+    const images = await mapLimit(draft.sourceImages, 4, async (src, i) =>
+      storeRemoteImage(src, `${draft.slugBase}-${i + 1}`).catch(() => null),
+    );
 
     const { sourceImages: _s, slugBase, ...fields } = draft;
     void _s;

@@ -40,57 +40,57 @@ Estados de un auto:
 ## Tecnología
 
 - Next.js 16 (App Router, Cache Components) + React 19 + Tailwind CSS 4.
-- **Upstash Redis** (integración gratuita del Marketplace de Vercel) para guardar el inventario.
-- **Vercel Blob** para las fotos.
-- Sin base de datos ni servicios de pago adicionales.
+- **Netlify Free** para publicar el sitio.
+- **Upstash Redis Free** para guardar el inventario.
+- **Cloudinary Free** para guardar y servir las fotos. Las fotos salen directo de Cloudinary ya
+  optimizadas (AVIF/WebP), así no gastan créditos de Netlify.
 
-Las páginas públicas se generan estáticas y se sirven desde el CDN; solo se regeneran cuando cambias
-algo en el panel. Eso las hace muy rápidas y casi no consumen recursos del plan.
+Las páginas públicas se generan estáticas y se sirven desde el CDN. Solo se regeneran cuando guardas
+algo en el panel, sin volver a publicar el sitio.
 
-## Publicar en Vercel (referencia)
+## Publicar en Netlify (gratis, paso a paso)
 
-> **Decisión del dueño (27-oct-2026): hosting solo gratis; primera opción Netlify Free.** Ver números y
-> plan en `CONTEXTO.md`. El código todavía guarda las fotos en Vercel Blob; falta cambiarlo (propuesta:
-> Cloudinary Free) y adaptar el despliegue a Netlify. Los pasos de abajo son para Vercel y quedan solo
-> como referencia.
+No se sube ninguna contraseña ni llave al repositorio. Todo va en las variables de entorno de Netlify.
 
-1. **Sube el código a GitHub** (un repositorio privado está bien).
-2. En [vercel.com](https://vercel.com) → **Add New → Project** → importa el repositorio → **Deploy**.
-   El primer despliegue funciona en "modo demo" con el inventario actual de ejemplo.
-3. **Base de datos**: en el proyecto → pestaña **Storage** → **Create Database** →
-   **Upstash for Redis** (plan Free) → conéctala al proyecto (deja el prefijo de variables por defecto,
-   `KV`).
-4. **Fotos**: en **Storage** → **Create** → **Blob** (acceso público) → conéctalo al proyecto.
-5. **Variables de entorno**: en **Settings → Environment Variables** agrega:
+1. **Upstash** ([upstash.com](https://upstash.com)): crea una cuenta y luego una base de datos Redis en el
+   plan Free. En la pestaña **REST API** copia `UPSTASH_REDIS_REST_URL` y `UPSTASH_REDIS_REST_TOKEN`.
+2. **Cloudinary** ([cloudinary.com](https://cloudinary.com)): crea una cuenta gratis. En el **Dashboard**
+   copia la «API environment variable», que tiene esta forma: `CLOUDINARY_URL=cloudinary://…`.
+3. **Netlify** ([netlify.com](https://www.netlify.com)): ve a **Add new project → Import an existing
+   project → GitHub** y elige este repositorio. La configuración de compilación ya viene en
+   `netlify.toml`.
+4. En **Site configuration → Environment variables** agrega:
    - `ADMIN_PASSWORD`: la contraseña del panel (larga, por ejemplo 4 palabras al azar).
    - `AUTH_SECRET`: texto largo y aleatorio (`openssl rand -base64 32`).
-   - `NEXT_PUBLIC_SITE_URL`: `https://www.h3seminuevos.com`
-6. **Redeploy** (Deployments → ⋯ → Redeploy) para que tome las variables.
-7. Entra a `https://TU-PROYECTO.vercel.app/admin` → **Importar de Shopify** → **Buscar** →
-   **Importar seleccionados**. Revisa los autos importados y ajusta lo que haga falta.
-8. **Dominio**: en **Settings → Domains** agrega `h3seminuevos.com` y `www.h3seminuevos.com` y cambia
-   los DNS donde esté registrado el dominio según lo que indique Vercel.
-   - Si el dominio se compró **dentro de Shopify**, primero transfiérelo a otro registrador
-     (o apunta sus DNS a Vercel) **antes** de cancelar Shopify.
-9. Cuando todo funcione con el dominio, **cancela Shopify**. Importa los autos *antes* de cancelar:
-   después las fotos de Shopify dejan de existir.
+   - `UPSTASH_REDIS_REST_URL` y `UPSTASH_REDIS_REST_TOKEN`.
+   - `CLOUDINARY_URL`.
+   - `NEXT_PUBLIC_SITE_URL`: déjala vacía mientras no se conecte el dominio, porque el sitio usa sola la
+     dirección `*.netlify.app`. Cuando se conecte, pon `https://www.h3seminuevos.com`.
+5. **Deploy**. Después entra a `https://TU-SITIO.netlify.app/admin`, ve a **Importar de Shopify → Buscar
+   → Importar seleccionados**. Las fotos se copian de Shopify a Cloudinary.
+6. **Para no gastar créditos de más:**
+   - Editar autos en el panel no requiere publicar de nuevo.
+   - Prueba los cambios de código en vistas previas (Deploy Previews), que cuestan 0 créditos.
+   - Publica a producción como máximo unas 4 veces al mes; cada vez cuesta 15 créditos.
+   - Deja solo este sitio en la cuenta de Netlify.
+7. Cuando todo funcione, **cancela Shopify**. Importa las fotos **antes**, porque después desaparecen.
+   El dominio se conecta después (sin decidir).
 
 ## Costos
 
-Meta: **$0 al mes en hosting**. Comparación con números (Netlify Free vs Railway Free) en `CONTEXTO.md`,
-sección 5.
+Meta: **$0 al mes** (decisión del dueño). Los cálculos completos están en `CONTEXTO.md`, sección 5.
 
-| Concepto | Costo |
-| --- | --- |
-| Upstash Redis (Free) | $0 (sobra para cientos de autos) |
-| Netlify Free | $0 con 300 créditos al mes; si se acaban, el sitio se pausa hasta el mes siguiente |
-| Fotos (propuesta: Cloudinary Free) | $0 con 25 créditos al mes |
-| Dominio `.com` | El que ya tienen (se verá después) |
+| Concepto | Plan | Si se pasa del límite |
+| --- | --- | --- |
+| Netlify | Free: 300 créditos al mes | El sitio se pausa hasta el mes siguiente; no cobra |
+| Cloudinary | Free: 25 créditos al mes, sin tarjeta | Avisa por correo y, si sigue, desactiva la cuenta |
+| Upstash Redis | Free: 500 mil comandos y 250 MB | Avisa por correo |
+| Dominio `.com` | El que ya tienen | Renovación anual, aparte |
 
 ## Editar datos del negocio
 
 Todo está en [`lib/site.ts`](lib/site.ts): WhatsApp, teléfono, dirección, horario (`hours` y
-`openingHours`), redes sociales y ciudades que atienden.
+`openingHours`) y redes sociales.
 
 ## Desarrollo local
 
@@ -102,19 +102,23 @@ npm run dev
 - Sin variables de entorno, el sitio usa `data/seed.json` (el inventario actual).
 - En local, el panel (`/admin`, contraseña `h3admin`) guarda en `data/cars.local.json` y las fotos en
   `public/uploads/` (ambos ignorados por git).
-- Para usar los servicios reales en local: `vercel env pull .env.local`.
+- Para usar los servicios reales en local, copia `.env.example` como `.env.local` y llénalo
+  (no lo subas al repositorio).
 
 ## Estructura
 
 ```
 app/(site)/          páginas públicas (inicio, catálogo, detalle, vende tu auto)
 app/admin/           panel de administración
-app/api/upload/      tokens para subir fotos directo a Vercel Blob
+app/api/upload/      firma para subir fotos directo a Cloudinary
 components/          interfaz (tarjetas, galería, filtros, formularios…)
 lib/site.ts          datos del negocio
 lib/cars.ts          tipos, formatos y mensajes de WhatsApp
 lib/data.ts          lecturas cacheadas para el sitio público
 lib/storage.ts       inventario en Redis (o archivo local en demo)
+lib/cloudinary.ts    subida, firma y borrado de fotos en Cloudinary
+lib/image-loader.ts  pide a Cloudinary cada foto del tamaño justo
+netlify.toml         configuración de Netlify
 lib/actions.ts       acciones del panel (guardar, borrar, importar…)
 proxy.ts             protege /admin
 ```

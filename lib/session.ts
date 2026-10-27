@@ -21,8 +21,12 @@ async function hmac(value: string, key: string) {
     false,
     ["sign"],
   );
-  const sig = await crypto.subtle.sign("HMAC", cryptoKey, encoder.encode(value));
-  return Buffer.from(sig).toString("base64url");
+  const sig = new Uint8Array(await crypto.subtle.sign("HMAC", cryptoKey, encoder.encode(value)));
+  // base64url sin Buffer: funciona igual en Node y en Edge (el proxy de Netlify corre en Edge)
+  return btoa(String.fromCharCode(...sig))
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
 }
 
 function safeEqual(a: string, b: string) {

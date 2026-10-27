@@ -3,7 +3,7 @@ import { FormShell, FormSkeleton } from "@/components/admin/form-shell";
 import { ShopifyImport } from "@/components/admin/shopify-import";
 import { StorageBanner } from "@/components/admin/storage-banner";
 import { requireAdmin } from "@/lib/auth";
-import { blobEnabled } from "@/lib/images";
+import { cloudinaryEnabled } from "@/lib/images";
 import { storageMode } from "@/lib/storage";
 
 export default function ImportPage() {
@@ -20,7 +20,7 @@ async function Import() {
   await requireAdmin();
   return (
     <>
-      <StorageBanner mode={storageMode} blob={blobEnabled} />
+      <StorageBanner mode={storageMode} photos={cloudinaryEnabled} />
       <ShopifyImport defaultStore="https://www.h3seminuevos.com" />
     </>
   );

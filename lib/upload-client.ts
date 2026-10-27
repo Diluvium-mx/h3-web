@@ -1,6 +1,5 @@
 "use client";
 
-import { upload } from "@vercel/blob/client";
 import { uploadImageAction } from "./actions";
 
 // Reduce las fotos del celular (5–10 MB) a ~300 KB antes de subirlas.
@@ -27,26 +26,56 @@ export async function compressImage(file: File, maxSide = 1800, quality = 0.82):
   return jpeg;
 }
 
+type SignedUpload = {
+  cloudName: string;
+  apiKey: string;
+  folder: string;
+  timestamp: number;
+  transformation: string;
+  signature: string;
+};
+
+// Sube directo del navegador a Cloudinary con una firma que da el servidor (solo a administradores)
+async function uploadToCloudinary(blob: Blob, onProgress?: (pct: number) => void) {
+  const res = await fetch("/api/upload", { method: "POST" });
+  const signed = (await res.json()) as SignedUpload & { error?: string };
+  if (!res.ok) throw new Error(signed.error ?? "No se pudo preparar la subida");
+  const fd = new FormData();
+  fd.append("file", blob);
+  fd.append("api_key", signed.apiKey);
+  fd.append("folder", signed.folder);
+  fd.append("timestamp", String(signed.timestamp));
+  fd.append("transformation", signed.transformation);
+  fd.append("signature", signed.signature);
+  return new Promise<string>((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", `https://api.cloudinary.com/v1_1/${signed.cloudName}/image/upload`);
+    xhr.upload.onprogress = (e) => e.lengthComputable && onProgress?.((e.loaded / e.total) * 100);
+    xhr.onload = () => {
+      try {
+        const json = JSON.parse(xhr.responseText) as { secure_url?: string; error?: { message: string } };
+        if (xhr.status < 300 && json.secure_url) resolve(json.secure_url);
+        else reject(new Error(json.error?.message ?? "Cloudinary no aceptó la foto"));
+      } catch {
+        reject(new Error("Respuesta inválida de Cloudinary"));
+      }
+    };
+    xhr.onerror = () => reject(new Error("Sin conexión al subir la foto"));
+    xhr.send(fd);
+  });
+}
+
 export async function uploadPhoto(
   file: File,
   baseName: string,
-  mode: "blob" | "local",
+  mode: "cloudinary" | "local",
   onProgress?: (pct: number) => void,
 ) {
   const blob = await compressImage(file);
+  if (mode === "cloudinary") return uploadToCloudinary(blob, onProgress);
   const ext = blob.type === "image/webp" ? "webp" : "jpg";
-  const name = `${baseName || "auto"}.${ext}`;
-  if (mode === "blob") {
-    const result = await upload(`autos/${name}`, blob, {
-      access: "public",
-      handleUploadUrl: "/api/upload",
-      contentType: blob.type,
-      onUploadProgress: ({ percentage }) => onProgress?.(percentage),
-    });
-    return result.url;
-  }
   const fd = new FormData();
-  fd.append("file", new File([blob], name, { type: blob.type }));
+  fd.append("file", new File([blob], `${baseName || "auto"}.${ext}`, { type: blob.type }));
   onProgress?.(50);
   const res = await uploadImageAction(fd);
   if (!res.ok) throw new Error(res.error);

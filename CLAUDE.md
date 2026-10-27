@@ -32,3 +32,14 @@
 
    La prueba del panel usa la contraseña de desarrollo local y modifica `data/cars.local.json`;
    ese archivo está ignorado por git.
+
+   Fotos en Cloudinary (con datos de prueba, nunca los reales):
+
+   ```bash
+   node --experimental-strip-types --conditions=react-server scripts/check-cloudinary.mjs
+   CLOUDINARY_URL=cloudinary://111:secreto-de-prueba@h3prueba npm run dev
+   node scripts/e2e-cloudinary.mjs http://localhost:3000
+   ```
+
+8. Hosting: Netlify Free (solo planes gratuitos). Cuida los créditos: pocos despliegues a producción,
+   fotos siempre desde Cloudinary (nunca por el hosting).

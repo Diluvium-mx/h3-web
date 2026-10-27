@@ -2,6 +2,18 @@
 
 Lo más reciente va arriba.
 
+## 27 de octubre de 2026 (noche) — fotos en Cloudinary y adaptación a Netlify
+
+- Las fotos ahora se guardan y se sirven desde **Cloudinary Free**. Ninguna foto pasa por el hosting.
+- El sitio quedó adaptado a **Netlify Free**. La herramienta oficial de Netlify lo compila y lo sirve en
+  local, y ahí pasan las pruebas.
+- Sigue siendo **$0 al mes**: aguanta ≈ 7,600 visitas completas al mes en los planes gratuitos. Si se
+  pasa, Netlify pausa el sitio; no cobra.
+- 30 pruebas pasan, incluida la subida a Cloudinary simulada.
+
+Falta: crear las cuentas gratuitas (Netlify, Upstash, Cloudinary), publicar, importar las fotos de
+Shopify y seguir con el diseño del inicio y del detalle.
+
 ## 27 de octubre de 2026 (tarde) — decisiones del dueño
 
 - Se pasó todo el sitio a **tema claro**. Se rediseñó el catálogo en celular con colores de marca:

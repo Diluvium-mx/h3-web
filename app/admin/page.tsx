@@ -6,7 +6,7 @@ import { StorageBanner } from "@/components/admin/storage-banner";
 import { LogoutButton } from "@/components/admin/logout-button";
 import { requireAdmin } from "@/lib/auth";
 import { sortNewest } from "@/lib/cars";
-import { blobEnabled } from "@/lib/images";
+import { cloudinaryEnabled } from "@/lib/images";
 import { listCars, storageMode } from "@/lib/storage";
 
 export default function AdminPage() {
@@ -50,7 +50,7 @@ async function Dashboard() {
   const cars = (await listCars()).sort(sortNewest);
   return (
     <>
-      <StorageBanner mode={storageMode} blob={blobEnabled} />
+      <StorageBanner mode={storageMode} photos={cloudinaryEnabled} />
       {cars.length === 0 ? (
         <div className="rounded-3xl border border-dashed border-line p-10 text-center">
           <p className="font-display text-2xl">Aún no hay autos</p>

@@ -96,7 +96,13 @@ function Pills<T extends string>({
 const digits = (s: string) => s.replace(/\D/g, "");
 const withCommas = (s: string) => (s ? Number(s).toLocaleString("es-MX") : "");
 
-export function CarForm({ initial, uploadMode }: { initial?: Car; uploadMode: "blob" | "local" | "none" }) {
+export function CarForm({
+  initial,
+  uploadMode,
+}: {
+  initial?: Car;
+  uploadMode: "cloudinary" | "local" | "none";
+}) {
   const router = useRouter();
   const [saving, startSaving] = useTransition();
   const [error, setError] = useState("");
@@ -244,7 +250,7 @@ export function CarForm({ initial, uploadMode }: { initial?: Car; uploadMode: "b
       <Section title="Fotos" hint="La primera es la portada. Se comprimen solas antes de subir.">
         {uploadMode === "none" ? (
           <p className="rounded-xl bg-soft p-4 text-sm text-mute">
-            Conecta Vercel Blob para poder subir fotos (ver README).
+            Conecta Cloudinary para poder subir fotos (ver README).
           </p>
         ) : (
           <>

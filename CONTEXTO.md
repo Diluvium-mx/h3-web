@@ -126,7 +126,7 @@ No se busca vender en línea: no hay carrito ni pagos.
 | Tipografía de texto | Geist | `app/layout.tsx` |
 | Datos del negocio | Teléfono, dirección, horario y redes | `lib/site.ts` |
 | Inventario inicial | 13 autos de Shopify con datos revisados | `data/seed.json` |
-| Fotos de los autos | 189 fotos en el CDN de Shopify | Enlaces dentro de `data/seed.json` |
+| Fotos de los autos | 189 fotos en el CDN de Shopify; se copian a **Cloudinary** con el importador del panel | Enlaces dentro de `data/seed.json` |
 
 Colores del tema claro:
 
@@ -141,8 +141,8 @@ Colores del tema claro:
 | Verde de WhatsApp | `#25d366` |
 
 Notas:
-- **Las fotos desaparecerán al cancelar Shopify.** Hay que copiarlas al almacenamiento definitivo
-  **antes** de cancelar.
+- **Las fotos desaparecerán al cancelar Shopify.** Hay que copiarlas a Cloudinary (Panel → Importar de
+  Shopify) **antes** de cancelar.
 - Casi todas las fotos se tomaron con celular y son verticales.
 - **Datos corregidos el 27-oct:**
   - Ford Expedition: **74,649 km**. Se quitó el 82,135, también de la descripción.
@@ -151,88 +151,103 @@ Notas:
 
 ## 5. Con qué se hace, dónde se publica y con qué dominio
 
+**Decisión del dueño (27-oct): todo gratis, nada de planes de pago.**
+
+| Para qué | Servicio | Plan |
+| --- | --- | --- |
+| Hosting | **Netlify** | Free |
+| Fotos | **Cloudinary** | Free |
+| Inventario | **Upstash Redis** | Free |
+
 **Código**
 - Next.js 16.4 (App Router con Cache Components), React 19.3, TypeScript y Tailwind CSS 4.
-- **Inventario:** Upstash Redis, gratis. Sin Redis, el sitio corre en «modo demo» con `data/seed.json`.
-- **Fotos:** hoy el código usa Vercel Blob, que **habrá que cambiar** (ver abajo).
+- **Inventario:** Upstash Redis. Sin Redis, el sitio corre en «modo demo» con `data/seed.json`.
+- **Fotos:** Cloudinary (desde el 27-oct; antes era Vercel Blob).
+  - El panel sube cada foto **directo del navegador a Cloudinary** con una firma que da el servidor solo
+    a administradores.
+  - El importador manda a Cloudinary los enlaces de Shopify y Cloudinary descarga las fotos.
+  - Al guardar, cada foto queda limitada a 1600 px.
+  - El sitio pide cada foto a Cloudinary del tamaño justo y en AVIF/WebP (`lib/image-loader.ts`).
+    **Ninguna foto pasa por Netlify.**
+- **Netlify:** `netlify.toml`. Netlify usa su adaptador oficial de Next.js. El candado del panel corre en
+  Edge, por eso se quitó el uso de `Buffer` en la sesión.
 - Las páginas públicas son estáticas. Se regeneran solas cuando el dueño guarda algo en el panel, sin
   volver a desplegar.
 
-**Hosting: decisión del dueño (27-oct): SOLO gratis, nada de planes de pago. Primera opción: Netlify Free.**
+**Verificado el 27-oct en esta máquina con la herramienta oficial de Netlify (CLI 27.15.0):**
+- `netlify build` compila el sitio con el adaptador de Next.js de Netlify (v5.16.3).
+- `netlify serve` levanta el sitio igual que en Netlify, con funciones y Edge. Las pruebas del sitio y el
+  login del panel pasan.
+- **Todavía no se publica en una cuenta real de Netlify.**
 
-Comparación con números, medida el 27-oct sobre la versión actual. La medición se hizo en un celular de
-pantalla muy densa, primera visita y sin caché, que es el caso más pesado.
+**Pruebas de fotos:** la subida a Cloudinary se probó simulando las respuestas de Cloudinary
+(`scripts/e2e-cloudinary.mjs`). La firma coincide con los ejemplos oficiales. **Falta probar con una
+cuenta real de Cloudinary.**
 
-| Qué se midió | Resultado |
+**¿Es completamente gratis?** Sí: **$0 al mes**, siempre que el uso no pase los límites gratuitos. En los
+planes gratuitos no se cobra.
+
+| Servicio | Si se pasa del límite |
 | --- | --- |
-| Visita completa (inicio → catálogo → 2 autos) | **≈ 3.0 MB** y 118 peticiones: ≈ 2.5 MB de fotos + ≈ 0.5 MB del resto |
-| Visita corta (enlace directo a 1 auto) | **≈ 1.4 MB** y 37 peticiones: ≈ 1.1 MB de fotos + ≈ 0.3 MB del resto |
-| Memoria RAM del servidor de Next.js | 136 MB en reposo y 170–316 MB después de optimizar fotos |
+| Netlify Free (300 créditos al mes) | **Pausa** el sitio hasta el mes siguiente |
+| Cloudinary Free (25 créditos al mes; sin tarjeta) | Avisa varias veces y, si no se hace nada, **desactiva la cuenta** ([docs](https://cloudinary.com/documentation/ts_why_is_my_account_disabled_and_how_can_i_recover_my_disabled_account)). Su FAQ dice que el plan gratis se puede usar en producción sin restricciones dentro de esos créditos ([FAQ](https://cloudinary.com/documentation/developer_onboarding_faq_free_plan)) |
+| Upstash Redis Free (500 mil comandos y 250 MB al mes) | Avisa por correo ([precios](https://upstash.com/pricing/redis)). La página casi no lo usa, porque las páginas están en caché |
 
-**Railway Free** ($1 de uso al mes; los $5 de prueba son una sola vez)
-([precios](https://railway.com/pricing)):
-- La RAM cuesta $0.00000386 por GB-segundo, unos $10 por GB al mes.
-- Con 0.14–0.32 GB encendido todo el mes, solo la RAM cuesta **$1.40–$3.20 al mes**, sin contar CPU ni
-  tráfico. **El $1 se acaba en 9 a 21 días.**
-- Al acabarse, Railway **apaga los servicios hasta el mes siguiente** y hay que volver a desplegarlos a
-  mano ([foro de Railway](https://station.railway.com/billing/free-plan-confusion-62db1780)).
-- Su modo «Serverless» duerme el servicio tras 5–10 minutos sin tráfico. La primera visita después
-  espera a que despierte y puede recibir un error 502
-  ([docs](https://docs.railway.com/reference/app-sleeping)).
-- **Conclusión: no aguanta la página prendida todo el mes sin pagar. Descartado.**
+El dominio (renovación anual) es aparte y ya existe.
 
-**Netlify Free** (300 créditos al mes, límite duro)
-([precios](https://www.netlify.com/pricing/),
+**Cuántas visitas aguanta gratis** (medido el 27-oct; celular de pantalla muy densa, primera visita, sin
+caché):
+
+| Tipo de visita | Lo que gasta del hosting (Netlify) | Fotos (Cloudinary, estimado*) |
+| --- | --- | --- |
+| Completa (inicio → catálogo → 2 autos) | 81 peticiones, ≈ 0.6 MB | ≈ 2.5 MB |
+| Corta (enlace directo a 1 auto) | 24 peticiones, ≈ 0.35 MB | ≈ 1.1 MB |
+
+\* Las fotos no se pudieron medir en Cloudinary sin cuenta. Se usó lo que pesaban en WebP con calidad 70;
+con AVIF/WebP automático de Cloudinary deberían pesar igual o menos.
+
+Costo en créditos de Netlify ([precios](https://www.netlify.com/pricing/),
 [créditos](https://docs.netlify.com/manage/accounts-and-billing/billing/billing-for-credit-based-plans/how-credits-work/)):
-- **Cuánto cuesta cada cosa:**
 
-  | Uso | Créditos |
-  | --- | --- |
-  | Despliegue a producción | 15 |
-  | Vistas previas | 0 |
-  | 1 GB de tráfico | 20 |
-  | 10,000 peticiones | 2 |
+| Uso | Créditos |
+| --- | --- |
+| Despliegue a producción | 15 |
+| Vistas previas | 0 |
+| 1 GB de tráfico | 20 |
+| 10,000 peticiones | 2 |
 
-- Si se acaban los créditos, **todos los sitios de la cuenta se pausan** hasta el mes siguiente.
-- Permite uso comercial ([blog oficial](https://www.netlify.com/blog/introducing-netlify-free-plan)) y
-  soporta Cache Components de Next.js ([docs](https://docs.netlify.com/frameworks/next-js/overview/)).
-- **Cuántas visitas aguanta**, suponiendo 4 despliegues al mes (60 créditos) y un margen del 10%. Quedan
-  unos 216 créditos para visitas:
+Por cada 1,000 visitas completas: ≈ 0.6 GB × 20 + 81,000 peticiones = **≈ 28 créditos**.
 
-  | Dónde están las fotos | Créditos por 1,000 visitas completas | Visitas completas al mes | Visitas cortas al mes |
-  | --- | --- | --- | --- |
-  | En Netlify | ≈ 84 | **≈ 2,500** | ≈ 6,100 |
-  | En Cloudinary Free | ≈ 25 | **≈ 8,600** | ≈ 19,600 |
+Con 4 despliegues al mes (60 créditos) y 10% de margen quedan ≈ 216 créditos:
 
-  Con fotos en Cloudinary Free, el límite lo pone el propio Cloudinary: 25 créditos son unos 22 GB de
-  fotos, que dan para **≈ 8,800 visitas completas**.
-- **Conclusión:** Netlify Free sí puede aguantar el mes completo si el tráfico queda por debajo de esas
-  cifras. El tráfico real de H3 es **desconocido**.
-- **No se ha hecho un despliegue de prueba en Netlify.**
+| Servicio | Visitas completas al mes | Visitas cortas al mes |
+| --- | --- | --- |
+| Netlify | **≈ 7,600** | ≈ 18,200 |
+| Cloudinary (25 créditos ≈ 23 GB de fotos tras almacenamiento y transformaciones) | ≈ 9,400 | ≈ 21,000 |
 
-**Propuesta para gastar pocos créditos en Netlify** (propuesta, **sin decidir**):
-1. **Fotos optimizadas (ya aplicado el 27-oct):**
-   - En celular se piden fotos de 640–828 px en lugar de 1080–1440.
-   - Una visita completa bajó de ≈ 6.6 MB a ≈ 3.0 MB.
-   - En el teléfono del dueño las fotos se comprimen a unos 300 KB antes de subir.
-2. **Pocos despliegues:**
+**El límite real es ≈ 7,600 visitas completas al mes** (lo que llegue primero, Netlify). El tráfico real
+de H3 es **desconocido**.
+
+**Railway Free: descartado.** Da $1 de uso al mes ([precios](https://railway.com/pricing)). El servidor
+usa 136–316 MB de RAM, que cuestan $1.40–$3.20 al mes encendido todo el tiempo. El $1 se acaba en 9 a
+21 días y luego apaga todo hasta el mes siguiente
+([foro de Railway](https://station.railway.com/billing/free-plan-confusion-62db1780)). Su modo
+«Serverless» duerme el servicio y la primera visita puede recibir error 502
+([docs](https://docs.railway.com/reference/app-sleeping)).
+
+**Cómo gastar pocos créditos:**
+1. **Fotos fuera de Netlify, en Cloudinary.** Ya aplicado.
+2. **Fotos ligeras.** Ya aplicado: en celular se piden de 640–828 px y en el teléfono del dueño se
+   comprimen a ~300 KB antes de subir.
+3. **Pocos despliegues:**
    - Editar autos en el panel no gasta despliegues.
-   - Juntar los cambios de código y publicar a producción como máximo unas 4 veces al mes.
-   - Probar en vistas previas, que cuestan 0 créditos.
-3. **Fotos fuera de Netlify:** guardarlas y servirlas desde **Cloudinary Free** para que su tráfico no
-   gaste créditos de Netlify.
-   - **Cloudinary Free:** 25 créditos al mes; 1 crédito equivale a 1 GB de almacenamiento, 1 GB de
-     tráfico o 1,000 transformaciones ([precios](https://cloudinary.com/pricing)).
-   - Sin tarjeta.
-   - Su página de precios no menciona restricción de uso comercial; **falta confirmarlo en sus términos**.
-   - El inventario actual (~200 fotos de ~300 KB) ocupa menos de 0.1 GB.
-   - Requiere cambiar el código de subida de fotos (hoy usa Vercel Blob).
-4. Tener **solo esta página** en la cuenta de Netlify, porque si se acaban los créditos se pausa todo.
-5. Revisar el consumo de créditos en el panel de Netlify cada semana.
+   - Probar en vistas previas (0 créditos).
+   - Publicar a producción como máximo unas 4 veces al mes.
+4. **Solo este sitio** en la cuenta de Netlify, porque si se acaban los créditos se pausa todo.
+5. **Revisar el consumo** en Netlify y Cloudinary cada semana.
 
-**Dónde guardar las fotos: sin decidir.** Propuesta: Cloudinary Free.
-
-**Dominio:** h3seminuevos.com (ya existe). Va aparte y se verá después: **sin decidir**.
+**Dominio:** h3seminuevos.com (ya existe). Va aparte y se verá después: **sin decidir**. Mientras tanto,
+el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
 
 **Repositorio:** `Diluvium-mx/h3-web`. Es público y temporal; se borrará después.
 
@@ -254,17 +269,21 @@ pantalla muy densa, primera visita y sin caché, que es el caso más pesado.
   - Detalle con resumen de datos y aviso para datos faltantes.
   - Correcciones de datos y textos de «Vende tu auto».
   - Ciudades cercanas eliminadas y fotos optimizadas.
+- **27-oct (noche):**
+  - Las fotos pasan a **Cloudinary**: subida firmada desde el panel, importador de Shopify y borrado.
+  - El sitio quedó **adaptado a Netlify** y se probó con la herramienta oficial de Netlify.
+  - Pruebas: 13 del sitio, 11 del panel, 3 de Cloudinary simulado y 3 verificaciones de firma y loader.
 
 ## 7. Lo que falta (en orden)
 
-1. **Mejorar el resto del diseño** al estilo del catálogo nuevo, sobre todo inicio y detalle en
-   celular. Detalles concretos: **sin decidir**.
-2. **Decidir dónde guardar las fotos** (propuesta: Cloudinary Free) y cambiar el código de subida.
-3. **Adaptar y probar el despliegue en Netlify Free:**
-   - Variables de entorno.
-   - Upstash Redis.
-   - Prueba de que el panel actualiza el sitio sin volver a desplegar.
-4. Importar el inventario desde Shopify **antes** de cancelarlo.
+1. **Crear las cuentas gratuitas** (Netlify, Upstash y Cloudinary) y poner sus variables en Netlify (ver
+   README). Quién las crea y con qué correo: **sin decidir**.
+2. **Publicar en Netlify y verificar con las cuentas reales:**
+   - Subir una foto desde el panel.
+   - Comprobar que el sitio se actualiza sin volver a desplegar.
+3. **Importar el inventario desde Shopify a Cloudinary** antes de cancelar Shopify.
+4. **Mejorar el resto del diseño** al estilo del catálogo nuevo (inicio y detalle en celular). Detalles:
+   **sin decidir**.
 5. Actualizar la imagen para compartir en redes al estilo claro (opcional).
 6. Conectar el dominio: **sin decidir** cuándo.
 7. Cancelar Shopify.
@@ -280,7 +299,8 @@ pantalla muy densa, primera visita y sin caché, que es el caso más pesado.
 - **Características de cada auto resumidas** y fáciles de entender (27-oct).
 - **Si falta un dato no se inventa.** Se pone «Para más información, mándanos un mensaje; te respondemos
   de inmediato.» con botón de WhatsApp (27-oct).
-- **Hosting solo gratis**, nada de planes de pago. Primera opción: **Netlify Free** (27-oct).
+- **Hosting solo gratis**, nada de planes de pago: **Netlify Free** (27-oct).
+- **Fotos en Cloudinary Free** y adaptar el sitio a Netlify (27-oct, noche).
 - «Vende tu auto»: **sí compran directo, pero la página no lo dice**. Los detalles los ve el encargado por
   WhatsApp (27-oct).
 - **Solo Villahermosa, Tabasco**, sin ciudades cercanas en textos ni SEO (27-oct).
@@ -295,14 +315,16 @@ pantalla muy densa, primera visita y sin caché, que es el caso más pesado.
 - Cualquier plan de pago, incluidos Vercel Pro ($20/mes) y Netlify Personal ($9/mes).
 - Vercel Hobby: sus reglas no permiten uso comercial.
 - Railway Free: el $1 al mes no alcanza para tener la página prendida todo el mes (ver punto 5).
+- Vercel Blob para las fotos (reemplazado por Cloudinary).
 - Sección «H3 Custom» en la página (por ahora).
 - Lista de ciudades cercanas.
 
 ## 9. Preguntas abiertas
 
-1. ¿Aceptas **Cloudinary Free** para guardar las fotos? Si sí, hay que crear una cuenta gratuita.
-2. ¿Cuántas visitas al mes recibe hoy la página? Sirve para confirmar que alcanzan los créditos gratis
-   de Netlify.
+1. ¿Quién crea las cuentas gratuitas de Netlify, Upstash y Cloudinary, y con qué correo? Conviene que
+   sean del negocio.
+2. ¿Cuántas visitas al mes recibe hoy la página? Sirve para confirmar que alcanzan los límites gratis
+   (≈ 7,600 visitas completas al mes).
 3. Financiamiento y autos a cuenta: ¿los ofrecen? Mientras no haya respuesta, no se mencionan.
 4. ¿Qué quieres mejorar después del catálogo: inicio, detalle del auto u otra cosa?
 5. Dominio: ¿dónde está registrado y cuándo se conecta?

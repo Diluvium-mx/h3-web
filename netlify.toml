@@ -1,0 +1,9 @@
+# Netlify detecta Next.js y usa su adaptador oficial (OpenNext) automáticamente.
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
+  # No mandar datos de uso de Next.js
+  NEXT_TELEMETRY_DISABLED = "1"

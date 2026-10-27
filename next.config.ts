@@ -12,24 +12,25 @@ const nextConfig: NextConfig = {
     },
   },
   experimental: {
-    // Respaldo para subir fotos sin Vercel Blob (las fotos se comprimen antes en el navegador)
+    // Respaldo local para subir fotos sin Cloudinary (las fotos se comprimen antes en el navegador)
     serverActions: { bodySizeLimit: "4mb" },
     // La mayoría llega desde WhatsApp/redes (primera visita): CSS en el HTML = pinta antes
     inlineCss: true,
   },
+  env: {
+    // En Netlify, mientras no se conecte el dominio, se usa la dirección que Netlify asigna (URL)
+    NEXT_PUBLIC_SITE_URL:
+      process.env.NEXT_PUBLIC_SITE_URL || process.env.URL || "https://www.h3seminuevos.com",
+  },
   images: {
-    remotePatterns: [
-      // Fotos subidas desde el panel (Vercel Blob)
-      { protocol: "https", hostname: "*.public.blob.vercel-storage.com" },
-      // Fotos del inventario original en Shopify (demo / migración)
-      { protocol: "https", hostname: "cdn.shopify.com" },
-    ],
+    // Las fotos se sirven optimizadas desde Cloudinary (ver lib/image-loader.ts),
+    // así no gastan tráfico ni transformaciones del hosting.
+    loader: "custom",
+    loaderFile: "./lib/image-loader.ts",
     // Pocos tamaños = menos transformaciones y menos tráfico (importante en planes gratuitos)
     deviceSizes: [640, 828, 1080, 1440],
     imageSizes: [96, 256, 384],
     qualities: [70, 80],
-    // Las fotos subidas tienen nombre único, se pueden cachear mucho tiempo
-    minimumCacheTTL: 2678400,
   },
   async headers() {
     return [
