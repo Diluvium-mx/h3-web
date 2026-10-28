@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import Link from "next/link";
-import { Download, Plus } from "lucide-react";
+import { Download, MessageSquareQuote, Plus } from "lucide-react";
 import { AdminCarList } from "@/components/admin/car-list";
 import { StorageBanner } from "@/components/admin/storage-banner";
 import { LogoutButton } from "@/components/admin/logout-button";
@@ -19,6 +19,12 @@ export default function AdminPage() {
         </div>
         <div className="flex items-center gap-2">
           <Link
+            href="/admin/resenas"
+            className="hidden h-11 items-center gap-2 rounded-full border border-line px-4 text-sm font-medium sm:inline-flex"
+          >
+            <MessageSquareQuote className="size-4" /> Reseñas
+          </Link>
+          <Link
             href="/admin/importar"
             className="hidden h-11 items-center gap-2 rounded-full border border-line px-4 text-sm font-medium sm:inline-flex"
           >
@@ -32,6 +38,18 @@ export default function AdminPage() {
           </Link>
         </div>
       </div>
+      <Link
+        href="/admin/resenas"
+        className="mb-5 flex items-center gap-3 rounded-2xl border border-line bg-card p-3 pr-4 text-sm sm:hidden"
+      >
+        <span className="grid size-10 place-items-center rounded-xl bg-volt-soft text-fg">
+          <MessageSquareQuote className="size-5" />
+        </span>
+        <span>
+          <span className="block font-semibold">Reseñas de clientes</span>
+          <span className="text-mute">Se muestran en el inicio</span>
+        </span>
+      </Link>
       <Suspense fallback={<ListSkeleton />}>
         <Dashboard />
       </Suspense>

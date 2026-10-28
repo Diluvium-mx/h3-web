@@ -8,9 +8,15 @@ autos desde el celular.
 ## Qué incluye
 
 **Sitio público** (pensado primero para celular)
-- **Inicio**: hero con fotos del inventario que van rotando, franja animada de marcas, autos destacados,
-  exploración por tipo (SUV, Pickup, Deportivos, Blindados…) y por rango de precio, "¿Por qué H3?",
-  "Vende tu auto", "Recién vendidos" y ubicación/contacto con horario.
+- **Inicio**: landing hecha con el método de los 2 videos analizados (ver `ANALISIS-VIDEOS.md`):
+  - Hero con prueba social real, título de beneficio, subtítulo de dolor a solución, un botón principal,
+    quita-miedos y fotos del inventario.
+  - Números reales del inventario y franja de marcas.
+  - Autos destacados con tipos como «historias».
+  - Reseñas, solo si el dueño las agrega.
+  - «Lo de siempre» contra «en H3».
+  - 3 beneficios con imagen y «Tu próximo auto en 3 pasos».
+  - «Recién vendidos», «Vende tu auto», preguntas frecuentes y cierre con contacto y horario.
 - **Catálogo** (`/autos`): búsqueda, filtros (tipo, marca, precio, año, transmisión) y orden. Los
   filtros viven en el URL (`/autos?tipo=SUV`), así que se pueden compartir.
 - **Detalle de cada auto** (`/autos/bmw-m3-2018`): galería que se desliza con el dedo, pantalla completa,
@@ -29,6 +35,9 @@ autos desde el celular.
 - Alta y edición de autos: fotos (se comprimen solas en el teléfono antes de subir, ~300 KB c/u),
   reordenar y elegir portada, datos, características, etiquetas, descripción.
 - **Importar de Shopify**: copia los autos y sus fotos del Shopify actual al sitio nuevo con un clic.
+- **Reseñas** (`/admin/resenas`): agrega lo que dicen tus clientes (nombre, estrellas, texto, auto, origen y
+  foto opcional). Aparecen en el inicio; si no hay ninguna, la sección no se muestra. Publica solo reseñas
+  reales y con permiso.
 - Al guardar, el sitio público se actualiza al instante.
 
 Estados de un auto:
@@ -100,8 +109,8 @@ npm run dev
 ```
 
 - Sin variables de entorno, el sitio usa `data/seed.json` (el inventario actual).
-- En local, el panel (`/admin`, contraseña `h3admin`) guarda en `data/cars.local.json` y las fotos en
-  `public/uploads/` (ambos ignorados por git).
+- En local, el panel (`/admin`, contraseña `h3admin`) guarda en `data/cars.local.json` y
+  `data/reviews.local.json`, y las fotos en `public/uploads/` (todo ignorado por git).
 - Para usar los servicios reales en local, copia `.env.example` como `.env.local` y llénalo
   (no lo subas al repositorio).
 

@@ -30,8 +30,8 @@
    node scripts/e2e-admin.mjs http://localhost:3000
    ```
 
-   La prueba del panel usa la contraseña de desarrollo local y modifica `data/cars.local.json`;
-   ese archivo está ignorado por git.
+   La prueba del panel usa la contraseña de desarrollo local y modifica `data/cars.local.json` y
+   `data/reviews.local.json`; los dos están ignorados por git.
 
    Fotos en Cloudinary (con datos de prueba, nunca los reales):
 

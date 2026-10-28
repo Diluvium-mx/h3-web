@@ -1,7 +1,8 @@
 import "server-only";
 import { cacheLife, cacheTag } from "next/cache";
 import { isPublic, sortNewest, type Car } from "./cars";
-import { listCars } from "./storage";
+import { sortReviews } from "./reviews";
+import { listCars, listReviews } from "./storage";
 
 // Lecturas cacheadas para el sitio público. El panel invalida la etiqueta
 // "cars" cada vez que se guarda un cambio, así que el sitio se actualiza al instante.
@@ -11,6 +12,13 @@ export async function getAllCars(): Promise<Car[]> {
   cacheLife("days");
   const cars = await listCars();
   return cars.sort(sortNewest);
+}
+
+export async function getReviews() {
+  "use cache";
+  cacheTag("reviews");
+  cacheLife("days");
+  return (await listReviews()).sort(sortReviews);
 }
 
 export async function getPublicCars() {

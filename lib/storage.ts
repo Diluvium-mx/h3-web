@@ -3,6 +3,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { Redis } from "@upstash/redis";
 import type { Car } from "./cars";
+import type { Review } from "./reviews";
 import seed from "@/data/seed.json";
 
 // Almacenamiento del inventario.
@@ -81,6 +82,60 @@ export async function removeCar(id: string) {
     return;
   }
   await writeFileCars((await readFileCars()).filter((c) => c.id !== id));
+}
+
+// ---------- Reseñas de clientes ----------
+// Sin Redis no hay reseñas en producción (no se inventan); en desarrollo van a data/reviews.local.json.
+
+const REVIEWS_KEY = "h3:reviews";
+const LOCAL_REVIEWS = path.join(/*turbopackIgnore: true*/ process.cwd(), "data", "reviews.local.json");
+
+async function readFileReviews(): Promise<Review[]> {
+  if (storageMode !== "local") return [];
+  try {
+    return JSON.parse(await fs.readFile(/*turbopackIgnore: true*/ LOCAL_REVIEWS, "utf8")) as Review[];
+  } catch {
+    return [];
+  }
+}
+
+async function writeFileReviews(reviews: Review[]) {
+  if (storageMode !== "local") {
+    throw new Error("El sitio está en modo demo. Conecta Upstash Redis para poder guardar reseñas.");
+  }
+  await fs.writeFile(/*turbopackIgnore: true*/ LOCAL_REVIEWS, JSON.stringify(reviews, null, 2));
+}
+
+export async function listReviews(): Promise<Review[]> {
+  if (redis) {
+    const all = await redis.hgetall<Record<string, Review>>(REVIEWS_KEY);
+    return all ? Object.values(all) : [];
+  }
+  return readFileReviews();
+}
+
+export async function putReview(review: Review) {
+  if (redis) {
+    await redis.hset(REVIEWS_KEY, { [review.id]: review });
+    return;
+  }
+  const reviews = await readFileReviews();
+  const i = reviews.findIndex((r) => r.id === review.id);
+  if (i >= 0) reviews[i] = review;
+  else reviews.push(review);
+  await writeFileReviews(reviews);
+}
+
+export async function removeReview(id: string): Promise<Review | null> {
+  if (redis) {
+    const review = (await redis.hget<Review>(REVIEWS_KEY, id)) ?? null;
+    await redis.hdel(REVIEWS_KEY, id);
+    return review;
+  }
+  const reviews = await readFileReviews();
+  const review = reviews.find((r) => r.id === id) ?? null;
+  await writeFileReviews(reviews.filter((r) => r.id !== id));
+  return review;
 }
 
 // ---------- Límite de intentos de login (solo con Redis) ----------

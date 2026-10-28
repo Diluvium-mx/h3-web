@@ -2,6 +2,19 @@
 
 Lo más reciente va arriba.
 
+## 28 de octubre de 2026 — nuevo inicio con el método de los videos
+
+- Se transcribieron y analizaron los 2 videos de landing pages. El resumen, los puntos a seguir y cómo se
+  aplicaron están en `ANALISIS-VIDEOS.md`.
+- Se rehízo el inicio con ese orden: hero completo en la primera pantalla del celular, prueba social real,
+  «lo de siempre» contra «en H3», beneficios, 3 pasos, preguntas frecuentes y cierre.
+- Nuevo en el panel: **Reseñas**. Solo se muestran si el dueño agrega reseñas reales. También se arregló el
+  filtro del catálogo al llegar desde otro enlace.
+- Lighthouse en celular: 94–96 de rendimiento y 100 en lo demás. Pasan las 34 pruebas.
+
+Falta: crear las cuentas, publicar, conseguir reseñas reales y responder las preguntas nuevas de
+`CONTEXTO.md` (video, medición, garantía).
+
 ## 27 de octubre de 2026 (noche) — fotos en Cloudinary y adaptación a Netlify
 
 - Las fotos ahora se guardan y se sirven desde **Cloudinary Free**. Ninguna foto pasa por el hosting.

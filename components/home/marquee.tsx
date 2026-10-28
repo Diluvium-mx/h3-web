@@ -11,8 +11,8 @@ export function Marquee({ items }: { items: string[] }) {
               <Fragment key={`${copy}-${i}`}>
                 <span
                   className={`font-display px-6 text-3xl whitespace-nowrap sm:text-4xl ${
-                    i % 2 ? "text-outline" : "text-fg"
-                  } ${item === "Ready to drive" ? "!text-brand" : ""}`}
+                    i % 2 ? "text-dim" : "text-fg"
+                  } ${item === "Ready to drive" ? "!text-brand-hi" : ""}`}
                 >
                   {item}
                 </span>

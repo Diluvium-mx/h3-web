@@ -13,6 +13,7 @@ import {
   type CarStatus,
 } from "./cars";
 import { requireAdmin } from "./auth";
+import { REVIEW_SOURCES, type Review } from "./reviews";
 import { checkPassword, createSessionToken, SESSION_COOKIE, SESSION_DAYS } from "./session";
 import {
   clearLoginFailures,
@@ -21,8 +22,10 @@ import {
   listCars,
   loginFailures,
   putCar,
+  putReview,
   recordLoginFailure,
   removeCar,
+  removeReview,
 } from "./storage";
 import { deleteImages, isAllowedImageUrl, saveImage, storeRemoteImage } from "./images";
 import { shopifyToCar, type ShopifyProduct } from "./shopify";
@@ -202,6 +205,51 @@ export async function deleteCarAction(id: string): Promise<ActionResult> {
     await removeCar(id);
     await deleteImages(car.images);
     changed();
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : "No se pudo eliminar" };
+  }
+}
+
+// ---------- Reseñas ----------
+
+export type ReviewInput = Omit<Review, "id" | "createdAt">;
+
+export async function saveReviewAction(input: ReviewInput): Promise<ActionResult<{ review: Review }>> {
+  await requireAdmin();
+  const name = str(input.name, 60);
+  const text = str(input.text, 700);
+  const stars = int(input.stars);
+  if (!name) return { ok: false, error: "Escribe el nombre del cliente." };
+  if (!text) return { ok: false, error: "Escribe lo que dijo el cliente." };
+  if (!stars || stars < 1 || stars > 5) return { ok: false, error: "Elige de 1 a 5 estrellas." };
+  const photo = typeof input.photo === "string" && isAllowedImageUrl(input.photo) ? input.photo : undefined;
+  const review: Review = clean({
+    id: crypto.randomUUID().slice(0, 12),
+    name,
+    text,
+    highlight: str(input.highlight, 90) || undefined,
+    car: str(input.car, 60) || undefined,
+    stars,
+    source: oneOf(REVIEW_SOURCES, input.source),
+    photo,
+    createdAt: new Date().toISOString(),
+  });
+  try {
+    await putReview(review);
+    updateTag("reviews");
+    return { ok: true, review };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : "No se pudo guardar" };
+  }
+}
+
+export async function deleteReviewAction(id: string): Promise<ActionResult> {
+  await requireAdmin();
+  try {
+    const review = await removeReview(id);
+    if (review?.photo) await deleteImages([review.photo]);
+    updateTag("reviews");
     return { ok: true };
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : "No se pudo eliminar" };

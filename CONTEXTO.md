@@ -1,6 +1,6 @@
 # Contexto del proyecto: página web de H3 Seminuevos
 
-Última actualización: 27 de octubre de 2026 (con las decisiones del dueño de ese día).
+Última actualización: 28 de octubre de 2026 (nuevo inicio basado en el análisis de 2 videos de landing pages).
 Regla: aquí no se inventa nada. Lo que no está decidido dice **«sin decidir»**.
 
 ---
@@ -43,25 +43,36 @@ No se busca vender en línea: no hay carrito ni pagos.
 
 ## 3. Secciones de la página (en orden)
 
-**Inicio (`/`)**
+**Inicio (`/`)** — rediseñado el 28-oct con el método de los 2 videos de landing pages que mandó el dueño
+(análisis completo en `ANALISIS-VIDEOS.md`). Acción principal: ver un auto y mandar WhatsApp.
 1. **Encabezado fijo:** logo, Catálogo, Vende tu auto, Contacto y botón de WhatsApp. En celular lleva un
    menú de pantalla completa.
-2. **Hero:**
-   - Fotos de los autos destacados que van rotando. En celular, la foto se desvanece a blanco donde va
-     el texto.
-   - Título «Tu próximo auto está aquí.».
-   - Botones «Ver catálogo» (rojo) y «Vender mi auto» (amarillo).
-   - Tres datos: autos disponibles, ubicación y «Atención 1 a 1».
-3. **Franja animada** con las marcas del inventario.
-4. **«Lo disponible 🔥»:** autos destacados. En celular se deslizan de lado.
-5. **«Explora por tipo»** y botones por rango de precio.
-6. **«¿Por qué H3?»:** autos verificados, precios justos y atención personalizada.
-7. **Banner rojo «¿Quieres vender tu auto?»**, que lleva a la página de venta.
-8. **«Recién vendidos»:** solo aparece si hay autos marcados como vendidos.
-9. **Contacto:**
-   - Dirección, horario y botones de Google Maps y Waze.
-   - WhatsApp, llamada y redes.
-10. **Pie de página** y **botón flotante de WhatsApp**.
+2. **Hero** (todo cabe en la primera pantalla del celular):
+   - **Prueba social arriba del título:** «13 autos disponibles hoy» (número real). Si hay reseñas en el
+     panel, cambia a estrellas y número de reseñas reales.
+   - Línea «Seminuevos premium en Villahermosa» y título «**Tu próximo auto, sin sorpresas.**».
+   - Subtítulo de dolor a solución: precios «por inbox», fotos que no son del auto y mensajes en visto →
+     fotos reales, precio de cada auto y respuesta inmediata por WhatsApp.
+   - Un solo botón principal: «Ver los 13 autos». En escritorio también «Escríbenos».
+   - Quita-miedos: ✓ Precio a la vista ✓ Fotos reales de cada auto ✓ Respuesta inmediata.
+   - Fotos reales de los autos destacados que van rotando, con nombre y precio.
+3. **Números reales del inventario** (disponibles, marcas, «desde $…», blindados) y franja de marcas.
+4. **«13 autos listos para manejar»:** tipos como «historias» que filtran el catálogo y autos destacados.
+5. **Reseñas de clientes:** solo aparece si el dueño agrega reseñas **reales** en el panel. Van todas a la
+   vista, sin carrusel, con estrellas, frase destacada, foto opcional y origen (Google, Facebook…).
+6. **«Comprar un seminuevo no tiene que ser una apuesta.»:** 5 comparaciones «lo de siempre» contra
+   «en H3».
+7. **3 beneficios con imagen:**
+   - **Autos verificados:** foto real con su ficha.
+   - **Precio justo y a la vista:** selector de presupuesto con el número real de autos.
+   - **Atención 1 a 1:** ilustración del WhatsApp que se manda, con el texto real.
+8. **«Tu próximo auto en 3 pasos»:** elige, escríbenos y ven a conocerlo.
+9. **«Recién vendidos»:** solo aparece si hay autos marcados como vendidos.
+10. **Banner rojo «¿Quieres vender tu auto?»**.
+11. **Preguntas frecuentes** (6), contestadas solo con datos confirmados.
+12. **Cierre:** «Cada auto es único: cuando se vende, ya no vuelve.», quita-miedos, WhatsApp, catálogo,
+    dirección, horario, Google Maps, Waze, teléfono y redes.
+13. **Pie de página** y **botón flotante de WhatsApp**.
 
 **Catálogo (`/autos`)** — rediseñado el 27-oct, empezando por celular:
 - **Encabezado:**
@@ -106,6 +117,10 @@ No se busca vender en línea: no hay carrito ni pagos.
 - Inventario con búsqueda y pestañas: Disponibles, Apartados y Vendidos.
 - Alta y edición de autos con fotos (se comprimen en el teléfono).
 - Importar de Shopify.
+- **Reseñas** (`/admin/resenas`, desde el 28-oct):
+  - Datos: nombre, auto que compró, estrellas, texto, frase destacada, origen y foto opcional.
+  - Se guardan en Upstash Redis, **nunca en el repositorio**.
+  - El panel recuerda publicar solo reseñas reales y con permiso del cliente.
 
 **Estados de un auto**
 - **Disponible:** se ve en el catálogo.
@@ -269,6 +284,13 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
   - Detalle con resumen de datos y aviso para datos faltantes.
   - Correcciones de datos y textos de «Vende tu auto».
   - Ciudades cercanas eliminadas y fotos optimizadas.
+- **28-oct:**
+  - Se analizaron y transcribieron los 2 videos de landing pages (`ANALISIS-VIDEOS.md`).
+  - **Inicio rediseñado** con ese método.
+  - Nueva sección de **reseñas** en el panel.
+  - Se corrigió el filtro del catálogo al llegar desde un enlace de otra página.
+  - Lighthouse en celular: rendimiento 94–96, accesibilidad 100, buenas prácticas 100 y SEO 100.
+  - Pruebas: 17 del sitio, 14 del panel y 3 de Cloudinary simulado.
 - **27-oct (noche):**
   - Las fotos pasan a **Cloudinary**: subida firmada desde el panel, importador de Shopify y borrado.
   - El sitio quedó **adaptado a Netlify** y se probó con la herramienta oficial de Netlify.
@@ -277,16 +299,16 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
 ## 7. Lo que falta (en orden)
 
 1. **Crear las cuentas gratuitas** (Netlify, Upstash y Cloudinary) y poner sus variables en Netlify (ver
-   README). Quién las crea y con qué correo: **sin decidir**.
+   README). Las crea quien lleva el proyecto (respuesta del 28-oct). Con qué correo: **sin decidir**.
 2. **Publicar en Netlify y verificar con las cuentas reales:**
    - Subir una foto desde el panel.
    - Comprobar que el sitio se actualiza sin volver a desplegar.
 3. **Importar el inventario desde Shopify a Cloudinary** antes de cancelar Shopify.
-4. **Mejorar el resto del diseño** al estilo del catálogo nuevo (inicio y detalle en celular). Detalles:
-   **sin decidir**.
-5. Actualizar la imagen para compartir en redes al estilo claro (opcional).
-6. Conectar el dominio: **sin decidir** cuándo.
-7. Cancelar Shopify.
+4. **Agregar reseñas reales** en el panel (con permiso de los clientes), cuando existan.
+5. **Mejorar la página de detalle** al estilo del inicio y del catálogo nuevos. Detalles: **sin decidir**.
+6. Actualizar la imagen para compartir en redes al estilo claro (opcional).
+7. Conectar el dominio: **sin decidir** cuándo.
+8. Cancelar Shopify.
 
 ## 8. Decisiones tomadas y cosas descartadas
 
@@ -308,6 +330,11 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
 - La sección de personalización (H3 Custom) **no se incluye por ahora**, aunque sí ofrecen el servicio.
 - Horario: lunes a sábado de 9:00 a 17:00; domingo cerrado.
 - El dominio se verá después.
+- **El inicio sigue el método de los 2 videos de landing pages** que mandó el dueño (28-oct). Ver
+  `ANALISIS-VIDEOS.md`.
+- **Prueba social solo con datos reales:** números del inventario y reseñas que el dueño agregue en el panel.
+  No se inventan reseñas, calificaciones ni cifras (28-oct).
+- Las cuentas gratuitas las crea quien lleva el proyecto (28-oct).
 - Seguimiento en un repo público temporal, con `CONTEXTO.md` y `AVANCE.md`.
 
 **Descartadas**
@@ -321,11 +348,17 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
 
 ## 9. Preguntas abiertas
 
-1. ¿Quién crea las cuentas gratuitas de Netlify, Upstash y Cloudinary, y con qué correo? Conviene que
-   sean del negocio.
+1. ¿Con qué correo se crean las cuentas gratuitas de Netlify, Upstash y Cloudinary? Conviene que sean del
+   negocio. (Quién las crea ya está respondido.)
 2. ¿Cuántas visitas al mes recibe hoy la página? Sirve para confirmar que alcanzan los límites gratis
    (≈ 7,600 visitas completas al mes).
 3. Financiamiento y autos a cuenta: ¿los ofrecen? Mientras no haya respuesta, no se mencionan.
-4. ¿Qué quieres mejorar después del catálogo: inicio, detalle del auto u otra cosa?
-5. Dominio: ¿dónde está registrado y cuándo se conecta?
-6. ¿Quién va a administrar el panel? La contraseña **no** se sube a este repositorio.
+4. **Reseñas reales:** ¿tienen reseñas en Google o Facebook, mensajes de clientes o fotos de entregas que se
+   puedan publicar con permiso? Es lo que más sube la confianza según los videos.
+5. **Video:** ¿pueden grabar un video corto (30–60 s) del lugar o de un auto para el inicio?
+6. **Medición:** ¿quieren medir cuántos tocan WhatsApp? Opciones gratuitas: Google Analytics 4 o
+   Cloudflare Web Analytics.
+7. **Garantía o revisión:** ¿los autos tienen alguna garantía o revisión que se pueda mencionar?
+8. **De dónde llegan los clientes hoy:** Instagram, Facebook, TikTok, Google o recomendación.
+9. Dominio: ¿dónde está registrado y cuándo se conecta?
+10. ¿Quién va a administrar el panel? La contraseña **no** se sube a este repositorio.

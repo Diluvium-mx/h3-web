@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useMemo, useState, type ReactNode } from "react";
 import Image from "next/image";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import { CarCard } from "@/components/car-card";
@@ -154,7 +154,8 @@ function TypeStory({
 export function CatalogBrowser({ cars }: { cars: Car[] }) {
   const [f, setF] = useState<Filters>(EMPTY);
   const [sheet, setSheet] = useState(false);
-  const ready = useRef(false);
+  // Estado (no ref): así el primer efecto, que aún tiene los filtros vacíos, no borra el ?tipo= del URL
+  const [ready, setReady] = useState(false);
 
   // Lee los filtros del URL (?tipo=SUV, etc.) antes de pintar
   useIsoLayoutEffect(() => {
@@ -163,17 +164,18 @@ export function CatalogBrowser({ cars }: { cars: Car[] }) {
       ...EMPTY,
       ...Object.fromEntries(Object.keys(EMPTY).map((k) => [k, p.get(k) ?? EMPTY[k as keyof Filters]])),
     });
-    ready.current = true;
+    setReady(true);
   }, []);
 
   // Mantiene el URL sincronizado para poder compartir la búsqueda
   useEffect(() => {
-    if (!ready.current) return;
+    if (!ready) return;
     const p = new URLSearchParams();
     for (const [k, v] of Object.entries(f)) if (v && v !== EMPTY[k as keyof Filters]) p.set(k, v);
     const qs = p.toString();
+    if (qs === window.location.search.slice(1)) return;
     window.history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
-  }, [f]);
+  }, [f, ready]);
 
   useEffect(() => {
     document.documentElement.style.overflow = sheet ? "hidden" : "";

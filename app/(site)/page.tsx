@@ -1,29 +1,44 @@
-import { Hero } from "@/components/home/hero";
-import { Marquee } from "@/components/home/marquee";
+import { Hero, ProofBar } from "@/components/home/hero";
+import { ReviewsWall } from "@/components/home/reviews";
 import {
-  Categories,
-  Contact,
-  FeaturedCars,
+  Closer,
+  Comparison,
+  Faq,
+  HowItWorks,
+  Inventory,
   SellBanner,
   SoldStrip,
-  WhyUs,
+  ValueProps,
 } from "@/components/home/sections";
-import { getFeaturedCars, getPublicCars, getSoldCars } from "@/lib/data";
+import { getFeaturedCars, getPublicCars, getReviews, getSoldCars } from "@/lib/data";
+import { reviewSummary } from "@/lib/reviews";
 
+// Estructura de landing de los videos analizados (ver ANALISIS-VIDEOS.md):
+// hero con prueba social → prueba social 2 → producto → reseñas → dolor vs. solución → beneficios →
+// cómo funciona → más prueba social → oferta secundaria → preguntas → cierre con urgencia y contacto.
 export default async function HomePage() {
-  const [cars, featured, sold] = await Promise.all([getPublicCars(), getFeaturedCars(8), getSoldCars()]);
-  const brands = [...new Set(cars.map((c) => c.brand))];
+  const [cars, featured, sold, reviews] = await Promise.all([
+    getPublicCars(),
+    getFeaturedCars(8),
+    getSoldCars(),
+    getReviews(),
+  ]);
+  const available = cars.filter((c) => c.status === "disponible").length;
+  const rating = reviewSummary(reviews);
 
   return (
     <>
-      <Hero cars={featured.slice(0, 4)} total={cars.length} />
-      {brands.length > 0 && <Marquee items={brands} />}
-      {featured.length > 0 && <FeaturedCars cars={featured} />}
-      {cars.length > 0 && <Categories cars={cars} />}
-      <WhyUs />
-      <SellBanner />
+      <Hero cars={featured.slice(0, 4)} total={cars.length} available={available} rating={rating} />
+      <ProofBar cars={cars} available={available} />
+      {featured.length > 0 && <Inventory cars={cars} featured={featured} />}
+      <ReviewsWall reviews={reviews} />
+      <Comparison />
+      <ValueProps cars={cars} featured={featured} />
+      <HowItWorks />
       <SoldStrip cars={sold} />
-      <Contact />
+      <SellBanner />
+      <Faq />
+      <Closer available={available} rating={rating} />
     </>
   );
 }

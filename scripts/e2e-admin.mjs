@@ -92,6 +92,35 @@ const step = (m) => console.log('✔', m);
     const still = await page.getByText('Porsche Cayenne').count();
     if (still) throw new Error('no se eliminó');
     step('auto eliminado');
+
+    // Reseñas: se agregan en el panel y aparecen en el inicio (y se pueden borrar)
+    await page.goto(B + '/');
+    if (await page.locator('#resenas').count()) throw new Error('hay reseñas antes de la prueba');
+    step('sin reseñas, el inicio no muestra la sección');
+    await page.goto(B + '/admin/resenas');
+    await page.getByText('Nueva reseña').waitFor({ timeout: 30000 });
+    await page.fill('input[placeholder="Ej. Carlos M."]', 'Prueba E2E');
+    await page.fill('input[placeholder="Ej. BMW M3 2018"]', 'Auto de prueba');
+    await page.click('[aria-label="4 estrellas"]');
+    await page.fill('textarea', 'Texto de reseña de prueba automática.');
+    await page.fill('input[placeholder="Una frase corta tomada de su reseña"]', 'Frase de prueba');
+    await page.click('[aria-label=Origen] >> text=Google');
+    await page.click('button:has-text("Publicar reseña")');
+    await page.locator('li', { hasText: 'Prueba E2E' }).waitFor({ timeout: 30000 });
+    await page.goto(B + '/');
+    await page.getByText('Texto de reseña de prueba automática.').waitFor({ timeout: 30000 });
+    await page.getByText('4.0 · 1 reseña de clientes').first().waitFor();
+    await page.getByText('Reseña de Google').waitFor();
+    step('reseña publicada → aparece en el inicio con su calificación');
+    await page.goto(B + '/admin/resenas');
+    const rv = page.locator('li', { hasText: 'Prueba E2E' });
+    await rv.locator('button[aria-label=Eliminar]').click();
+    await rv.locator('button:has-text("Eliminar")').click();
+    await rv.waitFor({ state: 'detached', timeout: 30000 });
+    await page.goto(B + '/');
+    await page.getByText('autos disponibles hoy').first().waitFor({ timeout: 30000 });
+    if (await page.getByText('Texto de reseña de prueba automática.').count()) throw new Error('la reseña sigue en el inicio');
+    step('reseña eliminada → sale del inicio');
   } catch (e) {
     console.log('✘ FALLO:', e.message);
     process.exitCode = 1;

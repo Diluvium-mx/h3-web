@@ -247,6 +247,30 @@ body {
   }
 }
 
+/* «Escribiendo…» del chat de ejemplo */
+.typing-dot {
+  animation: typing 1.2s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * 0.16s);
+}
+@keyframes typing {
+  0%,
+  60%,
+  100% {
+    transform: none;
+    opacity: 0.45;
+  }
+  30% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+/* Preguntas frecuentes: la respuesta entra suave al abrir */
+.faq[open] > p {
+  animation: var(--animate-rise);
+  animation-duration: 0.5s;
+}
+
 .skeleton {
   background: linear-gradient(90deg, var(--color-soft) 0%, var(--color-soft-2) 50%, var(--color-soft) 100%);
   background-size: 200% 100%;

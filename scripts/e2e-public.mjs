@@ -13,6 +13,32 @@ const step = (m) => console.log('✔', m);
   page.on('pageerror', e => errors.push('PAGEERROR ' + e.message));
   page.on('console', m => { if (m.type() === 'error') errors.push(m.text().slice(0, 300)); });
   try {
+    // Inicio: estructura de landing (hero con prueba social, CTA, sin miedos, preguntas)
+    await page.goto(B + '/');
+    await page.getByRole('heading', { level: 1 }).filter({ hasText: 'sin sorpresas' }).waitFor({ timeout: 30000 });
+    await page.getByText('13 autos disponibles hoy').first().waitFor();
+    for (const t of ['Precio a la vista', 'Fotos reales de cada auto', 'Respuesta inmediata']) await page.getByText(t).first().waitFor();
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    if (overflow > 0) throw new Error('scroll horizontal en inicio: ' + overflow + 'px');
+    const heroCta = page.locator('a', { hasText: 'Ver los 13 autos' }).first();
+    if (!(await heroCta.isVisible())) throw new Error('el botón principal no se ve sin hacer scroll');
+    const box = await heroCta.boundingBox();
+    if (box.y + box.height > 844) throw new Error('el botón principal queda abajo del primer pantallazo');
+    step('hero: prueba social, título, botón y quita-miedos en el primer pantallazo');
+    const faq = page.locator('details', { hasText: '¿Puedo ver el auto en persona?' });
+    await faq.locator('summary').click();
+    await faq.getByText('de lunes a sábado de').waitFor();
+    step('preguntas frecuentes abren');
+    await page.locator('a[href="/autos?tipo=Blindado"]').first().click();
+    await page.getByText('2 autos encontrados').waitFor({ timeout: 30000 });
+    step('historia «Blindados» del inicio filtra el catálogo → 2');
+    await page.goto(B + '/');
+    const budget = page.locator('a[href="/autos?precio=0-300000"]');
+    const label = (await budget.innerText()).match(/(\d+) autos?/)[1];
+    await budget.click();
+    await page.getByText(`${label} ${label === '1' ? 'auto encontrado' : 'autos encontrados'}`).waitFor({ timeout: 30000 });
+    step(`presupuesto «Hasta $300k» del inicio coincide con el catálogo → ${label}`);
+
     // Catálogo con filtro desde URL
     await page.goto(B + '/autos?tipo=Deportivo');
     await page.getByText('3 autos encontrados').waitFor({ timeout: 30000 });
