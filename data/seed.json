@@ -37,7 +37,22 @@
     "createdAt": "2026-10-18T08:36:31-07:00",
     "updatedAt": "2026-10-26T17:24:46-07:00",
     "ownerCount": 1,
-    "invoice": "Original"
+    "invoice": "Original",
+    "photoSections": {
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/E6E46EDC-1DC6-45AB-BAD5-BAEFCA91D454.jpg?v=1792337754&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/4D6D8A19-7A0D-4C99-9010-22AF392DEC61.jpg?v=1792337754&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/16396A0A-57CA-411B-9642-4182C85AFCCD.jpg?v=1792337754&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/39507736-5E53-4C8B-B3FB-E75E7E2A845A.jpg?v=1792337754&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/CE8072CA-5B54-4EEA-909C-7A250B91F7C9.jpg?v=1792337754&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/F6FEC4BD-B563-4480-AEE8-C53649AE4AD7.jpg?v=1792337754&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/F6F020C6-B75A-4FFF-88CB-4E5B6B6107CF.jpg?v=1792337754&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/F3AE23B8-1525-45B8-8B2B-575D75A0C21E.jpg?v=1792337754&width=1600": "interior"
+    },
+    "equipment": [
+      "aire-acondicionado",
+      "control-solar",
+      "proteccion-pintura"
+    ]
   },
   {
     "id": "shp92544921",
@@ -74,7 +89,19 @@
     "featured": true,
     "shopifyHandle": "2022-ford-mustang-gt-premium-aut",
     "createdAt": "2026-09-18T16:52:35-07:00",
-    "updatedAt": "2026-10-26T17:24:46-07:00"
+    "updatedAt": "2026-10-26T17:24:46-07:00",
+    "photoSections": {
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/CEB6C300-CA53-48EA-BCFE-20D925EC6FFF.jpg?v=1789775511&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/447E68CB-0918-4D2F-B24F-A1C6BA7268BF.jpg?v=1789775511&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/3A62B28E-84C5-40E4-822E-CC3724119E74.jpg?v=1789775511&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/58D17FF5-654A-4059-9DB6-3EDC3D3E2E0A.jpg?v=1789775511&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/2133F07C-66CE-4A87-A2CB-CC31FB35F134.jpg?v=1789775511&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/3B2A383A-73BD-4EA4-8D25-436D68EC5C9D.jpg?v=1789775511&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/C8DAB114-12FF-4BB6-98A6-8356A92B6D23.jpg?v=1789775511&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/76FC2B2B-E117-46CE-91C1-5F580D2C850F.jpg?v=1789775511&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/434C295A-CC24-4303-AB27-7C27A9C1B8CE.jpg?v=1789775511&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/B631954D-7B8B-4EEA-8A75-038E996C0E02.jpg?v=1789775511&width=1600": "interior"
+    }
   },
   {
     "id": "shp90578841",
@@ -110,7 +137,18 @@
     "featured": true,
     "shopifyHandle": "2023-chevrolet-cheyenne-high-country",
     "createdAt": "2026-09-18T16:34:02-07:00",
-    "updatedAt": "2026-10-26T17:24:46-07:00"
+    "updatedAt": "2026-10-26T17:24:46-07:00",
+    "photoSections": {
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/0885B032-C2CA-4F6E-BBF4-B3D10B120E7F.jpg?v=1789774410&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/6D25D33E-F947-4606-9114-46CF61F07FA9.jpg?v=1789774410&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/D1F2CAA4-5CA5-449A-B10F-CF1F5C55B949.jpg?v=1789774410&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/235BE34D-CC2E-493B-9173-216FE013FF51.jpg?v=1789774409&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/97BD0B3F-E5A0-48AC-8054-7A89714D95C2.jpg?v=1789774410&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/8BD146F4-6153-4A88-98D7-3929B5B2D31F.jpg?v=1789774410&width=1600": "detalles",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/BAC403DB-23E2-432F-98F6-F74C87342A5B.jpg?v=1789774410&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/97E235AC-78BE-41E1-8134-8A00E459AA75.jpg?v=1789774409&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/6F4D25A1-3093-46A3-8F82-27393ECE3E9D.jpg?v=1789774410&width=1600": "interior"
+    }
   },
   {
     "id": "shp63895961",
@@ -156,7 +194,27 @@
     "shopifyHandle": "2017-bmw-240m",
     "createdAt": "2026-09-17T09:39:24-07:00",
     "updatedAt": "2026-10-26T17:24:46-07:00",
-    "transmission": "Automática"
+    "transmission": "Automática",
+    "photoSections": {
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/40F85E48-D906-4F65-9C00-B905B1164BC8.jpg?v=1789663128&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/155FD40B-7C78-4E04-A73E-6845CE164EE9.jpg?v=1789663128&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/8A850815-7FD4-4314-9173-4E9E03AD2F98.jpg?v=1789663128&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/D13C0E5B-839B-44D0-B1EB-58DAA33DD110.jpg?v=1789663128&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/BBA5999A-34CA-4921-A7E1-C1C1E41C7710.jpg?v=1789663128&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/94706656-B7B3-49A9-BE3D-DF90BA29E088.jpg?v=1789663128&width=1600": "detalles",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/8A5EA76C-A105-4292-A4AC-83AA501A5B68.jpg?v=1789663128&width=1600": "detalles",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/C4C9B9B2-DB00-4640-8A56-67C82BFCAC17.jpg?v=1789663128&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/373DEE33-9C73-44BF-A690-F4023E6F80C5.jpg?v=1789663128&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/923CDA95-75E6-4816-AD1F-D7BCEF2A87CB.jpg?v=1789663128&width=1600": "detalles",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/FAA5C80B-CF4A-4905-9845-028FD10EAE5B.jpg?v=1789663128&width=1600": "detalles",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/E31AD074-53AB-43D8-808E-83F7AB341936.jpg?v=1789663128&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/7122855A-DF41-4DC2-B1BD-EE088F588D60.jpg?v=1789663128&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/F778F4AA-DF81-48BB-9837-F2F61EBDEF49.jpg?v=1789663128&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/1E3991CB-B7B3-4611-A943-82B863A91881.jpg?v=1789663128&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/E054D87E-43FC-43E3-B0D7-153EFC903B48.jpg?v=1789663128&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/5017EDBA-41E7-46A9-8C11-E46BBBB127C5.jpg?v=1789663128&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/086A6726-D490-4F2A-AE5B-A0BA32B7DF4E.jpg?v=1789663128&width=1600": "motor"
+    }
   },
   {
     "id": "shp79419289",
@@ -205,7 +263,29 @@
     "featured": true,
     "shopifyHandle": "2021-mercedes-benz-g63-amg-1",
     "createdAt": "2026-09-15T08:46:34-07:00",
-    "updatedAt": "2026-10-26T17:24:46-07:00"
+    "updatedAt": "2026-10-26T17:24:46-07:00",
+    "photoSections": {
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/EF3E9A2F-417D-4D71-8DA6-606EC3E36B73.jpg?v=1789487145&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/06E6D362-213D-4BB6-A00E-3A86C2B2CF08.jpg?v=1789487145&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/0D5118D4-E040-4CCB-80D0-E45E9967B612.jpg?v=1789487145&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/C3A4F36C-8F62-4D5C-8477-BBD7C176148F.jpg?v=1789487145&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/E1E959C3-32F1-4843-BD1E-9B4D94AE0889.jpg?v=1789487145&width=1600": "detalles",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/ADB9456B-79F7-4A40-85E3-1C175BDFB636.jpg?v=1789487145&width=1600": "detalles",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/4CAC1A19-A34E-40A0-9CE5-DC5068F409B3.jpg?v=1789487145&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/EC7DDEF1-8D90-4DA3-B37E-2F05327532F6.jpg?v=1789487145&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/CFD53439-2B9F-4D17-AC84-22F2E1C2E5ED.jpg?v=1789487145&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/DB4F2CA1-DBE8-4DD4-8662-32EE245C11C0.jpg?v=1789487145&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/105C1819-F252-4129-A5CF-DDD79F668A13.jpg?v=1789487145&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/43C65F68-FE2D-44B8-AA24-CA5D6E6CDACC.jpg?v=1789487145&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/A17C25FE-583D-49F0-9AEF-4F2AB7A5A67B.jpg?v=1789487145&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/C7621ACC-1CC6-4992-AF97-868186E810BC.jpg?v=1789487145&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/F4429E66-C366-40B0-B615-4D43D6896555.jpg?v=1789487145&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/899B3F0F-CD48-47F9-BFEC-AD9F4DC4B062.jpg?v=1789487145&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/030E5B25-7619-43DE-A8EF-27B68A96AD7B.jpg?v=1789487145&width=1600": "interior"
+    },
+    "equipment": [
+      "proteccion-pintura"
+    ]
   },
   {
     "id": "shp92154265",
@@ -246,7 +326,26 @@
     "featured": false,
     "shopifyHandle": "2013-cadillac-escalade",
     "createdAt": "2026-08-27T08:55:45-07:00",
-    "updatedAt": "2026-10-26T17:24:46-07:00"
+    "updatedAt": "2026-10-26T17:24:46-07:00",
+    "photoSections": {
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/5FC8F77C-2C72-4105-BF33-8680078B1EF3.jpg?v=1744781022&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/508674BC-B356-4E79-8CAF-C518B5D1AE4B.jpg?v=1744781022&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/B674CAD4-4168-4D10-8A53-403D6B52BF00.jpg?v=1744781022&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/988F2775-AF80-4114-9632-76E28149AE43.jpg?v=1744781022&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/43DD93F0-7EE1-4D19-8D3E-D334ACB3528D.jpg?v=1744781022&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/3A0E29AB-2831-4379-A21A-B7203B572AC1.jpg?v=1744834685&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/5CA6E9D9-7505-49A9-AE9D-3FCC4B00CB5D.jpg?v=1744834684&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/7E056E51-FD2B-4112-9328-117D10B8A477.jpg?v=1744834685&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/A4BA9483-0567-4DBA-B98D-F2B00BBB1F47.jpg?v=1744834685&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/FEF48D85-5E22-422B-A63C-832F98FFA727.jpg?v=1744834685&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/7C371003-E181-4C75-B0C4-8D1F0980C7AC.jpg?v=1744834684&width=1600": "interior"
+    },
+    "equipment": [
+      "piel",
+      "pantalla",
+      "navegacion",
+      "sonido-premium"
+    ]
   },
   {
     "id": "shp11251097",
@@ -293,7 +392,26 @@
     "shopifyHandle": "2024-jeep-unlimited-sahara",
     "createdAt": "2026-08-12T06:51:15-07:00",
     "updatedAt": "2026-10-26T17:24:46-07:00",
-    "ownerCount": 1
+    "ownerCount": 1,
+    "photoSections": {
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/363ACB83-7E8B-4FD8-86B2-B8C94F9F6EE0.jpg?v=1786542630&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/20FDC664-F3FB-43ED-BAEB-0372445B29D8.jpg?v=1786542629&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/BA91D2B2-C9DD-49C3-9E2A-1649C5F291EA.jpg?v=1786542629&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/6EF65C68-FCF7-4F9A-B43B-74CE803F2765.jpg?v=1786542629&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/E4369C81-1194-4511-87BD-63B2FC607D19.jpg?v=1786542629&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/6B3D01B2-B93C-4459-B39A-340CA8BA4CB0.jpg?v=1786542630&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/71A33CC5-54BC-4433-AC90-4DAB796690AA.jpg?v=1786542630&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/40CA4E56-6233-4E36-9DE1-76938DCBD32D.jpg?v=1786542630&width=1600": "detalles",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/6BB1CB62-0366-4A85-8A23-CBDAFEBC8A69.jpg?v=1786542630&width=1600": "motor",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/4AF966F9-D084-4EA4-8F59-BA99D84310E8.jpg?v=1786542629&width=1600": "detalles",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/5B9334F6-4BF9-4509-85FD-2107609CEA80.jpg?v=1786542630&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/7277AB11-D57D-4C1F-922D-7C3274A1DF7A.jpg?v=1786542629&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/D5326B80-D3B0-4E23-9905-8B053FADFD5B.jpg?v=1786542630&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/416DE681-771B-4BA0-9A0D-68CFEA8ED492.jpg?v=1786542630&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/68B3B14A-590C-4E03-8986-DBD2EA72DDFD.jpg?v=1786542630&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/65315777-DD71-4B9B-BE01-823E70E1847C.jpg?v=1786542629&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/912795DF-ACDB-45AA-B64E-105BA92829AD.jpg?v=1786542630&width=1600": "interior"
+    }
   },
   {
     "id": "shp90723225",
@@ -343,7 +461,33 @@
     "createdAt": "2026-06-09T10:21:37-07:00",
     "updatedAt": "2026-10-26T17:24:46-07:00",
     "ownerCount": 1,
-    "invoice": "Original"
+    "invoice": "Original",
+    "photoSections": {
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/8EF7019A-3218-40FE-86E6-D9E58DC306E5.jpg?v=1781025610&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/DD667A95-600D-4A79-92FA-70107C5CBC82.jpg?v=1781025610&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/CC89F2C7-075A-4A98-A2B9-9413C241D23D.jpg?v=1781025611&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/DDEA51F0-FC80-4060-BE92-59EB0FF691AF.jpg?v=1781025611&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/DE688708-F74C-4F3E-BD24-BE555CDDD878.jpg?v=1781025611&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/4286F454-4563-4B14-A0A7-7D4A6B7983BE.jpg?v=1781025610&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/F2C3339F-5B86-4650-B7A0-47341DA54634.jpg?v=1781025610&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/D333D55E-7A22-4B5B-8E43-4A3543D319EB.jpg?v=1781025610&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/3CED97C9-78FC-4023-AA3C-E217A53684F3.jpg?v=1781025610&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/6EEF1FD8-113F-4930-A37B-C7BE37898C6A.jpg?v=1781025610&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/04EB97CF-D2CA-479A-8137-68A04D7486EE.jpg?v=1781025610&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/C211AD29-FE10-4B0D-B3C9-44038E3C7513.jpg?v=1781025610&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/BE383FDC-C854-425A-BCED-4E8C6FFA2FC6.jpg?v=1781025611&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/94DBBB5F-17E2-4E31-AE58-420236D8DEB2.jpg?v=1781025610&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/84DB926C-A817-4C97-BE51-BE5833C4C545.jpg?v=1781025610&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/02178F0A-8181-47F3-B593-2F6659B1F84D.jpg?v=1781025610&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/E742F185-45CF-45BC-945D-FF13707F7DF0.jpg?v=1781025611&width=1600": "motor"
+    },
+    "equipment": [
+      "piel",
+      "pantalla",
+      "carplay",
+      "camara-reversa",
+      "asistencias"
+    ]
   },
   {
     "id": "shp93004441",
@@ -387,7 +531,33 @@
     "featured": false,
     "shopifyHandle": "2016-hyundai-tucson-limited",
     "createdAt": "2026-04-25T12:12:33-07:00",
-    "updatedAt": "2026-10-26T17:24:46-07:00"
+    "updatedAt": "2026-10-26T17:24:46-07:00",
+    "photoSections": {
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/B1BEE98F-4B7C-45A7-BD16-2A87141D7109.jpg?v=1777144306&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/D444312F-35DD-4238-8364-917C3E8F1E6C.jpg?v=1777144306&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/A8FE36C6-5E89-4ED1-B9D7-3B6FB87A950A.jpg?v=1777144306&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/AD2E4AE7-D04E-4343-8B45-76D5D6711BE1.jpg?v=1777144306&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/EF0D4E92-F956-48FA-9247-D396DA718D66.jpg?v=1777144306&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/6A177BD0-3DC6-4F2A-B067-2724CA46CED1.jpg?v=1777144306&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/06940ECD-36AC-44EE-BE8E-F51E3CC69649.jpg?v=1777144306&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/DB32CC3D-760D-41C0-9A3D-0FFE25A5D4D6.jpg?v=1777144306&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/0E8084C6-C977-4F42-8B12-CF3F3803E2BD.jpg?v=1777144306&width=1600": "detalles",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/D04063DE-3EFD-4E40-9D0A-9945D5CB6ACB.jpg?v=1777144306&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/BB8D9165-7A79-4E36-8869-435733072F74.jpg?v=1777144306&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/7A81388A-DE9E-4EB9-888F-268F7B5AF932.jpg?v=1777144306&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/172141E7-F64D-4F4B-BBE8-3AD1C6A29F14.jpg?v=1777144306&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/7A93EC5A-3909-424A-A0EE-C65A7FCE7C2D.jpg?v=1777144306&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/28EC37C7-3F8A-4E69-81AC-F979089FE3FB.jpg?v=1777144306&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/E58C2145-B85B-4ED9-87BE-7D0B196CC82B.jpg?v=1777144306&width=1600": "interior"
+    },
+    "equipment": [
+      "piel",
+      "techo-panoramico",
+      "aire-acondicionado",
+      "pantalla",
+      "camara-reversa",
+      "rines-aluminio"
+    ]
   },
   {
     "id": "shp95814553",
@@ -433,7 +603,28 @@
     "shopifyHandle": "2014-toyota-land-cruister-blindaje-3-plus",
     "createdAt": "2025-10-05T19:16:01-07:00",
     "updatedAt": "2026-10-26T17:24:46-07:00",
-    "invoice": "Empresa"
+    "invoice": "Empresa",
+    "photoSections": {
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/51D200C2-9431-41A1-8BDF-9E25C5E7AA6B.jpg?v=1759717080&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/1DC8CE7D-21AE-4CB1-AD83-C500358C93A5.jpg?v=1759717080&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/703713EA-74BE-4E68-8C59-53AC80ED8DDA.jpg?v=1759717079&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/0653B22C-8D7B-46E2-A0A4-F84EFD3FC747.jpg?v=1759717080&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/BE010172-1515-47E1-844B-1DE35027CD98.jpg?v=1759717079&width=1600": "detalles",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/6CEC8FDD-8EDB-4E1E-BC07-56F0164C1CEF.jpg?v=1759717080&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/61A29346-9F24-45DE-9EC3-E47D482A5387.jpg?v=1759717080&width=1600": "detalles",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/13A5E53F-5E66-4E55-9971-A5F358E58627.jpg?v=1759717080&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/CB4DB1D1-F499-4321-ADCD-0A8910ACEAEC.jpg?v=1759717080&width=1600": "detalles",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/FCBFD98F-267F-4726-A6AC-AAA2B00B0EB1.jpg?v=1759717080&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/BFA81C84-619D-485E-B5B9-7526C0778256.jpg?v=1759717080&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/0F2626CF-56C1-4616-AFE0-5967B3DAE30A.jpg?v=1759717080&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/94BDC9DC-E500-4E23-B50C-A3B747511617.jpg?v=1759717080&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/FBD4B703-AE8C-4D4E-AD1C-19DB2AFE4A55.jpg?v=1759717080&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/1FDBBAF0-C358-4DC1-9310-943792C54AC7.jpg?v=1759717080&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/09955F15-C7B6-47E0-AD88-B4CEFB2A1AC2.jpg?v=1759717080&width=1600": "motor",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/0A96C1CD-75E3-47AF-8122-31BE9CDA1C4B.jpg?v=1759717080&width=1600": "detalles",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/CC6BA7ED-EA1D-4279-BAA2-E50DE3ACAAD9.jpg?v=1759717079&width=1600": "detalles",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/89C2096D-ED2D-45DC-9F7C-8D813B92E399.jpg?v=1759717079&width=1600": "interior"
+    }
   },
   {
     "id": "shp25182105",
@@ -485,7 +676,34 @@
     "shopifyHandle": "2018-bmw-m3-aut",
     "createdAt": "2025-09-12T17:09:35-07:00",
     "updatedAt": "2026-10-26T17:24:46-07:00",
-    "ownerCount": 1
+    "ownerCount": 1,
+    "photoSections": {
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/F5E76B21-FF42-4137-BBA8-80B21AECD5A9.jpg?v=1757722294&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/1B410D08-B927-4143-90D0-E9926241FAC1.jpg?v=1757722294&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/9E4BC09B-8EC7-43FE-BE1B-6C5ACADFEF5B.jpg?v=1757722294&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/A05F4EDF-FBDB-4342-91AC-482FD731B7B5.jpg?v=1757722293&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/AD423596-AC31-497F-BCDD-F726C13683AF.jpg?v=1757722293&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/CF0FE4A5-9619-4434-B9C2-CD3A786A813F.jpg?v=1757722294&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/450102DA-ABCB-44B8-969F-310811A870D6.jpg?v=1757722293&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/5A57744F-210C-4579-BA14-0D92A2372FD2.jpg?v=1757722293&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/857AB587-817D-45E1-9952-1FA1E88B9E94.jpg?v=1757722294&width=1600": "detalles",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/9265BBBD-8542-46B0-8478-231E82C637CB.jpg?v=1757722294&width=1600": "detalles",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/6F1F1534-904D-457D-8077-2E2B96D1B48A.jpg?v=1757722295&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/0B35BAA0-2B61-43BA-91DD-932363609226.jpg?v=1757722295&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/416C0848-D172-4FCF-A6C5-538B8B8EA00E.jpg?v=1757722294&width=1600": "motor",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/271FACA9-B296-4A30-9901-0A1E7EE63DE4.jpg?v=1757722294&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/CD7D4027-319A-4A36-8804-D26C1FD7F593.jpg?v=1757722294&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/104E3488-E749-431C-BA6C-E27D8F0A74D6.jpg?v=1757722294&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/56404098-6359-42CE-A6CC-0CA944C0640C.jpg?v=1757722293&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/683CECE8-F085-4AC6-95CE-B0C576FA66C9.jpg?v=1757722294&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/D496DBD2-0411-404B-AA18-454832A9345E.jpg?v=1757722293&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/C3CE8D7C-B6F5-4201-AC16-5BC5CDB92A77.jpg?v=1757722293&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/DB52B76D-7560-48A4-BD2E-D3E1940F3F74.jpg?v=1757722293&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/776AB78F-2752-4FB0-8BB6-9B68FF7B0476.jpg?v=1757722294&width=1600": "interior"
+    },
+    "equipment": [
+      "piel"
+    ]
   },
   {
     "id": "shp08582041",
@@ -526,7 +744,30 @@
     "shopifyHandle": "2016-mazda-cx5",
     "createdAt": "2025-09-06T12:36:20-07:00",
     "updatedAt": "2026-10-26T17:24:46-07:00",
-    "invoice": "Original"
+    "invoice": "Original",
+    "photoSections": {
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/IMG_6759.jpg?v=1757187359&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/IMG_6760.jpg?v=1757187358&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/IMG_6761.jpg?v=1757187359&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/IMG_6762.jpg?v=1757187359&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/IMG_6763.jpg?v=1757187358&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/IMG_6764.jpg?v=1757187358&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/IMG_6764_aa6d91fe-7c38-4536-bd68-3dd4db7d1329.jpg?v=1757187359&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/IMG_6749.jpg?v=1757187358&width=1600": "motor",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/IMG_6746.jpg?v=1757187359&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/IMG_6743.jpg?v=1757187359&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/IMG_6739.jpg?v=1757187359&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/IMG_6737.jpg?v=1757187359&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/IMG_6736.jpg?v=1757187359&width=1600": "interior"
+    },
+    "equipment": [
+      "piel",
+      "asientos-electricos",
+      "quemacocos",
+      "clima-automatico",
+      "pantalla",
+      "rines-aluminio"
+    ]
   },
   {
     "id": "shp29333913",
@@ -569,6 +810,31 @@
     "shopifyHandle": "2017-ford-expedition-platinum-4x4",
     "createdAt": "2025-08-05T14:32:26-07:00",
     "updatedAt": "2026-10-26T17:24:46-07:00",
-    "ownerCount": 1
+    "ownerCount": 1,
+    "photoSections": {
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/E8B1B506-0DF6-42AB-B3D2-B0209AEDF19D.jpg?v=1743827616&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/44E2D333-4B26-4BF4-8D0F-A0DF875FA545.jpg?v=1743827616&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/A1859213-CE3E-4338-A22B-28DC52AFA59D.jpg?v=1743827616&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/83E14348-2FDD-4D32-AAE2-3D7573E60B86.jpg?v=1743827616&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/34633446-BA52-4000-928B-32DB38ABC999.jpg?v=1743827616&width=1600": "exterior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/IMG_0269.jpg?v=1743827616&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/IMG_0272.jpg?v=1743827616&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/IMG_0267.jpg?v=1743827616&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/IMG_0268.jpg?v=1743827616&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/IMG_0274.jpg?v=1743827616&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/IMG_0271.jpg?v=1743827616&width=1600": "interior",
+      "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/IMG_0270.jpg?v=1743827616&width=1600": "interior"
+    },
+    "equipment": [
+      "piel",
+      "asientos-electricos",
+      "asientos-calefaccion",
+      "asientos-ventilados",
+      "techo-panoramico",
+      "pantalla",
+      "navegacion",
+      "sonido-premium",
+      "camara-360"
+    ]
   }
 ]

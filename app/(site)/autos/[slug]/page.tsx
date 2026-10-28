@@ -13,6 +13,7 @@ import {
   DoorOpen,
   Fuel,
   Gauge,
+  ListChecks,
   MapPin,
   MessageCircle,
   Navigation,
@@ -50,6 +51,7 @@ import {
   type Car,
 } from "@/lib/cars";
 import { getAllCars, getCarBySlug, getReviews, similarCars } from "@/lib/data";
+import { equipmentByGroup, featuresWithoutEquipment } from "@/lib/equipment";
 import { reviewSummary, type Review } from "@/lib/reviews";
 import { site, whatsappUrl } from "@/lib/site";
 import { vars } from "@/lib/ui";
@@ -140,6 +142,10 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
   ];
   const missing = missingSpecs(car);
   const video = parseVideo(car.video);
+  const equipment = equipmentByGroup(car.equipment);
+  const equipmentCount = equipment.reduce((n, g) => n + g.items.length, 0);
+  // «Lo que destaca» sin repetir lo que ya está en el equipamiento
+  const highlights = featuresWithoutEquipment(car.features, car.equipment);
   // Para mandárselo a la pareja o la familia: WhatsApp sin número, el usuario elige a quién
   const shareToSomeone = `https://wa.me/?text=${encodeURIComponent(
     `Mira este ${carTitle(car)} en ${site.name}: ${formatPrice(car.price)}\n${carUrl(car)}`,
@@ -160,7 +166,7 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
 
         <div className="lg:grid lg:grid-cols-[1.25fr_1fr] lg:items-start lg:gap-10">
           <div className="relative min-w-0">
-            <Gallery images={car.images} alt={carTitle(car)} carId={car.id} sold={sold} />
+            <Gallery images={car.images} alt={carTitle(car)} carId={car.id} sold={sold} sections={car.photoSections} />
             <Link
               href="/autos"
               className="absolute top-20 left-4 grid size-11 place-items-center rounded-full bg-card/90 shadow-md backdrop-blur-md active:scale-95 lg:hidden"
@@ -201,6 +207,16 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
               {summary.slice(1).map((spec) => (
                 <QuickChip key={spec.label} spec={spec} car={car} />
               ))}
+              {equipmentCount > 0 && (
+                <li>
+                  <a
+                    href="#equipamiento"
+                    className="inline-flex h-9 items-center gap-1.5 rounded-full bg-volt px-3 text-sm font-semibold text-night active:scale-95"
+                  >
+                    <ListChecks className="size-4" /> Equipamiento ({equipmentCount})
+                  </a>
+                </li>
+              )}
               {video && (
                 <li>
                   <a
@@ -306,9 +322,14 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
                 <h2 id="fotos" className="font-display text-3xl">
                   {car.images.length} fotos <span className="text-brand">reales</span>
                 </h2>
-                <p className="mt-1 text-sm text-mute">Todas son de este auto. Toca una para verla completa.</p>
+                <p className="mt-1 text-sm text-mute">
+                  Todas son de este auto.{" "}
+                  {car.photoSections && Object.keys(car.photoSections).length > 0
+                    ? "Elige exterior, interior o motor, y toca una para verla completa."
+                    : "Toca una para verla completa."}
+                </p>
                 <div className="mt-5">
-                  <PhotoGrid images={car.images} alt={carTitle(car)} sold={sold} />
+                  <PhotoGrid images={car.images} alt={carTitle(car)} sold={sold} sections={car.photoSections} />
                 </div>
               </section>
             )}
@@ -373,13 +394,41 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
               )}
             </section>
 
-            {car.features.length > 0 && (
+            {equipmentCount > 0 && (
+              <section id="equipamiento" className="mt-12 scroll-mt-24" aria-labelledby="equipamiento-title">
+                <h2 id="equipamiento-title" className="font-display text-3xl">
+                  Equipamiento
+                </h2>
+                <div className="mt-5 space-y-5">
+                  {equipment.map(({ group, items }) => (
+                    <div key={group}>
+                      <h3 className="font-tech flex items-center gap-2 text-xs text-brand-hi">
+                        <span className="h-0.5 w-5 skew-x-[-20deg] bg-brand" />
+                        {group}
+                      </h3>
+                      <ul className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
+                        {items.map(({ key, label, Icon }) => (
+                          <li key={key} className="reveal flex items-center gap-2.5 rounded-2xl bg-card p-3 text-sm font-medium ring-1 ring-line">
+                            <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-volt-soft text-fg" aria-hidden="true">
+                              <Icon className="size-[1.1rem]" />
+                            </span>
+                            <span className="leading-tight">{label}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {highlights.length > 0 && (
               <section className="mt-12" aria-labelledby="destaca">
                 <h2 id="destaca" className="font-display text-3xl">
                   Lo que destaca
                 </h2>
                 <ul className="mt-5 flex flex-wrap gap-2">
-                  {car.features.map((f) => (
+                  {highlights.map((f) => (
                     <li
                       key={f}
                       className="reveal flex items-center gap-2 rounded-full border border-line bg-card px-4 py-2.5 text-sm"

@@ -4,8 +4,41 @@ import Image from "next/image";
 import { ViewTransition, useCallback, useEffect, useRef, useState, type RefObject } from "react";
 import { ChevronLeft, ChevronRight, Expand, X } from "lucide-react";
 import { useAfterLoad } from "@/components/after-load";
+import { PHOTO_SECTION_LABEL, photoTabs, type PhotoSection } from "@/lib/equipment";
 
-type Props = { images: string[]; alt: string; carId: string; sold?: boolean };
+type Sections = Record<string, PhotoSection>;
+type Props = { images: string[]; alt: string; carId: string; sold?: boolean; sections?: Sections };
+
+// Pestañas «Todas · Exterior 5 · Interior 4…» (solo aparecen si el dueño marcó secciones)
+function PhotoTabs({
+  tabs,
+  active,
+  onChange,
+}: {
+  tabs: ReturnType<typeof photoTabs>;
+  active: string;
+  onChange: (key: string) => void;
+}) {
+  return (
+    <div className="no-scrollbar -mx-1 flex gap-2 overflow-x-auto px-1 pb-1" role="tablist" aria-label="Secciones de fotos">
+      {tabs.map((t) => (
+        <button
+          key={t.key}
+          type="button"
+          role="tab"
+          aria-selected={active === t.key}
+          onClick={() => onChange(t.key)}
+          className={`inline-flex h-10 shrink-0 items-center gap-1.5 rounded-full px-4 text-sm font-semibold transition-colors ${
+            active === t.key ? "bg-night text-white" : "bg-card text-fg/80 ring-1 ring-line hover:text-fg"
+          }`}
+        >
+          {t.label}
+          <span className={`text-xs ${active === t.key ? "text-volt" : "text-dim"}`}>{t.indexes.length}</span>
+        </button>
+      ))}
+    </div>
+  );
+}
 
 function useActiveIndex(ref: RefObject<HTMLDivElement | null>) {
   const [index, setIndex] = useState(0);
@@ -34,10 +67,14 @@ function scrollToIndex(el: HTMLDivElement | null, i: number, smooth = true) {
   el.scrollTo({ left: i * el.clientWidth, behavior: smooth ? "smooth" : "instant" });
 }
 
-export function Gallery({ images, alt, carId, sold }: Props) {
+export function Gallery({ images, alt, carId, sold, sections = {} }: Props) {
   const track = useRef<HTMLDivElement>(null);
   const { index, maxSeen } = useActiveIndex(track);
   const [lightbox, setLightbox] = useState<number | null>(null);
+  const tabs = photoTabs(images, sections);
+  const [tab, setTab] = useState("todas");
+  const thumbs = tabs.find((t) => t.key === tab)?.indexes ?? images.map((_, i) => i);
+  const currentSection = sections[images[index]];
   // Descarga solo las fotos cercanas a la que se está viendo, y hasta que cargó la principal
   const loaded = useAfterLoad();
   const loadUntil = loaded || maxSeen > 0 ? maxSeen + 2 : 0;
@@ -108,6 +145,7 @@ export function Gallery({ images, alt, carId, sold }: Props) {
           ))}
         </div>
         <span className="font-tech pointer-events-none absolute right-4 bottom-14 rounded-full bg-card/90 px-2.5 py-1 text-[11px] shadow-sm backdrop-blur-md lg:top-4 lg:bottom-auto">
+          {currentSection && <span className="text-brand-hi">{PHOTO_SECTION_LABEL[currentSection]} · </span>}
           {index + 1} / {total}
         </span>
 
@@ -143,22 +181,38 @@ export function Gallery({ images, alt, carId, sold }: Props) {
         </button>
       </div>
 
-      {/* Miniaturas (escritorio) */}
+      {/* Miniaturas (escritorio), filtrables por sección */}
+      {tabs.length > 0 && (
+        <div className="mt-3 hidden lg:block">
+          <PhotoTabs
+            tabs={tabs}
+            active={tab}
+            onChange={(key) => {
+              setTab(key);
+              const first = tabs.find((t) => t.key === key)?.indexes[0];
+              if (first != null) scrollToIndex(track.current, first);
+            }}
+          />
+        </div>
+      )}
       {total > 1 && (
         <div className="no-scrollbar mt-3 hidden gap-2 overflow-x-auto pb-1 lg:flex">
-          {images.map((src, i) => (
-            <button
-              key={src}
-              type="button"
-              onClick={() => scrollToIndex(track.current, i)}
-              className={`relative aspect-square w-20 shrink-0 overflow-hidden rounded-xl ring-2 transition-all duration-300 ${
-                i === index ? "ring-brand" : "opacity-60 ring-transparent hover:opacity-100"
-              }`}
-              aria-label={`Ir a la foto ${i + 1}`}
-            >
-              <Image src={src} alt="" fill sizes="96px" quality={70} className="object-cover" />
-            </button>
-          ))}
+          {thumbs.map((i) => {
+            const src = images[i];
+            return (
+              <button
+                key={src}
+                type="button"
+                onClick={() => scrollToIndex(track.current, i)}
+                className={`relative aspect-square w-20 shrink-0 overflow-hidden rounded-xl ring-2 transition-all duration-300 ${
+                  i === index ? "ring-brand" : "opacity-60 ring-transparent hover:opacity-100"
+                }`}
+                aria-label={`Ir a la foto ${i + 1}`}
+              >
+                <Image src={src} alt="" fill sizes="96px" quality={70} className="object-cover" />
+              </button>
+            );
+          })}
         </div>
       )}
 
@@ -173,15 +227,42 @@ export function Gallery({ images, alt, carId, sold }: Props) {
 }
 
 // Todas las fotos a la vista en cuadrícula (casi nadie desliza un carrusel hasta el final)
-export function PhotoGrid({ images, alt, sold, max = 9 }: { images: string[]; alt: string; sold?: boolean; max?: number }) {
+export function PhotoGrid({
+  images: allImages,
+  alt,
+  sold,
+  sections = {},
+  max = 9,
+}: {
+  images: string[];
+  alt: string;
+  sold?: boolean;
+  sections?: Sections;
+  max?: number;
+}) {
   const [lightbox, setLightbox] = useState<number | null>(null);
   const [all, setAll] = useState(false);
   const ready = useAfterLoad();
+  const tabs = photoTabs(allImages, sections);
+  const [tab, setTab] = useState("todas");
+  const images = (tabs.find((t) => t.key === tab)?.indexes ?? allImages.map((_, i) => i)).map((i) => allImages[i]);
   const shown = all ? images : images.slice(0, max);
   const rest = images.length - shown.length;
   return (
     <>
-      <ul className="grid grid-cols-3 gap-1.5 sm:gap-2">
+      {tabs.length > 0 && (
+        <div className="mb-4">
+          <PhotoTabs
+            tabs={tabs}
+            active={tab}
+            onChange={(key) => {
+              setTab(key);
+              setAll(false);
+            }}
+          />
+        </div>
+      )}
+      <ul key={tab} className="grid animate-fade grid-cols-3 gap-1.5 sm:gap-2">
         {shown.map((src, i) => (
           <li key={src} className={i === 0 ? "col-span-2 row-span-2" : ""}>
             <button

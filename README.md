@@ -22,7 +22,9 @@ autos desde el celular.
 - **Detalle de cada auto** (`/autos/bmw-m3-2018`):
   - En la primera pantalla del celular: foto, precio, resumen, botón de WhatsApp según el estado y
     quita-miedos.
-  - Todas las fotos en cuadrícula y pantalla completa.
+  - Todas las fotos en cuadrícula y pantalla completa, con pestañas por sección (exterior, interior,
+    motor y detalles).
+  - Equipamiento agrupado con íconos (confort, tecnología, seguridad y exterior).
   - Video opcional (YouTube dentro de la página; TikTok, Instagram y Facebook como enlace).
   - Ficha técnica, «pregúntanos» para datos faltantes, descripción y «Así de fácil» en 3 pasos.
   - Reseñas, si hay, y autos similares.
@@ -39,7 +41,8 @@ autos desde el celular.
 - Lista del inventario con búsqueda y pestañas (Disponibles / Apartados / Vendidos).
 - Cambiar estado y marcar como destacado con un toque.
 - Alta y edición de autos: fotos (se comprimen solas en el teléfono antes de subir, ~300 KB c/u),
-  reordenar y elegir portada, datos, características, etiquetas, descripción y video opcional.
+  reordenar y elegir portada, sección de cada foto, datos, equipamiento (lista fija), características,
+  etiquetas, descripción y video opcional.
 - **Importar de Shopify**: copia los autos y sus fotos del Shopify actual al sitio nuevo con un clic.
 - **Reseñas** (`/admin/resenas`): agrega lo que dicen tus clientes (nombre, estrellas, texto, auto, origen y
   foto opcional). Aparecen en el inicio; si no hay ninguna, la sección no se muestra. Publica solo reseñas
@@ -129,6 +132,7 @@ app/api/upload/      firma para subir fotos directo a Cloudinary
 components/          interfaz (tarjetas, galería, filtros, formularios…)
 lib/site.ts          datos del negocio
 lib/cars.ts          tipos, formatos y mensajes de WhatsApp
+lib/equipment.ts     lista fija de equipamiento y secciones de fotos
 lib/data.ts          lecturas cacheadas para el sitio público
 lib/storage.ts       inventario en Redis (o archivo local en demo)
 lib/cloudinary.ts    subida, firma y borrado de fotos en Cloudinary

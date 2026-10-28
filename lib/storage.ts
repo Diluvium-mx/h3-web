@@ -28,7 +28,8 @@ export const storageMode: "redis" | "local" | "demo" = redis
 const LOCAL_FILE = path.join(/*turbopackIgnore: true*/ process.cwd(), "data", "cars.local.json");
 
 export async function getSeedCars(): Promise<Car[]> {
-  return structuredClone(seed) as Car[];
+  // El tipo que TypeScript deduce del JSON es demasiado específico (una variante por auto)
+  return structuredClone(seed) as unknown as Car[];
 }
 
 async function readFileCars(): Promise<Car[]> {

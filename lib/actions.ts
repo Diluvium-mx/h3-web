@@ -14,6 +14,7 @@ import {
   type CarStatus,
 } from "./cars";
 import { requireAdmin } from "./auth";
+import { isEquipmentKey, isPhotoSection, type PhotoSection } from "./equipment";
 import { REVIEW_SOURCES, type Review } from "./reviews";
 import { checkPassword, createSessionToken, SESSION_COOKIE, SESSION_DAYS } from "./session";
 import {
@@ -102,6 +103,12 @@ function validate(raw: CarInput): { car?: Omit<CarInput, "id">; error?: string }
   const videoRaw = str(raw.video, 300);
   const video = parseVideo(videoRaw);
   if (videoRaw && !video) return { error: "El video debe ser un enlace de YouTube, TikTok, Instagram o Facebook." };
+  const photoSections = Object.fromEntries(
+    Object.entries(raw.photoSections ?? {}).filter(
+      (entry): entry is [string, PhotoSection] => images.includes(entry[0]) && isPhotoSection(entry[1]),
+    ),
+  );
+  const equipment = [...new Set((Array.isArray(raw.equipment) ? raw.equipment : []).filter(isEquipmentKey))];
   return {
     car: {
       brand,
@@ -125,6 +132,8 @@ function validate(raw: CarInput): { car?: Omit<CarInput, "id">; error?: string }
       description: str(raw.description, 6000),
       images,
       video: video?.url,
+      photoSections: Object.keys(photoSections).length ? photoSections : undefined,
+      equipment: equipment.length ? equipment : undefined,
       status: oneOf(STATUSES, raw.status) ?? "disponible",
       featured: Boolean(raw.featured),
     },
@@ -353,6 +362,16 @@ export async function importShopifyAction(
       storeRemoteImage(src, `${draft.slugBase}-${i + 1}`).catch(() => null),
     );
 
+    // Las secciones de foto del inventario curado están por URL de Shopify: se pasan a las URLs nuevas
+    const bare = (u: string) => u.split("?")[0];
+    const curatedSections = new Map(Object.entries(curated?.photoSections ?? {}).map(([u, sec]) => [bare(u), sec]));
+    const photoSections = Object.fromEntries(
+      draft.sourceImages.flatMap((src, i) => {
+        const sec = curatedSections.get(bare(src));
+        return sec && images[i] ? [[images[i], sec]] : [];
+      }),
+    );
+
     const { sourceImages: _s, slugBase, ...fields } = draft;
     void _s;
     const now = new Date().toISOString();
@@ -362,6 +381,7 @@ export async function importShopifyAction(
       id: crypto.randomUUID().slice(0, 12),
       slug: uniqueSlug(curated?.slug ?? slugBase, cars),
       images: images.filter((u): u is string => Boolean(u)),
+      photoSections: Object.keys(photoSections).length ? photoSections : undefined,
       shopifyHandle: handle,
       updatedAt: now,
     }) as Car;

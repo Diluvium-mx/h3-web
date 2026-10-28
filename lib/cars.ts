@@ -1,4 +1,5 @@
 // Tipos y utilidades compartidas entre servidor y navegador.
+import type { PhotoSection } from "./equipment";
 import { site, whatsappUrl } from "./site";
 
 export const BODY_TYPES = [
@@ -43,6 +44,10 @@ export type Car = {
   images: string[];
   /** Enlace opcional a un video del auto (YouTube, TikTok, Instagram o Facebook) */
   video?: string;
+  /** Sección de cada foto (por URL): exterior, interior, motor o detalles */
+  photoSections?: Record<string, PhotoSection>;
+  /** Equipamiento marcado de la lista fija (lib/equipment.ts) */
+  equipment?: string[];
   status: CarStatus;
   featured?: boolean;
   shopifyHandle?: string;
@@ -120,7 +125,7 @@ export function slugify(input: string) {
 
 // Versión ligera para listas en el navegador (sin descripción ni galería completa)
 export function cardData(car: Car): Car {
-  return { ...car, description: "", images: car.images.slice(0, 1) };
+  return { ...car, description: "", images: car.images.slice(0, 1), photoSections: undefined };
 }
 
 export function isPublic(car: Car) {

@@ -34,8 +34,8 @@ cubría lo básico; de los repos se tomaron las ideas que no necesitan datos que
 | Video del auto (YouTube se ve dentro de la ficha; TikTok, Instagram y Facebook abren la red) | luxury-motors, inventory-presser y AutoTrader | **Hecho**: campo opcional en el panel. Falta que el dueño grabe videos |
 | Migas de pan para Google | Buenas prácticas de SEO | **Hecho** |
 | Botón según el estado: disponible «Me interesa», apartado «Avísame si se libera» y vendido «Búscame uno similar» | Varios repos | **Hecho** |
-| Fotos por secciones (exterior, interior) | luxury-motors | Pendiente: requiere etiquetar cada foto en el panel |
-| Equipamiento con lista cerrada e íconos (CarPlay, quemacocos…) | TechWithEmma | Pendiente: el dueño marca solo lo que tiene cada auto |
+| Fotos por secciones (exterior, interior, motor y detalles) | luxury-motors | **Hecho** (28-oct). Las 189 fotos actuales ya están clasificadas |
+| Equipamiento con lista fija e íconos (CarPlay, quemacocos…) | TechWithEmma | **Hecho** (28-oct). Solo con lo que dicen las descripciones; el dueño completa el resto |
 | «Antes / ahora» cuando baja el precio | inventory-presser | **Sin decidir**: si quieren mostrar rebajas |
 | Botón «Editar / Apartar» en la ficha cuando entra el dueño | mbeps | Pendiente |
 | Ficha para imprimir o guardar en PDF | autoexpress | Pendiente, prioridad baja |

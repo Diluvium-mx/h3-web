@@ -82,6 +82,20 @@ const step = (m) => console.log('✔', m);
     await page.locator('button[aria-label="Ver foto 10 de 10"]').waitFor();
     step('cuadrícula de fotos: abre la foto tocada y muestra todas');
 
+    // Fotos por sección y equipamiento con lista fija
+    await page.goto(B + '/autos/bmw-m3-2018');
+    await page.getByRole('tab', { name: /Interior/ }).first().waitFor({ timeout: 30000 });
+    await page.locator('section[aria-labelledby=fotos]').getByRole('tab', { name: /Interior/ }).click();
+    await page.click('button:has-text("Ver las 10 fotos")');
+    if ((await page.locator('section[aria-labelledby=fotos] ul button[aria-label$="de 10"]').count()) !== 10) throw new Error('la pestaña Interior no muestra 10 fotos');
+    step('fotos por sección: «Interior» del M3 muestra sus 10 fotos');
+    await page.goto(B + '/autos/ford-expedition-platinum-4x4-2017');
+    await page.locator('a[href="#equipamiento"]', { hasText: 'Equipamiento (9)' }).waitFor({ timeout: 30000 });
+    const eqItems = await page.locator('section#equipamiento li').count();
+    if (eqItems !== 9) throw new Error('equipamiento esperado 9, hay ' + eqItems);
+    if (await page.locator('section[aria-labelledby=destaca]').getByText('Asientos con calefacción y ventilación').count()) throw new Error('«Lo que destaca» repite el equipamiento');
+    step('equipamiento: 9 elementos agrupados y sin repetir en «Lo que destaca»');
+
     // Detalle + galería
     await page.goto(B + '/autos/bmw-m3-2018');
     await page.getByText('1 / 22').first().waitFor({ timeout: 30000 });

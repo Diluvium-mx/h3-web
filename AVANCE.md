@@ -2,6 +2,16 @@
 
 Lo más reciente va arriba.
 
+## 28 de octubre de 2026 (noche) — fotos por sección y equipamiento
+
+- Cada foto se marca en el panel como exterior, interior, motor o detalles. En la ficha hay pestañas, y la
+  galería dice en qué sección va. Se clasificaron las 189 fotos actuales.
+- Equipamiento con lista fija de 25 opciones e íconos, en 4 grupos. Los autos actuales solo tienen marcado
+  lo que dice su descripción publicada.
+- Se reescribió en limpio el método de los videos (`ANALISIS-VIDEOS.md`, sección 2). Pasan las 41 pruebas.
+
+Falta: que el dueño revise secciones y equipamiento en el panel, crear las cuentas y publicar.
+
 ## 28 de octubre de 2026 (tarde) — nueva página de detalle de cada auto
 
 - En celular, el botón de WhatsApp y los quita-miedos ya se ven sin bajar. Todas las fotos están en

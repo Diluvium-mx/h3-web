@@ -102,27 +102,97 @@ entregaron por separado en la conversación.
 
 ---
 
-## 2. Los puntos a seguir (resumen)
+## 2. La fórmula, en limpio: cómo hacer la mejor landing page según los videos
 
-1. **Una sola acción principal.** Todo empuja hacia ella.
-2. **Hero completo en la primera pantalla**, también en celular:
-   - prueba social;
-   - título con el beneficio;
-   - subtítulo de dolor a solución;
-   - botón;
-   - lo que quita miedos;
-   - imagen que lo demuestre.
-3. **Claro antes que ingenioso.** Cuantificar cuando se pueda.
-4. **Prueba social en varios puntos.** Visual (con foto), todo a la vista y sin carrusel, con origen
-   verificable.
-5. **Dolor antes del pitch:** «lo de siempre» contra lo que te hace diferente.
-6. **Beneficios con imagen**, cada título dice qué gana el cliente.
-7. **Cómo funciona en 3 pasos**, con título de beneficio.
-8. **Preguntas frecuentes** sacadas de los miedos reales.
-9. **Cierre** con urgencia, resumen de valor y el botón otra vez.
-10. **Medir y mejorar siempre.**
+### Las 6 reglas de fondo
 
----
+1. **Una sola acción principal.** Todo en la página empuja a esa acción.
+2. **La parte de arriba lo es todo.** Es lo único que ve el 100 % de la gente, y el 60 % no baja más.
+   Ahí tiene que quedar claro, en 5 segundos, qué gana el cliente.
+3. **Claro antes que ingenioso.** Se escribe en estilo de «respuesta directa»: frases largas y
+   concretas, con números, aunque no sean «bonitas».
+4. **Prueba social en varios lugares.** Arriba, a media página y al cierre. Que sea visual (fotos o
+   video), que esté toda a la vista y nunca en carrusel.
+5. **Una página larga no es problema**, siempre que cada sección dé una razón más para actuar.
+6. **Nunca está terminada.** Hay que medir, probar versiones A/B y mejorar.
+
+### Antes de diseñar: 3 preguntas
+
+1. **¿Qué se ofrece y cuál es la acción?** Por ejemplo: llenar un formulario, agendar o comprar.
+2. **¿Para quién es?**
+   - Sus 3 dolores principales.
+   - Qué quiere lograr.
+   - Esto se saca hablando con clientes reales.
+3. **¿De dónde llega el visitante y qué tanto sabe?**
+   - **Frío** (un anuncio en redes): hay que explicar más y poner el dolor primero.
+   - **Ya sabe lo que busca** (Google o recomendación): la prueba social va primero y se le pide la
+     acción más directo.
+
+### El orden de las secciones, de arriba abajo
+
+1. **Encabezado:** logo, contacto y botón.
+2. **Hero** (primera pantalla):
+   1. **Prueba social #1** arriba del título, por ejemplo estrellas de Google.
+   2. **Título:** el resultado soñado y «qué gano yo». Mejor si tiene números («hasta 3 veces más… en
+      menos de 24 horas») y junta lo emocional («transforma tu casa») con lo práctico («instalado en 10
+      días»).
+   3. **Subtítulo:** primero el dolor y luego la solución: «¿Cansado de X? Nosotros hacemos Y de esta
+      forma única».
+   4. **Botón** con la acción principal. Truco del «pie en la puerta»: pedir primero un solo dato y
+      después los demás.
+   5. **Quita-miedos junto al botón:** respuesta rápida, garantía, «sin costo», cifras de resultados.
+   6. **Imagen o video propio** que demuestre lo que haces, o un formulario si el visitante ya viene
+      decidido.
+   7. En celular todo va apilado, y hay que meter lo más posible en la primera pantalla.
+3. **Prueba social #2** justo abajo: logos, cifras o resultados.
+4. **Dolor contra solución** («la forma de siempre» contra tu beneficio único). Funciona como una
+   llamada de venta: primero el dolor y luego el pitch.
+   - Si la oferta es simple: un título y poco texto.
+   - Si es compleja: problema → agitar → solución.
+5. **Prueba social fuerte:**
+   - La más impactante va primero (video).
+   - El título explica con números por qué confiar («Únete a más de 1,200…»), no un genérico
+     «Testimonios».
+   - Cada reseña lleva estrellas, una frase resumen arriba, el texto, una **foto real** y **de dónde
+     salió** (Google, etc.).
+6. **Beneficios (de 5 a 8)**, cada uno con imagen y botón.
+   - El título junta la característica con el beneficio («tratamiento de 10 minutos sin dolor para una
+     vida de visión clara»).
+   - Los beneficios más importantes van en una sección propia.
+7. **Diferenciadores:** cada título dice el beneficio, como si nadie fuera a leer más.
+8. **Cómo funciona** (3 o 4 pasos): que el éxito se vea probable y sin esfuerzo. El título también es
+   un beneficio («proceso de 3 pasos: nosotros nos encargamos de todo»).
+9. **Más prueba social** (logos, porcentaje de clientes que regresan) y, si se quiere, «quiénes somos».
+10. **Preguntas frecuentes:** salen de los miedos reales («¿cuál es el truco?», «¿me van a querer
+    vender algo?»).
+11. **Cierre** (un mini hero):
+    - Razón para actuar hoy (urgencia).
+    - 3 viñetas de valor.
+    - Prueba social y quita-miedos.
+    - Botón o formulario corto: máximo 4 campos, el nombre completo en un solo campo y nada que no haga
+      falta.
+    - Imagen.
+12. **Pie de página.**
+
+### Los errores que más bajan la conversión
+
+- Un título que dice **quién eres** en vez de **qué gana el cliente**.
+- Un subtítulo que solo repite lo que haces.
+- No tener prueba social en la primera pantalla.
+- Poner «cómo funciona» justo después del hero, sin haber explicado por qué importa.
+- La prueba social escondida al final.
+- Reseñas en carrusel (menos del 1 % pasa a la segunda).
+- Reseñas solo de texto, sin foto ni origen.
+- Usar la IA sin corregir lo que escribe: solo sirve como inspiración.
+
+### Los resultados que muestran
+
+| Caso | Antes | Después | Mejora |
+| --- | --- | --- | --- |
+| Conversión de un cliente | — | — | +282 % |
+| Leads calificados de otro cliente | — | — | +124 % |
+| Prueba A/B | 2.46 % | 5.15 % | +109 % |
+| Prueba A/B | 10.05 % | 14.62 % | +45 % |
 
 ## 3. Cómo se aplicó al inicio de H3
 

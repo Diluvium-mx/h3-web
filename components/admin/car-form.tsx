@@ -17,8 +17,16 @@ import {
   type CarStatus,
 } from "@/lib/cars";
 import { uploadPhoto } from "@/lib/upload-client";
+import {
+  EQUIPMENT,
+  EQUIPMENT_GROUPS,
+  PHOTO_SECTION_LABEL,
+  PHOTO_SECTIONS,
+  isPhotoSection,
+  type PhotoSection,
+} from "@/lib/equipment";
 
-type Photo = { key: string; url?: string; preview?: string; progress: number; error?: string };
+type Photo = { key: string; url?: string; preview?: string; progress: number; error?: string; section?: PhotoSection };
 
 const BRANDS = [
   "Audi", "BMW", "Cadillac", "Chevrolet", "Dodge", "FIAT", "Ford", "GMC", "Honda", "Hyundai", "Jeep",
@@ -128,11 +136,12 @@ export function CarForm({
     features: initial?.features ?? [],
     description: initial?.description ?? "",
     video: initial?.video ?? "",
+    equipment: initial?.equipment ?? [],
     status: initial?.status ?? ("disponible" as CarStatus),
     featured: initial?.featured ?? false,
   });
   const [photos, setPhotos] = useState<Photo[]>(
-    (initial?.images ?? []).map((url) => ({ key: url, url, progress: 100 })),
+    (initial?.images ?? []).map((url) => ({ key: url, url, progress: 100, section: initial?.photoSections?.[url] })),
   );
   const [featureDraft, setFeatureDraft] = useState("");
 
@@ -219,6 +228,10 @@ export function CarForm({
       features: v.features,
       description: v.description,
       video: v.video.trim() || undefined,
+      equipment: v.equipment,
+      photoSections: Object.fromEntries(
+        photos.flatMap((p) => (p.url && p.section ? [[p.url, p.section] as const] : [])),
+      ),
       images: photos.filter((p) => p.url).map((p) => p.url!),
       status: v.status,
       featured: v.featured,
@@ -249,7 +262,7 @@ export function CarForm({
         </p>
       )}
 
-      <Section title="Fotos" hint="La primera es la portada. Se comprimen solas antes de subir.">
+      <Section title="Fotos" hint="La primera es la portada. Se comprimen solas antes de subir. Marca la sección de cada foto (exterior, interior, motor o detalles) y en la página se podrán ver por sección.">
         {uploadMode === "none" ? (
           <p className="rounded-xl bg-soft p-4 text-sm text-mute">
             Conecta Cloudinary para poder subir fotos (ver README).
@@ -295,62 +308,87 @@ export function CarForm({
                   if (dragIndex !== null) move(dragIndex, i);
                   setDragIndex(null);
                 }}
-                className={`group relative aspect-[3/4] overflow-hidden rounded-xl bg-soft ring-2 ${
-                  i === 0 ? "ring-brand" : "ring-transparent"
-                } ${dragIndex === i ? "opacity-40" : ""}`}
+                className={`flex flex-col gap-1 ${dragIndex === i ? "opacity-40" : ""}`}
               >
-                {p.url ? (
-                  <Image src={p.url} alt="" fill sizes="200px" quality={70} className="object-cover" />
-                ) : (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  p.preview && <img src={p.preview} alt="" className="absolute inset-0 size-full object-cover opacity-50" />
-                )}
-                {!p.url && !p.error && (
-                  <div className="absolute inset-0 grid place-items-center">
-                    <Loader2 className="size-6 animate-spin" />
-                    <span className="absolute inset-x-2 bottom-2 h-1 overflow-hidden rounded-full bg-white/20">
-                      <span className="block h-full bg-brand transition-all" style={{ width: `${Math.max(8, p.progress)}%` }} />
-                    </span>
-                  </div>
-                )}
-                {p.error && (
-                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-paper/80 p-2 text-center text-[11px] text-brand-hi">
-                    {p.error}
-                    <button type="button" onClick={() => setPhotos((ps) => ps.filter((x) => x.key !== p.key))} className="rounded-full bg-soft px-3 py-1 text-fg">
-                      Quitar
-                    </button>
-                  </div>
-                )}
-                {i === 0 && p.url && (
-                  <span className="font-tech absolute top-1.5 left-1.5 rounded-full bg-brand px-2 py-0.5 text-[9px] text-white">Portada</span>
-                )}
-                {p.url && (
-                  <>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setPhotos((ps) => ps.filter((x) => x.key !== p.key));
-                        setDirty(true);
-                      }}
-                      className="absolute top-1 right-1 grid size-7 place-items-center rounded-full bg-paper/80 text-brand-hi"
-                      aria-label="Quitar foto"
-                    >
-                      <Trash2 className="size-3.5" />
-                    </button>
-                    <div className="absolute inset-x-1 bottom-1 flex items-center justify-between">
-                      <button type="button" onClick={() => move(i, i - 1)} disabled={i === 0} className="grid size-7 place-items-center rounded-full bg-paper/80 disabled:opacity-30" aria-label="Mover a la izquierda">
-                        <ArrowLeft className="size-3.5" />
-                      </button>
-                      {i !== 0 && (
-                        <button type="button" onClick={() => move(i, 0)} className="grid size-7 place-items-center rounded-full bg-paper/80" aria-label="Usar como portada">
-                          <Star className="size-3.5" />
-                        </button>
-                      )}
-                      <button type="button" onClick={() => move(i, i + 1)} disabled={i === photos.length - 1} className="grid size-7 place-items-center rounded-full bg-paper/80 disabled:opacity-30" aria-label="Mover a la derecha">
-                        <ArrowRight className="size-3.5" />
+                <div
+                  className={`group relative aspect-[3/4] overflow-hidden rounded-xl bg-soft ring-2 ${
+                    i === 0 ? "ring-brand" : "ring-transparent"
+                  }`}
+                >
+                  {p.url ? (
+                    <Image src={p.url} alt="" fill sizes="200px" quality={70} className="object-cover" />
+                  ) : (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    p.preview && <img src={p.preview} alt="" className="absolute inset-0 size-full object-cover opacity-50" />
+                  )}
+                  {!p.url && !p.error && (
+                    <div className="absolute inset-0 grid place-items-center">
+                      <Loader2 className="size-6 animate-spin" />
+                      <span className="absolute inset-x-2 bottom-2 h-1 overflow-hidden rounded-full bg-white/20">
+                        <span className="block h-full bg-brand transition-all" style={{ width: `${Math.max(8, p.progress)}%` }} />
+                      </span>
+                    </div>
+                  )}
+                  {p.error && (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-paper/80 p-2 text-center text-[11px] text-brand-hi">
+                      {p.error}
+                      <button type="button" onClick={() => setPhotos((ps) => ps.filter((x) => x.key !== p.key))} className="rounded-full bg-soft px-3 py-1 text-fg">
+                        Quitar
                       </button>
                     </div>
-                  </>
+                  )}
+                  {i === 0 && p.url && (
+                    <span className="font-tech absolute top-1.5 left-1.5 rounded-full bg-brand px-2 py-0.5 text-[9px] text-white">Portada</span>
+                  )}
+                  {p.url && (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setPhotos((ps) => ps.filter((x) => x.key !== p.key));
+                          setDirty(true);
+                        }}
+                        className="absolute top-1 right-1 grid size-7 place-items-center rounded-full bg-paper/80 text-brand-hi"
+                        aria-label="Quitar foto"
+                      >
+                        <Trash2 className="size-3.5" />
+                      </button>
+                      <div className="absolute inset-x-1 bottom-1 flex items-center justify-between">
+                        <button type="button" onClick={() => move(i, i - 1)} disabled={i === 0} className="grid size-7 place-items-center rounded-full bg-paper/80 disabled:opacity-30" aria-label="Mover a la izquierda">
+                          <ArrowLeft className="size-3.5" />
+                        </button>
+                        {i !== 0 && (
+                          <button type="button" onClick={() => move(i, 0)} className="grid size-7 place-items-center rounded-full bg-paper/80" aria-label="Usar como portada">
+                            <Star className="size-3.5" />
+                          </button>
+                        )}
+                        <button type="button" onClick={() => move(i, i + 1)} disabled={i === photos.length - 1} className="grid size-7 place-items-center rounded-full bg-paper/80 disabled:opacity-30" aria-label="Mover a la derecha">
+                          <ArrowRight className="size-3.5" />
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
+                {p.url && (
+                  <select
+                    value={p.section ?? ""}
+                    onChange={(e) => {
+                      const section = isPhotoSection(e.target.value) ? e.target.value : undefined;
+                      setPhotos((ps) => ps.map((x) => (x.key === p.key ? { ...x, section } : x)));
+                      setDirty(true);
+                    }}
+                    aria-label={`Sección de la foto ${i + 1}`}
+                    className={`h-9 w-full rounded-lg border px-1.5 text-xs font-medium ${
+                      p.section ? "border-brand/40 bg-brand-soft text-brand-hi" : "border-line bg-soft text-mute"
+                    }`}
+                  >
+                    <option value="">Sin sección</option>
+                    {PHOTO_SECTIONS.map((sec) => (
+                      <option key={sec} value={sec}>
+                        {PHOTO_SECTION_LABEL[sec]}
+                      </option>
+                    ))}
+                  </select>
                 )}
               </li>
             ))}
@@ -452,6 +490,33 @@ export function CarForm({
             </button>
           ))}
         </div>
+      </Section>
+
+      <Section title="Equipamiento" hint="Marca solo lo que tiene este auto. En la página se ve agrupado y con íconos.">
+        {EQUIPMENT_GROUPS.map((group) => (
+          <div key={group}>
+            <span className="mb-1.5 block text-sm font-medium text-fg/90">{group}</span>
+            <div className="flex flex-wrap gap-2" role="group" aria-label={group}>
+              {EQUIPMENT.filter((e) => e.group === group).map(({ key, label, Icon }) => {
+                const on = v.equipment.includes(key);
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    aria-pressed={on}
+                    onClick={() => set("equipment", on ? v.equipment.filter((k) => k !== key) : [...v.equipment, key])}
+                    className={`inline-flex h-10 items-center gap-1.5 rounded-full border px-3.5 text-sm font-medium transition-colors ${
+                      on ? "border-brand bg-brand text-white" : "border-line bg-soft text-fg/80"
+                    }`}
+                  >
+                    <Icon className="size-4" aria-hidden="true" />
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        ))}
       </Section>
 
       <Section title="Descripción">

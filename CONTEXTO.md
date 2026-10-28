@@ -1,6 +1,6 @@
 # Contexto del proyecto: página web de H3 Seminuevos
 
-Última actualización: 28 de octubre de 2026 (nuevo inicio y nueva página de detalle de cada auto).
+Última actualización: 28 de octubre de 2026 (fotos por sección y equipamiento con lista fija).
 Regla: aquí no se inventa nada. Lo que no está decidido dice **«sin decidir»**.
 
 ---
@@ -108,6 +108,12 @@ y las ideas de la investigación de repos (`INVESTIGACION-REPOS.md`).
   - Dirección y horario.
 - **«N fotos reales»:** todas las fotos en cuadrícula (en celular). Al tocar una se abre en pantalla
   completa.
+- **Fotos por sección** (desde el 28-oct): pestañas «Todas · Exterior · Interior · Motor · Detalles» con
+  el número de fotos de cada una. En escritorio filtran las miniaturas, y la galería dice en qué sección va
+  («Interior · 4/22»). Solo aparecen si el auto tiene fotos con sección.
+- **Equipamiento** (desde el 28-oct): lista fija con íconos, agrupada en Confort, Tecnología, Seguridad y
+  Exterior. Arriba hay un chip «Equipamiento (N)» que lleva a la sección. «Lo que destaca» ya no repite lo
+  que está en el equipamiento.
 - **Video:** solo si el dueño agrega un enlace en el panel.
   - YouTube se ve dentro de la ficha y solo carga al tocar «play».
   - TikTok, Instagram y Facebook abren la red social.
@@ -139,6 +145,8 @@ y las ideas de la investigación de repos (`INVESTIGACION-REPOS.md`).
 - Inventario con búsqueda y pestañas: Disponibles, Apartados y Vendidos.
 - Alta y edición de autos con fotos (se comprimen en el teléfono).
 - Importar de Shopify.
+- **Sección de cada foto** (exterior, interior, motor o detalles): un selector debajo de cada foto.
+- **Equipamiento:** botones para marcar, de una lista fija de 25 opciones en 4 grupos (`lib/equipment.ts`).
 - **Video del auto** (opcional, desde el 28-oct): enlace de YouTube, TikTok, Instagram o Facebook. Otros
   enlaces se rechazan.
 - **Reseñas** (`/admin/resenas`, desde el 28-oct):
@@ -323,6 +331,19 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
   - Lighthouse en celular: detalle 86–90 de rendimiento (las fotos aún salen de Shopify) y 100 en
     accesibilidad, buenas prácticas y SEO. Inicio: 97/100/100/100.
   - Pruebas: 20 del sitio, 15 del panel y 3 de Cloudinary simulado.
+- **28-oct (noche):**
+  - **Fotos por sección y equipamiento con lista fija**, en el panel y en la ficha.
+  - Las **189 fotos** del inventario inicial se clasificaron revisándolas una por una:
+    - exterior;
+    - interior (incluye la cajuela);
+    - motor;
+    - detalles: acercamientos de rines, emblemas, escapes, faros y la placa del blindaje.
+  - El **equipamiento** de los 13 autos se marcó **solo con lo que dice su descripción publicada**:
+    - 8 autos tienen equipamiento marcado.
+    - Mustang, Cheyenne, M240i, Wrangler y Land Cruiser quedan sin marcar: su descripción no lo detalla.
+    - «Sensores» no se marcó en Escalade ni en Expedition porque no dice de qué tipo son.
+  - El importador de Shopify conserva las secciones de las fotos.
+  - Pruebas: 22 del sitio, 16 del panel y 3 de Cloudinary simulado.
 - **27-oct (noche):**
   - Las fotos pasan a **Cloudinary**: subida firmada desde el panel, importador de Shopify y borrado.
   - El sitio quedó **adaptado a Netlify** y se probó con la herramienta oficial de Netlify.
@@ -338,11 +359,13 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
 3. **Importar el inventario desde Shopify a Cloudinary** antes de cancelar Shopify.
 4. **Agregar reseñas reales** en el panel (con permiso de los clientes), cuando existan.
 5. **Grabar videos de los autos** y pegar el enlace en el panel (opcional).
-6. Ideas pendientes de la investigación de repos (ver `INVESTIGACION-REPOS.md`): fotos por secciones,
-   equipamiento con lista cerrada, botón «Editar» en la ficha para el dueño y ficha para imprimir.
-7. Actualizar la imagen para compartir en redes al estilo claro (opcional).
-8. Conectar el dominio: **sin decidir** cuándo.
-9. Cancelar Shopify.
+6. **Revisar en el panel** la sección de las fotos y el equipamiento de cada auto: corregir lo que haga
+   falta y marcar el equipamiento de los 5 autos que no lo tienen.
+7. Ideas pendientes de la investigación de repos (ver `INVESTIGACION-REPOS.md`): botón «Editar» en la
+   ficha para el dueño y ficha para imprimir.
+8. Actualizar la imagen para compartir en redes al estilo claro (opcional).
+9. Conectar el dominio: **sin decidir** cuándo.
+10. Cancelar Shopify.
 
 ## 8. Decisiones tomadas y cosas descartadas
 
@@ -373,6 +396,8 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
   datos nuevos (28-oct).
 - **No se agregan** calculadora de mensualidades, prueba de manejo, garantía ni historial mientras no haya
   datos reales (28-oct).
+- **Fotos por sección** (exterior, interior, motor y detalles) y **equipamiento con lista fija**, que el
+  dueño marca en el panel (28-oct).
 - Seguimiento en un repo público temporal, con `CONTEXTO.md` y `AVANCE.md`.
 
 **Descartadas**
@@ -401,5 +426,4 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
 9. Dominio: ¿dónde está registrado y cuándo se conecta?
 10. ¿Quién va a administrar el panel? La contraseña **no** se sube a este repositorio.
 11. **Rebajas:** cuando baja el precio de un auto, ¿quieren mostrar «antes / ahora»?
-12. **Equipamiento:** ¿quieren una lista fija para marcar (CarPlay, quemacocos, cámara, asientos de piel…)?
-    Así cada ficha se ve más ordenada.
+12. **Equipamiento:** ¿falta alguna opción en la lista fija? Se agrega en `lib/equipment.ts`.
