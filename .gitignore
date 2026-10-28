@@ -51,3 +51,6 @@ next-env.d.ts
 
 # Netlify (compilación local)
 .netlify/
+
+# videos de recorridos en celular (scripts/recorrido-movil.mjs)
+/recorridos/

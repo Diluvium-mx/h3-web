@@ -6,6 +6,8 @@ import { refresh, updateTag } from "next/cache";
 import {
   BODY_TYPES,
   FUELS,
+  INVOICES,
+  SERVICE_HISTORY,
   STATUSES,
   TRANSMISSIONS,
   parseVideo,
@@ -109,6 +111,7 @@ function validate(raw: CarInput): { car?: Omit<CarInput, "id">; error?: string }
     ),
   );
   const equipment = [...new Set((Array.isArray(raw.equipment) ? raw.equipment : []).filter(isEquipmentKey))];
+  const ownerCount = int(raw.ownerCount);
   return {
     car: {
       brand,
@@ -134,6 +137,11 @@ function validate(raw: CarInput): { car?: Omit<CarInput, "id">; error?: string }
       video: video?.url,
       photoSections: Object.keys(photoSections).length ? photoSections : undefined,
       equipment: equipment.length ? equipment : undefined,
+      ownerCount: ownerCount && ownerCount >= 1 && ownerCount <= 20 ? ownerCount : undefined,
+      invoice: oneOf(INVOICES, raw.invoice),
+      serviceHistory: oneOf(SERVICE_HISTORY, raw.serviceHistory),
+      papersInOrder: raw.papersInOrder ? true : undefined,
+      armorLevel: (raw.armored && str(raw.armorLevel, 60)) || undefined,
       status: oneOf(STATUSES, raw.status) ?? "disponible",
       featured: Boolean(raw.featured),
     },

@@ -16,11 +16,15 @@ export const BODY_TYPES = [
 export const TRANSMISSIONS = ["Automática", "Manual"] as const;
 export const FUELS = ["Gasolina", "Diésel", "Híbrido", "Eléctrico"] as const;
 export const STATUSES = ["disponible", "apartado", "vendido"] as const;
+export const INVOICES = ["Original", "De empresa", "Refacturada"] as const;
+export const SERVICE_HISTORY = ["De agencia", "Al día"] as const;
 
 export type BodyType = (typeof BODY_TYPES)[number];
 export type Transmission = (typeof TRANSMISSIONS)[number];
 export type Fuel = (typeof FUELS)[number];
 export type CarStatus = (typeof STATUSES)[number];
+export type Invoice = (typeof INVOICES)[number];
+export type ServiceHistory = (typeof SERVICE_HISTORY)[number];
 
 export type Car = {
   id: string;
@@ -48,6 +52,13 @@ export type Car = {
   photoSections?: Record<string, PhotoSection>;
   /** Equipamiento marcado de la lista fija (lib/equipment.ts) */
   equipment?: string[];
+  // Documentos e historial: lo que más pregunta quien compra. Si falta, la ficha invita a preguntar.
+  ownerCount?: number;
+  invoice?: Invoice;
+  serviceHistory?: ServiceHistory;
+  papersInOrder?: boolean;
+  /** Solo blindados, p. ej. «Nivel 3 Plus» */
+  armorLevel?: string;
   status: CarStatus;
   featured?: boolean;
   shopifyHandle?: string;
@@ -146,6 +157,10 @@ export function visitMessage(car: Car) {
 
 export function similarMessage(car: Car) {
   return `Hola 👋 Vi que el *${carTitle(car)}* ya se vendió. Busco algo similar, ¿me pueden ayudar?\n${carUrl(car)}`;
+}
+
+export function questionMessage(car: Car, question: string) {
+  return `Hola ${site.name} 👋 Sobre el *${carTitle(car)}*: ${question}\n${carUrl(car)}`;
 }
 
 export function waitlistMessage(car: Car) {

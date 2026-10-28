@@ -9,6 +9,8 @@ import { saveCarAction, type CarInput } from "@/lib/actions";
 import {
   BODY_TYPES,
   FUELS,
+  INVOICES,
+  SERVICE_HISTORY,
   STATUS_LABEL,
   STATUSES,
   TRANSMISSIONS,
@@ -102,6 +104,8 @@ function Pills<T extends string>({
 }
 
 const digits = (s: string) => s.replace(/\D/g, "");
+// crypto.randomUUID solo existe con https o localhost; desde el celular en la red local (http) no está
+const localId = () => `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
 const withCommas = (s: string) => (s ? Number(s).toLocaleString("es-MX") : "");
 
 export function CarForm({
@@ -137,6 +141,11 @@ export function CarForm({
     description: initial?.description ?? "",
     video: initial?.video ?? "",
     equipment: initial?.equipment ?? [],
+    ownerCount: initial?.ownerCount ? String(initial.ownerCount) : "",
+    invoice: initial?.invoice,
+    serviceHistory: initial?.serviceHistory,
+    papersInOrder: initial?.papersInOrder ?? false,
+    armorLevel: initial?.armorLevel ?? "",
     status: initial?.status ?? ("disponible" as CarStatus),
     featured: initial?.featured ?? false,
   });
@@ -164,7 +173,7 @@ export function CarForm({
     const base = slugify(`${v.brand} ${v.model} ${v.year}`) || "auto";
     const items = Array.from(files).map((file) => ({
       file,
-      photo: { key: crypto.randomUUID(), preview: URL.createObjectURL(file), progress: 0 } as Photo,
+      photo: { key: localId(), preview: URL.createObjectURL(file), progress: 0 } as Photo,
     }));
     setPhotos((p) => [...p, ...items.map((i) => i.photo)]);
     setDirty(true);
@@ -229,6 +238,11 @@ export function CarForm({
       description: v.description,
       video: v.video.trim() || undefined,
       equipment: v.equipment,
+      ownerCount: v.ownerCount ? Number(v.ownerCount) : undefined,
+      invoice: v.invoice,
+      serviceHistory: v.serviceHistory,
+      papersInOrder: v.papersInOrder,
+      armorLevel: v.armored ? v.armorLevel.trim() || undefined : undefined,
       photoSections: Object.fromEntries(
         photos.flatMap((p) => (p.url && p.section ? [[p.url, p.section] as const] : [])),
       ),
@@ -451,6 +465,40 @@ export function CarForm({
             <span className="text-sm text-mute">Aparece en la categoría «Blindados»</span>
           </span>
           <input type="checkbox" checked={v.armored} onChange={(e) => set("armored", e.target.checked)} className="size-6 accent-[var(--color-brand)]" />
+        </label>
+        {v.armored && (
+          <Field label="Nivel de blindaje" hint="Opcional">
+            <input className={field} value={v.armorLevel} onChange={(e) => set("armorLevel", e.target.value)} maxLength={60} placeholder="Ej. Nivel 3 Plus" />
+          </Field>
+        )}
+      </Section>
+
+      <Section
+        title="Documentos e historial"
+        hint="Lo que más pregunta quien compra. Lo que no llenes aparece en la página como «Pregúntanos»."
+      >
+        <Field label="Número de dueños" hint="Opcional · 1 = único dueño">
+          <input
+            className={field}
+            value={v.ownerCount}
+            onChange={(e) => set("ownerCount", digits(e.target.value).slice(0, 2))}
+            inputMode="numeric"
+            placeholder="1"
+          />
+        </Field>
+        <Pills label="Factura" value={v.invoice} options={INVOICES} onChange={(x) => set("invoice", x)} />
+        <Pills label="Servicios" value={v.serviceHistory} options={SERVICE_HISTORY} onChange={(x) => set("serviceHistory", x)} />
+        <label className="flex items-center justify-between gap-4 rounded-xl bg-soft p-4">
+          <span>
+            <span className="block font-medium">Papeles en regla</span>
+            <span className="text-sm text-mute">Márcalo solo si ya lo revisaste</span>
+          </span>
+          <input
+            type="checkbox"
+            checked={v.papersInOrder}
+            onChange={(e) => set("papersInOrder", e.target.checked)}
+            className="size-6 accent-[var(--color-brand)]"
+          />
         </label>
       </Section>
 

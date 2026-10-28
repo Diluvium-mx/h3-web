@@ -1,6 +1,15 @@
 import type { NextConfig } from "next";
 
+// Pruebas desde el celular (npm run movil): el script pasa aquí la IP de la red local y, si se usa,
+// el dominio del túnel. Solo afecta al servidor de desarrollo.
+const devHosts = (process.env.H3_DEV_HOSTS ?? "")
+  .split(",")
+  .map((h) => h.trim())
+  .filter(Boolean);
+
 const nextConfig: NextConfig = {
+  // En modo celular se oculta el botón «N» de Next.js, que tapa botones en pantallas chicas
+  ...(devHosts.length && { allowedDevOrigins: devHosts, devIndicators: false }),
   cacheComponents: true,
   partialPrefetching: true,
   turbopack: {
@@ -13,7 +22,7 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     // Respaldo local para subir fotos sin Cloudinary (las fotos se comprimen antes en el navegador)
-    serverActions: { bodySizeLimit: "4mb" },
+    serverActions: { bodySizeLimit: "4mb", ...(devHosts.length && { allowedOrigins: devHosts }) },
     // La mayoría llega desde WhatsApp/redes (primera visita): CSS en el HTML = pinta antes
     inlineCss: true,
   },

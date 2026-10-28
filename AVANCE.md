@@ -2,6 +2,17 @@
 
 Lo más reciente va arriba.
 
+## 28 de octubre de 2026 (cierre) — dudas por auto y pruebas en celular
+
+- Cada ficha tiene «Tus dudas, resueltas»: dueños, factura, servicios, papeles, blindaje y más. Lo que
+  falta se pregunta por WhatsApp con un toque. Estos datos se editan en el panel.
+- Para probar en un celular real: `npm run movil` muestra un QR, y hay una guía en `PRUEBAS-EN-CELULAR.md`.
+  Esa prueba encontró y corrigió un error al agregar fotos fuera de https.
+- Se documentaron las respuestas del dueño: qué se ofrece, para quién es y de dónde llega. Pasan las 43
+  pruebas.
+
+Falta: probar en iPhone y Android reales, decidir el recorrido (en vivo, 360° o 3D) y crear las cuentas.
+
 ## 28 de octubre de 2026 (noche) — fotos por sección y equipamiento
 
 - Cada foto se marca en el panel como exterior, interior, motor o detalles. En la ficha hay pestañas, y la

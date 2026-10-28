@@ -15,9 +15,15 @@ export function ShareButton({ title, url, className = "" }: { title: string; url
         return; // el usuario canceló
       }
     }
-    await navigator.clipboard?.writeText(url);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    try {
+      // Copiar solo existe con https (o localhost); en otros casos se comparte por WhatsApp
+      if (!navigator.clipboard) throw new Error("sin portapapeles");
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      window.open(`https://wa.me/?text=${encodeURIComponent(`Mira este ${title} en H3 Seminuevos: ${url}`)}`, "_blank", "noopener");
+    }
   }
 
   return (

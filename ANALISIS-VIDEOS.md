@@ -249,7 +249,26 @@ Además: la página no se mueve al cargar (CLS 0) y no tiene scroll horizontal.
 
 ---
 
-## 5. Preguntas para el dueño (para seguir mejorando)
+## 5. Respuestas del dueño a «Antes de diseñar» (28-oct) y qué cambian
+
+1. **¿Qué se ofrece?** Autos a la venta, nada más.
+   - Todo debe verse muy profesional.
+   - Cualquier duda sobre un auto se contesta en su misma página.
+   - **Qué se hizo:** «Tus dudas, resueltas» en cada ficha (dueños, factura, servicios, papeles,
+     blindaje, km, transmisión, disponibilidad y dónde verlo). Lo que falta se pregunta con un toque.
+   - **Recorrido en vivo o 3D:** ver las opciones en `CONTEXTO.md`, pregunta 8.
+2. **¿Para quién?** Se dedujo de la página actual: familia, deportivos y lujo, seguridad (blindados) y
+   trabajo o aventura (4x4 y pickups).
+   - Sus dudas son las que el dueño ya contesta en sus descripciones: factura, dueños, servicios y
+     papeles.
+   - El detalle está en `CONTEXTO.md` → «Para quién es y de dónde llega».
+3. **¿De dónde llega?** De dos lados, así que el sitio atiende a los dos:
+   - **Anuncios (frío):** el anuncio debe llevar directo a la ficha del auto, que funciona como landing
+     completa: hero con el botón, quita-miedos, confianza, dudas, pasos y cierre.
+   - **Google, buscando «seminuevos en Villahermosa»:** el inicio tiene la prueba social y el inventario
+     primero, y el SEO local ya está hecho.
+
+## 6. Preguntas que siguen abiertas
 
 1. **Reseñas reales:** ¿tienen reseñas en Google, Facebook o mensajes de clientes que se puedan publicar
    (con permiso)? ¿Fotos de entregas? Es lo que más sube la confianza según ambos videos.
@@ -257,5 +276,3 @@ Además: la página no se mueve al cargar (CLS 0) y no tiene scroll horizontal.
 3. **Medición:** ¿quieren medir cuántos tocan WhatsApp? Opciones gratuitas: Google Analytics 4 o
    Cloudflare Web Analytics. **Sin decidir.**
 4. **Garantía:** ¿los autos tienen algún tipo de garantía o revisión que se pueda mencionar? **Sin decidir.**
-5. **De dónde llegan los clientes hoy** (Instagram, Facebook, TikTok, Google, recomendación). Cambia qué
-   tanto hay que explicar arriba.

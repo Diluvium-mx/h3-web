@@ -1,6 +1,6 @@
 # Contexto del proyecto: página web de H3 Seminuevos
 
-Última actualización: 28 de octubre de 2026 (fotos por sección y equipamiento con lista fija).
+Última actualización: 28 de octubre de 2026 (respuestas del dueño a las 3 preguntas, dudas por auto y pruebas en celular).
 Regla: aquí no se inventa nada. Lo que no está decidido dice **«sin decidir»**.
 
 ---
@@ -25,8 +25,12 @@ Regla: aquí no se inventa nada. Lo que no está decidido dice **«sin decidir»
   - **Personalización y modificaciones** de autos de gama alta: sí lo ofrecen, pero **no va en la página
     por ahora**.
   - **Financiamiento y autos a cuenta:** **sin respuesta todavía. No se mencionan** en la página.
-- **Lo que los distingue** (textos del sitio actual en Shopify): autos verificados, precios justos y
-  atención personalizada.
+- **Lo que los distingue** (textos del sitio actual en Shopify):
+  - **Autos verificados:** «Revisamos cada carro antes de ponerlo a la venta».
+  - **Precios justos:** «Comparamos el valor real con el precio del mercado».
+  - **Atención personalizada:** «Te ayudamos a encontrar lo que andas buscando».
+  - El inicio de Shopify también dice: «Con años de experiencia en el mundo automotriz, garantizamos
+    vehículos revisados a detalle». Cuántos años: **sin decidir**.
 - **Página actual:** https://www.h3seminuevos.com (Shopify, $19 USD al mes).
 
 ## 2. Qué debe lograr la página
@@ -38,8 +42,47 @@ Regla: aquí no se inventa nada. Lo que no está decidido dice **«sin decidir»
 4. Que el dueño **suba y edite autos desde un panel**, sin depender de un programador.
 5. **Dejar de pagar Shopify** y que el hosting sea **gratis**.
 6. Verse moderna, juvenil, deportiva y **clara**, con colores llamativos y microanimaciones.
+7. **Verse muy profesional y contestar ahí mismo cualquier duda sobre cada auto** (respuesta del dueño,
+   28-oct). Lo único que se ofrece es **autos a la venta**.
 
 No se busca vender en línea: no hay carrito ni pagos.
+
+### Para quién es y de dónde llega (respuestas del dueño, 28-oct)
+
+**Qué se ofrece:** autos a la venta, nada más. La acción principal es mandar WhatsApp por un auto.
+
+**Para quién es.** El dueño pidió deducirlo de la página actual. Esto es lo que se concluye:
+
+- **Por las categorías** que ya tiene Shopify, hay 4 tipos de comprador:
+  - **Familia:** SUV, familiar y sedán.
+  - **Gusto por los deportivos y el lujo:** deportivos y convertibles.
+  - **Seguridad:** blindados.
+  - **Trabajo y aventura:** pickups y 4x4.
+  - También hay motocicletas.
+- **Por el inventario:** autos de $209,000 a $2,850,000, en su mayoría de gama alta (G63, M3, Escalade,
+  Land Cruiser, High Country).
+- **Sus dudas.** Son las que el propio dueño ya contesta en sus descripciones:
+  - factura original, de empresa o refacturable;
+  - único dueño;
+  - servicios de agencia o al día;
+  - papeles en regla;
+  - kilometraje;
+  - estado;
+  - nivel y certificación del blindaje.
+- **Sus miedos al comprar un seminuevo** (deducidos, no son datos del negocio):
+  - que el auto no sea como en las fotos;
+  - precios inflados o escondidos;
+  - papeles con problemas;
+  - perder tiempo con vendedores que no contestan.
+
+**De dónde llega:**
+- **Anuncios en redes:** llega «en frío». Necesita confianza rápido y suele aterrizar en un auto en
+  particular, así que **la ficha del auto es su página de llegada**.
+- **Google**, buscando «seminuevos en Villahermosa, Tabasco»: ya sabe lo que quiere y busca inventario
+  y confianza.
+- La página de Shopify **no tiene descripción para Google** y su título es solo «H3 Seminuevos». El sitio
+  nuevo ya usa «Autos seminuevos en Villahermosa, Tabasco», descripciones por auto, datos estructurados y
+  `sitemap.xml`.
 
 ## 3. Secciones de la página (en orden)
 
@@ -123,6 +166,17 @@ y las ideas de la investigación de repos (`INVESTIGACION-REPOS.md`).
   «Preguntar» (decisión del 27-oct). Nunca se inventa el dato.
 - «Lo que destaca» y descripción.
 - **«Así de fácil»:** 3 pasos (escríbenos, te respondemos de inmediato y ven a conocerlo).
+- **«Tus dudas, resueltas»** (desde el 28-oct). Contesta con los datos del auto:
+  - si sigue disponible;
+  - kilómetros y transmisión;
+  - número de dueños;
+  - factura;
+  - servicios;
+  - papeles;
+  - nivel de blindaje;
+  - dónde verlo.
+
+  Si un dato falta, ese renglón tiene «Pregúntanos» y el WhatsApp lleva la pregunta exacta y el auto.
 - Reseñas reales, si hay.
 - Autos similares y «Ver los N del mismo tipo».
 - En celular aparece una barra fija de WhatsApp y llamada al bajar.
@@ -146,6 +200,8 @@ y las ideas de la investigación de repos (`INVESTIGACION-REPOS.md`).
 - Alta y edición de autos con fotos (se comprimen en el teléfono).
 - Importar de Shopify.
 - **Sección de cada foto** (exterior, interior, motor o detalles): un selector debajo de cada foto.
+- **Documentos e historial:** número de dueños, factura (original, de empresa o refacturada), servicios
+  (de agencia o al día), papeles en regla y nivel de blindaje.
 - **Equipamiento:** botones para marcar, de una lista fija de 25 opciones en 4 grupos (`lib/equipment.ts`).
 - **Video del auto** (opcional, desde el 28-oct): enlace de YouTube, TikTok, Instagram o Facebook. Otros
   enlaces se rechazan.
@@ -344,6 +400,21 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
     - «Sensores» no se marcó en Escalade ni en Expedition porque no dice de qué tipo son.
   - El importador de Shopify conserva las secciones de las fotos.
   - Pruebas: 22 del sitio, 16 del panel y 3 de Cloudinary simulado.
+- **28-oct (cierre):**
+  - **«Tus dudas, resueltas»** en cada ficha, con documentos e historial editables en el panel.
+  - En los autos actuales solo se llenó lo que dice su descripción publicada:
+    - Wrangler: papeles en regla.
+    - Land Cruiser: factura de empresa y blindaje nivel 3 Plus de BS Blindaje.
+    - Escalade: blindaje nivel 3 Plus.
+    - CX-5: servicios al día.
+    - Expedition: servicios de agencia.
+  - **Pruebas en celular** (`PRUEBAS-EN-CELULAR.md`):
+    - `npm run movil` muestra el enlace y un QR para el celular en el mismo Wi-Fi.
+    - `--tunel` da un enlace https temporal.
+    - `scripts/recorrido-movil.mjs` graba el recorrido en video, en tamaño iPhone y Android.
+  - Se probó entrando por la IP de red, como un celular. Eso encontró y corrigió un error: agregar fotos en
+    el panel fallaba fuera de https.
+  - Pruebas: 23 del sitio, 17 del panel y 3 de Cloudinary simulado.
 - **27-oct (noche):**
   - Las fotos pasan a **Cloudinary**: subida firmada desde el panel, importador de Shopify y borrado.
   - El sitio quedó **adaptado a Netlify** y se probó con la herramienta oficial de Netlify.
@@ -359,13 +430,18 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
 3. **Importar el inventario desde Shopify a Cloudinary** antes de cancelar Shopify.
 4. **Agregar reseñas reales** en el panel (con permiso de los clientes), cuando existan.
 5. **Grabar videos de los autos** y pegar el enlace en el panel (opcional).
-6. **Revisar en el panel** la sección de las fotos y el equipamiento de cada auto: corregir lo que haga
-   falta y marcar el equipamiento de los 5 autos que no lo tienen.
-7. Ideas pendientes de la investigación de repos (ver `INVESTIGACION-REPOS.md`): botón «Editar» en la
+6. **Revisar en el panel** de cada auto:
+   - la sección de las fotos;
+   - el equipamiento, incluido el de los 5 autos que no lo tienen;
+   - los documentos e historial (dueños, factura, servicios y papeles).
+   Corregir lo que haga falta.
+7. **Probar en un celular real** con `npm run movil` y la lista de `PRUEBAS-EN-CELULAR.md`, en iPhone y
+   Android.
+8. Ideas pendientes de la investigación de repos (ver `INVESTIGACION-REPOS.md`): botón «Editar» en la
    ficha para el dueño y ficha para imprimir.
-8. Actualizar la imagen para compartir en redes al estilo claro (opcional).
-9. Conectar el dominio: **sin decidir** cuándo.
-10. Cancelar Shopify.
+9. Actualizar la imagen para compartir en redes al estilo claro (opcional).
+10. Conectar el dominio: **sin decidir** cuándo.
+11. Cancelar Shopify.
 
 ## 8. Decisiones tomadas y cosas descartadas
 
@@ -398,6 +474,11 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
   datos reales (28-oct).
 - **Fotos por sección** (exterior, interior, motor y detalles) y **equipamiento con lista fija**, que el
   dueño marca en el panel (28-oct).
+- **Lo único que se ofrece son autos a la venta.** Todo debe verse muy profesional y cada ficha debe
+  contestar las dudas ahí mismo (28-oct).
+- **De dónde llegan:** anuncios en redes y Google («seminuevos en Villahermosa, Tabasco») (28-oct).
+- **Pruebas en celular:** `npm run movil` en el día a día y vistas previas de Netlify antes de publicar
+  (28-oct).
 - Seguimiento en un repo público temporal, con `CONTEXTO.md` y `AVANCE.md`.
 
 **Descartadas**
@@ -422,8 +503,17 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
 6. **Medición:** ¿quieren medir cuántos tocan WhatsApp? Opciones gratuitas: Google Analytics 4 o
    Cloudflare Web Analytics.
 7. **Garantía o revisión:** ¿los autos tienen alguna garantía o revisión que se pueda mencionar?
-8. **De dónde llegan los clientes hoy:** Instagram, Facebook, TikTok, Google o recomendación.
-9. Dominio: ¿dónde está registrado y cuándo se conecta?
-10. ¿Quién va a administrar el panel? La contraseña **no** se sube a este repositorio.
-11. **Rebajas:** cuando baja el precio de un auto, ¿quieren mostrar «antes / ahora»?
-12. **Equipamiento:** ¿falta alguna opción en la lista fija? Se agrega en `lib/equipment.ts`.
+8. **Recorrido del auto** (idea del dueño, 28-oct). ¿Cuál de estas opciones quieren?
+   - **En vivo por videollamada de WhatsApp:** $0. Necesita a alguien disponible en horario.
+   - **Video grabado:** ya existe el campo en el panel.
+   - **Vista 360° que se gira con el dedo**, hecha con un video alrededor del auto subido a Cloudinary.
+   - **Modelo 3D:** caro de hacer bien. Con la pintura brillante y los cristales los escaneos salen mal, y
+     los archivos son pesados.
+9. **Perfil de Google (Maps):** ¿tienen perfil de negocio con reseñas? Ayuda mucho a aparecer en «seminuevos
+   en Villahermosa».
+10. Dominio: ¿dónde está registrado y cuándo se conecta?
+11. ¿Quién va a administrar el panel? La contraseña **no** se sube a este repositorio.
+12. **Rebajas:** cuando baja el precio de un auto, ¿quieren mostrar «antes / ahora»?
+13. **Equipamiento:** ¿falta alguna opción en la lista fija? Se agrega en `lib/equipment.ts`.
+14. **Experiencia:** el sitio de Shopify dice «con años de experiencia». ¿Cuántos años exactos? Sirve como
+    prueba social.

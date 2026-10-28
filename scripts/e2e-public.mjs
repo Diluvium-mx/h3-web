@@ -96,6 +96,17 @@ const step = (m) => console.log('✔', m);
     if (await page.locator('section[aria-labelledby=destaca]').getByText('Asientos con calefacción y ventilación').count()) throw new Error('«Lo que destaca» repite el equipamiento');
     step('equipamiento: 9 elementos agrupados y sin repetir en «Lo que destaca»');
 
+    // «Tus dudas, resueltas»: contesta con datos reales o pregunta por WhatsApp
+    await page.goto(B + '/autos/toyota-land-cruiser-blindada-2014');
+    const dudas = page.locator('#dudas');
+    await dudas.waitFor({ timeout: 30000 });
+    await dudas.getByText('Factura de empresa.').waitFor();
+    await dudas.getByText('Nivel 3 Plus (BS Blindaje).').waitFor();
+    const askServ = dudas.locator('div', { hasText: '¿Tiene sus servicios?' }).locator('a').first();
+    const askMsg = decodeURIComponent(await askServ.getAttribute('href'));
+    if (!askMsg.includes('¿Tiene sus servicios?') || !askMsg.includes('Toyota Land Cruiser')) throw new Error('pregunta sin el auto: ' + askMsg);
+    step('dudas: factura y blindaje contestados; lo que falta pregunta por WhatsApp con el auto');
+
     // Detalle + galería
     await page.goto(B + '/autos/bmw-m3-2018');
     await page.getByText('1 / 22').first().waitFor({ timeout: 30000 });

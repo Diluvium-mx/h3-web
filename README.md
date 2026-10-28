@@ -27,6 +27,8 @@ autos desde el celular.
   - Equipamiento agrupado con íconos (confort, tecnología, seguridad y exterior).
   - Video opcional (YouTube dentro de la página; TikTok, Instagram y Facebook como enlace).
   - Ficha técnica, «pregúntanos» para datos faltantes, descripción y «Así de fácil» en 3 pasos.
+  - «Tus dudas, resueltas»: dueños, factura, servicios, papeles, blindaje y más. Lo que falta se pregunta
+    por WhatsApp con un toque.
   - Reseñas, si hay, y autos similares.
   - «Mándaselo por WhatsApp» a otra persona y barra fija en celular.
   - Si el enlace es de un auto que ya no existe, ofrece autos de la misma marca.
@@ -122,6 +124,9 @@ npm run dev
   `data/reviews.local.json`, y las fotos en `public/uploads/` (todo ignorado por git).
 - Para usar los servicios reales en local, copia `.env.example` como `.env.local` y llénalo
   (no lo subas al repositorio).
+- **Probar en tu celular:** `npm run movil` muestra un enlace y un código QR (celular en el mismo Wi-Fi).
+  Con `npm run movil -- --tunel` da un enlace https temporal (requiere `cloudflared`). Guía completa y
+  lista de revisión en [`PRUEBAS-EN-CELULAR.md`](PRUEBAS-EN-CELULAR.md).
 
 ## Estructura
 

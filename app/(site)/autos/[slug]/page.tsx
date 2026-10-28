@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Suspense } from "react";
+import { Suspense, type ReactNode } from "react";
 import {
   ArrowRight,
   Calendar,
@@ -16,6 +16,7 @@ import {
   ListChecks,
   MapPin,
   MessageCircle,
+  MessageCircleQuestion,
   Navigation,
   PlayCircle,
   Send,
@@ -46,6 +47,7 @@ import {
   MISSING_INFO_TEXT,
   missingSpecs,
   parseVideo,
+  questionMessage,
   slugify,
   visitMessage,
   type Car,
@@ -292,6 +294,17 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
                   </Link>
                 </li>
               )}
+              {!sold && (
+                <li>
+                  <a href="#dudas" className="flex gap-3">
+                    <MessageCircleQuestion className="mt-0.5 size-5 shrink-0 text-brand" />
+                    <span>
+                      <b>¿Dudas?</b>{" "}
+                      <span className="text-mute underline">Dueños, factura, servicios y más, aquí mismo</span>
+                    </span>
+                  </a>
+                </li>
+              )}
               <li>
                 <a href={shareToSomeone} target="_blank" rel="noopener" className="flex gap-3">
                   <Send className="mt-0.5 size-5 shrink-0 text-wa-dark" />
@@ -452,6 +465,8 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
               </section>
             )}
 
+            {!sold && <CarQuestions car={car} />}
+
             {!sold && <NextSteps car={car} />}
 
             {reviews.length > 0 && <ReviewSnippets reviews={reviews} />}
@@ -585,6 +600,75 @@ function GoneCar({ slug, cars }: { slug: string; cars: Car[] }) {
         </section>
       )}
     </div>
+  );
+}
+
+// Las dudas de siempre, contestadas con los datos del auto. Si falta un dato, se pregunta con un toque
+// (el mensaje lleva la pregunta exacta). Nunca se inventa una respuesta.
+function CarQuestions({ car }: { car: Car }) {
+  const invoice = { Original: "Factura original.", "De empresa": "Factura de empresa.", Refacturada: "Refacturada." };
+  const items: { q: string; a?: ReactNode }[] = [
+    {
+      q: "¿Sigue disponible?",
+      a:
+        car.status === "apartado"
+          ? "Está apartado. Si se libera, te avisamos."
+          : "Sí, está a la venta. Escríbenos y te lo confirmamos al momento.",
+    },
+    { q: "¿Cuántos kilómetros tiene?", a: car.mileage != null ? formatKm(car.mileage) : undefined },
+    {
+      q: "¿Es automático o estándar?",
+      a: car.transmission === "Automática" ? "Automático." : car.transmission === "Manual" ? "Estándar (manual)." : undefined,
+    },
+    {
+      q: "¿Cuántos dueños ha tenido?",
+      a: car.ownerCount === 1 ? "Único dueño." : car.ownerCount ? `${car.ownerCount} dueños.` : undefined,
+    },
+    { q: "¿Qué factura tiene?", a: car.invoice ? invoice[car.invoice] : undefined },
+    {
+      q: "¿Tiene sus servicios?",
+      a: car.serviceHistory ? `Sí, servicios ${car.serviceHistory === "De agencia" ? "de agencia" : "al día"}.` : undefined,
+    },
+    { q: "¿Los papeles están en regla?", a: car.papersInOrder ? "Sí, papeles en regla." : undefined },
+    ...(car.armored ? [{ q: "¿Qué nivel de blindaje tiene?", a: car.armorLevel ? `${car.armorLevel}.` : undefined }] : []),
+    {
+      q: "¿Dónde lo puedo ver?",
+      a: (
+        <>
+          {site.address.street}, {site.address.city}. {site.hours}.{" "}
+          <a href={site.mapsUrl} target="_blank" rel="noopener" className="font-semibold text-brand-hi underline">
+            Cómo llegar
+          </a>
+        </>
+      ),
+    },
+  ];
+  return (
+    <section id="dudas" className="mt-12 scroll-mt-24" aria-labelledby="dudas-title">
+      <h2 id="dudas-title" className="font-display text-3xl">
+        Tus dudas, <span className="text-brand">resueltas</span>
+      </h2>
+      <p className="mt-1 text-sm text-mute">Lo que más nos preguntan de este auto. Si algo falta, pregúntalo con un toque.</p>
+      <dl className="mt-5 divide-y divide-line overflow-hidden rounded-3xl bg-card ring-1 ring-line">
+        {items.map(({ q, a }) => (
+          <div key={q} className="flex flex-col gap-1.5 p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:px-5">
+            <dt className="font-semibold">{q}</dt>
+            <dd className="text-fg/80 sm:text-right">
+              {a ?? (
+                <a
+                  href={whatsappUrl(questionMessage(car, q))}
+                  target="_blank"
+                  rel="noopener"
+                  className="inline-flex h-9 items-center gap-1.5 rounded-full bg-wa/15 px-3 text-sm font-semibold text-fg active:scale-95"
+                >
+                  <WhatsAppIcon className="size-4 text-wa-dark" /> Pregúntanos<span className="sr-only"> por WhatsApp</span>
+                </a>
+              )}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </section>
   );
 }
 

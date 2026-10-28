@@ -33,6 +33,9 @@
    La prueba del panel usa la contraseña de desarrollo local y modifica `data/cars.local.json` y
    `data/reviews.local.json`; los dos están ignorados por git.
 
+   En celular (ver `PRUEBAS-EN-CELULAR.md`): `npm run movil` para un teléfono real en el mismo Wi-Fi y
+   `node scripts/recorrido-movil.mjs http://localhost:3000` para grabar el recorrido en video.
+
    Fotos en Cloudinary (con datos de prueba, nunca los reales):
 
    ```bash

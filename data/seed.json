@@ -345,7 +345,8 @@
       "pantalla",
       "navegacion",
       "sonido-premium"
-    ]
+    ],
+    "armorLevel": "Nivel 3 Plus"
   },
   {
     "id": "shp11251097",
@@ -411,7 +412,8 @@
       "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/68B3B14A-590C-4E03-8986-DBD2EA72DDFD.jpg?v=1786542630&width=1600": "interior",
       "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/65315777-DD71-4B9B-BE01-823E70E1847C.jpg?v=1786542629&width=1600": "interior",
       "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/912795DF-ACDB-45AA-B64E-105BA92829AD.jpg?v=1786542630&width=1600": "interior"
-    }
+    },
+    "papersInOrder": true
   },
   {
     "id": "shp90723225",
@@ -603,7 +605,7 @@
     "shopifyHandle": "2014-toyota-land-cruister-blindaje-3-plus",
     "createdAt": "2025-10-05T19:16:01-07:00",
     "updatedAt": "2026-10-26T17:24:46-07:00",
-    "invoice": "Empresa",
+    "invoice": "De empresa",
     "photoSections": {
       "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/51D200C2-9431-41A1-8BDF-9E25C5E7AA6B.jpg?v=1759717080&width=1600": "exterior",
       "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/1DC8CE7D-21AE-4CB1-AD83-C500358C93A5.jpg?v=1759717080&width=1600": "exterior",
@@ -624,7 +626,8 @@
       "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/0A96C1CD-75E3-47AF-8122-31BE9CDA1C4B.jpg?v=1759717080&width=1600": "detalles",
       "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/CC6BA7ED-EA1D-4279-BAA2-E50DE3ACAAD9.jpg?v=1759717079&width=1600": "detalles",
       "https://cdn.shopify.com/s/files/1/0663/9271/9513/files/89C2096D-ED2D-45DC-9F7C-8D813B92E399.jpg?v=1759717079&width=1600": "interior"
-    }
+    },
+    "armorLevel": "Nivel 3 Plus (BS Blindaje)"
   },
   {
     "id": "shp25182105",
@@ -767,7 +770,8 @@
       "clima-automatico",
       "pantalla",
       "rines-aluminio"
-    ]
+    ],
+    "serviceHistory": "Al día"
   },
   {
     "id": "shp29333913",
@@ -835,6 +839,7 @@
       "navegacion",
       "sonido-premium",
       "camara-360"
-    ]
+    ],
+    "serviceHistory": "De agencia"
   }
 ]
