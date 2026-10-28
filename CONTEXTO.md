@@ -422,8 +422,10 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
 
 ## 7. Lo que falta (en orden)
 
-1. **Crear las cuentas gratuitas** (Netlify, Upstash y Cloudinary) y poner sus variables en Netlify (ver
-   README). Las crea quien lleva el proyecto (respuesta del 28-oct). Con qué correo: **sin decidir**.
+1. **Crear las cuentas gratuitas** y poner sus variables en Netlify (ver README, etapas 1 y 2):
+   - **Netlify primero:** da el enlace para el celular (en curso, 28-oct).
+   - Después Upstash y Cloudinary, para que el panel guarde cambios.
+   - Las crea quien lleva el proyecto. Con qué correo: **sin decidir**.
 2. **Publicar en Netlify y verificar con las cuentas reales:**
    - Subir una foto desde el panel.
    - Comprobar que el sitio se actualiza sin volver a desplegar.
@@ -479,6 +481,10 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
 - **De dónde llegan:** anuncios en redes y Google («seminuevos en Villahermosa, Tabasco») (28-oct).
 - **Pruebas en celular:** `npm run movil` en el día a día y vistas previas de Netlify antes de publicar
   (28-oct).
+- **Publicación (28-oct):**
+  - El dueño eligió conectar Netlify primero, para tener un enlace que abra en el celular.
+  - Netlify publica la rama `main`. El trabajo diario va a la rama `desarrollo` y solo se pasa a `main`
+    cuando el dueño dice «publica», para no gastar créditos: cada publicación cuesta 15 de 300 al mes.
 - Seguimiento en un repo público temporal, con `CONTEXTO.md` y `AVANCE.md`.
 
 **Descartadas**

@@ -2,6 +2,15 @@
 
 Lo más reciente va arriba.
 
+## 28 de octubre de 2026 (noche) — pasos para publicar en Netlify
+
+- Se escribieron los pasos actuales de Netlify en el README. Las cuentas nuevas crean proyectos privados
+  y hay que hacerlos públicos.
+- Para cuidar los créditos, el trabajo diario ahora va a la rama `desarrollo`. `main` solo se actualiza
+  cuando el dueño dice «publica».
+
+Falta: que el dueño complete la etapa 1 en Netlify y pase el enlace, para probar desde el celular.
+
 ## 28 de octubre de 2026 (cierre) — dudas por auto y pruebas en celular
 
 - Cada ficha tiene «Tus dudas, resueltas»: dueños, factura, servicios, papeles, blindaje y más. Lo que

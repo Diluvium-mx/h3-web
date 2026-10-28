@@ -71,30 +71,66 @@ algo en el panel, sin volver a publicar el sitio.
 ## Publicar en Netlify (gratis, paso a paso)
 
 No se sube ninguna contraseña ni llave al repositorio. Todo va en las variables de entorno de Netlify.
+Se hace en dos etapas.
+
+### Etapa 1: tener el enlace (solo Netlify, ≈ 15 minutos)
+
+El sitio público queda completo con el inventario actual. El panel deja entrar, pero **no guarda cambios**
+hasta la etapa 2.
+
+1. **Cuenta:** entra a [app.netlify.com](https://app.netlify.com/signup), elige **GitHub** para registrarte
+   y acepta el plan **Free**.
+2. **Visibilidad pública por defecto.** Las cuentas nuevas crean los proyectos como **privados**: solo
+   los ve el dueño de la cuenta, con sesión iniciada. En **Team settings → General → Visitor access →
+   Default project visibility**, elige que sean públicos.
+3. **Importar:**
+   1. Ve a **Add new project → Import an existing project → GitHub** y autoriza a Netlify.
+   2. Si `Diluvium-mx/h3-web` no aparece en la lista, usa el enlace para configurar la app de Netlify en
+      GitHub. Ahí elige la organización **Diluvium-mx** y el repositorio **h3-web**, y regresa.
+   3. Nombre del proyecto: `h3-seminuevos`, o el que esté libre. Ese nombre forma la dirección
+      `https://NOMBRE.netlify.app`.
+   4. Rama: **main**. No cambies la configuración de compilación, porque ya viene en `netlify.toml`.
+   5. Si ves **Add environment variables**, agrega ahí las del paso 5 y te ahorras un despliegue.
+   6. Confirma con **Deploy** (o **Publish**). Tarda de 3 a 5 minutos.
+4. **Hazlo público**, si quedó privado: usa el botón **Make public** o ve a **Project configuration →
+   General → Visitor access → Project visibility → Public**.
+5. **Contraseñas del panel**, si no las pusiste en el paso 3:
+   1. Ve a **Project configuration → Environment variables → Add a variable → Import from a .env file**.
+   2. Pega estas dos líneas con tus valores y toca **Import variables**:
+      ```
+      ADMIN_PASSWORD=tu-contraseña-larga
+      AUTH_SECRET=texto-largo-y-aleatorio
+      ```
+   - Para el `AUTH_SECRET`, en la Terminal de la Mac corre `openssl rand -base64 32`.
+   - Para `ADMIN_PASSWORD`, usa 4 palabras al azar que **no aparezcan en el sitio**. Netlify revisa que las
+     contraseñas no se filtren en el código publicado, y una palabra común podría detener la publicación.
+6. **Vuelve a publicar** para que tome las contraseñas: **Deploys → Trigger deploy → Deploy project**.
+7. Abre `https://NOMBRE.netlify.app` en el celular. El panel está en `/admin`.
+
+### Etapa 2: que el panel guarde cambios y las fotos salgan de Cloudinary
 
 1. **Upstash** ([upstash.com](https://upstash.com)): crea una cuenta y luego una base de datos Redis en el
    plan Free. En la pestaña **REST API** copia `UPSTASH_REDIS_REST_URL` y `UPSTASH_REDIS_REST_TOKEN`.
 2. **Cloudinary** ([cloudinary.com](https://cloudinary.com)): crea una cuenta gratis. En el **Dashboard**
    copia la «API environment variable», que tiene esta forma: `CLOUDINARY_URL=cloudinary://…`.
-3. **Netlify** ([netlify.com](https://www.netlify.com)): ve a **Add new project → Import an existing
-   project → GitHub** y elige este repositorio. La configuración de compilación ya viene en
-   `netlify.toml`.
-4. En **Site configuration → Environment variables** agrega:
-   - `ADMIN_PASSWORD`: la contraseña del panel (larga, por ejemplo 4 palabras al azar).
-   - `AUTH_SECRET`: texto largo y aleatorio (`openssl rand -base64 32`).
-   - `UPSTASH_REDIS_REST_URL` y `UPSTASH_REDIS_REST_TOKEN`.
-   - `CLOUDINARY_URL`.
-   - `NEXT_PUBLIC_SITE_URL`: déjala vacía mientras no se conecte el dominio, porque el sitio usa sola la
+3. Agrégalas en **Project configuration → Environment variables**, igual que en la etapa 1, y vuelve a
+   publicar.
+   - `NEXT_PUBLIC_SITE_URL`: no la agregues mientras no se conecte el dominio; el sitio usa sola la
      dirección `*.netlify.app`. Cuando se conecte, pon `https://www.h3seminuevos.com`.
-5. **Deploy**. Después entra a `https://TU-SITIO.netlify.app/admin`, ve a **Importar de Shopify → Buscar
-   → Importar seleccionados**. Las fotos se copian de Shopify a Cloudinary.
-6. **Para no gastar créditos de más:**
-   - Editar autos en el panel no requiere publicar de nuevo.
-   - Prueba los cambios de código en vistas previas (Deploy Previews), que cuestan 0 créditos.
-   - Publica a producción como máximo unas 4 veces al mes; cada vez cuesta 15 créditos.
-   - Deja solo este sitio en la cuenta de Netlify.
-7. Cuando todo funcione, **cancela Shopify**. Importa las fotos **antes**, porque después desaparecen.
+4. Entra a `https://NOMBRE.netlify.app/admin`, ve a **Importar de Shopify → Buscar → Importar
+   seleccionados**. Las fotos se copian de Shopify a Cloudinary.
+5. Cuando todo funcione, **cancela Shopify**. Importa las fotos **antes**, porque después desaparecen.
    El dominio se conecta después (sin decidir).
+
+### Para no gastar créditos de más
+
+- **Cada vez que algo llega a la rama `main`, Netlify publica y gasta 15 créditos** (de 300 al mes). Por
+  eso los cambios se trabajan en la rama `desarrollo`, y solo se pasan a `main` cuando el dueño dice
+  «publica».
+- Editar autos en el panel **no** requiere publicar de nuevo.
+- Las vistas previas (Deploy Previews) cuestan 0 créditos.
+- Publica a producción como máximo unas 4 veces al mes.
+- Deja solo este sitio en la cuenta de Netlify.
 
 ## Costos
 

@@ -10,7 +10,7 @@
    - de 2 a 4 líneas sencillas de lo que se hizo;
    - una línea «Falta: …».
 
-   Haz commit y push seguido.
+   Haz commit y push seguido (a la rama `desarrollo`, ver punto 9).
 5. Si cambia una decisión o se responde una pregunta abierta, actualiza `CONTEXTO.md`.
 6. Todo el texto visible del sitio va en español de México.
 7. Antes de subir cambios, verifica:
@@ -46,3 +46,5 @@
 
 8. Hosting: Netlify Free (solo planes gratuitos). Cuida los créditos: pocos despliegues a producción,
    fotos siempre desde Cloudinary (nunca por el hosting).
+9. **Ramas:** trabaja y sube en la rama `desarrollo`. Netlify publica `main`, y cada vez gasta 15 de 300
+   créditos al mes. Pasa los cambios a `main` solo cuando el dueño pida publicar.
