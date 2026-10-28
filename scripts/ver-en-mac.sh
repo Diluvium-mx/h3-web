@@ -39,12 +39,12 @@ if [ -n "$OLD" ]; then
 fi
 
 # 2. Baja el código de GitHub (sin git) y lo pone en ~/h3-web-vista, conservando lo ya instalado
-if [ -e "$DIR" ] && ! grep -qs '"name": "h3-seminuevos"' "$DIR/package.json"; then
+if [ -e "$DIR" ] && [ ! -e "$DIR/.h3-vista" ] && ! grep -qs '"name": "h3-seminuevos"' "$DIR/package.json"; then
   echo "❌ $DIR ya existe y no es del sitio. Muévela o bórrala y vuelve a correr el comando."
   exit 1
 fi
 TMP=$(mktemp -d "$HOME/.h3-descarga.XXXXXX")
-trap 'rm -rf "$TMP"' EXIT
+trap 'rm -rf "$TMP" 2>/dev/null || true' EXIT
 curl -fsSL "$ZIP_URL" -o "$TMP/h3.zip"
 unzip -q "$TMP/h3.zip" -d "$TMP"
 SRC=$(find "$TMP" -mindepth 1 -maxdepth 1 -type d -name "h3-web-*" | head -n 1)
@@ -60,9 +60,11 @@ if [ -d "$DIR" ]; then
   for f in "$DIR"/data/*.local.json; do
     if [ -e "$f" ]; then mv "$f" "$SRC/data/"; fi
   done
-  rm -rf "$DIR" 2>/dev/null || { sleep 2; rm -rf "$DIR"; }
+  # La carpeta vieja se aparta de un jalón (nunca queda a medias) y se borra al final
+  mv "$DIR" "$TMP/anterior"
 fi
 mv "$SRC" "$DIR"
+touch "$DIR/.h3-vista"
 cd "$DIR"
 
 # 3. Instala lo necesario (la primera vez tarda 1 o 2 minutos; después, segundos)
