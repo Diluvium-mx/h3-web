@@ -16,14 +16,26 @@ if ! command -v node >/dev/null 2>&1; then
   exit 1
 fi
 
-# 1. Detiene el sitio viejo si sigue prendido (es lo que hacía que no se viera el cambio)
-if command -v lsof >/dev/null 2>&1; then
-  OLD=$(lsof -ti tcp:3000 || true)
-  if [ -n "$OLD" ]; then
-    echo "   Deteniendo el sitio anterior que seguía prendido…"
-    kill $OLD 2>/dev/null || true
-    sleep 2
-  fi
+# 1. Detiene el sitio viejo si sigue prendido (es lo que hacía que no se viera el cambio).
+#    Solo toca procesos de Next.js: el que escucha en el puerto 3000 y el que corre desde ~/h3-web-vista.
+MY_PGID=$(ps -o pgid= -p $$ | tr -d ' ')
+stop_group() {
+  local pid="$1" pgid
+  ps -o command= -p "$pid" 2>/dev/null | grep -qE "next|node" || return 0
+  pgid=$(ps -o pgid= -p "$pid" 2>/dev/null | tr -d ' ')
+  if [ -n "$pgid" ] && [ "$pgid" != "$MY_PGID" ]; then kill -TERM -- "-$pgid" 2>/dev/null || true; fi
+}
+old_pids() {
+  { command -v lsof >/dev/null 2>&1 && lsof -nP -ti tcp:3000 -sTCP:LISTEN; pgrep -f "$DIR/node_modules/.bin/next"; } 2>/dev/null | sort -u
+}
+OLD=$(old_pids || true)
+if [ -n "$OLD" ]; then
+  echo "   Deteniendo el sitio anterior que seguía prendido…"
+  for pid in $OLD; do stop_group "$pid"; done
+  for _ in 1 2 3 4 5 6 7 8 9 10; do
+    [ -z "$(old_pids || true)" ] && break
+    sleep 1
+  done
 fi
 
 # 2. Baja el código de GitHub (sin git) y lo pone en ~/h3-web-vista, conservando lo ya instalado
@@ -48,7 +60,7 @@ if [ -d "$DIR" ]; then
   for f in "$DIR"/data/*.local.json; do
     if [ -e "$f" ]; then mv "$f" "$SRC/data/"; fi
   done
-  rm -rf "$DIR"
+  rm -rf "$DIR" 2>/dev/null || { sleep 2; rm -rf "$DIR"; }
 fi
 mv "$SRC" "$DIR"
 cd "$DIR"
