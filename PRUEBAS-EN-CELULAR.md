@@ -16,8 +16,8 @@ Ya existen y corren con cada cambio (ver `CLAUDE.md`):
 
 ```bash
 npm run dev
-node scripts/e2e-public.mjs http://localhost:3000   # 23 pruebas del sitio
-node scripts/e2e-admin.mjs http://localhost:3000    # 17 pruebas del panel
+node scripts/e2e-public.mjs http://localhost:3000   # 26 pruebas del sitio
+node scripts/e2e-admin.mjs http://localhost:3000    # 23 pruebas del panel
 ```
 
 Para **ver** el recorrido completo en video, en tamaño iPhone y Android:
@@ -37,8 +37,13 @@ WhatsApp y no usa la cámara real.
 En la Mac, dentro de la carpeta del proyecto:
 
 ```bash
+npm run actualizar   # baja la última versión de la rama desarrollo
 npm run movil
 ```
+
+**Importante:** el celular y el navegador muestran **lo que hay en la carpeta de tu Mac**. Cuando se suben
+cambios a GitHub, tu Mac no los tiene hasta que corres `npm run actualizar`. Si `npm run movil` ya estaba
+corriendo, deténlo con `Ctrl + C`, actualiza, vuelve a correrlo y recarga la página.
 
 Muestra un enlace como `http://192.168.1.50:3000` y un **código QR**. Apunta la cámara del celular al QR
 y se abre el sitio.

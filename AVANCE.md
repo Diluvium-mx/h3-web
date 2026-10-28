@@ -2,6 +2,14 @@
 
 Lo más reciente va arriba.
 
+## 28 de octubre de 2026 (noche 3) — comando para actualizar la Mac
+
+- El dueño no veía los cambios: estaban en GitHub, pero la carpeta de su Mac seguía con la versión
+  anterior. Se agregó `npm run actualizar`, que baja la rama `desarrollo` (y guarda aparte lo que `next dev`
+  haya cambiado). Se explicó en `PRUEBAS-EN-CELULAR.md`.
+
+Falta: que el dueño actualice su Mac y revise el estilo premium en el celular.
+
 ## 28 de octubre de 2026 (noche 2) — estilo premium y panel con contraseña cambiable
 
 - Se aplicaron las correcciones del dueño: colores premium (tinta, grafito y plata con rojo de acento),

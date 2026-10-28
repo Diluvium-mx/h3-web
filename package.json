@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "movil": "node scripts/movil.mjs",
+    "actualizar": "node scripts/actualizar.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
