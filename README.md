@@ -19,9 +19,15 @@ autos desde el celular.
   - «Recién vendidos», «Vende tu auto», preguntas frecuentes y cierre con contacto y horario.
 - **Catálogo** (`/autos`): búsqueda, filtros (tipo, marca, precio, año, transmisión) y orden. Los
   filtros viven en el URL (`/autos?tipo=SUV`), así que se pueden compartir.
-- **Detalle de cada auto** (`/autos/bmw-m3-2018`): galería que se desliza con el dedo, pantalla completa,
-  ficha técnica, etiquetas, descripción, autos similares y botones de WhatsApp ("Me interesa",
-  "Agendar visita"), llamada y compartir. En celular aparece una barra fija de WhatsApp al hacer scroll.
+- **Detalle de cada auto** (`/autos/bmw-m3-2018`):
+  - En la primera pantalla del celular: foto, precio, resumen, botón de WhatsApp según el estado y
+    quita-miedos.
+  - Todas las fotos en cuadrícula y pantalla completa.
+  - Video opcional (YouTube dentro de la página; TikTok, Instagram y Facebook como enlace).
+  - Ficha técnica, «pregúntanos» para datos faltantes, descripción y «Así de fácil» en 3 pasos.
+  - Reseñas, si hay, y autos similares.
+  - «Mándaselo por WhatsApp» a otra persona y barra fija en celular.
+  - Si el enlace es de un auto que ya no existe, ofrece autos de la misma marca.
 - **Vende tu auto** (`/vende-tu-auto`): formulario de 3 pasos que arma el mensaje de WhatsApp con los
   datos del auto. Guarda el borrador en el teléfono.
 - Microanimaciones: aparición al hacer scroll, destellos en botones, transición de la foto de la
@@ -33,7 +39,7 @@ autos desde el celular.
 - Lista del inventario con búsqueda y pestañas (Disponibles / Apartados / Vendidos).
 - Cambiar estado y marcar como destacado con un toque.
 - Alta y edición de autos: fotos (se comprimen solas en el teléfono antes de subir, ~300 KB c/u),
-  reordenar y elegir portada, datos, características, etiquetas, descripción.
+  reordenar y elegir portada, datos, características, etiquetas, descripción y video opcional.
 - **Importar de Shopify**: copia los autos y sus fotos del Shopify actual al sitio nuevo con un clic.
 - **Reseñas** (`/admin/resenas`): agrega lo que dicen tus clientes (nombre, estrellas, texto, auto, origen y
   foto opcional). Aparecen en el inicio; si no hay ninguna, la sección no se muestra. Publica solo reseñas

@@ -41,6 +41,8 @@ export type Car = {
   features: string[];
   description: string;
   images: string[];
+  /** Enlace opcional a un video del auto (YouTube, TikTok, Instagram o Facebook) */
+  video?: string;
   status: CarStatus;
   featured?: boolean;
   shopifyHandle?: string;
@@ -141,8 +143,49 @@ export function similarMessage(car: Car) {
   return `Hola 👋 Vi que el *${carTitle(car)}* ya se vendió. Busco algo similar, ¿me pueden ayudar?\n${carUrl(car)}`;
 }
 
+export function waitlistMessage(car: Car) {
+  return `Hola 👋 Vi que el *${carTitle(car)}* está apartado. Si se libera, ¿me avisan?\n${carUrl(car)}`;
+}
+
 export function carWhatsApp(car: Car) {
-  return whatsappUrl(car.status === "vendido" ? similarMessage(car) : interestMessage(car));
+  const message =
+    car.status === "vendido" ? similarMessage(car) : car.status === "apartado" ? waitlistMessage(car) : interestMessage(car);
+  return whatsappUrl(message);
+}
+
+// Texto del botón principal según el estado del auto
+export function ctaLabel(car: Pick<Car, "status">, short = false) {
+  if (car.status === "vendido") return short ? "Similar" : "Búscame uno similar";
+  if (car.status === "apartado") return short ? "Avísame" : "Avísame si se libera";
+  return short ? "Lo quiero" : "Me interesa este auto";
+}
+
+export type CarVideo =
+  | { kind: "youtube"; id: string; url: string }
+  | { kind: "link"; platform: "TikTok" | "Instagram" | "Facebook"; url: string };
+
+// Reconoce el enlace del video. YouTube se reproduce en la ficha; los demás abren la red social.
+export function parseVideo(raw?: string): CarVideo | null {
+  if (!raw) return null;
+  let u: URL;
+  try {
+    u = new URL(raw.trim());
+  } catch {
+    return null;
+  }
+  if (u.protocol !== "https:") return null;
+  const host = u.hostname.replace(/^(www\.|m\.)/, "");
+  if (host === "youtu.be" || host === "youtube.com") {
+    const id =
+      host === "youtu.be"
+        ? u.pathname.slice(1)
+        : (u.searchParams.get("v") ?? u.pathname.match(/^\/(?:shorts|embed|live)\/([^/]+)/)?.[1] ?? "");
+    return /^[\w-]{6,20}$/.test(id) ? { kind: "youtube", id, url: u.toString() } : null;
+  }
+  if (host === "tiktok.com" || host.endsWith(".tiktok.com")) return { kind: "link", platform: "TikTok", url: u.toString() };
+  if (host === "instagram.com") return { kind: "link", platform: "Instagram", url: u.toString() };
+  if (host === "facebook.com" || host === "fb.watch") return { kind: "link", platform: "Facebook", url: u.toString() };
+  return null;
 }
 
 // Etiquetas cortas para destacar en tarjetas (ej. "Único dueño", "Blindado")

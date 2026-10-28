@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { ViewTransition, useCallback, useEffect, useRef, useState, type RefObject } from "react";
 import { ChevronLeft, ChevronRight, Expand, X } from "lucide-react";
+import { useAfterLoad } from "@/components/after-load";
 
 type Props = { images: string[]; alt: string; carId: string; sold?: boolean };
 
@@ -37,20 +38,21 @@ export function Gallery({ images, alt, carId, sold }: Props) {
   const track = useRef<HTMLDivElement>(null);
   const { index, maxSeen } = useActiveIndex(track);
   const [lightbox, setLightbox] = useState<number | null>(null);
-  // Descarga solo las fotos cercanas a la que se está viendo
-  const loadUntil = maxSeen + 2;
+  // Descarga solo las fotos cercanas a la que se está viendo, y hasta que cargó la principal
+  const loaded = useAfterLoad();
+  const loadUntil = loaded || maxSeen > 0 ? maxSeen + 2 : 0;
   const total = images.length;
 
   const go = useCallback((delta: number) => scrollToIndex(track.current, Math.max(0, Math.min(total - 1, index + delta))), [index, total]);
 
-  if (!total) return <div className="skeleton aspect-[4/5] w-full lg:rounded-3xl" />;
+  if (!total) return <div className="skeleton aspect-square w-full lg:aspect-[5/6] lg:rounded-3xl" />;
 
   return (
     <div className="relative">
       <div className="group relative overflow-hidden bg-soft lg:rounded-3xl">
         <div
           ref={track}
-          className="no-scrollbar flex aspect-[4/5] snap-x snap-mandatory overflow-x-auto overscroll-x-contain lg:aspect-[5/6]"
+          className="no-scrollbar flex aspect-square snap-x snap-mandatory overflow-x-auto overscroll-x-contain lg:aspect-[5/6]"
           aria-roledescription="carrusel"
           aria-label={`Fotos de ${alt}`}
         >
@@ -167,6 +169,54 @@ export function Gallery({ images, alt, carId, sold }: Props) {
         }} />
       )}
     </div>
+  );
+}
+
+// Todas las fotos a la vista en cuadrícula (casi nadie desliza un carrusel hasta el final)
+export function PhotoGrid({ images, alt, sold, max = 9 }: { images: string[]; alt: string; sold?: boolean; max?: number }) {
+  const [lightbox, setLightbox] = useState<number | null>(null);
+  const [all, setAll] = useState(false);
+  const ready = useAfterLoad();
+  const shown = all ? images : images.slice(0, max);
+  const rest = images.length - shown.length;
+  return (
+    <>
+      <ul className="grid grid-cols-3 gap-1.5 sm:gap-2">
+        {shown.map((src, i) => (
+          <li key={src} className={i === 0 ? "col-span-2 row-span-2" : ""}>
+            <button
+              type="button"
+              onClick={() => setLightbox(i)}
+              className="group relative block aspect-square w-full overflow-hidden rounded-xl bg-soft"
+              aria-label={`Ver foto ${i + 1} de ${images.length}`}
+            >
+              {ready ? (
+                <Image
+                  src={src}
+                  alt=""
+                  fill
+                  sizes={i === 0 ? "(min-width: 1024px) 34vw, 64vw" : "(min-width: 1024px) 17vw, 32vw"}
+                  quality={70}
+                  className={`object-cover transition-transform duration-500 group-hover:scale-105 ${sold ? "grayscale" : ""}`}
+                />
+              ) : (
+                <span className="skeleton absolute inset-0" />
+              )}
+            </button>
+          </li>
+        ))}
+      </ul>
+      {rest > 0 && (
+        <button
+          type="button"
+          onClick={() => setAll(true)}
+          className="mt-3 flex h-12 w-full items-center justify-center gap-2 rounded-full border border-line bg-card text-sm font-semibold transition-colors hover:border-fg/30"
+        >
+          Ver las {images.length} fotos
+        </button>
+      )}
+      {lightbox !== null && <Lightbox images={images} alt={alt} start={lightbox} onClose={() => setLightbox(null)} />}
+    </>
   );
 }
 

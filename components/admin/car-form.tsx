@@ -127,6 +127,7 @@ export function CarForm({
     armored: initial?.armored ?? false,
     features: initial?.features ?? [],
     description: initial?.description ?? "",
+    video: initial?.video ?? "",
     status: initial?.status ?? ("disponible" as CarStatus),
     featured: initial?.featured ?? false,
   });
@@ -217,6 +218,7 @@ export function CarForm({
       armored: v.armored,
       features: v.features,
       description: v.description,
+      video: v.video.trim() || undefined,
       images: photos.filter((p) => p.url).map((p) => p.url!),
       status: v.status,
       featured: v.featured,
@@ -461,6 +463,19 @@ export function CarForm({
           maxLength={6000}
         />
         <p className="text-right text-xs text-dim">{v.description.length} / 6000</p>
+      </Section>
+
+      <Section title="Video (opcional)" hint="Un recorrido del auto ayuda mucho a decidir. YouTube se ve dentro de la página; TikTok, Instagram y Facebook abren la red social.">
+        <Field label="Enlace del video">
+          <input
+            className={field}
+            type="url"
+            inputMode="url"
+            value={v.video}
+            onChange={(e) => set("video", e.target.value)}
+            placeholder="https://youtube.com/shorts/… o https://www.tiktok.com/@…"
+          />
+        </Field>
       </Section>
 
       <Section title="Publicación">

@@ -1,6 +1,6 @@
 # Contexto del proyecto: página web de H3 Seminuevos
 
-Última actualización: 28 de octubre de 2026 (nuevo inicio basado en el análisis de 2 videos de landing pages).
+Última actualización: 28 de octubre de 2026 (nuevo inicio y nueva página de detalle de cada auto).
 Regla: aquí no se inventa nada. Lo que no está decidido dice **«sin decidir»**.
 
 ---
@@ -90,17 +90,39 @@ No se busca vender en línea: no hay carrito ni pagos.
     kilometraje dice «Km: pregúntanos».
 - Si no hay resultados, se ofrece «Búscame uno» por WhatsApp.
 
-**Detalle de cada auto (`/autos/<nombre-del-auto>`)**
-- Galería deslizable con pantalla completa.
-- Precio y **resumen de 4 datos con íconos de color:** año, kilometraje, transmisión y combustible.
+**Detalle de cada auto (`/autos/<nombre-del-auto>`)** — rediseñado el 28-oct con el método de los videos
+y las ideas de la investigación de repos (`INVESTIGACION-REPOS.md`).
+- **Primera pantalla del celular:**
+  - Foto (galería deslizable con pantalla completa).
+  - Año, marca, modelo y precio.
+  - Resumen en una línea: kilometraje, transmisión y combustible. Si falta un dato, el chip dice
+    «Kilometraje: pregúntanos» y abre WhatsApp.
+  - Botón principal de WhatsApp. Cambia según el estado: «Me interesa este auto», «Avísame si se libera»
+    (apartado) o «Búscame uno similar» (vendido).
+  - Quita-miedos: ✓ Te respondemos de inmediato ✓ El mensaje ya lleva este auto ✓ Sin registros.
+  - Botones de visita, llamar y compartir.
+- **Confianza:**
+  - «Auto verificado. Fotos reales de este auto y precio a la vista.»
+  - Calificación real si hay reseñas.
+  - «¿Lo decides con alguien más? Mándaselo por WhatsApp» (lo manda a quien el cliente elija).
+  - Dirección y horario.
+- **«N fotos reales»:** todas las fotos en cuadrícula (en celular). Al tocar una se abre en pantalla
+  completa.
+- **Video:** solo si el dueño agrega un enlace en el panel.
+  - YouTube se ve dentro de la ficha y solo carga al tocar «play».
+  - TikTok, Instagram y Facebook abren la red social.
 - **Ficha técnica:** lo anterior más motor, tipo y los extras que existan.
 - **Si falta un dato**, en su lugar aparece «Pregúntanos» con botón de WhatsApp. También se muestra el
   texto «Para más información, mándanos un mensaje; te respondemos de inmediato.» con botón
   «Preguntar» (decisión del 27-oct). Nunca se inventa el dato.
-- «Lo que destaca», descripción y autos similares.
-- Botones: «Me interesa este auto» (WhatsApp con el auto, precio y enlace), «Agendar visita», llamar y
-  compartir.
-- En celular aparece una barra fija de WhatsApp al bajar.
+- «Lo que destaca» y descripción.
+- **«Así de fácil»:** 3 pasos (escríbenos, te respondemos de inmediato y ven a conocerlo).
+- Reseñas reales, si hay.
+- Autos similares y «Ver los N del mismo tipo».
+- En celular aparece una barra fija de WhatsApp y llamada al bajar.
+- **Enlace de un auto que ya no existe** (por ejemplo, uno viejo que circula por WhatsApp): muestra «Este
+  auto ya no está» con autos de la misma marca y «Búscame uno parecido». Google no lo indexa.
+- Migas de pan para Google.
 
 **Vende tu auto (`/vende-tu-auto`)**
 - Pasos:
@@ -117,6 +139,8 @@ No se busca vender en línea: no hay carrito ni pagos.
 - Inventario con búsqueda y pestañas: Disponibles, Apartados y Vendidos.
 - Alta y edición de autos con fotos (se comprimen en el teléfono).
 - Importar de Shopify.
+- **Video del auto** (opcional, desde el 28-oct): enlace de YouTube, TikTok, Instagram o Facebook. Otros
+  enlaces se rechazan.
 - **Reseñas** (`/admin/resenas`, desde el 28-oct):
   - Datos: nombre, auto que compró, estrellas, texto, frase destacada, origen y foto opcional.
   - Se guardan en Upstash Redis, **nunca en el repositorio**.
@@ -291,6 +315,14 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
   - Se corrigió el filtro del catálogo al llegar desde un enlace de otra página.
   - Lighthouse en celular: rendimiento 94–96, accesibilidad 100, buenas prácticas 100 y SEO 100.
   - Pruebas: 17 del sitio, 14 del panel y 3 de Cloudinary simulado.
+- **28-oct (tarde):**
+  - **Página de detalle rediseñada:** botón y quita-miedos en la primera pantalla, todas las fotos en
+    cuadrícula, video opcional y «mándaselo a alguien».
+  - Enlaces de autos que ya no existen: ofrecen autos de la misma marca.
+  - Investigación de repos de GitHub (`INVESTIGACION-REPOS.md`).
+  - Lighthouse en celular: detalle 86–90 de rendimiento (las fotos aún salen de Shopify) y 100 en
+    accesibilidad, buenas prácticas y SEO. Inicio: 97/100/100/100.
+  - Pruebas: 20 del sitio, 15 del panel y 3 de Cloudinary simulado.
 - **27-oct (noche):**
   - Las fotos pasan a **Cloudinary**: subida firmada desde el panel, importador de Shopify y borrado.
   - El sitio quedó **adaptado a Netlify** y se probó con la herramienta oficial de Netlify.
@@ -305,10 +337,12 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
    - Comprobar que el sitio se actualiza sin volver a desplegar.
 3. **Importar el inventario desde Shopify a Cloudinary** antes de cancelar Shopify.
 4. **Agregar reseñas reales** en el panel (con permiso de los clientes), cuando existan.
-5. **Mejorar la página de detalle** al estilo del inicio y del catálogo nuevos. Detalles: **sin decidir**.
-6. Actualizar la imagen para compartir en redes al estilo claro (opcional).
-7. Conectar el dominio: **sin decidir** cuándo.
-8. Cancelar Shopify.
+5. **Grabar videos de los autos** y pegar el enlace en el panel (opcional).
+6. Ideas pendientes de la investigación de repos (ver `INVESTIGACION-REPOS.md`): fotos por secciones,
+   equipamiento con lista cerrada, botón «Editar» en la ficha para el dueño y ficha para imprimir.
+7. Actualizar la imagen para compartir en redes al estilo claro (opcional).
+8. Conectar el dominio: **sin decidir** cuándo.
+9. Cancelar Shopify.
 
 ## 8. Decisiones tomadas y cosas descartadas
 
@@ -335,6 +369,10 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
 - **Prueba social solo con datos reales:** números del inventario y reseñas que el dueño agregue en el panel.
   No se inventan reseñas, calificaciones ni cifras (28-oct).
 - Las cuentas gratuitas las crea quien lleva el proyecto (28-oct).
+- **Página de detalle** con el mismo método que el inicio, más ideas de repos de GitHub que no necesitan
+  datos nuevos (28-oct).
+- **No se agregan** calculadora de mensualidades, prueba de manejo, garantía ni historial mientras no haya
+  datos reales (28-oct).
 - Seguimiento en un repo público temporal, con `CONTEXTO.md` y `AVANCE.md`.
 
 **Descartadas**
@@ -362,3 +400,6 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
 8. **De dónde llegan los clientes hoy:** Instagram, Facebook, TikTok, Google o recomendación.
 9. Dominio: ¿dónde está registrado y cuándo se conecta?
 10. ¿Quién va a administrar el panel? La contraseña **no** se sube a este repositorio.
+11. **Rebajas:** cuando baja el precio de un auto, ¿quieren mostrar «antes / ahora»?
+12. **Equipamiento:** ¿quieren una lista fija para marcar (CarPlay, quemacocos, cámara, asientos de piel…)?
+    Así cada ficha se ve más ordenada.

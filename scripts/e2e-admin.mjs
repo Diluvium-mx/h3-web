@@ -55,7 +55,7 @@ const step = (m) => console.log('✔', m);
     console.log('  página pública status', res.status());
     await page.getByText('$1,450,000').first().waitFor({ timeout: 30000 });
     step('página pública del auto nuevo funciona');
-    const wa = await page.locator('a:has-text("Me interesa este auto")').getAttribute('href');
+    const wa = await page.locator('#cta-principal').getAttribute('href');
     console.log('  WhatsApp:', decodeURIComponent(wa));
     await page.goto(B + '/autos');
     await page.getByText('14 autos encontrados').waitFor({ timeout: 30000 });
@@ -83,6 +83,24 @@ const step = (m) => console.log('✔', m);
     await page.waitForURL(B + '/admin', { timeout: 30000 });
     await page.getByText('$1,399,000').waitFor({ timeout: 30000 });
     step('edición de precio guardada');
+
+    // Video opcional: rechaza enlaces raros y reproduce YouTube dentro de la ficha
+    const editHref = await page.locator('li', { hasText: 'Porsche Cayenne' }).locator('a[aria-label=Editar]').getAttribute('href');
+    await page.goto(B + editHref);
+    await page.getByText('Guardar cambios').waitFor({ timeout: 30000 });
+    await page.fill('input[type=url]', 'https://ejemplo.com/video');
+    await page.click('button:has-text("Guardar cambios")');
+    await page.getByText('El video debe ser un enlace de YouTube').waitFor({ timeout: 30000 });
+    await page.fill('input[type=url]', 'https://youtu.be/dQw4w9WgXcQ');
+    await page.click('button:has-text("Guardar cambios")');
+    await page.waitForURL(B + '/admin', { timeout: 30000 });
+    await page.goto(B + '/autos/porsche-cayenne-coupe-platinum-2022');
+    await page.locator('a[href="#video"]').waitFor({ timeout: 30000 });
+    await page.click('button[aria-label^="Reproducir video"]');
+    const iframe = await page.locator('iframe[src*="youtube-nocookie.com/embed/dQw4w9WgXcQ"]').count();
+    if (!iframe) throw new Error('no se cargó el reproductor de YouTube');
+    step('video: rechaza enlaces que no son de redes y reproduce YouTube en la ficha');
+    await page.goto(B + '/admin');
 
     const r2 = page.locator('li', { hasText: 'Porsche Cayenne' });
     await r2.locator('button[aria-label=Eliminar]').click();

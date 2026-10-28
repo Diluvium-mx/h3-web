@@ -43,6 +43,23 @@ export function LocalBusinessJsonLd() {
   );
 }
 
+// Migas de pan para Google: Inicio › Catálogo › auto
+export function BreadcrumbJsonLd({ car }: { car: Car }) {
+  return (
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Inicio", item: site.url },
+          { "@type": "ListItem", position: 2, name: "Catálogo", item: `${site.url}/autos` },
+          { "@type": "ListItem", position: 3, name: carTitle(car), item: carUrl(car) },
+        ],
+      }}
+    />
+  );
+}
+
 export function CarJsonLd({ car }: { car: Car }) {
   return (
     <JsonLd

@@ -2,6 +2,17 @@
 
 Lo más reciente va arriba.
 
+## 28 de octubre de 2026 (tarde) — nueva página de detalle de cada auto
+
+- En celular, el botón de WhatsApp y los quita-miedos ya se ven sin bajar. Todas las fotos están en
+  cuadrícula y se agregó «¿Lo decides con alguien más? Mándaselo por WhatsApp».
+- Nuevo en el panel: **video opcional** de cada auto. Un enlace de un auto que ya no existe ahora ofrece
+  autos de la misma marca.
+- Se investigaron 11 repos de GitHub de sitios de autos (`INVESTIGACION-REPOS.md`). Se tomaron las ideas
+  que no requieren inventar datos. Pasan las 38 pruebas.
+
+Falta: grabar videos, responder si quieren mostrar rebajas y equipamiento con lista fija, y publicar.
+
 ## 28 de octubre de 2026 — nuevo inicio con el método de los videos
 
 - Se transcribieron y analizaron los 2 videos de landing pages. El resumen, los puntos a seguir y cómo se

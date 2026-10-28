@@ -8,6 +8,7 @@ import {
   FUELS,
   STATUSES,
   TRANSMISSIONS,
+  parseVideo,
   slugify,
   type Car,
   type CarStatus,
@@ -98,6 +99,9 @@ function validate(raw: CarInput): { car?: Omit<CarInput, "id">; error?: string }
   if (images.length > 40) return { error: "Máximo 40 fotos por auto." };
   const mileage = int(raw.mileage);
   const doors = int(raw.doors);
+  const videoRaw = str(raw.video, 300);
+  const video = parseVideo(videoRaw);
+  if (videoRaw && !video) return { error: "El video debe ser un enlace de YouTube, TikTok, Instagram o Facebook." };
   return {
     car: {
       brand,
@@ -120,6 +124,7 @@ function validate(raw: CarInput): { car?: Omit<CarInput, "id">; error?: string }
         .slice(0, 30),
       description: str(raw.description, 6000),
       images,
+      video: video?.url,
       status: oneOf(STATUSES, raw.status) ?? "disponible",
       featured: Boolean(raw.featured),
     },

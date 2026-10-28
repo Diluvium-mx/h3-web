@@ -61,6 +61,27 @@ const step = (m) => console.log('✔', m);
     await page.getByText('Sin resultados').waitFor();
     step('estado vacío con CTA de WhatsApp');
 
+    // Detalle: botón, quita-miedos y dato faltante en el primer pantallazo
+    await page.goto(B + '/autos/ford-mustang-gt-premium-2022');
+    const cta = page.locator('#cta-principal');
+    await cta.waitFor({ timeout: 30000 });
+    const cb = await cta.boundingBox();
+    if (cb.y + cb.height > 844) throw new Error('el botón de WhatsApp queda abajo del primer pantallazo: ' + Math.round(cb.y + cb.height));
+    await page.getByText('Te respondemos de inmediato').first().waitFor();
+    const ask = page.locator('a', { hasText: 'Kilometraje: pregúntanos' });
+    const askHref = decodeURIComponent(await ask.getAttribute('href'));
+    if (!askHref.includes('kilometraje') || !askHref.includes('Ford Mustang GT Premium 2022')) throw new Error('mensaje de dato faltante: ' + askHref);
+    const ld = await page.locator('script[type="application/ld+json"]').allTextContents();
+    if (!ld.some((t) => t.includes('BreadcrumbList'))) throw new Error('faltan migas de pan para Google');
+    step('detalle: botón y quita-miedos en el primer pantallazo, «Kilometraje: pregúntanos» y migas de pan');
+    await page.locator('button[aria-label="Ver foto 3 de 10"]').click();
+    await page.getByRole('dialog', { name: 'Galería' }).getByText('3 / 10').waitFor();
+    await page.keyboard.press('Escape');
+    await page.getByRole('dialog', { name: 'Galería' }).waitFor({ state: 'detached' });
+    await page.click('button:has-text("Ver las 10 fotos")');
+    await page.locator('button[aria-label="Ver foto 10 de 10"]').waitFor();
+    step('cuadrícula de fotos: abre la foto tocada y muestra todas');
+
     // Detalle + galería
     await page.goto(B + '/autos/bmw-m3-2018');
     await page.getByText('1 / 22').first().waitFor({ timeout: 30000 });
@@ -109,8 +130,15 @@ const step = (m) => console.log('✔', m);
 
     // 404
     const r = await page.goto(B + '/autos/no-existe-123');
-    await page.getByText('Te saliste de la pista').waitFor({ timeout: 30000 });
-    step('404 de auto inexistente (status ' + r.status() + ', robots=' + await page.locator('meta[name=robots]').first().getAttribute('content').catch(() => 'n/a') + ')');
+    await page.getByRole('heading', { name: 'Este auto ya no está' }).waitFor({ timeout: 30000 });
+    const robots = await page.locator('meta[name=robots]').first().getAttribute('content').catch(() => 'n/a');
+    if (!robots?.includes('noindex')) throw new Error('el auto que ya no existe debe llevar noindex: ' + robots);
+    step('auto inexistente: «Este auto ya no está» con autos disponibles (status ' + r.status() + ', robots=' + robots + ')');
+    await page.goto(B + '/autos/bmw-x5-xdrive40i-2015');
+    await page.getByRole('heading', { name: 'BMW disponibles' }).waitFor({ timeout: 30000 });
+    await page.locator('a', { hasText: 'Ver los 2 BMW' }).click();
+    await page.getByText('2 autos encontrados').waitFor({ timeout: 30000 });
+    step('enlace viejo de un BMW → ofrece los BMW disponibles y filtra el catálogo');
     const r2 = await page.goto(B + '/pagina-rara');
     await page.getByText('Te saliste de la pista').waitFor({ timeout: 30000 });
     step('404 global (status ' + r2.status() + ')');
