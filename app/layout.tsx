@@ -10,15 +10,7 @@ const geist = Geist({
   display: "swap",
 });
 
-// Saira en dos cortes estáticos (expandida): ~15 KB cada uno en vez de ~210 KB variables
-const sairaDisplay = localFont({
-  src: "./fonts/saira-display-800i.woff2",
-  variable: "--font-saira",
-  weight: "800",
-  style: "italic",
-  display: "swap",
-});
-
+// Saira expandida en un solo corte estático (600): ~15 KB, para títulos y etiquetas
 const sairaTech = localFont({
   src: "./fonts/saira-tech-600.woff2",
   variable: "--font-saira-tech",
@@ -64,7 +56,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="es-MX"
       data-scroll-behavior="smooth"
-      className={`${geist.variable} ${sairaDisplay.variable} ${sairaTech.variable} antialiased`}
+      className={`${geist.variable} ${sairaTech.variable} antialiased`}
     >
       <body className="min-h-dvh">{children}</body>
     </html>

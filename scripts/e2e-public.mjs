@@ -13,31 +13,42 @@ const step = (m) => console.log('✔', m);
   page.on('pageerror', e => errors.push('PAGEERROR ' + e.message));
   page.on('console', m => { if (m.type() === 'error') errors.push(m.text().slice(0, 300)); });
   try {
-    // Inicio: estructura de landing (hero con prueba social, CTA, sin miedos, preguntas)
+    // Inicio: estructura de landing (título claro, CTA, quita-miedos, confianza, inventario, vende tu auto)
     await page.goto(B + '/');
-    await page.getByRole('heading', { level: 1 }).filter({ hasText: 'sin sorpresas' }).waitFor({ timeout: 30000 });
-    await page.getByText('13 autos disponibles hoy').first().waitFor();
+    await page.getByRole('heading', { level: 1 }).filter({ hasText: 'Autos seminuevos premium' }).waitFor({ timeout: 30000 });
     for (const t of ['Precio a la vista', 'Fotos reales de cada auto', 'Respuesta inmediata']) await page.getByText(t).first().waitFor();
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     if (overflow > 0) throw new Error('scroll horizontal en inicio: ' + overflow + 'px');
-    const heroCta = page.locator('a', { hasText: 'Ver los 13 autos' }).first();
+    const heroCta = page.locator('a', { hasText: 'Ver inventario' }).first();
     if (!(await heroCta.isVisible())) throw new Error('el botón principal no se ve sin hacer scroll');
     const box = await heroCta.boundingBox();
     if (box.y + box.height > 844) throw new Error('el botón principal queda abajo del primer pantallazo');
-    step('hero: prueba social, título, botón y quita-miedos en el primer pantallazo');
+    step('hero: título, botón y quita-miedos en el primer pantallazo');
+    // Lo que el dueño pidió quitar (28-oct)
+    for (const gone of ['autos disponibles hoy', '¿Cuál es tu presupuesto?', 'Ver del más barato al más caro']) {
+      if (await page.getByText(gone).count()) throw new Error('debería haberse quitado: ' + gone);
+    }
+    if (await page.locator('a[href*="waze"]').count()) throw new Error('debería haberse quitado el botón de Waze');
+    if (await page.locator('a[href="/autos?precio=0-300000"]').count()) throw new Error('debería haberse quitado el presupuesto');
+    step('sin «N autos disponibles hoy», sin presupuesto y sin Waze');
+    await page.getByText('Autos entregados').first().waitFor();
+    await page.getByText('Números de ejemplo').first().waitFor();
+    step('números de confianza (de ejemplo, solo en desarrollo)');
+    await page.getByRole('heading', { name: 'Autos listos para manejar' }).waitFor();
+    const sell = page.getByRole('heading', { name: '¿Quieres vender tu auto?' });
+    const reviews = page.locator('#diferencia');
+    if ((await sell.boundingBox()).y > (await reviews.boundingBox()).y) throw new Error('«Vende tu auto» debe ir más arriba');
+    step('«Autos listos para manejar» y «¿Quieres vender tu auto?» arriba');
     const faq = page.locator('details', { hasText: '¿Puedo ver el auto en persona?' });
     await faq.locator('summary').click();
     await faq.getByText('de lunes a sábado de').waitFor();
     step('preguntas frecuentes abren');
     await page.locator('a[href="/autos?tipo=Blindado"]').first().click();
     await page.getByText('2 autos encontrados').waitFor({ timeout: 30000 });
-    step('historia «Blindados» del inicio filtra el catálogo → 2');
+    step('categoría «Blindados» del inicio filtra el catálogo → 2');
     await page.goto(B + '/');
-    const budget = page.locator('a[href="/autos?precio=0-300000"]');
-    const label = (await budget.innerText()).match(/(\d+) autos?/)[1];
-    await budget.click();
-    await page.getByText(`${label} ${label === '1' ? 'auto encontrado' : 'autos encontrados'}`).waitFor({ timeout: 30000 });
-    step(`presupuesto «Hasta $300k» del inicio coincide con el catálogo → ${label}`);
+    await page.locator('footer a[href="/admin/login"]', { hasText: 'Administración' }).waitFor();
+    step('acceso discreto al panel en el pie de página');
 
     // Catálogo con filtro desde URL
     await page.goto(B + '/autos?tipo=Deportivo');
@@ -68,7 +79,7 @@ const step = (m) => console.log('✔', m);
     const cb = await cta.boundingBox();
     if (cb.y + cb.height > 844) throw new Error('el botón de WhatsApp queda abajo del primer pantallazo: ' + Math.round(cb.y + cb.height));
     await page.getByText('Te respondemos de inmediato').first().waitFor();
-    const ask = page.locator('a', { hasText: 'Kilometraje: pregúntanos' });
+    const ask = page.locator('a', { hasText: 'Kilometraje: pregúntanos' }).first();
     const askHref = decodeURIComponent(await ask.getAttribute('href'));
     if (!askHref.includes('kilometraje') || !askHref.includes('Ford Mustang GT Premium 2022')) throw new Error('mensaje de dato faltante: ' + askHref);
     const ld = await page.locator('script[type="application/ld+json"]').allTextContents();

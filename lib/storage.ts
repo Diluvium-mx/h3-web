@@ -139,6 +139,41 @@ export async function removeReview(id: string): Promise<Review | null> {
   return review;
 }
 
+// ---------- Ajustes del panel (contraseña cifrada, números de confianza) ----------
+// En desarrollo van a data/settings.local.json (ignorado por git).
+
+const LOCAL_SETTINGS = path.join(/*turbopackIgnore: true*/ process.cwd(), "data", "settings.local.json");
+
+async function readFileSettings(): Promise<Record<string, unknown>> {
+  if (storageMode !== "local") return {};
+  try {
+    return JSON.parse(await fs.readFile(/*turbopackIgnore: true*/ LOCAL_SETTINGS, "utf8")) as Record<string, unknown>;
+  } catch {
+    return {};
+  }
+}
+
+export async function getSetting<T>(key: string): Promise<T | null> {
+  if (redis) return (await redis.get<T>(`h3:settings:${key}`)) ?? null;
+  return ((await readFileSettings())[key] as T | undefined) ?? null;
+}
+
+// `null` borra el ajuste
+export async function putSetting<T>(key: string, value: T | null) {
+  if (redis) {
+    if (value === null) await redis.del(`h3:settings:${key}`);
+    else await redis.set(`h3:settings:${key}`, value);
+    return;
+  }
+  if (storageMode !== "local") {
+    throw new Error("El sitio está en modo demo. Conecta Upstash Redis para poder guardar ajustes.");
+  }
+  const all = await readFileSettings();
+  if (value === null) delete all[key];
+  else all[key] = value;
+  await fs.writeFile(/*turbopackIgnore: true*/ LOCAL_SETTINGS, JSON.stringify(all, null, 2));
+}
+
 // ---------- Límite de intentos de login (solo con Redis) ----------
 
 const LOGIN_WINDOW = 15 * 60;

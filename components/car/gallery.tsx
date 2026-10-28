@@ -20,7 +20,7 @@ function PhotoTabs({
   onChange: (key: string) => void;
 }) {
   return (
-    <div className="no-scrollbar -mx-1 flex gap-2 overflow-x-auto px-1 pb-1" role="tablist" aria-label="Secciones de fotos">
+    <div className="no-scrollbar flex gap-6 overflow-x-auto border-b border-line" role="tablist" aria-label="Secciones de fotos">
       {tabs.map((t) => (
         <button
           key={t.key}
@@ -28,12 +28,12 @@ function PhotoTabs({
           role="tab"
           aria-selected={active === t.key}
           onClick={() => onChange(t.key)}
-          className={`inline-flex h-10 shrink-0 items-center gap-1.5 rounded-full px-4 text-sm font-semibold transition-colors ${
-            active === t.key ? "bg-night text-white" : "bg-card text-fg/80 ring-1 ring-line hover:text-fg"
+          className={`relative inline-flex h-11 shrink-0 items-center gap-1.5 text-sm font-semibold transition-colors after:absolute after:inset-x-0 after:-bottom-px after:h-0.5 after:origin-left after:bg-fg after:transition-transform after:duration-500 after:ease-[var(--ease-out-expo)] ${
+            active === t.key ? "text-fg after:scale-x-100" : "text-mute after:scale-x-0 hover:text-fg"
           }`}
         >
           {t.label}
-          <span className={`text-xs ${active === t.key ? "text-volt" : "text-dim"}`}>{t.indexes.length}</span>
+          <span className="text-xs font-normal text-dim">{t.indexes.length}</span>
         </button>
       ))}
     </div>
@@ -82,11 +82,11 @@ export function Gallery({ images, alt, carId, sold, sections = {} }: Props) {
 
   const go = useCallback((delta: number) => scrollToIndex(track.current, Math.max(0, Math.min(total - 1, index + delta))), [index, total]);
 
-  if (!total) return <div className="skeleton aspect-square w-full lg:aspect-[5/6] lg:rounded-3xl" />;
+  if (!total) return <div className="skeleton aspect-square w-full lg:aspect-[5/6] lg:rounded-lg" />;
 
   return (
     <div className="relative">
-      <div className="group relative overflow-hidden bg-soft lg:rounded-3xl">
+      <div className="group relative overflow-hidden bg-soft lg:rounded-lg">
         <div
           ref={track}
           className="no-scrollbar flex aspect-square snap-x snap-mandatory overflow-x-auto overscroll-x-contain lg:aspect-[5/6]"
@@ -135,7 +135,7 @@ export function Gallery({ images, alt, carId, sold, sections = {} }: Props) {
         {/* Progreso */}
         <div className="pointer-events-none absolute inset-x-4 bottom-10 flex gap-1 lg:bottom-4">
           {images.slice(0, 24).map((src, i) => (
-            <span key={src} className="h-[3px] flex-1 overflow-hidden rounded-full bg-white/25">
+            <span key={src} className="h-0.5 flex-1 overflow-hidden bg-white/25">
               <span
                 className={`block h-full origin-left bg-white transition-transform duration-500 ease-[var(--ease-out-expo)] ${
                   i <= index ? "scale-x-100" : "scale-x-0"
@@ -144,8 +144,8 @@ export function Gallery({ images, alt, carId, sold, sections = {} }: Props) {
             </span>
           ))}
         </div>
-        <span className="font-tech pointer-events-none absolute right-4 bottom-14 rounded-full bg-card/90 px-2.5 py-1 text-[11px] shadow-sm backdrop-blur-md lg:top-4 lg:bottom-auto">
-          {currentSection && <span className="text-brand-hi">{PHOTO_SECTION_LABEL[currentSection]} · </span>}
+        <span className="font-tech pointer-events-none absolute right-4 bottom-14 rounded-sm bg-night/70 px-2 py-1 text-[10px] text-white backdrop-blur-md lg:top-4 lg:bottom-auto">
+          {currentSection && <span className="text-white/70">{PHOTO_SECTION_LABEL[currentSection]} · </span>}
           {index + 1} / {total}
         </span>
 
@@ -155,7 +155,7 @@ export function Gallery({ images, alt, carId, sold, sections = {} }: Props) {
               type="button"
               onClick={() => go(-1)}
               disabled={index === 0}
-              className="absolute top-1/2 left-4 hidden size-12 -translate-y-1/2 place-items-center rounded-full bg-card/90 opacity-0 shadow-md backdrop-blur-md transition-all group-hover:opacity-100 hover:bg-paper disabled:invisible lg:grid"
+              className="absolute top-1/2 left-4 hidden size-12 -translate-y-1/2 place-items-center rounded-md bg-card/90 opacity-0 shadow-md backdrop-blur-md transition-all group-hover:opacity-100 hover:bg-paper disabled:invisible lg:grid"
               aria-label="Foto anterior"
             >
               <ChevronLeft className="size-6" />
@@ -164,7 +164,7 @@ export function Gallery({ images, alt, carId, sold, sections = {} }: Props) {
               type="button"
               onClick={() => go(1)}
               disabled={index === total - 1}
-              className="absolute top-1/2 right-4 hidden size-12 -translate-y-1/2 place-items-center rounded-full bg-card/90 opacity-0 shadow-md backdrop-blur-md transition-all group-hover:opacity-100 hover:bg-paper disabled:invisible lg:grid"
+              className="absolute top-1/2 right-4 hidden size-12 -translate-y-1/2 place-items-center rounded-md bg-card/90 opacity-0 shadow-md backdrop-blur-md transition-all group-hover:opacity-100 hover:bg-paper disabled:invisible lg:grid"
               aria-label="Foto siguiente"
             >
               <ChevronRight className="size-6" />
@@ -174,7 +174,7 @@ export function Gallery({ images, alt, carId, sold, sections = {} }: Props) {
         <button
           type="button"
           onClick={() => setLightbox(index)}
-          className="absolute top-4 left-4 hidden size-10 place-items-center rounded-full bg-card/90 shadow-md backdrop-blur-md transition-transform hover:scale-110 lg:grid"
+          className="absolute top-4 left-4 hidden size-10 place-items-center rounded-md bg-card/90 shadow-md backdrop-blur-md transition-transform hover:scale-110 lg:grid"
           aria-label="Pantalla completa"
         >
           <Expand className="size-4" />
@@ -204,7 +204,7 @@ export function Gallery({ images, alt, carId, sold, sections = {} }: Props) {
                 key={src}
                 type="button"
                 onClick={() => scrollToIndex(track.current, i)}
-                className={`relative aspect-square w-20 shrink-0 overflow-hidden rounded-xl ring-2 transition-all duration-300 ${
+                className={`relative aspect-square w-20 shrink-0 overflow-hidden rounded-md ring-2 transition-all duration-300 ${
                   i === index ? "ring-brand" : "opacity-60 ring-transparent hover:opacity-100"
                 }`}
                 aria-label={`Ir a la foto ${i + 1}`}
@@ -268,7 +268,7 @@ export function PhotoGrid({
             <button
               type="button"
               onClick={() => setLightbox(i)}
-              className="group relative block aspect-square w-full overflow-hidden rounded-xl bg-soft"
+              className="group relative block aspect-square w-full overflow-hidden rounded-md bg-soft"
               aria-label={`Ver foto ${i + 1} de ${images.length}`}
             >
               {ready ? (
@@ -291,7 +291,7 @@ export function PhotoGrid({
         <button
           type="button"
           onClick={() => setAll(true)}
-          className="mt-3 flex h-12 w-full items-center justify-center gap-2 rounded-full border border-line bg-card text-sm font-semibold transition-colors hover:border-fg/30"
+          className="btn btn-outline mt-3 w-full text-sm"
         >
           Ver las {images.length} fotos
         </button>
@@ -354,13 +354,13 @@ function Lightbox({
         ))}
       </div>
       <div className="pointer-events-none absolute inset-x-0 top-0 flex items-center justify-between p-4 pt-[max(1rem,env(safe-area-inset-top))]">
-        <span className="font-tech rounded-full bg-white/10 px-3 py-1.5 text-xs backdrop-blur-md">
+        <span className="font-tech rounded-sm bg-white/10 px-2.5 py-1.5 text-xs backdrop-blur-md">
           {index + 1} / {images.length}
         </span>
         <button
           type="button"
           onClick={() => onClose(index)}
-          className="pointer-events-auto grid size-12 place-items-center rounded-full bg-white/10 backdrop-blur-md transition-transform hover:scale-110"
+          className="pointer-events-auto grid size-12 place-items-center rounded-md bg-white/10 backdrop-blur-md transition-transform hover:scale-110"
           aria-label="Cerrar galería"
         >
           <X className="size-6" />
@@ -369,7 +369,7 @@ function Lightbox({
       <button
         type="button"
         onClick={() => scrollToIndex(track.current, index - 1)}
-        className="absolute top-1/2 left-4 hidden size-12 -translate-y-1/2 place-items-center rounded-full bg-white/10 backdrop-blur-md sm:grid"
+        className="absolute top-1/2 left-4 hidden size-12 -translate-y-1/2 place-items-center rounded-md bg-white/10 backdrop-blur-md sm:grid"
         aria-label="Foto anterior"
       >
         <ChevronLeft className="size-6" />
@@ -377,7 +377,7 @@ function Lightbox({
       <button
         type="button"
         onClick={() => scrollToIndex(track.current, index + 1)}
-        className="absolute top-1/2 right-4 hidden size-12 -translate-y-1/2 place-items-center rounded-full bg-white/10 backdrop-blur-md sm:grid"
+        className="absolute top-1/2 right-4 hidden size-12 -translate-y-1/2 place-items-center rounded-md bg-white/10 backdrop-blur-md sm:grid"
         aria-label="Foto siguiente"
       >
         <ChevronRight className="size-6" />

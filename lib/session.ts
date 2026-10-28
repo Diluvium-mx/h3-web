@@ -6,11 +6,21 @@ export const SESSION_DAYS = 30;
 
 const encoder = new TextEncoder();
 
+// Llave para firmar la sesión. Si no se configuró AUTH_SECRET, se usa la llave de Upstash (que ya es
+// secreta y existe cuando el panel puede guardar), así el dueño no tiene que configurar nada más.
 function secret() {
-  const s = process.env.AUTH_SECRET || process.env.ADMIN_PASSWORD;
-  if (s) return s;
+  const s =
+    process.env.AUTH_SECRET ||
+    process.env.ADMIN_PASSWORD ||
+    process.env.UPSTASH_REDIS_REST_TOKEN ||
+    process.env.KV_REST_API_TOKEN;
+  if (s) return `h3-sesion:${s}`;
   if (process.env.NODE_ENV !== "production") return "dev-secret-h3";
   return null;
+}
+
+export function sessionConfigured() {
+  return secret() !== null;
 }
 
 async function hmac(value: string, key: string) {
@@ -36,12 +46,17 @@ function safeEqual(a: string, b: string) {
   return diff === 0;
 }
 
-export async function createSessionToken() {
+// `version` cambia cuando el dueño cambia la contraseña: así se cierran las sesiones abiertas con la anterior
+export async function createSessionToken(version: string) {
   const key = secret();
-  if (!key) throw new Error("Falta configurar ADMIN_PASSWORD");
+  if (!key) throw new Error("Para usar el panel publicado hay que conectar Upstash (ver README)");
   const expires = Date.now() + SESSION_DAYS * 24 * 60 * 60 * 1000;
-  const payload = `admin.${expires}`;
+  const payload = `admin.${expires}.${version}`;
   return `${payload}.${await hmac(payload, key)}`;
+}
+
+export function sessionVersion(token: string | undefined) {
+  return token?.split(".")[2] ?? "";
 }
 
 export async function verifySessionToken(token: string | undefined) {
@@ -54,13 +69,4 @@ export async function verifySessionToken(token: string | undefined) {
   const expires = Number(payload.split(".")[1]);
   if (!Number.isFinite(expires) || expires < Date.now()) return false;
   return safeEqual(sig, await hmac(payload, key));
-}
-
-export async function checkPassword(input: string) {
-  const expected =
-    process.env.ADMIN_PASSWORD || (process.env.NODE_ENV !== "production" ? "h3admin" : "");
-  if (!expected) return false;
-  // Compara hashes para que el tiempo no dependa del contenido
-  const [a, b] = await Promise.all([hmac(input, "pw"), hmac(expected, "pw")]);
-  return safeEqual(a, b);
 }

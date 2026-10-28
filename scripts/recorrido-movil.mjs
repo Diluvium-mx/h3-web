@@ -2,7 +2,7 @@
 // Uso, con el sitio corriendo (npm run dev o npm run movil):
 //   node scripts/recorrido-movil.mjs http://localhost:3000 [carpeta-de-salida]
 // Los videos (.webm) se abren en Chrome o en QuickTime/VLC. La carpeta por defecto es recorridos/ (ignorada por git).
-// Usa la contraseña de desarrollo local del panel (h3admin) o ADMIN_PASSWORD si está definida.
+// Usa la contraseña de desarrollo local del panel (12345) o ADMIN_PASSWORD si está definida.
 import { createRequire } from "node:module";
 import { mkdirSync, renameSync } from "node:fs";
 import path from "node:path";
@@ -11,7 +11,7 @@ const { chromium } = require("playwright");
 
 const B = process.argv[2] || "http://localhost:3000";
 const OUT = process.argv[3] || "recorridos";
-const PASSWORD = process.env.ADMIN_PASSWORD || "h3admin";
+const PASSWORD = process.env.ADMIN_PASSWORD || "12345";
 
 const DEVICES = [
   {

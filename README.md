@@ -94,17 +94,19 @@ hasta la etapa 2.
    6. Confirma con **Deploy** (o **Publish**). Tarda de 3 a 5 minutos.
 4. **Hazlo público**, si quedó privado: usa el botón **Make public** o ve a **Project configuration →
    General → Visitor access → Project visibility → Public**.
-5. **Contraseñas del panel**, si no las pusiste en el paso 3:
+5. **Secreto del panel**, si no lo pusiste en el paso 3:
    1. Ve a **Project configuration → Environment variables → Add a variable → Import from a .env file**.
-   2. Pega estas dos líneas con tus valores y toca **Import variables**:
+   2. Pega esta línea con tu valor y toca **Import variables**:
       ```
-      ADMIN_PASSWORD=tu-contraseña-larga
       AUTH_SECRET=texto-largo-y-aleatorio
       ```
    - Para el `AUTH_SECRET`, en la Terminal de la Mac corre `openssl rand -base64 32`.
-   - Para `ADMIN_PASSWORD`, usa 4 palabras al azar que **no aparezcan en el sitio**. Netlify revisa que las
-     contraseñas no se filtren en el código publicado, y una palabra común podría detener la publicación.
-6. **Vuelve a publicar** para que tome las contraseñas: **Deploys → Trigger deploy → Deploy project**.
+   - La contraseña inicial del panel es `12345` (decisión del dueño). Como el repositorio es público,
+     cualquiera puede saberla: **cámbiala en Panel → Ajustes** en cuanto conectes Upstash (etapa 2).
+   - Opcional: si agregas `ADMIN_PASSWORD`, esa reemplaza a `12345` desde el principio. Usa 4 palabras al
+     azar que **no aparezcan en el sitio**; Netlify revisa que las contraseñas no se filtren en el código
+     publicado, y una palabra común podría detener la publicación.
+6. **Vuelve a publicar** para que tome el secreto: **Deploys → Trigger deploy → Deploy project**.
 7. Abre `https://NOMBRE.netlify.app` en el celular. El panel está en `/admin`.
 
 ### Etapa 2: que el panel guarde cambios y las fotos salgan de Cloudinary
@@ -117,9 +119,12 @@ hasta la etapa 2.
    publicar.
    - `NEXT_PUBLIC_SITE_URL`: no la agregues mientras no se conecte el dominio; el sitio usa sola la
      dirección `*.netlify.app`. Cuando se conecte, pon `https://www.h3seminuevos.com`.
-4. Entra a `https://NOMBRE.netlify.app/admin`, ve a **Importar de Shopify → Buscar → Importar
-   seleccionados**. Las fotos se copian de Shopify a Cloudinary.
-5. Cuando todo funcione, **cancela Shopify**. Importa las fotos **antes**, porque después desaparecen.
+4. Entra a `https://NOMBRE.netlify.app/admin` (el enlace discreto «Administración» está al final del
+   pie de página). Ve primero a **Ajustes**: cambia la contraseña `12345` y pon los números reales del
+   inicio (por ejemplo, autos entregados o años de experiencia).
+5. En el panel, ve a **Importar de Shopify → Buscar → Importar seleccionados**. Las fotos se copian de
+   Shopify a Cloudinary.
+6. Cuando todo funcione, **cancela Shopify**. Importa las fotos **antes**, porque después desaparecen.
    El dominio se conecta después (sin decidir).
 
 ### Para no gastar créditos de más
@@ -156,7 +161,7 @@ npm run dev
 ```
 
 - Sin variables de entorno, el sitio usa `data/seed.json` (el inventario actual).
-- En local, el panel (`/admin`, contraseña `h3admin`) guarda en `data/cars.local.json` y
+- En local, el panel (`/admin`, contraseña inicial `12345`, que se cambia en Panel → Ajustes) guarda en `data/cars.local.json` y
   `data/reviews.local.json`, y las fotos en `public/uploads/` (todo ignorado por git).
 - Para usar los servicios reales en local, copia `.env.example` como `.env.local` y llénalo
   (no lo subas al repositorio).

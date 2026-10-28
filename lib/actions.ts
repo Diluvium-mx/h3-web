@@ -18,7 +18,9 @@ import {
 import { requireAdmin } from "./auth";
 import { isEquipmentKey, isPhotoSection, type PhotoSection } from "./equipment";
 import { REVIEW_SOURCES, type Review } from "./reviews";
-import { checkPassword, createSessionToken, SESSION_COOKIE, SESSION_DAYS } from "./session";
+import { createSessionToken, sessionConfigured, SESSION_COOKIE, SESSION_DAYS } from "./session";
+import { passwordVersion, setAdminPassword, verifyAdminPassword } from "./admin-password";
+import type { TrustStat } from "./settings";
 import {
   clearLoginFailures,
   getCar,
@@ -26,6 +28,7 @@ import {
   listCars,
   loginFailures,
   putCar,
+  putSetting,
   putReview,
   recordLoginFailure,
   removeCar,
@@ -45,26 +48,78 @@ export async function loginAction(_prev: { error?: string } | undefined, formDat
   if ((await loginFailures(ip)) >= MAX_LOGIN_FAILURES) {
     return { error: "Demasiados intentos. Espera 15 minutos e inténtalo de nuevo." };
   }
+  if (!sessionConfigured()) {
+    return { error: "Para usar el panel publicado hay que conectar Upstash (ver README, etapa 2)." };
+  }
   const password = String(formData.get("password") ?? "");
-  if (!(await checkPassword(password))) {
+  if (!(await verifyAdminPassword(password))) {
     await recordLoginFailure(ip);
     await new Promise((r) => setTimeout(r, 700));
     return { error: "Contraseña incorrecta" };
   }
   await clearLoginFailures(ip);
-  (await cookies()).set(SESSION_COOKIE, await createSessionToken(), {
+  await startSession();
+  redirect("/admin");
+}
+
+async function startSession() {
+  (await cookies()).set(SESSION_COOKIE, await createSessionToken(await passwordVersion()), {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     path: "/",
     maxAge: SESSION_DAYS * 24 * 60 * 60,
   });
-  redirect("/admin");
 }
 
 export async function logoutAction() {
   (await cookies()).delete(SESSION_COOKIE);
   redirect("/admin/login");
+}
+
+// ---------- Ajustes: contraseña y números de confianza ----------
+
+export async function changePasswordAction(
+  current: string,
+  next: string,
+  confirm: string,
+): Promise<ActionResult> {
+  await requireAdmin();
+  if (!(await verifyAdminPassword(current))) return { ok: false, error: "La contraseña actual no es correcta." };
+  const clean = next.trim();
+  if (clean.length < 5) return { ok: false, error: "La nueva contraseña debe tener al menos 5 caracteres." };
+  if (clean.length > 100) return { ok: false, error: "La nueva contraseña es demasiado larga." };
+  if (clean !== confirm.trim()) return { ok: false, error: "Las dos contraseñas nuevas no coinciden." };
+  try {
+    await setAdminPassword(clean);
+    // Las demás sesiones (otros teléfonos o computadoras) se cierran; esta sigue abierta
+    await startSession();
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : "No se pudo cambiar" };
+  }
+}
+
+export async function saveStatsAction(stats: TrustStat[]): Promise<ActionResult> {
+  await requireAdmin();
+  const input = Array.isArray(stats) ? stats : [];
+  const list: TrustStat[] = [];
+  for (const raw of input.slice(0, 4)) {
+    const value = int(raw?.value);
+    const label = str(raw?.label, 40);
+    if (value == null || value < 0 || value > 10_000_000 || !label) continue;
+    const suffix = str(raw?.suffix, 8);
+    list.push(clean({ value, label, prefix: str(raw?.prefix, 3) || undefined, suffix: suffix ? ` ${suffix}` : undefined }));
+  }
+  // Sin filas = quitar la sección del inicio
+  if (input.length && !list.length) return { ok: false, error: "Escribe al menos un número con su texto." };
+  try {
+    await putSetting("stats", list.length ? list : null);
+    updateTag("settings");
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : "No se pudo guardar" };
+  }
 }
 
 // ---------- Validación ----------

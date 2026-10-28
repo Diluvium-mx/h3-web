@@ -52,7 +52,7 @@ function parseMultipart(body, contentType) {
   );
   try {
     await page.goto(B + "/admin/login");
-    await page.fill("input[name=password]", "h3admin");
+    await page.fill("input[name=password]", process.env.ADMIN_PASSWORD || "12345");
     await page.click('button:has-text("Entrar")');
     await page.waitForURL(B + "/admin");
     await page.goto(B + "/admin/autos/nuevo");

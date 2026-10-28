@@ -15,13 +15,16 @@ export default function ReviewsPage() {
       <Link href="/admin" className="inline-flex items-center gap-1.5 text-sm text-mute hover:text-fg">
         <ArrowLeft className="size-4" /> Inventario
       </Link>
-      <p className="font-tech mt-6 text-xs text-brand-hi">Prueba social</p>
+      <p className="font-tech mt-6 flex items-center gap-3 text-[11px] text-dim">
+        <span className="h-px w-6 bg-brand" />
+        Prueba social
+      </p>
       <h1 className="font-display mt-2 text-4xl">Reseñas</h1>
       <p className="mt-3 max-w-xl text-mute">
         Lo que dicen tus clientes. Aparecen en el inicio en cuanto las guardas; si no hay ninguna, la sección no
         se muestra.
       </p>
-      <Suspense fallback={<div className="skeleton mt-8 h-64 rounded-3xl" />}>
+      <Suspense fallback={<div className="skeleton mt-8 h-64 rounded-lg" />}>
         <Manager />
       </Suspense>
     </div>

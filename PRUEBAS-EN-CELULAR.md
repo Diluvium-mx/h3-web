@@ -43,7 +43,7 @@ npm run movil
 Muestra un enlace como `http://192.168.1.50:3000` y un **código QR**. Apunta la cámara del celular al QR
 y se abre el sitio.
 
-- El panel está en `/admin`. La contraseña en tu Mac es `h3admin`, o la de `ADMIN_PASSWORD` si creaste
+- El panel está en `/admin`. La contraseña inicial es `12345` (se cambia en Panel → Ajustes), o la de `ADMIN_PASSWORD` si creaste
   `.env.local`.
 - Todo lo que cambies en el código se ve en el celular al instante.
 - Si la Mac tiene varias redes y el enlace no abre: `H3_IP=192.168.1.50 npm run movil`, con la IP de tu

@@ -10,7 +10,7 @@ export function StorageBanner({ mode, photos }: { mode: "redis" | "local" | "dem
       : "Falta conectar Cloudinary: no podrás subir fotos hasta configurarlo.";
   return (
     <div
-      className={`mb-6 flex gap-3 rounded-2xl border p-4 text-sm ${
+      className={`mb-6 flex gap-3 rounded-lg border p-4 text-sm ${
         demo || mode === "redis" ? "border-brand/40 bg-brand/10 text-fg" : "border-line bg-card text-mute"
       }`}
     >

@@ -13,12 +13,7 @@ export const SOCIALS = [
 export function Footer() {
   return (
     <footer className="relative overflow-hidden border-t border-line bg-card">
-      <div className="h-1.5 bg-gradient-to-r from-brand from-60% to-volt" aria-hidden="true" />
-      <div className="pointer-events-none absolute -bottom-6 left-0 right-0 select-none overflow-hidden">
-        <p className="font-display text-outline whitespace-nowrap text-[22vw] leading-none opacity-[0.07] md:text-[16vw]">
-          Ready to drive
-        </p>
-      </div>
+      <div className="h-0.5 bg-[linear-gradient(90deg,var(--color-brand)_0_6rem,transparent_6rem)]" aria-hidden="true" />
       <div className="relative mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
           <Image src="/brand/logo-dark.png" alt={site.name} width={344} height={220} className="h-16 w-auto" />
@@ -31,7 +26,7 @@ export function Footer() {
                 target="_blank"
                 rel="noopener"
                 aria-label={label}
-                className="grid size-11 place-items-center rounded-full border border-line text-fg/80 transition-all duration-300 hover:-translate-y-0.5 hover:border-brand hover:text-fg"
+                className="grid size-11 place-items-center rounded-md border border-line text-fg/80 transition-all duration-300 hover:-translate-y-0.5 hover:border-fg/40 hover:text-fg"
               >
                 <Icon className="size-5" />
               </a>
@@ -39,9 +34,9 @@ export function Footer() {
           </div>
         </div>
         <div>
-          <h2 className="font-tech text-xs text-dim">Explora</h2>
+          <h2 className="font-tech text-[11px] text-dim">Explora</h2>
           <ul className="mt-4 space-y-3 text-sm">
-            <li><Link href="/autos" className="hover:text-brand-hi">Catálogo completo</Link></li>
+            <li><Link href="/autos" className="hover:text-brand-hi">Inventario completo</Link></li>
             <li><Link href="/autos?tipo=SUV" className="hover:text-brand-hi">SUVs y camionetas</Link></li>
             <li><Link href="/autos?tipo=Deportivo" className="hover:text-brand-hi">Deportivos</Link></li>
             <li><Link href="/autos?tipo=Blindado" className="hover:text-brand-hi">Blindados</Link></li>
@@ -49,7 +44,7 @@ export function Footer() {
           </ul>
         </div>
         <div>
-          <h2 className="font-tech text-xs text-dim">Visítanos</h2>
+          <h2 className="font-tech text-[11px] text-dim">Visítanos</h2>
           <ul className="mt-4 space-y-3 text-sm text-fg/90">
             <li>
               <a href={site.mapsUrl} target="_blank" rel="noopener" className="flex gap-2 hover:text-brand-hi">
@@ -83,7 +78,13 @@ export function Footer() {
       <div className="relative border-t border-line">
         <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-6 text-xs text-dim sm:flex-row sm:justify-between sm:px-6">
           <p>© {site.name} · Villahermosa, Tabasco, México</p>
-          <p>Precios en pesos mexicanos (MXN). Sujetos a cambio sin previo aviso.</p>
+          <p className="flex flex-wrap items-center gap-x-4 gap-y-1">
+            Precios en pesos mexicanos (MXN). Sujetos a cambio sin previo aviso.
+            {/* Acceso discreto para el dueño */}
+            <Link href="/admin/login" rel="nofollow" className="text-dim/90 underline-offset-2 hover:text-fg hover:underline">
+              Administración
+            </Link>
+          </p>
         </div>
       </div>
     </footer>

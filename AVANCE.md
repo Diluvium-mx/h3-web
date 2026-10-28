@@ -2,6 +2,19 @@
 
 Lo más reciente va arriba.
 
+## 28 de octubre de 2026 (noche 2) — estilo premium y panel con contraseña cambiable
+
+- Se aplicaron las correcciones del dueño: colores premium (tinta, grafito y plata con rojo de acento),
+  título claro, sin «óvalos» ni amarillo, categorías con íconos propios, tarjetas y ficha técnica más
+  premium, y «¿Quieres vender tu auto?» más grande y arriba. Se quitaron «13 autos disponibles hoy», el
+  presupuesto y el botón de Waze.
+- Números de confianza de ejemplo (solo se ven en desarrollo) y microanimaciones.
+- Panel: contraseña `12345` que se cambia en **Ajustes**, enlace discreto en el pie de página y formulario
+  de auto en 4 pasos. Pasan 26 pruebas del sitio, 23 del panel y 3 de Cloudinary.
+
+Falta: que el dueño revise en su celular, cambie `12345` y ponga los números reales cuando el panel
+guarde en Upstash.
+
 ## 28 de octubre de 2026 (noche) — pasos para publicar en Netlify
 
 - Se escribieron los pasos actuales de Netlify en el README. Las cuentas nuevas crean proyectos privados

@@ -39,7 +39,7 @@ const STORAGE_KEY = "h3-vende-borrador";
 const STEPS = ["Tu auto", "Detalles", "Contacto"];
 
 const field =
-  "h-13 w-full rounded-2xl border border-line bg-soft px-4 text-fg placeholder:text-dim transition-colors focus:border-brand focus:outline-none";
+  "h-13 w-full rounded-md border border-line bg-paper px-4 text-fg placeholder:text-dim transition-colors focus:border-fg/50 focus:bg-card focus:ring-4 focus:ring-fg/5 focus:outline-none";
 
 function Options({
   value,
@@ -61,8 +61,8 @@ function Options({
           role="radio"
           aria-checked={value === o}
           onClick={() => onChange(value === o ? "" : o)}
-          className={`h-11 rounded-full border px-4 text-sm font-medium transition-all duration-300 active:scale-95 ${
-            value === o ? "border-brand bg-brand text-white" : "border-line bg-soft text-fg/80 hover:border-fg/30"
+          className={`h-11 rounded-md border px-4 text-sm font-medium transition-all duration-300 active:scale-95 ${
+            value === o ? "border-night bg-night text-white" : "border-line bg-paper text-fg/80 hover:border-fg/40"
           }`}
         >
           {o}
@@ -158,7 +158,7 @@ export function SellForm() {
   }
 
   return (
-    <form onSubmit={submit} className="rounded-[2rem] border border-line bg-card p-5 sm:p-8" noValidate>
+    <form onSubmit={submit} className="rounded-lg bg-card p-5 shadow-[0_30px_80px_-40px_rgb(12_13_15/0.35)] ring-1 ring-line sm:p-8" noValidate>
       {/* Progreso */}
       <ol className="mb-8 grid grid-cols-3 gap-2" aria-label="Pasos">
         {STEPS.map((label, i) => (
@@ -169,7 +169,7 @@ export function SellForm() {
               className="w-full text-left"
               aria-current={i === step ? "step" : undefined}
             >
-              <span className="block h-1.5 overflow-hidden rounded-full bg-soft-2">
+              <span className="block h-0.5 overflow-hidden bg-soft-2">
                 <span
                   className={`block h-full origin-left bg-brand transition-transform duration-700 ease-[var(--ease-out-expo)] ${
                     i <= step ? "scale-x-100" : "scale-x-0"
@@ -273,7 +273,7 @@ export function SellForm() {
                 rows={3}
               />
             </label>
-            <p className="flex items-start gap-2 rounded-2xl bg-soft p-4 text-sm text-mute">
+            <p className="flex items-start gap-2 rounded-md bg-paper p-4 text-sm text-mute">
               <Camera className="mt-0.5 size-4 shrink-0 text-brand" />
               Se abrirá WhatsApp con tus datos listos. Después solo envía 4–6 fotos de tu auto (frente, lados, interior y tablero).
             </p>
@@ -282,7 +282,7 @@ export function SellForm() {
       </div>
 
       {error && (
-        <p className="mt-5 rounded-xl bg-brand/15 px-4 py-3 text-sm text-brand-hi" role="alert">
+        <p className="mt-5 rounded-md border-l-2 border-brand bg-brand-soft px-4 py-3 text-sm text-brand-hi" role="alert">
           {error}
         </p>
       )}
@@ -295,7 +295,7 @@ export function SellForm() {
               setError("");
               setStep((s) => s - 1);
             }}
-            className="grid size-14 shrink-0 place-items-center rounded-full border border-line active:scale-95"
+            className="grid size-14 shrink-0 place-items-center rounded-md border border-line transition-colors hover:border-fg/40 active:scale-95"
             aria-label="Paso anterior"
           >
             <ArrowLeft className="size-5" />
@@ -305,7 +305,7 @@ export function SellForm() {
           <button
             type="button"
             onClick={next}
-            className="btn-shine group inline-flex h-14 flex-1 items-center justify-center gap-2 rounded-full bg-brand font-semibold text-white active:scale-[0.98]"
+            className="btn btn-dark btn-shine group h-14 flex-1"
           >
             Continuar
             <ArrowRight className="size-5 transition-transform group-hover:translate-x-1" />
@@ -313,7 +313,7 @@ export function SellForm() {
         ) : (
           <button
             type="submit"
-            className="btn-shine group inline-flex h-14 flex-1 items-center justify-center gap-2 rounded-full bg-wa font-bold text-night active:scale-[0.98]"
+            className="btn btn-wa btn-shine group h-14 flex-1"
           >
             <WhatsAppIcon className="size-6 transition-transform group-hover:-rotate-12" />
             Enviar por WhatsApp

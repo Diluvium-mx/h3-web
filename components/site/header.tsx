@@ -63,7 +63,7 @@ export function Header() {
               alt=""
               width={344}
               height={186}
-              className="h-7 w-auto transition-transform duration-500 ease-[var(--ease-spring)] group-hover:-skew-x-6 group-hover:scale-105"
+              className="h-7 w-auto transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:scale-105"
               preload
             />
             <span className="font-tech hidden text-[11px] leading-tight text-mute sm:block">
@@ -81,7 +81,7 @@ export function Header() {
                 className="group relative px-4 py-2 text-sm font-medium text-fg/80 transition-colors hover:text-fg"
               >
                 {item.label}
-                <span className="absolute inset-x-4 -bottom-0.5 h-0.5 origin-left scale-x-0 skew-x-[-20deg] bg-brand transition-transform duration-300 ease-[var(--ease-out-expo)] group-hover:scale-x-100" />
+                <span className="absolute inset-x-4 bottom-1 h-px origin-left scale-x-0 bg-brand transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:scale-x-100" />
               </Link>
             ))}
           </nav>
@@ -91,7 +91,7 @@ export function Header() {
               href={whatsappUrl(`Hola ${site.name} 👋 Vengo de su página web.`)}
               target="_blank"
               rel="noopener"
-              className="btn-shine inline-flex h-10 items-center gap-2 rounded-full bg-wa px-3 text-sm font-semibold text-night transition-transform active:scale-95 sm:px-4"
+              className="btn-shine inline-flex h-10 items-center gap-2 rounded-md bg-wa px-3 text-sm font-semibold text-night transition-transform active:scale-95 sm:px-4"
             >
               <WhatsAppIcon className="size-5" />
               <span className="hidden sm:inline">Escríbenos</span>
@@ -100,7 +100,7 @@ export function Header() {
             <button
               type="button"
               onClick={() => setOpen((v) => !v)}
-              className="relative grid size-10 place-items-center rounded-full border border-line bg-card/80 shadow-sm md:hidden"
+              className="relative grid size-10 place-items-center rounded-md border border-line bg-card/80 md:hidden"
               aria-expanded={open}
               aria-controls="mobile-menu"
               aria-label={open ? "Cerrar menú" : "Abrir menú"}
@@ -124,7 +124,6 @@ export function Header() {
           id="mobile-menu"
           className="fixed inset-0 z-40 flex flex-col bg-paper/95 px-6 pt-24 pb-10 backdrop-blur-xl md:hidden animate-fade"
         >
-          <div className="speed-lines pointer-events-none absolute inset-0 opacity-60" />
           <nav className="stagger relative flex flex-col gap-2" aria-label="Menú móvil">
             {[{ href: "/", label: "Inicio" }, ...NAV].map((item, i) => (
               <Link
@@ -132,9 +131,9 @@ export function Header() {
                 href={item.href}
                 onClick={() => setOpen(false)}
                 style={vars({ "--i": i })}
-                className="font-display flex items-baseline gap-3 py-2 text-4xl active:text-brand"
+                className="font-display flex items-baseline gap-4 border-b border-line py-4 text-[2rem] active:text-brand"
               >
-                <span className="font-tech text-xs text-brand-hi not-italic">0{i + 1}</span>
+                <span className="font-tech text-[10px] text-dim">0{i + 1}</span>
                 {item.label}
               </Link>
             ))}

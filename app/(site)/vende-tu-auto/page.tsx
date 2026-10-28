@@ -18,40 +18,40 @@ const STEPS = [
 
 export default function SellPage() {
   return (
-    <div className="relative overflow-hidden">
-      <div className="speed-lines pointer-events-none absolute inset-x-0 top-0 h-[32rem] opacity-60 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
-      <div className="pointer-events-none absolute -top-32 -left-32 size-[30rem] rounded-full bg-brand/20 blur-[120px]" />
-      <div className="relative mx-auto grid max-w-7xl gap-10 px-4 pt-28 pb-24 sm:px-6 lg:grid-cols-[1fr_1.1fr] lg:gap-16 lg:pt-36">
+    <div className="relative isolate overflow-hidden">
+      {/* Franja oscura arriba, como la sección del inicio */}
+      <div className="absolute inset-x-0 top-16 -z-10 h-[30rem] bg-night lg:h-[34rem]">
+        <div className="absolute inset-0 bg-[radial-gradient(50rem_24rem_at_10%_0%,rgb(200_16_46/0.25),transparent_60%)]" />
+      </div>
+      <div className="mx-auto grid max-w-7xl gap-10 px-4 pt-28 pb-24 sm:px-6 lg:grid-cols-[1fr_1.1fr] lg:gap-16 lg:pt-36">
         <div>
-          <header className="stagger">
-            <p className="font-tech flex items-center gap-2 text-xs text-brand-hi">
-              <span className="h-0.5 w-6 skew-x-[-20deg] bg-brand" />
+          <header className="stagger text-white">
+            <p className="font-tech flex items-center gap-3 text-[11px] text-silver">
+              <span className="draw-line h-px w-8 bg-brand" />
               Vende tu auto
             </p>
-            <h1 className="font-display mt-4 text-5xl sm:text-7xl" style={vars({ "--i": 1 })}>
-              Tu auto vale.
-              <br />
-              <span className="text-brand">Véndelo fácil.</span>
+            <h1 className="font-display mt-5 text-[2.8rem] leading-[1.02] sm:text-7xl" style={vars({ "--i": 1 })}>
+              ¿Quieres vender tu auto?
             </h1>
-            <p className="mt-5 max-w-md text-lg leading-relaxed text-mute" style={vars({ "--i": 2 })}>
+            <p className="mt-5 max-w-md text-lg leading-relaxed text-white/75" style={vars({ "--i": 2 })}>
               Llena tus datos en menos de un minuto y te atendemos por WhatsApp.
             </p>
           </header>
-          <ol className="mt-10 space-y-3">
+          <ol className="mt-12 hidden border-t border-line lg:mt-40 lg:block">
             {STEPS.map(({ Icon, title, text }, i) => (
               <li
                 key={title}
-                className="group flex gap-4 rounded-3xl border border-line bg-card/60 p-5 backdrop-blur-sm transition-colors hover:border-brand/40 animate-rise"
+                className="group flex gap-5 border-b border-line py-5 animate-rise"
                 style={{ animationDelay: `${300 + i * 100}ms` }}
               >
-                <span className="relative grid size-12 shrink-0 place-items-center rounded-2xl bg-brand/15 text-brand-hi transition-transform duration-500 ease-[var(--ease-spring)] group-hover:-rotate-6">
-                  <Icon className="size-6" />
-                  <span className="font-tech absolute -top-2 -right-2 grid size-6 place-items-center rounded-full bg-brand text-[10px] text-white">
-                    {i + 1}
-                  </span>
+                <span className="font-display w-10 shrink-0 text-3xl leading-none text-soft-2 transition-colors duration-500 group-hover:text-fg">
+                  0{i + 1}
                 </span>
                 <div>
-                  <p className="font-semibold">{title}</p>
+                  <p className="flex items-center gap-2 font-semibold">
+                    <Icon className="size-4 text-brand" aria-hidden="true" />
+                    {title}
+                  </p>
                   <p className="mt-1 text-sm text-mute">{text}</p>
                 </div>
               </li>
@@ -60,6 +60,21 @@ export default function SellPage() {
         </div>
         <div className="animate-rise [animation-delay:200ms] lg:sticky lg:top-28 lg:self-start">
           <SellForm />
+          {/* En celular los pasos van debajo del formulario */}
+          <ol className="mt-10 border-t border-line lg:hidden">
+            {STEPS.map(({ Icon, title, text }, i) => (
+              <li key={title} className="flex gap-5 border-b border-line py-5">
+                <span className="font-display w-10 shrink-0 text-3xl leading-none text-soft-2">0{i + 1}</span>
+                <div>
+                  <p className="flex items-center gap-2 font-semibold">
+                    <Icon className="size-4 text-brand" aria-hidden="true" />
+                    {title}
+                  </p>
+                  <p className="mt-1 text-sm text-mute">{text}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
         </div>
       </div>
     </div>

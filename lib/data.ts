@@ -2,7 +2,8 @@ import "server-only";
 import { cacheLife, cacheTag } from "next/cache";
 import { isPublic, sortNewest, type Car } from "./cars";
 import { sortReviews } from "./reviews";
-import { listCars, listReviews } from "./storage";
+import type { TrustStat } from "./settings";
+import { getSetting, listCars, listReviews } from "./storage";
 
 // Lecturas cacheadas para el sitio público. El panel invalida la etiqueta
 // "cars" cada vez que se guarda un cambio, así que el sitio se actualiza al instante.
@@ -19,6 +20,14 @@ export async function getReviews() {
   cacheTag("reviews");
   cacheLife("days");
   return (await listReviews()).sort(sortReviews);
+}
+
+// Números de confianza guardados por el dueño (null si aún no los pone)
+export async function getTrustStats() {
+  "use cache";
+  cacheTag("settings");
+  cacheLife("days");
+  return getSetting<TrustStat[]>("stats").catch(() => null);
 }
 
 export async function getPublicCars() {

@@ -30,8 +30,9 @@
    node scripts/e2e-admin.mjs http://localhost:3000
    ```
 
-   La prueba del panel usa la contraseña de desarrollo local y modifica `data/cars.local.json` y
-   `data/reviews.local.json`; los dos están ignorados por git.
+   La prueba del panel usa la contraseña inicial `12345` (o `ADMIN_PASSWORD`) y modifica
+   `data/cars.local.json`, `data/reviews.local.json` y `data/settings.local.json` (este último lo respalda y
+   lo restaura al terminar); los tres están ignorados por git.
 
    En celular (ver `PRUEBAS-EN-CELULAR.md`): `npm run movil` para un teléfono real en el mismo Wi-Fi y
    `node scripts/recorrido-movil.mjs http://localhost:3000` para grabar el recorrido en video.

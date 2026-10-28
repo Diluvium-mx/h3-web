@@ -10,13 +10,13 @@ export function Marquee({ items }: { items: string[] }) {
             {row.map((item, i) => (
               <Fragment key={`${copy}-${i}`}>
                 <span
-                  className={`font-display px-6 text-3xl whitespace-nowrap sm:text-4xl ${
+                  className={`font-display px-7 text-2xl tracking-[0.04em] whitespace-nowrap uppercase sm:text-3xl ${
                     i % 2 ? "text-dim" : "text-fg"
                   } ${item === "Ready to drive" ? "!text-brand-hi" : ""}`}
                 >
                   {item}
                 </span>
-                <span className="size-2 rotate-45 bg-brand" />
+                <span className="size-1.5 rotate-45 bg-brand" />
               </Fragment>
             ))}
           </div>

@@ -1,112 +1,67 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import {
-  ArrowRight,
-  Check,
-  ChevronDown,
-  Cog,
-  Gauge,
-  MapPin,
-  MessageCircle,
-  Navigation,
-  Phone,
-  Search,
-  ShieldCheck,
-  X,
-} from "lucide-react";
+import { ArrowRight, Check, MessageCircle, Navigation, Phone, Plus, Search, ShieldCheck, X } from "lucide-react";
 import { CarCard } from "@/components/car-card";
+import { CategoryTileContent, categoryTileClass } from "@/components/category-tile";
 import { SectionHeading } from "@/components/section-heading";
 import { SOCIALS } from "@/components/site/footer";
 import { WhatsAppIcon } from "@/components/icons";
-import { FUDS, GENERAL_MESSAGE, ProofPill, type Rating } from "@/components/home/hero";
+import { FUDS, GENERAL_MESSAGE, type Rating } from "@/components/home/hero";
+import { Stars } from "@/components/home/reviews";
 import { carName, carTitle, formatKm, formatPrice, type Car } from "@/lib/cars";
 import { site, whatsappUrl } from "@/lib/site";
 import { vars } from "@/lib/ui";
 
-const TYPE_LABEL: Record<string, string> = { Deportivo: "Deportivos", Blindado: "Blindados" };
-
-function CtaLink({ href, children }: { href: string; children: ReactNode }) {
+function CtaLink({ href, children, light }: { href: string; children: ReactNode; light?: boolean }) {
   return (
-    <Link
-      href={href}
-      className="btn-shine group inline-flex h-14 items-center gap-3 rounded-full bg-brand pr-2 pl-6 font-semibold text-white shadow-[0_12px_40px_-12px_rgb(227_20_31/0.8)] transition-transform active:scale-95"
-    >
+    <Link href={href} className={`btn btn-shine group ${light ? "btn-light" : "btn-dark"}`}>
       {children}
-      <span className="grid size-10 place-items-center rounded-full bg-white/15 transition-transform duration-500 ease-[var(--ease-spring)] group-hover:translate-x-1">
-        <ArrowRight className="size-5" />
-      </span>
+      <ArrowRight className="size-4 transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:translate-x-1" />
     </Link>
   );
 }
 
 function WhatsAppCta({ message, children }: { message: string; children: ReactNode }) {
   return (
-    <a
-      href={whatsappUrl(message)}
-      target="_blank"
-      rel="noopener"
-      className="btn-shine group inline-flex h-14 items-center gap-2.5 rounded-full bg-wa px-6 font-semibold text-night shadow-[0_12px_32px_-12px_rgb(37_211_102/0.9)] transition-transform active:scale-95"
-    >
+    <a href={whatsappUrl(message)} target="_blank" rel="noopener" className="btn btn-wa btn-shine group">
       <WhatsAppIcon className="size-5 transition-transform duration-500 group-hover:-rotate-12" />
       {children}
     </a>
   );
 }
 
-// ---------- Inventario: el producto, justo después de la prueba social ----------
+// ---------- Inventario: categorías con ícono y autos destacados ----------
 
 export function Inventory({ cars, featured }: { cars: Car[]; featured: Car[] }) {
-  const types = new Map<string, { count: number; cover?: string }>();
+  const types = new Map<string, number>();
   for (const car of cars) {
-    for (const t of car.armored ? [car.body, "Blindado"] : [car.body]) {
-      const prev = types.get(t);
-      types.set(t, { count: (prev?.count ?? 0) + 1, cover: prev?.cover ?? car.images[0] });
-    }
+    for (const t of car.armored ? [car.body, "Blindado"] : [car.body]) types.set(t, (types.get(t) ?? 0) + 1);
   }
-  const tiles = [...types.entries()].sort((a, b) => b[1].count - a[1].count);
+  const tiles = [...types.entries()].sort((a, b) => b[1] - a[1]);
 
   return (
-    <section className="pt-14 pb-16 sm:pt-20 sm:pb-24" aria-labelledby="destacados">
+    <section className="pt-12 pb-16 sm:pt-20 sm:pb-24" aria-labelledby="destacados">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <SectionHeading
           id="destacados"
-          eyebrow="Inventario de hoy"
-          title={
-            <>
-              {cars.length} autos <span className="text-brand">listos para manejar</span>
-            </>
-          }
-          action={{ href: "/autos", label: "Ver todo el catálogo" }}
+          eyebrow="Inventario"
+          title="Autos listos para manejar"
+          action={{ href: "/autos", label: "Ver todo el inventario" }}
         />
       </div>
-      {/* Tipos como «historias»: un toque y ya filtra el catálogo */}
-      <nav aria-label="Explora por tipo" className="no-scrollbar -mt-1 mb-6 flex snap-x gap-3 overflow-x-auto px-4 pb-1 sm:px-6 lg:mx-auto lg:max-w-7xl">
-        {tiles.map(([t, { count, cover }]) => (
+      <nav
+        aria-label="Explora por tipo"
+        className="no-scrollbar mb-8 flex snap-x scroll-px-4 gap-2.5 overflow-x-auto px-4 pb-1 sm:scroll-px-6 sm:px-6 lg:mx-auto lg:max-w-7xl"
+      >
+        {tiles.map(([t, count], i) => (
           <Link
             key={t}
             href={`/autos?tipo=${encodeURIComponent(t)}`}
-            className="group flex w-[4.75rem] shrink-0 snap-start flex-col items-center gap-1.5"
+            className={`reveal ${categoryTileClass()}`}
+            style={vars({ "--i": i })}
           >
-            <span className="relative grid size-[4.5rem] place-items-center transition-transform duration-300 ease-[var(--ease-spring)] group-active:scale-90">
-              <span className="absolute inset-0 rounded-full bg-[conic-gradient(var(--color-brand),var(--color-volt),var(--color-brand))] group-hover:animate-[spin_4s_linear_infinite]" />
-              <span className="relative size-[calc(100%-6px)] overflow-hidden rounded-full border-[3px] border-paper bg-brand">
-                {cover && (
-                  <Image
-                    src={cover}
-                    alt=""
-                    fill
-                    sizes="72px"
-                    quality={70}
-                    className="object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                )}
-              </span>
-              <span className="font-display absolute -right-1 -bottom-1 grid h-6 min-w-6 -skew-x-6 place-items-center rounded-md bg-volt px-1 text-sm text-night shadow">
-                {count}
-              </span>
-            </span>
-            <span className="max-w-full truncate text-xs font-semibold">{TYPE_LABEL[t] ?? t}</span>
+            <CategoryTileContent type={t} count={count} />
           </Link>
         ))}
       </nav>
@@ -120,8 +75,55 @@ export function Inventory({ cars, featured }: { cars: Car[]; featured: Car[] }) 
           />
         ))}
       </div>
-      <div className="mt-6 flex justify-center px-4">
-        <CtaLink href="/autos">Ver los {cars.length} autos</CtaLink>
+      <div className="mt-8 flex justify-center px-4">
+        <CtaLink href="/autos">Ver todo el inventario</CtaLink>
+      </div>
+    </section>
+  );
+}
+
+// ---------- Vende tu auto: grande y arriba (pedido del dueño, 28-oct) ----------
+
+const SELL_STEPS = [
+  { title: "Cuéntanos de tu auto", text: "Marca, modelo, año y kilometraje. Toma menos de un minuto." },
+  { title: "Envía fotos por WhatsApp", text: "El mensaje se arma solo; tú agregas las fotos." },
+  { title: "Te atendemos por WhatsApp", text: "El encargado revisa tus datos y te responde por ahí." },
+];
+
+export function SellSection() {
+  return (
+    <section className="relative isolate overflow-hidden bg-night py-20 text-white sm:py-28" aria-labelledby="vende">
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(60rem_30rem_at_85%_0%,rgb(200_16_46/0.22),transparent_60%)]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+      <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[1.1fr_1fr] lg:items-end lg:gap-20">
+        <div className="reveal">
+          <p className="font-tech flex items-center gap-3 text-[11px] text-silver">
+            <span className="h-px w-8 bg-brand" />
+            Vende tu auto
+          </p>
+          <h2 id="vende" className="font-display mt-5 text-[2.6rem] leading-[1.02] sm:text-7xl">
+            ¿Quieres vender tu auto?
+          </h2>
+          <p className="mt-6 max-w-lg text-lg leading-relaxed text-white/75">
+            Cuéntanos de tu auto en menos de un minuto y te atendemos por WhatsApp. Sin vueltas y sin compromiso.
+          </p>
+          <div className="mt-9 flex flex-wrap gap-3">
+            <CtaLink href="/vende-tu-auto" light>
+              Vender mi auto
+            </CtaLink>
+          </div>
+        </div>
+        <ol className="grid gap-px overflow-hidden rounded-lg bg-white/10">
+          {SELL_STEPS.map((s, i) => (
+            <li key={s.title} className="reveal flex gap-5 bg-graphite p-5 sm:p-6" style={vars({ "--i": i })}>
+              <span className="font-display text-3xl leading-none text-white/30">0{i + 1}</span>
+              <div>
+                <h3 className="font-semibold">{s.title}</h3>
+                <p className="mt-1 text-sm leading-relaxed text-white/65">{s.text}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
       </div>
     </section>
   );
@@ -139,18 +141,17 @@ const OLD_VS_H3 = [
 
 export function Comparison() {
   return (
-    <section className="relative overflow-hidden bg-night py-16 text-white sm:py-24" aria-labelledby="diferencia">
-      <div className="pointer-events-none absolute inset-0 bg-[repeating-linear-gradient(100deg,transparent_0_46px,rgb(255_255_255/0.035)_46px_48px,transparent_48px_120px)]" />
-      <div className="relative mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-16">
+    <section className="py-20 sm:py-28" aria-labelledby="diferencia">
+      <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-16">
         <div className="reveal">
-          <p className="font-tech flex items-center gap-2 text-xs text-volt">
-            <span className="h-0.5 w-6 skew-x-[-20deg] bg-volt" />
+          <p className="font-tech flex items-center gap-3 text-[11px] text-dim">
+            <span className="h-px w-8 bg-brand" />
             La diferencia H3
           </p>
-          <h2 id="diferencia" className="font-display mt-3 text-4xl sm:text-5xl">
-            Comprar un seminuevo <span className="text-volt">no tiene que ser una apuesta.</span>
+          <h2 id="diferencia" className="font-display mt-4 text-[2rem] sm:text-5xl">
+            Comprar un seminuevo no tiene que ser una apuesta.
           </h2>
-          <p className="mt-5 max-w-md text-lg leading-relaxed text-white/75">
+          <p className="mt-5 max-w-md text-lg leading-relaxed text-mute">
             Precios que solo te dan por mensaje, fotos que no son del auto, datos a medias y mensajes en visto. Así
             se pierde tiempo y confianza. En H3 lo hacemos diferente.
           </p>
@@ -158,36 +159,32 @@ export function Comparison() {
             <CtaLink href="/autos">Ver autos disponibles</CtaLink>
           </div>
         </div>
-        <div>
-          <div className="mb-3 hidden grid-cols-2 gap-3 px-5 sm:grid">
-            <p className="font-tech text-[11px] text-white/50">Lo de siempre</p>
-            <p className="font-tech text-[11px] text-volt">En H3</p>
+        <div className="overflow-hidden rounded-lg bg-card ring-1 ring-line">
+          <div className="hidden grid-cols-2 border-b border-line px-6 py-3 sm:grid">
+            <p className="font-tech text-[10px] text-dim">Lo de siempre</p>
+            <p className="font-tech text-[10px] text-fg">En H3</p>
           </div>
-          <ul className="space-y-3">
+          <ul className="divide-y divide-line">
             {OLD_VS_H3.map((row, i) => (
               <li
                 key={row.h3}
-                className="reveal grid gap-2 rounded-2xl bg-white/[0.06] p-4 ring-1 ring-white/10 sm:grid-cols-2 sm:items-center sm:gap-3 sm:px-5"
+                className="reveal grid gap-1.5 px-5 py-4 sm:grid-cols-2 sm:items-center sm:gap-4 sm:px-6"
                 style={vars({ "--i": i })}
               >
-                <p className="flex items-center gap-2.5 text-sm text-white/55">
-                  <span className="grid size-6 shrink-0 place-items-center rounded-full bg-white/10">
-                    <X className="size-3.5" aria-hidden="true" />
-                  </span>
-                  <span className="line-through decoration-brand decoration-2">{row.old}</span>
+                <p className="flex items-center gap-2.5 text-sm text-dim">
+                  <X className="size-4 shrink-0" aria-hidden="true" />
+                  <span className="line-through decoration-dim/60">{row.old}</span>
                 </p>
-                <p className="flex items-center gap-2.5 font-semibold">
-                  <span className="grid size-6 shrink-0 place-items-center rounded-full bg-volt text-night">
-                    <Check className="size-3.5" strokeWidth={3} aria-hidden="true" />
-                  </span>
+                <p className="flex items-center gap-2.5 font-medium">
+                  <Check className="size-4 shrink-0 text-brand" strokeWidth={2.5} aria-hidden="true" />
                   {row.h3}
                 </p>
               </li>
             ))}
           </ul>
-          <div className="mt-8 lg:hidden">
-            <CtaLink href="/autos">Ver autos disponibles</CtaLink>
-          </div>
+        </div>
+        <div className="lg:hidden">
+          <CtaLink href="/autos">Ver autos disponibles</CtaLink>
         </div>
       </div>
     </section>
@@ -196,79 +193,32 @@ export function Comparison() {
 
 // ---------- Beneficios (qué ganas tú), cada uno con su imagen y su botón ----------
 
-const PRICE_RANGES = [
-  { label: "Hasta $300k", value: "0-300000", min: 0, max: 300_000 },
-  { label: "$300k – $600k", value: "300000-600000", min: 300_000, max: 600_000 },
-  { label: "$600k – $1M", value: "600000-1000000", min: 600_000, max: 1_000_000 },
-  { label: "Más de $1M", value: "1000000-", min: 1_000_000, max: Infinity },
-];
-
 function SpecPhoto({ car }: { car: Car }) {
   return (
-    <Link href={`/autos/${car.slug}`} className="group relative block aspect-[4/3] overflow-hidden rounded-[1.75rem] bg-soft ring-1 ring-line">
+    <Link href={`/autos/${car.slug}`} className="group relative block aspect-[4/3] overflow-hidden rounded-lg bg-soft">
       <Image
         src={car.images[0]}
-        alt={`${carTitle(car)}`}
+        alt={carTitle(car)}
         fill
         sizes="(min-width: 1024px) 40vw, 92vw"
         quality={70}
-        className="object-cover object-[50%_62%] transition-transform duration-700 ease-[var(--ease-out-expo)] group-hover:scale-105"
+        className="object-cover object-[50%_62%] transition-transform duration-[1.2s] ease-[var(--ease-out-expo)] group-hover:scale-105"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-night/70 via-transparent to-transparent" />
-      <span className="font-tech absolute top-4 left-4 inline-flex items-center gap-1.5 rounded-full bg-card/90 px-3 py-1.5 text-[11px] text-fg shadow backdrop-blur-md">
-        <ShieldCheck className="size-4 text-wa-dark" /> Auto verificado
+      <div className="absolute inset-0 bg-gradient-to-t from-night/80 via-night/10 to-transparent" />
+      <span className="font-tech absolute top-4 left-4 inline-flex items-center gap-1.5 rounded-sm bg-white/90 px-2.5 py-1.5 text-[10px] text-fg backdrop-blur-md">
+        <ShieldCheck className="size-3.5 text-brand" /> Auto verificado
       </span>
-      <div className="absolute inset-x-4 bottom-4">
-        <p className="font-display text-2xl text-white">{carName(car)}</p>
-        <ul className="mt-2 flex flex-wrap gap-1.5 text-xs font-medium">
-          <li className="rounded-full bg-volt px-2.5 py-1 text-night">{car.year}</li>
-          <li className="inline-flex items-center gap-1 rounded-full bg-card/90 px-2.5 py-1 text-fg">
-            <Gauge className="size-3.5 text-brand" /> {car.mileage != null ? formatKm(car.mileage) : "Km: pregúntanos"}
-          </li>
-          {car.transmission && (
-            <li className="inline-flex items-center gap-1 rounded-full bg-card/90 px-2.5 py-1 text-fg">
-              <Cog className="size-3.5 text-brand" /> {car.transmission}
-            </li>
-          )}
-          <li className="rounded-full bg-brand px-2.5 py-1 font-bold text-white">{formatPrice(car.price)}</li>
-        </ul>
+      <div className="absolute inset-x-5 bottom-5 text-white">
+        <p className="font-tech text-[10px] text-white/70">
+          {car.year} · {car.mileage != null ? formatKm(car.mileage) : "Km: pregúntanos"}
+          {car.transmission && ` · ${car.transmission}`}
+        </p>
+        <div className="mt-1.5 flex items-end justify-between gap-4">
+          <p className="font-display text-2xl">{carName(car)}</p>
+          <p className="font-display shrink-0 text-xl">{formatPrice(car.price)}</p>
+        </div>
       </div>
     </Link>
-  );
-}
-
-function BudgetPicker({ cars }: { cars: Car[] }) {
-  return (
-    <div className="rounded-[1.75rem] bg-card p-5 shadow-[0_24px_60px_-30px_rgb(20_20_23/0.35)] ring-1 ring-line sm:p-7">
-      <p className="font-display text-2xl">¿Cuál es tu presupuesto?</p>
-      <p className="mt-1 text-sm text-mute">Toca uno y ve solo los autos en ese rango.</p>
-      <ul className="mt-5 grid gap-2.5">
-        {PRICE_RANGES.map((r, i) => {
-          const n = cars.filter((c) => c.price >= r.min && c.price < r.max).length;
-          if (!n) return null;
-          return (
-            <li key={r.value}>
-              <Link
-                href={`/autos?precio=${r.value}`}
-                className="group flex h-14 items-center justify-between rounded-2xl border border-line bg-paper px-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-brand active:scale-[0.98]"
-              >
-                <span className="flex items-center gap-3 font-semibold">
-                  <span
-                    className="h-6 w-1.5 -skew-x-12 rounded-sm bg-gradient-to-b from-volt to-brand"
-                    style={{ opacity: 0.4 + i * 0.2 }}
-                  />
-                  {r.label}
-                </span>
-                <span className="flex items-center gap-2 text-sm text-mute">
-                  {n} {n === 1 ? "auto" : "autos"}
-                  <ArrowRight className="size-4 transition-transform group-hover:translate-x-1 group-hover:text-brand" />
-                </span>
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
-    </div>
   );
 }
 
@@ -276,20 +226,20 @@ function BudgetPicker({ cars }: { cars: Car[] }) {
 function ChatMock({ car }: { car: Car }) {
   const host = site.url.replace(/^https?:\/\//, "");
   return (
-    <div className="relative mx-auto w-full max-w-sm overflow-hidden rounded-[2rem] bg-[#efeae2] shadow-[0_30px_70px_-30px_rgb(20_20_23/0.5)] ring-1 ring-line">
-      <div className="flex items-center gap-3 bg-wa-dark px-4 py-3 text-white">
+    <div className="relative mx-auto w-full max-w-sm overflow-hidden rounded-2xl bg-[#efeae2] shadow-[0_30px_70px_-30px_rgb(12_13_15/0.5)] ring-1 ring-line">
+      <div className="flex items-center gap-3 bg-[#0b141a] px-4 py-3 text-white">
         <span className="grid size-9 place-items-center rounded-full bg-white">
           <Image src="/brand/mark-dark.png" alt="" width={344} height={186} className="w-6" />
         </span>
         <div className="leading-tight">
           <p className="text-sm font-semibold">{site.name}</p>
-          <p className="text-[11px] text-white/80">en línea</p>
+          <p className="text-[11px] text-white/70">en línea</p>
         </div>
       </div>
       <div className="space-y-2 p-4 pb-5">
-        <div className="reveal ml-auto max-w-[88%] rounded-2xl rounded-tr-sm bg-[#d9fdd3] p-1.5 text-[13px] leading-snug text-[#111b21] shadow-sm">
-          <div className="flex gap-2 rounded-xl bg-black/5 p-1.5">
-            <span className="relative size-14 shrink-0 overflow-hidden rounded-lg bg-soft">
+        <div className="reveal ml-auto max-w-[88%] rounded-xl rounded-tr-sm bg-[#d9fdd3] p-1.5 text-[13px] leading-snug text-[#111b21] shadow-sm">
+          <div className="flex gap-2 rounded-lg bg-black/5 p-1.5">
+            <span className="relative size-14 shrink-0 overflow-hidden rounded-md bg-soft">
               <Image src={car.images[0]} alt="" fill sizes="56px" quality={70} className="object-cover" />
             </span>
             <span className="min-w-0 py-0.5">
@@ -305,7 +255,7 @@ function ChatMock({ car }: { car: Car }) {
           </p>
           <p className="px-1.5 text-right text-[10px] text-black/45">✓✓</p>
         </div>
-        <div className="inline-flex items-center gap-1 rounded-2xl rounded-tl-sm bg-white px-3.5 py-3 shadow-sm" aria-hidden="true">
+        <div className="inline-flex items-center gap-1 rounded-xl rounded-tl-sm bg-white px-3.5 py-3 shadow-sm" aria-hidden="true">
           {[0, 1, 2].map((i) => (
             <span key={i} className="typing-dot size-1.5 rounded-full bg-black/40" style={vars({ "--i": i })} />
           ))}
@@ -331,28 +281,28 @@ function ValueRow({
   flip?: boolean;
 }) {
   return (
-    <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-16">
+    <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-20">
       <div className={`reveal ${flip ? "lg:order-2" : ""}`}>{visual}</div>
       <div className="reveal">
-        <p className="font-tech flex items-center gap-2 text-xs text-brand-hi">
-          <span className="h-0.5 w-6 skew-x-[-20deg] bg-brand" />
+        <p className="font-tech flex items-center gap-3 text-[11px] text-dim">
+          <span className="h-px w-8 bg-brand" />
           {eyebrow}
         </p>
-        <h3 className="font-display mt-3 text-3xl sm:text-[2.6rem]">{title}</h3>
+        <h3 className="font-display mt-4 text-[1.85rem] sm:text-[2.6rem]">{title}</h3>
         <p className="mt-4 max-w-lg text-lg leading-relaxed text-mute">{text}</p>
-        <div className="mt-6">{cta}</div>
+        <div className="mt-7">{cta}</div>
       </div>
     </div>
   );
 }
 
-export function ValueProps({ cars, featured }: { cars: Car[]; featured: Car[] }) {
+export function ValueProps({ featured }: { featured: Car[] }) {
   const withPhoto = featured.filter((c) => c.images[0]);
   if (!withPhoto.length) return null;
   const specCar = withPhoto.find((c) => c.mileage != null && c.transmission) ?? withPhoto[0];
   const chatCar = withPhoto.find((c) => c.id !== specCar.id) ?? specCar;
   return (
-    <section className="py-16 sm:py-24" aria-labelledby="beneficios">
+    <section className="bg-card py-20 sm:py-28" aria-labelledby="beneficios">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <h2 id="beneficios" className="sr-only">
           Por qué comprar en H3
@@ -360,44 +310,22 @@ export function ValueProps({ cars, featured }: { cars: Car[]; featured: Car[] })
         <div className="space-y-20 sm:space-y-28">
           <ValueRow
             eyebrow="Autos verificados"
-            title={
-              <>
-                Maneja tranquilo: <span className="text-brand">autos verificados</span> y con ficha clara
-              </>
-            }
+            title="Maneja tranquilo: autos verificados y con ficha clara."
             text="Cada auto se publica con fotos reales y su ficha: año, kilometraje, transmisión y más. ¿Te quedó una duda? Pregúntanos y te respondemos de inmediato."
             visual={<SpecPhoto car={specCar} />}
             cta={
-              <Link href={`/autos/${specCar.slug}`} className="group inline-flex items-center gap-2 font-semibold text-brand-hi">
-                Ver la ficha de este auto
+              <Link href={`/autos/${specCar.slug}`} className="group inline-flex items-center gap-2 font-semibold">
+                <span className="bg-[linear-gradient(currentColor,currentColor)] bg-[length:100%_1px] bg-left-bottom bg-no-repeat pb-0.5">
+                  Ver la ficha de este auto
+                </span>
                 <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
               </Link>
             }
           />
           <ValueRow
             flip
-            eyebrow="Precio justo y a la vista"
-            title={
-              <>
-                Sabes cuánto cuesta <span className="text-brand">antes de escribir</span>
-              </>
-            }
-            text="Todos los autos muestran su precio. Nada de «precio por inbox»: filtra por presupuesto, compara con calma y escríbenos solo por el que te late."
-            visual={<BudgetPicker cars={cars} />}
-            cta={
-              <Link href="/autos?orden=precio-asc" className="group inline-flex items-center gap-2 font-semibold text-brand-hi">
-                Ver del más barato al más caro
-                <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-            }
-          />
-          <ValueRow
             eyebrow="Atención 1 a 1"
-            title={
-              <>
-                Un toque y ya estás <span className="text-brand">hablando con nosotros</span>
-              </>
-            }
+            title="Un toque y ya estás hablando con nosotros."
             text="Toca «Me interesa» en cualquier auto: el WhatsApp ya lleva el modelo, el precio y el enlace. Sin registros ni formularios, y te respondemos de inmediato."
             visual={<ChatMock car={chatCar} />}
             cta={<WhatsAppCta message={GENERAL_MESSAGE}>Escríbenos ahora</WhatsAppCta>}
@@ -411,18 +339,10 @@ export function ValueProps({ cars, featured }: { cars: Car[]; featured: Car[] })
 // ---------- Cómo funciona: que se vea fácil ----------
 
 const STEPS = [
+  { Icon: Search, title: "Elige el tuyo", text: "Filtra por tipo, marca, precio y año. Cada auto tiene fotos reales, precio y ficha." },
+  { Icon: MessageCircle, title: "Escríbenos", text: "Toca «Me interesa»: el mensaje ya lleva el auto. Te respondemos de inmediato." },
   {
-    Icon: Search,
-    title: "Elige el tuyo",
-    text: "Filtra por tipo, marca, precio y año. Cada auto tiene fotos reales, precio y ficha.",
-  },
-  {
-    Icon: MessageCircle,
-    title: "Escríbenos",
-    text: "Toca «Me interesa»: el mensaje ya lleva el auto. Te respondemos de inmediato.",
-  },
-  {
-    Icon: MapPin,
+    Icon: Navigation,
     title: "Ven a conocerlo",
     text: `${site.address.street}, ${site.address.city}. Lunes a sábado de 9:00 a 17:00.`,
   },
@@ -430,42 +350,25 @@ const STEPS = [
 
 export function HowItWorks() {
   return (
-    <section className="bg-card py-16 sm:py-24" aria-labelledby="como-funciona">
+    <section className="py-20 sm:py-28" aria-labelledby="como-funciona">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <SectionHeading
-          id="como-funciona"
-          eyebrow="Así de fácil"
-          title={
-            <>
-              Tu próximo auto <span className="text-brand">en 3 pasos</span>
-            </>
-          }
-        />
-        <ol className="relative grid gap-4 md:grid-cols-3">
-          <span
-            className="absolute top-10 bottom-10 left-[2.15rem] w-0.5 bg-gradient-to-b from-brand to-volt md:top-[2.15rem] md:right-[16%] md:bottom-auto md:left-[16%] md:h-0.5 md:w-auto md:bg-gradient-to-r"
-            aria-hidden="true"
-          />
+        <SectionHeading id="como-funciona" eyebrow="Así de fácil" title="Tu próximo auto en 3 pasos." />
+        <ol className="grid gap-px overflow-hidden rounded-lg bg-line ring-1 ring-line md:grid-cols-3">
           {STEPS.map(({ Icon, title, text }, i) => (
-            <li
-              key={title}
-              className="reveal relative flex gap-4 rounded-3xl border border-line bg-paper p-5 md:flex-col md:p-7"
-              style={vars({ "--i": i })}
-            >
-              <span className="relative grid size-11 shrink-0 place-items-center rounded-2xl bg-brand text-white shadow-[0_10px_24px_-10px_rgb(227_20_31/0.9)]">
-                <Icon className="size-5" />
-                <span className="font-display absolute -top-2 -right-2 grid size-6 -skew-x-6 place-items-center rounded-md bg-volt text-xs text-night">
-                  {i + 1}
+            <li key={title} className="reveal group relative bg-card p-6 sm:p-8" style={vars({ "--i": i })}>
+              <div className="flex items-center justify-between">
+                <span className="font-display text-5xl leading-none text-soft-2 transition-colors duration-500 group-hover:text-fg">
+                  0{i + 1}
                 </span>
-              </span>
-              <div>
-                <h3 className="font-display text-2xl">{title}</h3>
-                <p className="mt-2 leading-relaxed text-mute">{text}</p>
+                <Icon className="size-5 text-brand" strokeWidth={1.75} />
               </div>
+              <h3 className="font-display mt-8 text-xl">{title}</h3>
+              <p className="mt-2 leading-relaxed text-mute">{text}</p>
+              <span className="absolute inset-x-0 top-0 h-0.5 origin-left scale-x-0 bg-brand transition-transform duration-700 ease-[var(--ease-out-expo)] group-hover:scale-x-100" />
             </li>
           ))}
         </ol>
-        <div className="mt-8 flex flex-wrap items-center gap-4">
+        <div className="mt-8">
           <CtaLink href="/autos">Empezar: ver autos</CtaLink>
         </div>
       </div>
@@ -478,54 +381,13 @@ export function HowItWorks() {
 export function SoldStrip({ cars }: { cars: Car[] }) {
   if (!cars.length) return null;
   return (
-    <section className="py-16" aria-labelledby="vendidos">
+    <section className="pb-16" aria-labelledby="vendidos">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <SectionHeading
-          id="vendidos"
-          eyebrow="Ya tienen nuevo dueño"
-          title={
-            <>
-              Recién <span className="text-brand">vendidos</span>
-            </>
-          }
-        />
+        <SectionHeading id="vendidos" eyebrow="Ya tienen nuevo dueño" title="Recién vendidos" />
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           {cars.slice(0, 4).map((car) => (
             <CarCard key={car.id} car={car} sizes="(min-width: 640px) 25vw, 50vw" />
           ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ---------- Oferta secundaria: vender tu auto ----------
-
-export function SellBanner() {
-  return (
-    <section className="px-4 py-10 sm:px-6" aria-labelledby="vende">
-      <div className="reveal relative mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-gradient-to-br from-brand via-[#b80f18] to-[#5c0509] px-6 py-12 sm:px-12 sm:py-16">
-        <div className="speed-lines pointer-events-none absolute inset-0 opacity-80" />
-        <p className="font-display pointer-events-none absolute -right-6 -bottom-8 text-[9rem] leading-none text-white/10 sm:text-[14rem]">
-          $$$
-        </p>
-        <div className="relative max-w-xl">
-          <p className="font-tech text-xs text-white/80">Vende tu auto</p>
-          <h2 id="vende" className="font-display mt-3 text-5xl text-white sm:text-6xl">
-            ¿Quieres vender tu auto?
-          </h2>
-          <p className="mt-4 text-lg leading-relaxed text-white/85">
-            Cuéntanos de tu auto en menos de un minuto y te atendemos por WhatsApp.
-          </p>
-          <Link
-            href="/vende-tu-auto"
-            className="btn-shine group mt-8 inline-flex h-14 items-center gap-3 rounded-full bg-white pr-2 pl-6 font-semibold text-night transition-transform active:scale-95"
-          >
-            Vender mi auto
-            <span className="grid size-10 place-items-center rounded-full bg-night text-white transition-transform duration-500 ease-[var(--ease-spring)] group-hover:translate-x-1">
-              <ArrowRight className="size-5" />
-            </span>
-          </Link>
         </div>
       </div>
     </section>
@@ -539,7 +401,7 @@ const FAQ: { q: string; a: ReactNode }[] = [
     q: "¿Cómo sé si un auto sigue disponible?",
     a: (
       <>
-        Si está en el catálogo, está a la venta; si dice «Apartado», alguien ya lo apartó. Toca «Me interesa» y te
+        Si está en el inventario, está a la venta; si dice «Apartado», alguien ya lo apartó. Toca «Me interesa» y te
         confirmamos al momento por WhatsApp.
       </>
     ),
@@ -571,7 +433,7 @@ const FAQ: { q: string; a: ReactNode }[] = [
     a: (
       <>
         En {site.address.street}, {site.address.neighborhood}, {site.address.city}, {site.address.state}.{" "}
-        <a href={site.mapsUrl} target="_blank" rel="noopener" className="font-semibold text-brand-hi underline">
+        <a href={site.mapsUrl} target="_blank" rel="noopener" className="font-semibold text-fg underline">
           Abrir en Google Maps
         </a>
         .
@@ -583,7 +445,7 @@ const FAQ: { q: string; a: ReactNode }[] = [
     a: (
       <>
         Sí. Cuéntanos de tu auto en menos de un minuto y te atendemos por WhatsApp.{" "}
-        <Link href="/vende-tu-auto" className="font-semibold text-brand-hi underline">
+        <Link href="/vende-tu-auto" className="font-semibold text-fg underline">
           Vender mi auto
         </Link>
         .
@@ -594,7 +456,7 @@ const FAQ: { q: string; a: ReactNode }[] = [
 
 export function Faq() {
   return (
-    <section className="py-16 sm:py-24" aria-labelledby="preguntas">
+    <section className="bg-card py-20 sm:py-28" aria-labelledby="preguntas">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
         <div>
           <SectionHeading id="preguntas" eyebrow="Sin dudas" title="Preguntas frecuentes" />
@@ -611,16 +473,17 @@ export function Faq() {
             .
           </p>
         </div>
-        <div className="space-y-3">
+        <div className="border-t border-line">
           {FAQ.map(({ q, a }) => (
-            <details key={q} className="faq reveal group rounded-2xl border border-line bg-card open:border-brand/40">
-              <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 font-semibold [&::-webkit-details-marker]:hidden">
+            <details key={q} className="faq reveal group border-b border-line">
+              <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-4 py-5 font-semibold [&::-webkit-details-marker]:hidden">
                 {q}
-                <span className="grid size-8 shrink-0 place-items-center rounded-full bg-soft transition-transform duration-300 group-open:rotate-180 group-open:bg-brand group-open:text-white">
-                  <ChevronDown className="size-4" />
-                </span>
+                <Plus
+                  className="size-5 shrink-0 text-dim transition-transform duration-500 ease-[var(--ease-out-expo)] group-open:rotate-45 group-open:text-brand"
+                  aria-hidden="true"
+                />
               </summary>
-              <p className="px-5 pb-5 leading-relaxed text-mute">{a}</p>
+              <p className="pb-6 leading-relaxed text-mute">{a}</p>
             </details>
           ))}
         </div>
@@ -631,83 +494,61 @@ export function Faq() {
 
 // ---------- Cierre: resumen, urgencia real y contacto ----------
 
-export function Closer({ available, rating }: { available: number; rating: Rating }) {
-  const waze = `https://waze.com/ul?q=${encodeURIComponent(`${site.address.street}, ${site.address.city}, ${site.address.state}`)}&navigate=yes`;
+export function Closer({ rating }: { rating: Rating }) {
   return (
     <section id="contacto" className="scroll-mt-20 px-4 pt-6 pb-16 sm:px-6 sm:pb-24" aria-labelledby="contacto-title">
-      <div className="mx-auto grid max-w-7xl gap-4 lg:grid-cols-[1.25fr_1fr]">
-        <div className="reveal relative overflow-hidden rounded-[2rem] bg-volt p-6 text-night sm:p-10">
-          <span className="font-display pointer-events-none absolute -right-4 -bottom-10 text-[10rem] leading-none text-night/[0.06] sm:text-[13rem]">
-            H3
-          </span>
-          <div className="relative">
-            <ProofPill available={available} rating={rating} />
-            <p className="font-tech mt-6 text-xs text-night/70">Cada auto es único</p>
-            <h2 id="contacto-title" className="font-display mt-2 text-4xl sm:text-6xl">
-              Cuando se vende, <span className="text-brand">ya no vuelve.</span>
-            </h2>
-            <p className="mt-4 max-w-md text-lg leading-relaxed text-night/80">
-              ¿Ya viste el tuyo? Escríbenos hoy y te confirmamos al momento si sigue disponible.
-            </p>
-            <ul className="mt-5 space-y-2">
-              {FUDS.map((f) => (
-                <li key={f} className="flex items-center gap-2.5 font-semibold">
-                  <span className="grid size-6 place-items-center rounded-full bg-night text-volt">
-                    <Check className="size-3.5" strokeWidth={3} />
-                  </span>
-                  {f}
-                </li>
-              ))}
-            </ul>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <WhatsAppCta message={GENERAL_MESSAGE}>Escríbenos por WhatsApp</WhatsAppCta>
-              <Link
-                href="/autos"
-                className="inline-flex h-14 items-center gap-2 rounded-full bg-night px-6 font-semibold text-white transition-transform active:scale-95"
-              >
-                Ver catálogo <ArrowRight className="size-4" />
-              </Link>
+      <div className="mx-auto grid max-w-7xl gap-4 lg:grid-cols-[1.3fr_1fr]">
+        <div className="reveal relative isolate overflow-hidden rounded-lg bg-night p-7 text-white sm:p-12">
+          <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(40rem_20rem_at_100%_100%,rgb(200_16_46/0.25),transparent_60%)]" />
+          {rating.count > 0 && (
+            <div className="mb-6 flex items-center gap-2 text-sm text-white/80">
+              <Stars value={rating.avg} className="size-4" />
+              {rating.avg.toFixed(1)} · {rating.count} {rating.count === 1 ? "reseña" : "reseñas"}
             </div>
+          )}
+          <p className="font-tech flex items-center gap-3 text-[11px] text-silver">
+            <span className="h-px w-8 bg-brand" />
+            Cada auto es único
+          </p>
+          <h2 id="contacto-title" className="font-display mt-4 text-[2.2rem] leading-[1.04] sm:text-6xl">
+            Cuando se vende, ya no vuelve.
+          </h2>
+          <p className="mt-5 max-w-md text-lg leading-relaxed text-white/75">
+            ¿Ya viste el tuyo? Escríbenos hoy y te confirmamos al momento si sigue disponible.
+          </p>
+          <ul className="mt-6 space-y-2.5">
+            {FUDS.map((f) => (
+              <li key={f} className="flex items-center gap-2.5 text-white/90">
+                <Check className="size-4 text-brand" strokeWidth={2.5} />
+                {f}
+              </li>
+            ))}
+          </ul>
+          <div className="mt-9 flex flex-wrap gap-3">
+            <WhatsAppCta message={GENERAL_MESSAGE}>Escríbenos por WhatsApp</WhatsAppCta>
+            <CtaLink href="/autos" light>
+              Ver inventario
+            </CtaLink>
           </div>
         </div>
 
-        <div className="reveal flex flex-col rounded-[2rem] border border-line bg-card p-6 sm:p-8">
-          <span className="relative grid size-14 place-items-center rounded-full bg-brand text-white">
-            <span className="absolute inset-0 rounded-full bg-brand animate-pulse-ring" />
-            <MapPin className="relative size-7" />
-          </span>
-          <p className="font-tech mt-6 text-xs text-brand-hi">Visítanos</p>
-          <p className="font-display mt-2 text-3xl">{site.address.street}</p>
+        <div className="reveal flex flex-col rounded-lg bg-card p-7 ring-1 ring-line sm:p-10">
+          <p className="font-tech text-[11px] text-dim">Visítanos</p>
+          <p className="font-display mt-4 text-[1.75rem]">{site.address.street}</p>
           <p className="mt-2 text-mute">
             {site.address.neighborhood}, {site.address.city}, {site.address.state}
           </p>
           <p className="mt-1 text-sm text-mute">{site.hours}</p>
-          <div className="mt-6 flex flex-wrap gap-2.5">
-            <a
-              href={site.mapsUrl}
-              target="_blank"
-              rel="noopener"
-              className="inline-flex h-12 items-center gap-2 rounded-full bg-night px-5 font-semibold text-white transition-transform active:scale-95"
-            >
-              <Navigation className="size-4" /> Google Maps
+          <div className="mt-7 grid gap-2.5 sm:grid-cols-2">
+            <a href={site.mapsUrl} target="_blank" rel="noopener" className="btn btn-dark group">
+              <Navigation className="size-4" /> Cómo llegar
             </a>
-            <a
-              href={waze}
-              target="_blank"
-              rel="noopener"
-              className="inline-flex h-12 items-center gap-2 rounded-full border border-line px-5 font-semibold transition-colors hover:border-fg/40 active:scale-95"
-            >
-              Waze
-            </a>
-            <a
-              href={site.phoneHref}
-              className="inline-flex h-12 items-center gap-2 rounded-full border border-line px-5 font-semibold transition-colors hover:border-fg/40 active:scale-95"
-            >
-              <Phone className="size-4 text-brand" /> {site.phoneDisplay}
+            <a href={site.phoneHref} className="btn btn-outline">
+              <Phone className="size-4" /> {site.phoneDisplay}
             </a>
           </div>
-          <div className="mt-auto flex items-center gap-2 border-t border-line pt-5">
-            <p className="mr-auto text-sm text-mute">Síguenos</p>
+          <div className="mt-auto flex items-center gap-2 border-t border-line pt-6">
+            <p className="font-tech mr-auto text-[10px] text-dim">Síguenos</p>
             {SOCIALS.map(({ href, label, Icon }) => (
               <a
                 key={label}
@@ -715,7 +556,7 @@ export function Closer({ available, rating }: { available: number; rating: Ratin
                 target="_blank"
                 rel="noopener"
                 aria-label={label}
-                className="grid size-11 place-items-center rounded-full border border-line transition-all hover:-translate-y-0.5 hover:border-brand"
+                className="grid size-11 place-items-center rounded-md ring-1 ring-line transition-all duration-300 hover:-translate-y-0.5 hover:ring-fg/40"
               >
                 <Icon className="size-5" />
               </a>

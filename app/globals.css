@@ -1,27 +1,31 @@
 @import "tailwindcss";
 
 @theme {
-  /* Tema claro */
-  --color-paper: #f4f4f0; /* fondo de página */
+  /* Tema claro premium (28-oct): tinta, grafito y plata; el rojo solo como acento */
+  --color-paper: #f5f5f3; /* fondo de página */
   --color-card: #ffffff; /* tarjetas y paneles */
-  --color-soft: #ecece6; /* campos, chips */
-  --color-soft-2: #deded6;
-  --color-line: rgb(20 20 23 / 0.1);
-  --color-fg: #141417; /* texto */
-  --color-mute: #55555e;
-  --color-dim: #6a6a73;
-  --color-night: #111114; /* superficies oscuras y texto sobre colores brillantes */
+  --color-soft: #eeeeeb; /* campos */
+  --color-soft-2: #e2e2de;
+  --color-line: rgb(12 13 15 / 0.1);
+  --color-fg: #0c0d0f; /* texto */
+  --color-mute: #4d5158;
+  --color-dim: #686c73;
+  --color-night: #0c0d0f; /* tinta: superficies oscuras */
+  --color-graphite: #17191d;
+  --color-steel: #2a2d33;
+  --color-silver: #a7acb3;
   /* Marca */
-  --color-brand: #e3141f; /* rojo H3 */
-  --color-brand-hi: #c40f19; /* rojo para texto pequeño sobre fondo claro */
-  --color-brand-soft: #fde8e9;
-  --color-volt: #fad116; /* amarillo H3 */
-  --color-volt-soft: #fff6cc;
+  --color-brand: #c8102e; /* rojo de carreras, sobrio */
+  --color-brand-hi: #a80d26; /* rojo para texto pequeño sobre fondo claro */
+  --color-brand-soft: #f7e6e9;
+  /* Antes amarillo; ahora un arena discreto (lujo y off-road) para detalles mínimos */
+  --color-volt: #b89b6a;
+  --color-volt-soft: #f2ede3;
   --color-wa: #25d366;
   --color-wa-dark: #0f7a40;
 
   --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-saira), var(--font-geist), ui-sans-serif, sans-serif;
+  --font-display: var(--font-saira-tech), var(--font-geist), ui-sans-serif, sans-serif;
   --font-tech: var(--font-saira-tech), var(--font-geist), ui-sans-serif, sans-serif;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -105,28 +109,88 @@ body {
 }
 
 ::selection {
-  background: var(--color-brand);
+  background: var(--color-night);
   color: white;
 }
 
-/* Tipografía deportiva: Saira expandida e itálica */
+/* Tipografía premium: Saira expandida en peso medio, sin cursiva (estilo de marcas de autos de lujo) */
 .font-display {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  text-transform: uppercase;
-  line-height: 0.95;
+  font-family: var(--font-tech);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.04;
 }
+/* Etiquetas pequeñas: mayúsculas con espacio, como los emblemas de un auto */
 .font-tech {
   font-family: var(--font-tech);
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 .text-outline {
   color: transparent;
-  -webkit-text-stroke: 1.5px rgb(20 20 23 / 0.35);
+  -webkit-text-stroke: 1px rgb(12 13 15 / 0.35);
+}
+
+/* Línea fina que se dibuja al aparecer (detalle deportivo) */
+.draw-line {
+  transform-origin: left;
+  animation: draw 1.1s var(--ease-out-expo) both;
+}
+@keyframes draw {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+/* Botones premium: rectangulares con esquinas suaves (sin óvalos) */
+@utility btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 3.25rem;
+  padding-inline: 1.35rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition:
+    transform 0.4s var(--ease-out-expo),
+    background-color 0.3s,
+    color 0.3s,
+    box-shadow 0.4s;
+  &:active {
+    transform: scale(0.98);
+  }
+}
+@utility btn-dark {
+  background: var(--color-night);
+  color: white;
+  &:hover {
+    background: var(--color-steel);
+  }
+}
+@utility btn-outline {
+  background: var(--color-card);
+  color: var(--color-fg);
+  box-shadow: inset 0 0 0 1px var(--color-line);
+  &:hover {
+    box-shadow: inset 0 0 0 1px rgb(12 13 15 / 0.4);
+  }
+}
+@utility btn-wa {
+  background: var(--color-wa);
+  color: var(--color-night);
+  &:hover {
+    background: #36de76;
+  }
+}
+@utility btn-light {
+  background: white;
+  color: var(--color-night);
+  &:hover {
+    background: #ececea;
+  }
 }
 
 /* Botón con destello al pasar el mouse */
@@ -222,6 +286,25 @@ body {
   30%,
   100% {
     transform: scale(1);
+  }
+}
+/* Barritas de progreso de cada diapositiva */
+.hero-bar {
+  transform-origin: left;
+  transform: scaleX(0);
+  animation: hero-bar var(--cycle, 20s) linear infinite;
+  animation-delay: calc(var(--i) * var(--step, 5s) - 0.8s);
+}
+@keyframes hero-bar {
+  0% {
+    transform: scaleX(0);
+  }
+  25% {
+    transform: scaleX(1);
+  }
+  25.01%,
+  100% {
+    transform: scaleX(0);
   }
 }
 .hero-slides[data-count="1"] .hero-slide {
