@@ -6,10 +6,10 @@ Lo más reciente va arriba.
 
 - `ANALISIS-VIDEOS.md` ahora describe el inicio actual (estilo premium y correcciones del dueño) y agrega
   una lista de dónde el sitio se aparta del método de los videos.
-- Se están traduciendo al español las transcripciones completas de los 2 videos para entregárselas al
-  dueño (no se suben al repositorio por ser contenido de terceros).
+- Se entregó al dueño un PDF con el análisis y las transcripciones completas de los 2 videos traducidas
+  al español, con sus minutos (no se sube al repositorio por ser contenido de terceros).
 
-Falta: entregar el documento completo y que el dueño decida qué cambiar.
+Falta: que el dueño revise el sitio y el análisis y diga qué cambiar.
 
 ## 28 de octubre de 2026 (noche 3) — comando para actualizar la Mac
 
