@@ -2,6 +2,15 @@
 
 Lo más reciente va arriba.
 
+## 28 de octubre de 2026 (noche 4) — análisis de los videos al día
+
+- `ANALISIS-VIDEOS.md` ahora describe el inicio actual (estilo premium y correcciones del dueño) y agrega
+  una lista de dónde el sitio se aparta del método de los videos.
+- Se están traduciendo al español las transcripciones completas de los 2 videos para entregárselas al
+  dueño (no se suben al repositorio por ser contenido de terceros).
+
+Falta: entregar el documento completo y que el dueño decida qué cambiar.
+
 ## 28 de octubre de 2026 (noche 3) — comando para actualizar la Mac
 
 - El dueño no veía los cambios: estaban en GitHub, pero la carpeta de su Mac seguía con la versión

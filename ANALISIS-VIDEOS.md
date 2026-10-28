@@ -200,37 +200,52 @@ entregaron por separado en la conversación.
 auto». El visitante de H3 **ya sabe lo que busca** (quiere un auto), así que, como dice el video 1, la prueba
 social y el producto van **antes** que la sección de dolor.
 
+Esta tabla describe el inicio **actual**: la estructura de los videos con el estilo premium y las
+correcciones que pidió el dueño después de verlo en su celular (28-oct, noche). Donde el dueño pidió algo
+distinto al video, se indica.
+
 | Punto del video | Qué se hizo en H3 | Archivo |
 | --- | --- | --- |
-| Prueba social #1 arriba del título | Píldora con **los autos disponibles hoy** (número real). Si el dueño sube reseñas, cambia sola a **estrellas y número de reseñas reales** | `components/home/hero.tsx` |
-| Título con beneficio, claro | «**Tu próximo auto, sin sorpresas.**». La línea de arriba dice «Seminuevos premium en Villahermosa» (para Google) | `hero.tsx` |
-| Subtítulo dolor → solución | «¿Cansado de precios «por inbox», fotos que no son del auto y mensajes en visto? En H3 ves fotos reales y el precio de cada auto, y te respondemos de inmediato por WhatsApp.» | `hero.tsx` |
-| Una sola acción principal | En celular, un solo botón: «Ver los 13 autos». WhatsApp sigue en el botón flotante y en el encabezado. En escritorio se agrega «Escríbenos» | `hero.tsx` |
+| Prueba social #1 arriba del título | **Por ahora no hay.** El dueño pidió quitar «13 autos disponibles hoy» porque se veía hecho con IA. Si el dueño sube reseñas reales, la calificación aparece junto a los quita-miedos. Cuando haya calificación de Google, es el mejor candidato para este lugar | `components/home/hero.tsx` |
+| Título claro («claridad antes que ingenio») | «**Autos seminuevos premium en Villahermosa.**», arriba de él la línea «Villahermosa, Tabasco». El dueño pidió un título más claro; además coincide con lo que la gente busca en Google | `hero.tsx` |
+| Subtítulo con beneficio | «Revisados a detalle, con precio a la vista y atención directa por WhatsApp.» El dolor se cuenta más abajo, en la sección «lo de siempre contra H3» | `hero.tsx` |
+| Una acción principal | «**Ver inventario**» y, al lado, «WhatsApp». WhatsApp también está en el encabezado y en el botón flotante | `hero.tsx` |
 | Quitar miedos junto al botón | ✓ Precio a la vista · ✓ Fotos reales de cada auto · ✓ Respuesta inmediata | `hero.tsx` |
-| Imagen que refuerce la propuesta | Fotos reales del inventario que rotan, con nombre y precio. En celular se ve el auto completo en la primera pantalla | `hero.tsx` |
-| Todo arriba en celular | Se comprobó con una prueba automática: el botón principal queda dentro de la primera pantalla de un iPhone (390×844) | `scripts/e2e-public.mjs` |
-| Prueba social #2 bajo el hero | Números reales del inventario (disponibles, marcas, desde $…, blindados) y franja de marcas (el equivalente a «logos») | `hero.tsx` (`ProofBar`) |
-| «Pie en la puerta» (primer paso pequeño) | Tipos como «historias» (SUV, Deportivos, Blindados…): un toque y el catálogo ya sale filtrado | `sections.tsx` (`Inventory`) |
-| Título de sección cuantificado | «**13 autos listos para manejar**» (el número es real y se actualiza solo; es la traducción de «Ready to drive») | `sections.tsx` |
-| Prueba social visual, sin carrusel, con origen | **Reseñas** con estrellas, frase destacada, foto, auto que compró y origen («Reseña de Google»). Todas a la vista en columnas; las que traen foto van primero. **Solo aparecen si el dueño agrega reseñas reales en el panel** | `components/home/reviews.tsx`, `/admin/resenas` |
-| Dolor: «lo de siempre» contra «en H3» | «**Comprar un seminuevo no tiene que ser una apuesta.**» y 5 comparaciones: precio por inbox → precio a la vista, etc. | `sections.tsx` (`Comparison`) |
-| Beneficios con imagen y botón | 3 beneficios del propio H3: **autos verificados** (foto real con ficha), **precio justo y a la vista** (selector de presupuesto con conteo real) y **atención 1 a 1** (ilustración del WhatsApp que se manda, con el texto real que arma el sitio) | `sections.tsx` (`ValueProps`) |
+| Imagen que refuerce la propuesta | Fotos reales del inventario que rotan, con nombre, precio y barra de avance | `hero.tsx` |
+| Todo arriba en celular | Una prueba automática comprueba que el botón principal queda dentro de la primera pantalla de un iPhone (390×844) | `scripts/e2e-public.mjs` |
+| Prueba social #2 bajo el hero | **Números de confianza** (2 a 3, con animación que cuenta) y franja de marcas en movimiento (el equivalente a «logos»). El dueño los pone en **Panel → Ajustes**; hoy se ven números de ejemplo **solo en la computadora de desarrollo**. Los reales están **sin decidir** | `hero.tsx` (`TrustBar`), `/admin/ajustes` |
+| «Pie en la puerta» (primer paso pequeño) | Categorías con íconos propios (SUV, Deportivos, Blindados, Pickups…): un toque y el inventario ya sale filtrado | `sections.tsx` (`Inventory`), `components/body-icons.tsx` |
+| Título de sección | «**Autos listos para manejar**» (traducción de «Ready to drive»). Sin número, porque el inventario cambia (pedido del dueño) | `sections.tsx` |
+| Oferta secundaria | «**¿Quieres vender tu auto?**» como sección grande en fondo oscuro, **justo después del inventario**. El video la pondría más abajo; el dueño pidió subirla y hacerla más grande | `sections.tsx` (`SellSection`) |
+| Prueba social visual, sin carrusel, con origen | **Reseñas** con estrellas, frase destacada, foto, auto que compró y origen («Reseña de Google»). Todas a la vista; las que traen foto van primero. **Solo aparecen si el dueño agrega reseñas reales en el panel** | `components/home/reviews.tsx`, `/admin/resenas` |
+| Dolor: «lo de siempre» contra «en H3» | «**Comprar un seminuevo no tiene que ser una apuesta.**» y 5 comparaciones (precio por inbox → precio a la vista, etc.) | `sections.tsx` (`Comparison`) |
+| Beneficios con imagen y botón | 2 beneficios: **autos verificados** (foto real con ficha) y **atención 1 a 1** (ilustración animada del WhatsApp que se manda, con el texto real). El dueño pidió quitar «¿Cuál es tu presupuesto?» y «Ver del más barato al más caro» | `sections.tsx` (`ValueProps`) |
 | Cómo funciona: probable y fácil | «Tu próximo auto en 3 pasos»: elige, escríbenos y ven a conocerlo (con dirección y horario) | `sections.tsx` (`HowItWorks`) |
 | Más prueba social | «Recién vendidos», si hay autos marcados como vendidos | `sections.tsx` (`SoldStrip`) |
-| Preguntas frecuentes de los miedos | 6 preguntas que se contestan **solo con datos confirmados** (disponibilidad, datos faltantes, visita, registro, ubicación y vender) | `sections.tsx` (`Faq`) |
-| Cierre con urgencia real | «**Cada auto es único: cuando se vende, ya no vuelve.**». Repite los 3 quita-miedos, el botón de WhatsApp y el catálogo, junto con dirección, mapa, teléfono y redes | `sections.tsx` (`Closer`) |
-| Oferta secundaria sin competir | «Vende tu auto» queda como banner a media página, en el menú y en las preguntas | `sections.tsx` |
+| Preguntas frecuentes de los miedos | 6 preguntas que se contestan **solo con datos confirmados** | `sections.tsx` (`Faq`) |
+| Cierre con urgencia real | «**Cada auto es único: cuando se vende, ya no vuelve.**», los 3 quita-miedos, WhatsApp, inventario, dirección, mapa, teléfono y redes (sin Waze, por pedido del dueño) | `sections.tsx` (`Closer`) |
 
-**Medición** (celular simulado de Lighthouse, versión de producción, 28-oct):
+### Dónde el inicio actual se aparta del método (para decidir)
+
+1. **No hay prueba social arriba del título.** Es lo que más pesa según los dos videos. Lo ideal: la
+   calificación de Google («X.X ★ · N reseñas») o una cifra real («más de N autos entregados»). Necesita
+   datos reales: **sin decidir**.
+2. **El subtítulo no menciona el dolor.** El video pide «¿Cansado de X? Nosotros Y». Hoy el dolor está más
+   abajo, en «Comprar un seminuevo no tiene que ser una apuesta».
+3. **Los números de confianza son de ejemplo.** No se publican hasta que el dueño ponga los reales.
+4. **Solo 2 beneficios con imagen**; el video recomienda de 5 a 8. Candidatos con datos que ya existen:
+   «Tus dudas, resueltas» (dueños, factura, servicios) y «fotos por sección».
+5. **Las reseñas dependen de que existan.** Sin reseñas reales, la prueba social fuerte (sección 5 del
+   método) no aparece.
+6. **Nada se está midiendo.** El video 2 insiste en que una landing nunca está terminada; sin medición no
+   se sabe qué funciona.
+
+**Medición** (celular simulado de Lighthouse, versión de producción). Es del diseño **anterior** (28-oct, en
+la mañana); el diseño premium **falta medirlo**:
 
 | Rendimiento | Accesibilidad | Buenas prácticas | SEO |
 | --- | --- | --- | --- |
 | 94–96 | 100 | 100 | 100 |
-
-Además: la página no se mueve al cargar (CLS 0) y no tiene scroll horizontal.
-
-**Se corrigió un error de paso:** al tocar un enlace con filtro desde otra página (por ejemplo,
-`/autos?tipo=Blindado`), el catálogo a veces mostraba todos los autos. Ahora respeta el filtro.
 
 ---
 
@@ -238,8 +253,8 @@ Además: la página no se mueve al cargar (CLS 0) y no tiene scroll horizontal.
 
 | Recomendación del video | Por qué no se hizo |
 | --- | --- |
-| Reseñas, calificación de Google o «+1,200 clientes» en el hero | **No hay datos reales** todavía. La sección de reseñas ya está lista y se llena desde el panel |
-| Números de resultados («64 % más…») | H3 no tiene esos datos. Se usan solo números reales del inventario |
+| Reseñas, calificación de Google o «+1,200 clientes» en el hero | **No hay datos reales** todavía. La sección de reseñas ya está lista y se llena desde el panel. El número de autos disponibles que había ahí se quitó por pedido del dueño |
+| Números de resultados («+1,200 clientes», «64 % más…») | Ya hay lugar para ellos (números de confianza, Panel → Ajustes). Los de ahora son **de ejemplo** y no se publican; los reales están **sin decidir** |
 | Garantía o devolución de dinero para quitar miedos | **Sin decidir.** No se mencionan |
 | Financiamiento en la página | **Decisión del dueño:** no se menciona hasta tener respuesta |
 | Formulario corto como acción | La acción de H3 es WhatsApp con el auto ya escrito, que es aún más corto. «Vende tu auto» ya tiene su formulario de 3 pasos |
