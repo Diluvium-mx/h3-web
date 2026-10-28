@@ -43,6 +43,7 @@ if [ -e "$DIR" ] && [ ! -e "$DIR/.h3-vista" ] && ! grep -qs '"name": "h3-seminue
   echo "❌ $DIR ya existe y no es del sitio. Muévela o bórrala y vuelve a correr el comando."
   exit 1
 fi
+rm -rf "$HOME"/.h3-descarga.* 2>/dev/null || true   # restos de veces anteriores
 TMP=$(mktemp -d "$HOME/.h3-descarga.XXXXXX")
 trap 'rm -rf "$TMP" 2>/dev/null || true' EXIT
 curl -fsSL "$ZIP_URL" -o "$TMP/h3.zip"
@@ -76,5 +77,6 @@ echo "   Carpeta: $DIR"
 echo ""
 
 # 4. Prende el sitio y muestra el QR para el celular (detenlo con Ctrl + C)
+rm -rf "$TMP" 2>/dev/null || true
 if [ "${H3_SIN_INICIAR:-}" = "1" ]; then exit 0; fi
 exec npm run movil
