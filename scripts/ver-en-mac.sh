@@ -1,0 +1,66 @@
+#!/bin/bash
+# Baja la última versión del sitio (rama desarrollo) y la abre para la Mac y el celular.
+# Uso, en cualquier ventana de la Terminal:
+#   bash -c "$(curl -fsSL https://raw.githubusercontent.com/Diluvium-mx/h3-web/desarrollo/scripts/ver-en-mac.sh)"
+# No necesita git. Deja el sitio en la carpeta ~/h3-web-vista y la reutiliza cada vez (solo baja lo nuevo).
+set -euo pipefail
+
+DIR="${H3_DIR:-$HOME/h3-web-vista}"
+ZIP_URL="https://codeload.github.com/Diluvium-mx/h3-web/zip/refs/heads/desarrollo"
+
+echo ""
+echo "🚗 H3 Seminuevos: bajando la última versión…"
+
+if ! command -v node >/dev/null 2>&1; then
+  echo "❌ No encontré Node.js. Instálalo desde https://nodejs.org (versión LTS) y vuelve a correr el comando."
+  exit 1
+fi
+
+# 1. Detiene el sitio viejo si sigue prendido (es lo que hacía que no se viera el cambio)
+if command -v lsof >/dev/null 2>&1; then
+  OLD=$(lsof -ti tcp:3000 || true)
+  if [ -n "$OLD" ]; then
+    echo "   Deteniendo el sitio anterior que seguía prendido…"
+    kill $OLD 2>/dev/null || true
+    sleep 2
+  fi
+fi
+
+# 2. Baja el código de GitHub (sin git) y lo pone en ~/h3-web-vista, conservando lo ya instalado
+if [ -e "$DIR" ] && ! grep -qs '"name": "h3-seminuevos"' "$DIR/package.json"; then
+  echo "❌ $DIR ya existe y no es del sitio. Muévela o bórrala y vuelve a correr el comando."
+  exit 1
+fi
+TMP=$(mktemp -d "$HOME/.h3-descarga.XXXXXX")
+trap 'rm -rf "$TMP"' EXIT
+curl -fsSL "$ZIP_URL" -o "$TMP/h3.zip"
+unzip -q "$TMP/h3.zip" -d "$TMP"
+SRC=$(find "$TMP" -mindepth 1 -maxdepth 1 -type d -name "h3-web-*" | head -n 1)
+if [ -d "$DIR" ]; then
+  # Lo instalado y los datos de prueba del panel pasan a la versión nueva
+  for keep in node_modules .env.local public/uploads; do
+    if [ -e "$DIR/$keep" ]; then
+      rm -rf "${SRC:?}/$keep"
+      mkdir -p "$(dirname "$SRC/$keep")"
+      mv "$DIR/$keep" "$SRC/$keep"
+    fi
+  done
+  for f in "$DIR"/data/*.local.json; do
+    if [ -e "$f" ]; then mv "$f" "$SRC/data/"; fi
+  done
+  rm -rf "$DIR"
+fi
+mv "$SRC" "$DIR"
+cd "$DIR"
+
+# 3. Instala lo necesario (la primera vez tarda 1 o 2 minutos; después, segundos)
+echo "   Instalando dependencias…"
+npm install --no-audit --no-fund --loglevel=error
+
+echo "✅ Listo. Versión: $(grep -m1 '^## ' AVANCE.md 2>/dev/null | sed 's/^## //' || echo 'desarrollo')"
+echo "   Carpeta: $DIR"
+echo ""
+
+# 4. Prende el sitio y muestra el QR para el celular (detenlo con Ctrl + C)
+if [ "${H3_SIN_INICIAR:-}" = "1" ]; then exit 0; fi
+exec npm run movil

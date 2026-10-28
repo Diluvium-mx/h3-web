@@ -8,7 +8,10 @@ Lo más reciente va arriba.
   anterior. Se agregó `npm run actualizar`, que baja la rama `desarrollo` (y guarda aparte lo que `next dev`
   haya cambiado). Se explicó en `PRUEBAS-EN-CELULAR.md`.
 
-Falta: que el dueño actualice su Mac y revise el estilo premium en el celular.
+- Como los comandos de git no le funcionaron, se agregó un comando de una sola línea que no necesita git
+  (`scripts/ver-en-mac.sh`): baja la versión nueva, apaga el sitio viejo y muestra el QR.
+
+Falta: que el dueño corra ese comando en su Mac y revise el estilo premium en el celular.
 
 ## 28 de octubre de 2026 (noche 2) — estilo premium y panel con contraseña cambiable
 

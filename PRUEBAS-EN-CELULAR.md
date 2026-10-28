@@ -34,6 +34,16 @@ WhatsApp y no usa la cámara real.
 
 ## 2. Tu celular en el mismo Wi-Fi (la forma diaria)
 
+**La forma más fácil (no necesita git):** abre la Terminal y pega esta línea. Baja la última versión de la
+rama `desarrollo` a la carpeta `~/h3-web-vista`, apaga el sitio viejo si seguía prendido, instala lo
+necesario y muestra el QR para el celular. Para ver cambios nuevos, vuelve a pegarla.
+
+```bash
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/Diluvium-mx/h3-web/desarrollo/scripts/ver-en-mac.sh)"
+```
+
+**Si trabajas con git en la carpeta del proyecto:**
+
 En la Mac, dentro de la carpeta del proyecto:
 
 ```bash
