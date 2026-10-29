@@ -19,7 +19,7 @@ export function SectionHeading({
     <div className="reveal mb-8 flex items-end justify-between gap-4">
       <div>
         <p className={`font-tech flex items-center gap-3 text-[11px] ${dark ? "text-silver" : "text-dim"}`}>
-          <span className="h-px w-8 bg-brand" />
+          <span className="h-px w-8 rule-accent" />
           {eyebrow}
         </p>
         <h2 id={id} className={`font-display mt-4 text-[2rem] sm:text-5xl ${dark ? "text-white" : ""}`}>

@@ -337,7 +337,7 @@ function Lightbox({
   }, [start]);
 
   return (
-    <div className="fixed inset-0 z-[70] bg-black animate-fade" role="dialog" aria-modal="true" aria-label="Galería">
+    <div className="fixed inset-0 z-[70] bg-black text-white animate-fade" role="dialog" aria-modal="true" aria-label="Galería">
       <div ref={track} className="no-scrollbar flex h-full snap-x snap-mandatory overflow-x-auto">
         {images.map((src, i) => (
           <div key={src} className="relative h-full w-full shrink-0 snap-center">
@@ -353,23 +353,25 @@ function Lightbox({
           </div>
         ))}
       </div>
-      <div className="pointer-events-none absolute inset-x-0 top-0 flex items-center justify-between p-4 pt-[max(1rem,env(safe-area-inset-top))]">
-        <span className="font-tech rounded-sm bg-white/10 px-2.5 py-1.5 text-xs backdrop-blur-md">
+      {/* Barra de arriba sobre un degradado, para que «Cerrar» se vea en cualquier foto */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 flex items-center justify-between bg-gradient-to-b from-black/80 to-transparent p-4 pt-[max(1rem,env(safe-area-inset-top))] pb-10">
+        <span className="font-tech rounded-md bg-white/15 px-3 py-2 text-xs text-white backdrop-blur-md">
           {index + 1} / {images.length}
         </span>
         <button
           type="button"
           onClick={() => onClose(index)}
-          className="pointer-events-auto grid size-12 place-items-center rounded-md bg-white/10 backdrop-blur-md transition-transform hover:scale-110"
+          className="pointer-events-auto inline-flex h-12 items-center gap-2 rounded-md bg-white pr-4 pl-3 text-sm font-semibold text-night shadow-[0_10px_30px_-8px_rgb(0_0_0/0.7)] transition-transform duration-300 hover:scale-105 active:scale-95"
           aria-label="Cerrar galería"
         >
-          <X className="size-6" />
+          <X className="size-5" strokeWidth={2.5} />
+          Cerrar
         </button>
       </div>
       <button
         type="button"
         onClick={() => scrollToIndex(track.current, index - 1)}
-        className="absolute top-1/2 left-4 hidden size-12 -translate-y-1/2 place-items-center rounded-md bg-white/10 backdrop-blur-md sm:grid"
+        className="absolute top-1/2 left-4 hidden size-12 -translate-y-1/2 place-items-center rounded-md bg-white/15 text-white backdrop-blur-md transition-colors hover:bg-white/25 sm:grid"
         aria-label="Foto anterior"
       >
         <ChevronLeft className="size-6" />
@@ -377,7 +379,7 @@ function Lightbox({
       <button
         type="button"
         onClick={() => scrollToIndex(track.current, index + 1)}
-        className="absolute top-1/2 right-4 hidden size-12 -translate-y-1/2 place-items-center rounded-md bg-white/10 backdrop-blur-md sm:grid"
+        className="absolute top-1/2 right-4 hidden size-12 -translate-y-1/2 place-items-center rounded-md bg-white/15 text-white backdrop-blur-md transition-colors hover:bg-white/25 sm:grid"
         aria-label="Foto siguiente"
       >
         <ChevronRight className="size-6" />

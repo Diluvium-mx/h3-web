@@ -8,7 +8,7 @@ export function FormShell({ title, eyebrow, children }: { title: string; eyebrow
       <Link href="/admin" className="inline-flex items-center gap-1 text-sm text-mute hover:text-fg">
         <ChevronLeft className="size-4" /> Inventario
       </Link>
-      <p className="font-tech mt-4 flex items-center gap-3 text-[11px] text-dim"><span className="h-px w-6 bg-brand" />{eyebrow}</p>
+      <p className="font-tech mt-4 flex items-center gap-3 text-[11px] text-dim"><span className="h-px w-6 rule-accent" />{eyebrow}</p>
       <h1 className="font-display mt-2 mb-6 text-4xl">{title}</h1>
       {children}
     </div>

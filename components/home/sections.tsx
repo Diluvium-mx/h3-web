@@ -7,7 +7,7 @@ import { CategoryTileContent, categoryTileClass } from "@/components/category-ti
 import { SectionHeading } from "@/components/section-heading";
 import { SOCIALS } from "@/components/site/footer";
 import { WhatsAppIcon } from "@/components/icons";
-import { FUDS, GENERAL_MESSAGE, type Rating } from "@/components/home/hero";
+import { FUDS, GENERAL_MESSAGE, countTypes, type Rating } from "@/components/home/hero";
 import { Stars } from "@/components/home/reviews";
 import { carName, carTitle, formatKm, formatPrice, type Car } from "@/lib/cars";
 import { site, whatsappUrl } from "@/lib/site";
@@ -34,11 +34,7 @@ function WhatsAppCta({ message, children }: { message: string; children: ReactNo
 // ---------- Inventario: categorías con ícono y autos destacados ----------
 
 export function Inventory({ cars, featured }: { cars: Car[]; featured: Car[] }) {
-  const types = new Map<string, number>();
-  for (const car of cars) {
-    for (const t of car.armored ? [car.body, "Blindado"] : [car.body]) types.set(t, (types.get(t) ?? 0) + 1);
-  }
-  const tiles = [...types.entries()].sort((a, b) => b[1] - a[1]);
+  const tiles = countTypes(cars);
 
   return (
     <section className="pt-12 pb-16 sm:pt-20 sm:pb-24" aria-labelledby="destacados">
@@ -92,17 +88,20 @@ const SELL_STEPS = [
 
 export function SellSection() {
   return (
-    <section className="relative isolate overflow-hidden bg-night py-20 text-white sm:py-28" aria-labelledby="vende">
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(60rem_30rem_at_85%_0%,rgb(200_16_46/0.22),transparent_60%)]" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+    <section className="glow-night relative overflow-hidden py-20 text-white sm:py-28" aria-labelledby="vende">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
+      <div className="light-trails" aria-hidden="true">
+        <span style={{ top: "18%", ...vars({ "--d": "6s", "--delay": "0.6s" }) }} />
+        <span style={{ top: "64%", ...vars({ "--d": "7.5s", "--delay": "3s" }) }} />
+      </div>
       <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[1.1fr_1fr] lg:items-end lg:gap-20">
         <div className="reveal">
           <p className="font-tech flex items-center gap-3 text-[11px] text-silver">
-            <span className="h-px w-8 bg-brand" />
+            <span className="h-px w-8 rule-accent" />
             Vende tu auto
           </p>
           <h2 id="vende" className="font-display mt-5 text-[2.6rem] leading-[1.02] sm:text-7xl">
-            ¿Quieres vender tu auto?
+            ¿Quieres vender <span className="text-gradient">tu auto</span>?
           </h2>
           <p className="mt-6 max-w-lg text-lg leading-relaxed text-white/75">
             Cuéntanos de tu auto en menos de un minuto y te atendemos por WhatsApp. Sin vueltas y sin compromiso.
@@ -113,10 +112,16 @@ export function SellSection() {
             </CtaLink>
           </div>
         </div>
-        <ol className="grid gap-px overflow-hidden rounded-lg bg-white/10">
+        <ol className="grid gap-px overflow-hidden rounded-lg bg-white/10 ring-1 ring-white/10">
           {SELL_STEPS.map((s, i) => (
-            <li key={s.title} className="reveal flex gap-5 bg-graphite p-5 sm:p-6" style={vars({ "--i": i })}>
-              <span className="font-display text-3xl leading-none text-white/30">0{i + 1}</span>
+            <li
+              key={s.title}
+              className="reveal group flex gap-5 bg-graphite/90 p-5 backdrop-blur-sm transition-colors duration-500 hover:bg-steel/80 sm:p-6"
+              style={vars({ "--i": i })}
+            >
+              <span className="font-display text-3xl leading-none text-white/30 transition-colors duration-500 group-hover:text-brand-glow">
+                0{i + 1}
+              </span>
               <div>
                 <h3 className="font-semibold">{s.title}</h3>
                 <p className="mt-1 text-sm leading-relaxed text-white/65">{s.text}</p>
@@ -145,7 +150,7 @@ export function Comparison() {
       <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-16">
         <div className="reveal">
           <p className="font-tech flex items-center gap-3 text-[11px] text-dim">
-            <span className="h-px w-8 bg-brand" />
+            <span className="h-px w-8 rule-accent" />
             La diferencia H3
           </p>
           <h2 id="diferencia" className="font-display mt-4 text-[2rem] sm:text-5xl">
@@ -285,7 +290,7 @@ function ValueRow({
       <div className={`reveal ${flip ? "lg:order-2" : ""}`}>{visual}</div>
       <div className="reveal">
         <p className="font-tech flex items-center gap-3 text-[11px] text-dim">
-          <span className="h-px w-8 bg-brand" />
+          <span className="h-px w-8 rule-accent" />
           {eyebrow}
         </p>
         <h3 className="font-display mt-4 text-[1.85rem] sm:text-[2.6rem]">{title}</h3>
@@ -302,7 +307,7 @@ export function ValueProps({ featured }: { featured: Car[] }) {
   const specCar = withPhoto.find((c) => c.mileage != null && c.transmission) ?? withPhoto[0];
   const chatCar = withPhoto.find((c) => c.id !== specCar.id) ?? specCar;
   return (
-    <section className="bg-card py-20 sm:py-28" aria-labelledby="beneficios">
+    <section className="tint-warm py-20 sm:py-28" aria-labelledby="beneficios">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <h2 id="beneficios" className="sr-only">
           Por qué comprar en H3
@@ -357,14 +362,14 @@ export function HowItWorks() {
           {STEPS.map(({ Icon, title, text }, i) => (
             <li key={title} className="reveal group relative bg-card p-6 sm:p-8" style={vars({ "--i": i })}>
               <div className="flex items-center justify-between">
-                <span className="font-display text-5xl leading-none text-soft-2 transition-colors duration-500 group-hover:text-fg">
+                <span className="font-display text-5xl leading-none text-soft-2 transition-colors duration-500 group-hover:text-brand">
                   0{i + 1}
                 </span>
                 <Icon className="size-5 text-brand" strokeWidth={1.75} />
               </div>
               <h3 className="font-display mt-8 text-xl">{title}</h3>
               <p className="mt-2 leading-relaxed text-mute">{text}</p>
-              <span className="absolute inset-x-0 top-0 h-0.5 origin-left scale-x-0 bg-brand transition-transform duration-700 ease-[var(--ease-out-expo)] group-hover:scale-x-100" />
+              <span className="absolute inset-x-0 top-0 h-0.5 origin-left scale-x-0 rule-accent transition-transform duration-700 ease-[var(--ease-out-expo)] group-hover:scale-x-100" />
             </li>
           ))}
         </ol>
@@ -456,7 +461,7 @@ const FAQ: { q: string; a: ReactNode }[] = [
 
 export function Faq() {
   return (
-    <section className="bg-card py-20 sm:py-28" aria-labelledby="preguntas">
+    <section className="tint-warm py-20 sm:py-28" aria-labelledby="preguntas">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
         <div>
           <SectionHeading id="preguntas" eyebrow="Sin dudas" title="Preguntas frecuentes" />
@@ -498,8 +503,10 @@ export function Closer({ rating }: { rating: Rating }) {
   return (
     <section id="contacto" className="scroll-mt-20 px-4 pt-6 pb-16 sm:px-6 sm:pb-24" aria-labelledby="contacto-title">
       <div className="mx-auto grid max-w-7xl gap-4 lg:grid-cols-[1.3fr_1fr]">
-        <div className="reveal relative isolate overflow-hidden rounded-lg bg-night p-7 text-white sm:p-12">
-          <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(40rem_20rem_at_100%_100%,rgb(200_16_46/0.25),transparent_60%)]" />
+        <div className="reveal glow-night relative overflow-hidden rounded-lg p-7 text-white sm:p-12">
+          <div className="light-trails" aria-hidden="true">
+            <span style={{ top: "30%", ...vars({ "--d": "6.5s", "--delay": "1.4s" }) }} />
+          </div>
           {rating.count > 0 && (
             <div className="mb-6 flex items-center gap-2 text-sm text-white/80">
               <Stars value={rating.avg} className="size-4" />
@@ -507,11 +514,11 @@ export function Closer({ rating }: { rating: Rating }) {
             </div>
           )}
           <p className="font-tech flex items-center gap-3 text-[11px] text-silver">
-            <span className="h-px w-8 bg-brand" />
+            <span className="h-px w-8 rule-accent" />
             Cada auto es único
           </p>
           <h2 id="contacto-title" className="font-display mt-4 text-[2.2rem] leading-[1.04] sm:text-6xl">
-            Cuando se vende, ya no vuelve.
+            Cuando se vende, <span className="text-gradient">ya no vuelve</span>.
           </h2>
           <p className="mt-5 max-w-md text-lg leading-relaxed text-white/75">
             ¿Ya viste el tuyo? Escríbenos hoy y te confirmamos al momento si sigue disponible.
@@ -519,7 +526,7 @@ export function Closer({ rating }: { rating: Rating }) {
           <ul className="mt-6 space-y-2.5">
             {FUDS.map((f) => (
               <li key={f} className="flex items-center gap-2.5 text-white/90">
-                <Check className="size-4 text-brand" strokeWidth={2.5} />
+                <Check className="size-4 text-brand-glow" strokeWidth={2.5} />
                 {f}
               </li>
             ))}

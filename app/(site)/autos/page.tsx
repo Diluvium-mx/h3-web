@@ -14,20 +14,28 @@ export const metadata: Metadata = {
 export default async function CatalogPage() {
   const cars = await getPublicCars();
   return (
-    <div className="mx-auto max-w-7xl px-4 pt-24 pb-24 sm:px-6 sm:pt-28">
-      <header className="stagger mb-7">
-        <p className="font-tech flex items-center gap-3 text-[11px] text-dim" style={vars({ "--i": 0 })}>
-          <span className="draw-line h-px w-8 bg-brand" />
-          Villahermosa, Tabasco
-        </p>
-        <h1 className="font-display mt-4 text-[2.8rem] sm:text-7xl" style={vars({ "--i": 1 })}>
-          Inventario
-        </h1>
-        <p className="mt-3 max-w-xl text-mute" style={vars({ "--i": 2 })}>
-          Autos listos para manejar. Toca el que te guste y escríbenos directo por WhatsApp.
-        </p>
+    <>
+      {/* Franja oscura con color, como el inicio; el buscador queda flotando sobre su borde */}
+      <header className="glow-night relative overflow-hidden px-4 pt-24 pb-14 text-white sm:px-6 sm:pt-32 sm:pb-20">
+        <div className="light-trails" aria-hidden="true">
+          <span style={{ top: "62%", ...vars({ "--d": "6s", "--delay": "0.8s" }) }} />
+        </div>
+        <div className="stagger relative mx-auto max-w-7xl">
+          <p className="font-tech flex items-center gap-3 text-[11px] text-white/65" style={vars({ "--i": 0 })}>
+            <span className="draw-line rule-accent h-px w-8" />
+            Villahermosa, Tabasco
+          </p>
+          <h1 className="font-display mt-4 text-[2.8rem] sm:text-7xl" style={vars({ "--i": 1 })}>
+            Inventario
+          </h1>
+          <p className="mt-3 max-w-xl text-white/70" style={vars({ "--i": 2 })}>
+            Autos listos para manejar. Toca el que te guste y escríbenos directo por WhatsApp.
+          </p>
+        </div>
       </header>
-      <CatalogBrowser cars={cars.map(cardData)} />
-    </div>
+      <div className="mx-auto -mt-7 max-w-7xl px-4 pb-24 sm:px-6">
+        <CatalogBrowser cars={cars.map(cardData)} />
+      </div>
+    </>
   );
 }

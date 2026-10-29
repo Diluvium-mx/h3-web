@@ -20,18 +20,20 @@ export default function SellPage() {
   return (
     <div className="relative isolate overflow-hidden">
       {/* Franja oscura arriba, como la sección del inicio */}
-      <div className="absolute inset-x-0 top-16 -z-10 h-[30rem] bg-night lg:h-[34rem]">
-        <div className="absolute inset-0 bg-[radial-gradient(50rem_24rem_at_10%_0%,rgb(200_16_46/0.25),transparent_60%)]" />
+      <div className="glow-night absolute inset-x-0 top-0 -z-10 h-[34rem] overflow-hidden lg:h-[38rem]">
+        <div className="light-trails" aria-hidden="true">
+          <span style={{ top: "70%", ...vars({ "--d": "6.5s", "--delay": "1s" }) }} />
+        </div>
       </div>
       <div className="mx-auto grid max-w-7xl gap-10 px-4 pt-28 pb-24 sm:px-6 lg:grid-cols-[1fr_1.1fr] lg:gap-16 lg:pt-36">
         <div>
           <header className="stagger text-white">
             <p className="font-tech flex items-center gap-3 text-[11px] text-silver">
-              <span className="draw-line h-px w-8 bg-brand" />
+              <span className="draw-line h-px w-8 rule-accent" />
               Vende tu auto
             </p>
             <h1 className="font-display mt-5 text-[2.8rem] leading-[1.02] sm:text-7xl" style={vars({ "--i": 1 })}>
-              ¿Quieres vender tu auto?
+              ¿Quieres vender <span className="text-gradient">tu auto</span>?
             </h1>
             <p className="mt-5 max-w-md text-lg leading-relaxed text-white/75" style={vars({ "--i": 2 })}>
               Llena tus datos en menos de un minuto y te atendemos por WhatsApp.

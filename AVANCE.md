@@ -2,6 +2,17 @@
 
 Lo más reciente va arriba.
 
+## 29 de octubre de 2026 — más impacto, color sutil y ficha más limpia
+
+- Hero a pantalla completa en celular con fotos reales, tratamiento de cine, estelas de luz y accesos
+  rápidos por tipo. Paleta con color sutil (medianoche, carmesí y champaña) y franja de marcas con logos.
+- Botones de WhatsApp en verde oscuro con brillo, WhatsApp en cada tarjeta, buscador fijo en el inventario
+  y pie de página oscuro. Se quitaron los números de confianza.
+- Ficha: botón «Cerrar» claro en pantalla completa, sin filas vacías y sin «Tus dudas». Pasan 27 pruebas
+  del sitio, 21 del panel y 3 de Cloudinary.
+
+Falta: que el dueño lo vea en su celular (el mismo comando de siempre) y diga qué más ajustar.
+
 ## 28 de octubre de 2026 (noche 4) — análisis de los videos al día
 
 - `ANALISIS-VIDEOS.md` ahora describe el inicio actual (estilo premium y correcciones del dueño) y agrega

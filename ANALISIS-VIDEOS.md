@@ -201,20 +201,20 @@ auto». El visitante de H3 **ya sabe lo que busca** (quiere un auto), así que, 
 social y el producto van **antes** que la sección de dolor.
 
 Esta tabla describe el inicio **actual**: la estructura de los videos con el estilo premium y las
-correcciones que pidió el dueño después de verlo en su celular (28-oct, noche). Donde el dueño pidió algo
-distinto al video, se indica.
+correcciones que pidió el dueño después de verlo en su celular (28-oct noche y 29-oct). Donde el dueño pidió
+algo distinto al video, se indica.
 
 | Punto del video | Qué se hizo en H3 | Archivo |
 | --- | --- | --- |
-| Prueba social #1 arriba del título | **Por ahora no hay.** El dueño pidió quitar «13 autos disponibles hoy» porque se veía hecho con IA. Si el dueño sube reseñas reales, la calificación aparece junto a los quita-miedos. Cuando haya calificación de Google, es el mejor candidato para este lugar | `components/home/hero.tsx` |
+| Prueba social #1 arriba del título | **Solo cuando haya reseñas reales:** la calificación («★ 4.8 · N reseñas») sale arriba del título, en lugar de «Villahermosa, Tabasco». Mientras no haya, no se inventa nada (el dueño pidió quitar «13 autos disponibles hoy») | `components/home/hero.tsx` |
 | Título claro («claridad antes que ingenio») | «**Autos seminuevos premium en Villahermosa.**», arriba de él la línea «Villahermosa, Tabasco». El dueño pidió un título más claro; además coincide con lo que la gente busca en Google | `hero.tsx` |
 | Subtítulo con beneficio | «Revisados a detalle, con precio a la vista y atención directa por WhatsApp.» El dolor se cuenta más abajo, en la sección «lo de siempre contra H3» | `hero.tsx` |
 | Una acción principal | «**Ver inventario**» y, al lado, «WhatsApp». WhatsApp también está en el encabezado y en el botón flotante | `hero.tsx` |
-| Quitar miedos junto al botón | ✓ Precio a la vista · ✓ Fotos reales de cada auto · ✓ Respuesta inmediata | `hero.tsx` |
-| Imagen que refuerce la propuesta | Fotos reales del inventario que rotan, con nombre, precio y barra de avance | `hero.tsx` |
+| Quitar miedos junto al botón | ✓ Precio a la vista · ✓ Fotos reales de cada auto · ✓ Respuesta inmediata. En celular se omiten (el subtítulo ya lo dice y así se ve el auto completo); van también en el cierre | `hero.tsx` |
+| Imagen que refuerce la propuesta | **Fotos reales a pantalla completa** en celular, con zoom lento, tratamiento de cine y estelas de luz; arriba, el auto que se ve con su precio | `hero.tsx` |
 | Todo arriba en celular | Una prueba automática comprueba que el botón principal queda dentro de la primera pantalla de un iPhone (390×844) | `scripts/e2e-public.mjs` |
-| Prueba social #2 bajo el hero | **Números de confianza** (2 a 3, con animación que cuenta) y franja de marcas en movimiento (el equivalente a «logos»). El dueño los pone en **Panel → Ajustes**; hoy se ven números de ejemplo **solo en la computadora de desarrollo**. Los reales están **sin decidir** | `hero.tsx` (`TrustBar`), `/admin/ajustes` |
-| «Pie en la puerta» (primer paso pequeño) | Categorías con íconos propios (SUV, Deportivos, Blindados, Pickups…): un toque y el inventario ya sale filtrado | `sections.tsx` (`Inventory`), `components/body-icons.tsx` |
+| Prueba social #2 bajo el hero | **Franja de marcas en movimiento con sus logos** (el equivalente directo a los «logos» del video). Los números de confianza se quitaron a pedido del dueño (29-oct) | `components/home/marquee.tsx`, `components/brand-logos.tsx` |
+| «Pie en la puerta» (primer paso pequeño) | **«¿Qué buscas?»** en el mismo hero y categorías con íconos propios en el inventario: un toque y el inventario ya sale filtrado | `hero.tsx`, `sections.tsx` (`Inventory`) |
 | Título de sección | «**Autos listos para manejar**» (traducción de «Ready to drive»). Sin número, porque el inventario cambia (pedido del dueño) | `sections.tsx` |
 | Oferta secundaria | «**¿Quieres vender tu auto?**» como sección grande en fondo oscuro, **justo después del inventario**. El video la pondría más abajo; el dueño pidió subirla y hacerla más grande | `sections.tsx` (`SellSection`) |
 | Prueba social visual, sin carrusel, con origen | **Reseñas** con estrellas, frase destacada, foto, auto que compró y origen («Reseña de Google»). Todas a la vista; las que traen foto van primero. **Solo aparecen si el dueño agrega reseñas reales en el panel** | `components/home/reviews.tsx`, `/admin/resenas` |
@@ -227,12 +227,12 @@ distinto al video, se indica.
 
 ### Dónde el inicio actual se aparta del método (para decidir)
 
-1. **No hay prueba social arriba del título.** Es lo que más pesa según los dos videos. Lo ideal: la
-   calificación de Google («X.X ★ · N reseñas») o una cifra real («más de N autos entregados»). Necesita
-   datos reales: **sin decidir**.
+1. **No hay prueba social arriba del título mientras no haya reseñas.** Es lo que más pesa según los dos
+   videos. El lugar ya está listo: en cuanto el dueño agregue reseñas reales en el panel, la calificación
+   aparece ahí sola.
 2. **El subtítulo no menciona el dolor.** El video pide «¿Cansado de X? Nosotros Y». Hoy el dolor está más
    abajo, en «Comprar un seminuevo no tiene que ser una apuesta».
-3. **Los números de confianza son de ejemplo.** No se publican hasta que el dueño ponga los reales.
+3. **No hay cifras de resultados** («más de N clientes»): el dueño pidió quitar los números de confianza.
 4. **Solo 2 beneficios con imagen**; el video recomienda de 5 a 8. Candidatos con datos que ya existen:
    «Tus dudas, resueltas» (dueños, factura, servicios) y «fotos por sección».
 5. **Las reseñas dependen de que existan.** Sin reseñas reales, la prueba social fuerte (sección 5 del

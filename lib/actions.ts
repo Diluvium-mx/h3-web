@@ -20,7 +20,6 @@ import { isEquipmentKey, isPhotoSection, type PhotoSection } from "./equipment";
 import { REVIEW_SOURCES, type Review } from "./reviews";
 import { createSessionToken, sessionConfigured, SESSION_COOKIE, SESSION_DAYS } from "./session";
 import { passwordVersion, setAdminPassword, verifyAdminPassword } from "./admin-password";
-import type { TrustStat } from "./settings";
 import {
   clearLoginFailures,
   getCar,
@@ -28,7 +27,6 @@ import {
   listCars,
   loginFailures,
   putCar,
-  putSetting,
   putReview,
   recordLoginFailure,
   removeCar,
@@ -77,7 +75,7 @@ export async function logoutAction() {
   redirect("/admin/login");
 }
 
-// ---------- Ajustes: contraseña y números de confianza ----------
+// ---------- Ajustes: contraseña del panel ----------
 
 export async function changePasswordAction(
   current: string,
@@ -97,28 +95,6 @@ export async function changePasswordAction(
     return { ok: true };
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : "No se pudo cambiar" };
-  }
-}
-
-export async function saveStatsAction(stats: TrustStat[]): Promise<ActionResult> {
-  await requireAdmin();
-  const input = Array.isArray(stats) ? stats : [];
-  const list: TrustStat[] = [];
-  for (const raw of input.slice(0, 4)) {
-    const value = int(raw?.value);
-    const label = str(raw?.label, 40);
-    if (value == null || value < 0 || value > 10_000_000 || !label) continue;
-    const suffix = str(raw?.suffix, 8);
-    list.push(clean({ value, label, prefix: str(raw?.prefix, 3) || undefined, suffix: suffix ? ` ${suffix}` : undefined }));
-  }
-  // Sin filas = quitar la sección del inicio
-  if (input.length && !list.length) return { ok: false, error: "Escribe al menos un número con su texto." };
-  try {
-    await putSetting("stats", list.length ? list : null);
-    updateTag("settings");
-    return { ok: true };
-  } catch (e) {
-    return { ok: false, error: e instanceof Error ? e.message : "No se pudo guardar" };
   }
 }
 

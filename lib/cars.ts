@@ -159,10 +159,6 @@ export function similarMessage(car: Car) {
   return `Hola 👋 Vi que el *${carTitle(car)}* ya se vendió. Busco algo similar, ¿me pueden ayudar?\n${carUrl(car)}`;
 }
 
-export function questionMessage(car: Car, question: string) {
-  return `Hola ${site.name} 👋 Sobre el *${carTitle(car)}*: ${question}\n${carUrl(car)}`;
-}
-
 export function waitlistMessage(car: Car) {
   return `Hola 👋 Vi que el *${carTitle(car)}* está apartado. Si se libera, ¿me avisan?\n${carUrl(car)}`;
 }

@@ -16,7 +16,7 @@ export default function ReviewsPage() {
         <ArrowLeft className="size-4" /> Inventario
       </Link>
       <p className="font-tech mt-6 flex items-center gap-3 text-[11px] text-dim">
-        <span className="h-px w-6 bg-brand" />
+        <span className="h-px w-6 rule-accent" />
         Prueba social
       </p>
       <h1 className="font-display mt-2 text-4xl">Reseñas</h1>

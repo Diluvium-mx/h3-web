@@ -32,7 +32,7 @@ export function CategoryTileContent({
         {count} {count === 1 ? "auto" : "autos"}
       </span>
       <span
-        className={`absolute inset-x-4 bottom-0 h-0.5 origin-left bg-brand transition-transform duration-500 ease-[var(--ease-out-expo)] ${
+        className={`absolute inset-x-4 bottom-0 h-0.5 origin-left rule-accent transition-transform duration-500 ease-[var(--ease-out-expo)] ${
           active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
         }`}
       />
@@ -41,7 +41,9 @@ export function CategoryTileContent({
 }
 
 export function categoryTileClass(active?: boolean) {
-  return `group relative flex w-[7.5rem] shrink-0 snap-start flex-col items-center gap-1.5 rounded-lg px-3 pt-4 pb-3.5 ring-1 transition-colors duration-300 active:scale-[0.98] ${
-    active ? "bg-night text-white ring-night" : "bg-card text-fg ring-line hover:ring-fg/30"
+  return `group relative flex w-[7.5rem] shrink-0 snap-start flex-col items-center gap-1.5 rounded-lg px-3 pt-4 pb-3.5 ring-1 transition-[transform,box-shadow,background-color] duration-500 ease-[var(--ease-out-expo)] hover:-translate-y-0.5 active:scale-[0.97] ${
+    active
+      ? "bg-night text-white shadow-[0_16px_34px_-18px_rgb(208_18_46/0.6)] ring-night"
+      : "bg-card text-fg ring-line hover:shadow-[0_16px_34px_-20px_rgb(10_15_26/0.45)] hover:ring-fg/25"
   }`;
 }

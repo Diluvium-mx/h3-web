@@ -238,8 +238,8 @@ export function CatalogBrowser({ cars }: { cars: Car[] }) {
       </aside>
 
       <div className="min-w-0">
-        {/* Buscador + orden */}
-        <div className="flex gap-2">
+        {/* Buscador + orden: se queda fijo arriba al bajar (en celular), justo debajo del encabezado */}
+        <div className="sticky top-[4.5rem] z-30 flex gap-2 transition-[top] duration-500 ease-[var(--ease-out-expo)] in-data-[header=oculto]:top-2 lg:static">
           <label className="relative flex-1">
             <span className="sr-only">Buscar auto</span>
             <Search className="pointer-events-none absolute top-1/2 left-4 size-5 -translate-y-1/2 text-dim" />
@@ -248,13 +248,13 @@ export function CatalogBrowser({ cars }: { cars: Car[] }) {
               value={f.q}
               onChange={(e) => setF((p) => ({ ...p, q: e.target.value }))}
               placeholder="Busca marca, modelo o año…"
-              className="h-12 w-full rounded-md border border-line bg-card pr-4 pl-12 text-fg placeholder:text-dim focus:border-fg/50 focus:ring-4 focus:ring-fg/5 focus:outline-none"
+              className="h-12 w-full rounded-md border border-line bg-card pr-4 pl-12 text-fg shadow-[0_14px_32px_-18px_rgb(10_15_26/0.45)] placeholder:text-dim focus:border-fg/50 focus:ring-4 focus:ring-fg/5 focus:outline-none"
             />
           </label>
           <button
             type="button"
             onClick={() => setSheet(true)}
-            className={`relative inline-flex h-12 items-center gap-2 rounded-md border px-4 font-medium transition-colors lg:hidden ${
+            className={`relative inline-flex h-12 items-center gap-2 rounded-md border px-4 font-medium shadow-[0_14px_32px_-18px_rgb(10_15_26/0.45)] transition-colors lg:hidden ${
               activeCount > 0 ? "border-night bg-night text-white" : "border-line bg-card"
             }`}
           >

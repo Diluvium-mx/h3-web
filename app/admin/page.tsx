@@ -16,7 +16,7 @@ export default function AdminPage() {
       <div className="mb-6 flex items-end justify-between gap-4">
         <div>
           <p className="font-tech flex items-center gap-3 text-[11px] text-dim">
-            <span className="h-px w-6 bg-brand" />
+            <span className="h-px w-6 rule-accent" />
             Inventario
           </p>
           <h1 className="font-display mt-2 text-4xl">Tus autos</h1>

@@ -11,12 +11,13 @@ import {
   Clock,
   Cog,
   DoorOpen,
+  FileCheck,
+  FileText,
   Fuel,
   Gauge,
   ListChecks,
   MapPin,
   MessageCircle,
-  MessageCircleQuestion,
   Navigation,
   PlayCircle,
   Send,
@@ -24,7 +25,9 @@ import {
   Phone,
   Shield,
   ShieldCheck,
+  Users,
   Waypoints,
+  Wrench,
   Zap,
 } from "lucide-react";
 import { Gallery, PhotoGrid } from "@/components/car/gallery";
@@ -47,7 +50,6 @@ import {
   MISSING_INFO_TEXT,
   missingSpecs,
   parseVideo,
-  questionMessage,
   slugify,
   visitMessage,
   type Car,
@@ -122,26 +124,33 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
   const rating = reviewSummary(reviews);
   const sameType = all.filter((c) => c.status !== "vendido" && c.body === car.body).length;
 
-  // Resumen: los datos que más pregunta la gente. Si falta uno, se invita a preguntar por WhatsApp.
+  // Resumen: los datos que más pregunta la gente. Lo que no se tiene no se muestra (pedido del dueño, 29-oct);
+  // abajo de la ficha hay un aviso con botón de WhatsApp para preguntarlo.
   const summary: Spec[] = [
     { Icon: Calendar, label: "Año", value: String(car.year) },
     { Icon: Gauge, label: "Kilometraje", value: car.mileage != null ? formatKm(car.mileage) : undefined },
     { Icon: Cog, label: "Transmisión", value: car.transmission },
     { Icon: Fuel, label: "Combustible", value: car.fuel },
   ];
-  const extras = [
-    car.drivetrain && { Icon: Waypoints, label: "Tracción", value: car.drivetrain },
-    car.color && { Icon: Palette, label: "Color", value: car.color },
-    car.doors && { Icon: DoorOpen, label: "Puertas", value: String(car.doors) },
-    car.armored && { Icon: Shield, label: "Blindaje", value: "Sí" },
-    { Icon: MapPin, label: "Ubicación", value: `${site.address.city}, ${site.address.state}`, wide: true },
-  ].filter(Boolean) as Spec[];
+  // Documentos e historial: solo lo que el dueño confirmó en el panel
+  const history: Spec[] = [
+    { Icon: Users, label: "Dueños", value: car.ownerCount ? (car.ownerCount === 1 ? "Único dueño" : `${car.ownerCount} dueños`) : undefined },
+    { Icon: FileText, label: "Factura", value: car.invoice },
+    { Icon: Wrench, label: "Servicios", value: car.serviceHistory },
+    { Icon: FileCheck, label: "Papeles", value: car.papersInOrder ? "En regla" : undefined },
+  ];
   const details: Spec[] = [
     ...summary,
     { Icon: Zap, label: "Motor", value: car.engine },
     { Icon: CarIcon, label: "Tipo", value: car.body },
-    ...extras,
-  ];
+    { Icon: Waypoints, label: "Tracción", value: car.drivetrain },
+    { Icon: Palette, label: "Color", value: car.color },
+    { Icon: DoorOpen, label: "Puertas", value: car.doors ? String(car.doors) : undefined },
+    { Icon: Shield, label: "Blindaje", value: car.armored ? (car.armorLevel ?? "Sí") : undefined },
+    ...history,
+    { Icon: MapPin, label: "Ubicación", value: `${site.address.city}, ${site.address.state}` },
+  ].filter((spec) => spec.value);
+  const quick = summary.slice(1).filter((spec) => spec.value);
   const missing = missingSpecs(car);
   const video = parseVideo(car.video);
   const equipment = equipmentByGroup(car.equipment);
@@ -183,7 +192,7 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
             <div className="stagger">
               <div className="flex flex-wrap items-center gap-2.5">
                 <p className="font-tech flex items-center gap-3 text-[11px] text-dim">
-                  <span className="draw-line h-px w-6 bg-brand" />
+                  <span className="draw-line h-px w-6 rule-accent" />
                   {car.year} · {car.brand}
                 </p>
                 <StatusBadge status={car.status} />
@@ -211,12 +220,17 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
             </div>
 
             {/* Resumen: los datos que más se preguntan; si falta uno, se pregunta con un toque */}
-            <ul className="mt-6 grid grid-cols-3 divide-x divide-line border-y border-line" aria-label="Resumen del auto">
-              {/* El año ya va arriba del título */}
-              {summary.slice(1).map((spec) => (
-                <QuickSpec key={spec.label} spec={spec} car={car} />
-              ))}
-            </ul>
+            {quick.length > 0 && (
+              <ul
+                className={`mt-6 grid divide-x divide-line border-y border-line ${quick.length === 3 ? "grid-cols-3" : "grid-cols-2"}`}
+                aria-label="Resumen del auto"
+              >
+                {/* El año ya va arriba del título */}
+                {quick.map((spec) => (
+                  <QuickSpec key={spec.label} spec={spec} />
+                ))}
+              </ul>
+            )}
             {(equipmentCount > 0 || video) && (
               <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-sm font-semibold">
                 {equipmentCount > 0 && (
@@ -301,17 +315,6 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
                   </Link>
                 </li>
               )}
-              {!sold && (
-                <li>
-                  <a href="#dudas" className="flex gap-3 py-3.5">
-                    <MessageCircleQuestion className="mt-0.5 size-[1.15rem] shrink-0 text-brand" />
-                    <span>
-                      <b>¿Dudas?</b>{" "}
-                      <span className="text-mute underline underline-offset-4">Dueños, factura, servicios y más, aquí mismo</span>
-                    </span>
-                  </a>
-                </li>
-              )}
               <li>
                 <a href={shareToSomeone} target="_blank" rel="noopener" className="flex gap-3 py-3.5">
                   <Send className="mt-0.5 size-[1.15rem] shrink-0 text-brand" />
@@ -392,8 +395,8 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
                 Ficha técnica
               </SectionTitle>
               <dl className="mt-6 overflow-hidden rounded-lg bg-card px-5 ring-1 ring-line sm:grid sm:grid-cols-2 sm:gap-x-10 sm:px-7">
-                {details.map((spec) => (
-                  <SpecRow key={spec.label} spec={spec} car={car} />
+                {details.map((spec, i) => (
+                  <SpecRow key={spec.label} spec={spec} i={i} />
                 ))}
               </dl>
               {missing.length > 0 && (
@@ -468,8 +471,6 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
                 </div>
               </section>
             )}
-
-            {!sold && <CarQuestions car={car} />}
 
             {!sold && <NextSteps car={car} />}
 
@@ -559,7 +560,7 @@ function GoneCar({ slug, cars }: { slug: string; cars: Car[] }) {
       <div className="relative overflow-hidden rounded-lg bg-card p-6 ring-1 ring-line sm:p-10">
         <div className="relative max-w-xl">
           <p className="font-tech flex items-center gap-3 text-[11px] text-dim">
-            <span className="h-px w-8 bg-brand" />
+            <span className="h-px w-8 rule-accent" />
             Ya no está disponible
           </p>
           <h1 className="font-display mt-3 text-4xl sm:text-5xl">Este auto ya no está</h1>
@@ -600,77 +601,6 @@ function GoneCar({ slug, cars }: { slug: string; cars: Car[] }) {
         </section>
       )}
     </div>
-  );
-}
-
-// Las dudas de siempre, contestadas con los datos del auto. Si falta un dato, se pregunta con un toque
-// (el mensaje lleva la pregunta exacta). Nunca se inventa una respuesta.
-function CarQuestions({ car }: { car: Car }) {
-  const invoice = { Original: "Factura original.", "De empresa": "Factura de empresa.", Refacturada: "Refacturada." };
-  const items: { q: string; a?: ReactNode }[] = [
-    {
-      q: "¿Sigue disponible?",
-      a:
-        car.status === "apartado"
-          ? "Está apartado. Si se libera, te avisamos."
-          : "Sí, está a la venta. Escríbenos y te lo confirmamos al momento.",
-    },
-    { q: "¿Cuántos kilómetros tiene?", a: car.mileage != null ? formatKm(car.mileage) : undefined },
-    {
-      q: "¿Es automático o estándar?",
-      a: car.transmission === "Automática" ? "Automático." : car.transmission === "Manual" ? "Estándar (manual)." : undefined,
-    },
-    {
-      q: "¿Cuántos dueños ha tenido?",
-      a: car.ownerCount === 1 ? "Único dueño." : car.ownerCount ? `${car.ownerCount} dueños.` : undefined,
-    },
-    { q: "¿Qué factura tiene?", a: car.invoice ? invoice[car.invoice] : undefined },
-    {
-      q: "¿Tiene sus servicios?",
-      a: car.serviceHistory ? `Sí, servicios ${car.serviceHistory === "De agencia" ? "de agencia" : "al día"}.` : undefined,
-    },
-    { q: "¿Los papeles están en regla?", a: car.papersInOrder ? "Sí, papeles en regla." : undefined },
-    ...(car.armored ? [{ q: "¿Qué nivel de blindaje tiene?", a: car.armorLevel ? `${car.armorLevel}.` : undefined }] : []),
-    {
-      q: "¿Dónde lo puedo ver?",
-      a: (
-        <>
-          {site.address.street}, {site.address.city}. {site.hours}.{" "}
-          <a href={site.mapsUrl} target="_blank" rel="noopener" className="font-semibold text-fg underline underline-offset-4">
-            Cómo llegar
-          </a>
-        </>
-      ),
-    },
-  ];
-  return (
-    <section id="dudas" className="mt-14 scroll-mt-24" aria-labelledby="dudas-title">
-      <SectionTitle id="dudas-title" eyebrow="Preguntas de este auto">
-        Tus dudas, resueltas
-      </SectionTitle>
-      <p className="mt-2 text-sm text-mute">Lo que más nos preguntan de este auto. Si algo falta, pregúntalo con un toque.</p>
-      <dl className="mt-6 divide-y divide-line overflow-hidden rounded-lg bg-card ring-1 ring-line">
-        {items.map(({ q, a }) => (
-          <div key={q} className="flex flex-col gap-1.5 p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:px-5">
-            <dt className="font-semibold">{q}</dt>
-            <dd className="text-fg/80 sm:text-right">
-              {a ?? (
-                <a
-                  href={whatsappUrl(questionMessage(car, q))}
-                  target="_blank"
-                  rel="noopener"
-                  className="group inline-flex min-h-9 items-center gap-1.5 text-sm font-semibold text-wa-dark"
-                >
-                  <WhatsAppIcon className="size-4" />
-                  <span className="underline decoration-wa-dark/30 underline-offset-4 group-hover:decoration-wa-dark">Pregúntanos</span>
-                  <span className="sr-only"> por WhatsApp</span>
-                </a>
-              )}
-            </dd>
-          </div>
-        ))}
-      </dl>
-    </section>
   );
 }
 
@@ -761,14 +691,13 @@ type Spec = {
   Icon: typeof Calendar;
   label: string;
   value?: string;
-  wide?: boolean;
 };
 
 function SectionTitle({ id, eyebrow, children }: { id: string; eyebrow: string; children: ReactNode }) {
   return (
     <div>
       <p className="font-tech flex items-center gap-3 text-[10px] text-dim">
-        <span className="h-px w-6 bg-brand" />
+        <span className="h-px w-6 rule-accent" />
         {eyebrow}
       </p>
       <h2 id={id} className="font-display mt-2.5 text-[1.85rem] sm:text-[2.1rem]">
@@ -778,8 +707,8 @@ function SectionTitle({ id, eyebrow, children }: { id: string; eyebrow: string; 
   );
 }
 
-// Dato del resumen (kilometraje, transmisión, combustible). Si falta, pregunta por WhatsApp.
-function QuickSpec({ spec, car }: { spec: Spec; car: Car }) {
+// Dato del resumen (kilometraje, transmisión, combustible). Solo se usa con datos confirmados.
+function QuickSpec({ spec }: { spec: Spec }) {
   const { Icon, label, value } = spec;
   return (
     <li className="min-w-0 px-3 py-3.5 first:pl-0 last:pr-0">
@@ -787,51 +716,26 @@ function QuickSpec({ spec, car }: { spec: Spec; car: Car }) {
         <Icon className="hidden size-3.5 shrink-0 text-brand sm:block" aria-hidden="true" />
         <span className="truncate">{label}</span>
       </span>
-      {value ? (
-        <span className="mt-1.5 block truncate text-[15px] font-semibold">{value}</span>
-      ) : (
-        <a
-          href={whatsappUrl(infoMessage(car, [label]))}
-          target="_blank"
-          rel="noopener"
-          className="mt-1.5 inline-flex items-center gap-1 text-[15px] font-semibold text-wa-dark"
-        >
-          <span className="sr-only">{label}: </span>
-          <span className="underline decoration-wa-dark/30 underline-offset-4">pregúntanos</span>
-          <WhatsAppIcon className="size-3.5" />
-          <span className="sr-only"> por WhatsApp</span>
-        </a>
-      )}
+      <span className="mt-1.5 block truncate text-[15px] font-semibold">{value}</span>
     </li>
   );
 }
 
-// Una fila de la ficha técnica. Si el dato no se tiene, invita a preguntarlo (nunca se inventa).
-function SpecRow({ spec, car }: { spec: Spec; car: Car }) {
+// Una fila de la ficha técnica (solo datos confirmados; nunca se inventa)
+function SpecRow({ spec, i }: { spec: Spec; i: number }) {
   const { Icon, label, value } = spec;
   return (
-    <div className="group flex items-center gap-3 border-b border-line py-4 last:border-0 sm:[&:nth-last-child(2):nth-child(odd)]:border-0">
+    <div
+      className="reveal group flex items-center gap-3 border-b border-line py-4 last:border-0 sm:[&:nth-last-child(2):nth-child(odd)]:border-0"
+      style={vars({ "--i": i })}
+    >
       <Icon
         className="size-[1.1rem] shrink-0 text-dim transition-colors duration-300 group-hover:text-brand"
         strokeWidth={1.75}
         aria-hidden="true"
       />
       <dt className="text-sm text-mute">{label}</dt>
-      <dd className="ml-auto text-right font-semibold">
-        {value ?? (
-          <a
-            href={whatsappUrl(infoMessage(car, [label]))}
-            target="_blank"
-            rel="noopener"
-            className="inline-flex items-center gap-1.5 text-wa-dark"
-          >
-            <WhatsAppIcon className="size-4" />
-            <span className="sr-only">{label}: </span>
-            <span className="underline decoration-wa-dark/30 underline-offset-4">Pregúntanos</span>
-            <span className="sr-only"> por WhatsApp</span>
-          </a>
-        )}
-      </dd>
+      <dd className="ml-auto text-right font-semibold">{value}</dd>
     </div>
   );
 }

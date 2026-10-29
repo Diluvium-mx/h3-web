@@ -16,8 +16,8 @@ Ya existen y corren con cada cambio (ver `CLAUDE.md`):
 
 ```bash
 npm run dev
-node scripts/e2e-public.mjs http://localhost:3000   # 26 pruebas del sitio
-node scripts/e2e-admin.mjs http://localhost:3000    # 23 pruebas del panel
+node scripts/e2e-public.mjs http://localhost:3000   # 27 pruebas del sitio
+node scripts/e2e-admin.mjs http://localhost:3000    # 21 pruebas del panel
 ```
 
 Para **ver** el recorrido completo en video, en tamaño iPhone y Android:

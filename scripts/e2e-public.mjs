@@ -16,14 +16,17 @@ const step = (m) => console.log('✔', m);
     // Inicio: estructura de landing (título claro, CTA, quita-miedos, confianza, inventario, vende tu auto)
     await page.goto(B + '/');
     await page.getByRole('heading', { level: 1 }).filter({ hasText: 'Autos seminuevos premium' }).waitFor({ timeout: 30000 });
-    for (const t of ['Precio a la vista', 'Fotos reales de cada auto', 'Respuesta inmediata']) await page.getByText(t).first().waitFor();
+    // Los quita-miedos van en el cierre (y en el hero en pantallas grandes)
+    for (const t of ['Precio a la vista', 'Fotos reales de cada auto', 'Respuesta inmediata']) await page.locator('#contacto').getByText(t).waitFor();
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     if (overflow > 0) throw new Error('scroll horizontal en inicio: ' + overflow + 'px');
     const heroCta = page.locator('a', { hasText: 'Ver inventario' }).first();
     if (!(await heroCta.isVisible())) throw new Error('el botón principal no se ve sin hacer scroll');
     const box = await heroCta.boundingBox();
     if (box.y + box.height > 844) throw new Error('el botón principal queda abajo del primer pantallazo');
-    step('hero: título, botón y quita-miedos en el primer pantallazo');
+    const quick = page.locator('nav[aria-label="Busca por tipo"] a');
+    if ((await quick.count()) < 3) throw new Error('faltan los accesos rápidos por tipo en el hero');
+    step('hero: título, botón y accesos rápidos por tipo en el primer pantallazo');
     // Lo que el dueño pidió quitar (28-oct)
     for (const gone of ['autos disponibles hoy', '¿Cuál es tu presupuesto?', 'Ver del más barato al más caro']) {
       if (await page.getByText(gone).count()) throw new Error('debería haberse quitado: ' + gone);
@@ -31,9 +34,13 @@ const step = (m) => console.log('✔', m);
     if (await page.locator('a[href*="waze"]').count()) throw new Error('debería haberse quitado el botón de Waze');
     if (await page.locator('a[href="/autos?precio=0-300000"]').count()) throw new Error('debería haberse quitado el presupuesto');
     step('sin «N autos disponibles hoy», sin presupuesto y sin Waze');
-    await page.getByText('Autos entregados').first().waitFor();
-    await page.getByText('Números de ejemplo').first().waitFor();
-    step('números de confianza (de ejemplo, solo en desarrollo)');
+    // 29-oct: se quitaron los números de confianza; la franja de marcas lleva logos
+    for (const gone of ['Autos entregados', 'Años de experiencia', 'Tiempo de respuesta']) {
+      if (await page.getByText(gone).count()) throw new Error('debería haberse quitado: ' + gone);
+    }
+    const logos = await page.locator('section[aria-label="Marcas en inventario"] svg').count();
+    if (logos < 10) throw new Error('la franja de marcas debería llevar logos, hay ' + logos);
+    step(`sin números de confianza; franja de marcas con ${logos} logos`);
     await page.getByRole('heading', { name: 'Autos listos para manejar' }).waitFor();
     const sell = page.getByRole('heading', { name: '¿Quieres vender tu auto?' });
     const reviews = page.locator('#diferencia');
@@ -79,16 +86,26 @@ const step = (m) => console.log('✔', m);
     const cb = await cta.boundingBox();
     if (cb.y + cb.height > 844) throw new Error('el botón de WhatsApp queda abajo del primer pantallazo: ' + Math.round(cb.y + cb.height));
     await page.getByText('Te respondemos de inmediato').first().waitFor();
-    const ask = page.locator('a', { hasText: 'Kilometraje: pregúntanos' }).first();
+    // Dato faltante: no aparece en el resumen ni en la ficha; abajo hay un aviso con botón para preguntarlo
+    if (await page.getByText('Pregúntanos').count()) throw new Error('la ficha no debe mostrar «Pregúntanos»');
+    if (await page.locator('section[aria-labelledby=ficha] dt', { hasText: 'Kilometraje' }).count()) throw new Error('el kilometraje sin dato no debe salir en la ficha');
+    const ask = page.locator('section[aria-labelledby=ficha] a', { hasText: 'Preguntar' });
     const askHref = decodeURIComponent(await ask.getAttribute('href'));
     if (!askHref.includes('kilometraje') || !askHref.includes('Ford Mustang GT Premium 2022')) throw new Error('mensaje de dato faltante: ' + askHref);
     const ld = await page.locator('script[type="application/ld+json"]').allTextContents();
     if (!ld.some((t) => t.includes('BreadcrumbList'))) throw new Error('faltan migas de pan para Google');
-    step('detalle: botón y quita-miedos en el primer pantallazo, «Kilometraje: pregúntanos» y migas de pan');
+    step('detalle: botón en el primer pantallazo, sin filas vacías, aviso para preguntar y migas de pan');
     await page.locator('button[aria-label="Ver foto 3 de 10"]').click();
-    await page.getByRole('dialog', { name: 'Galería' }).getByText('3 / 10').waitFor();
+    const dialog = page.getByRole('dialog', { name: 'Galería' });
+    await dialog.getByText('3 / 10').waitFor();
+    const close = dialog.getByRole('button', { name: 'Cerrar galería' });
+    const closeColors = await close.evaluate((e) => [getComputedStyle(e).backgroundColor, getComputedStyle(e).color]);
+    if (closeColors[0] !== 'rgb(255, 255, 255)' || !(await close.innerText()).includes('Cerrar')) throw new Error('el botón Cerrar no es claro: ' + closeColors);
+    await close.click();
+    await dialog.waitFor({ state: 'detached' });
+    await page.locator('button[aria-label="Ver foto 3 de 10"]').click();
     await page.keyboard.press('Escape');
-    await page.getByRole('dialog', { name: 'Galería' }).waitFor({ state: 'detached' });
+    await dialog.waitFor({ state: 'detached' });
     await page.click('button:has-text("Ver las 10 fotos")');
     await page.locator('button[aria-label="Ver foto 10 de 10"]').waitFor();
     step('cuadrícula de fotos: abre la foto tocada y muestra todas');
@@ -107,16 +124,22 @@ const step = (m) => console.log('✔', m);
     if (await page.locator('section[aria-labelledby=destaca]').getByText('Asientos con calefacción y ventilación').count()) throw new Error('«Lo que destaca» repite el equipamiento');
     step('equipamiento: 9 elementos agrupados y sin repetir en «Lo que destaca»');
 
-    // «Tus dudas, resueltas»: contesta con datos reales o pregunta por WhatsApp
+    // 29-oct: sin «Tus dudas»; los documentos confirmados salen como filas de la ficha técnica
     await page.goto(B + '/autos/toyota-land-cruiser-blindada-2014');
-    const dudas = page.locator('#dudas');
-    await dudas.waitFor({ timeout: 30000 });
-    await dudas.getByText('Factura de empresa.').waitFor();
-    await dudas.getByText('Nivel 3 Plus (BS Blindaje).').waitFor();
-    const askServ = dudas.locator('div', { hasText: '¿Tiene sus servicios?' }).locator('a').first();
-    const askMsg = decodeURIComponent(await askServ.getAttribute('href'));
-    if (!askMsg.includes('¿Tiene sus servicios?') || !askMsg.includes('Toyota Land Cruiser')) throw new Error('pregunta sin el auto: ' + askMsg);
-    step('dudas: factura y blindaje contestados; lo que falta pregunta por WhatsApp con el auto');
+    const ficha = page.locator('section[aria-labelledby=ficha]');
+    await ficha.waitFor({ timeout: 30000 });
+    await ficha.locator('div', { hasText: 'Factura' }).getByText('De empresa').waitFor();
+    await ficha.getByText('Nivel 3 Plus (BS Blindaje)').waitFor();
+    if (await page.locator('#dudas').count()) throw new Error('la sección «Tus dudas» debería haberse quitado');
+    if (await ficha.locator('dt', { hasText: 'Servicios' }).count()) throw new Error('servicios sin dato no debe salir');
+    step('ficha: factura y blindaje confirmados como filas; sin «Tus dudas» ni filas vacías');
+
+    // Tarjetas: botón directo de WhatsApp con el auto
+    await page.goto(B + '/autos');
+    const cardWa = page.locator('article').first().locator('a[aria-label^="Escribir por WhatsApp"]');
+    const cardMsg = decodeURIComponent(await cardWa.getAttribute('href', { timeout: 30000 }));
+    if (!cardMsg.includes('Me interesa el')) throw new Error('el WhatsApp de la tarjeta no lleva el auto: ' + cardMsg);
+    step('tarjetas: WhatsApp directo con el auto en el mensaje');
 
     // Detalle + galería
     await page.goto(B + '/autos/bmw-m3-2018');

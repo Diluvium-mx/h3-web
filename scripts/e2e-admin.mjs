@@ -9,7 +9,7 @@ const { chromium } = require("playwright");
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const B = process.argv[2] || 'http://localhost:3000';
 const step = (m) => console.log('✔', m);
-// La prueba cambia la contraseña y los números del inicio: se respalda el archivo y se restaura al final
+// La prueba cambia la contraseña del panel: se respalda el archivo de ajustes y se restaura al final
 const SETTINGS = path.join(ROOT, 'data/settings.local.json');
 const settingsBackup = fs.existsSync(SETTINGS) ? fs.readFileSync(SETTINGS, 'utf8') : null;
 if (settingsBackup) {
@@ -169,27 +169,6 @@ const PASSWORD = process.env.ADMIN_PASSWORD || '12345';
     await page.getByRole('heading', { level: 1 }).filter({ hasText: 'Autos seminuevos premium' }).waitFor({ timeout: 30000 });
     if (await page.getByText('Texto de reseña de prueba automática.').count()) throw new Error('la reseña sigue en el inicio');
     step('reseña eliminada → sale del inicio');
-
-    // Ajustes: números de confianza del inicio
-    await page.goto(B + '/admin/ajustes');
-    await page.getByText('Números de confianza').waitFor({ timeout: 30000 });
-    await page.locator('input[placeholder="500"]').first().fill('321');
-    await page.locator('input[placeholder="Autos entregados"]').first().fill('Prueba E2E entregados');
-    await page.click('button:has-text("Guardar números")');
-    await page.getByText('Guardado. Ya se ven en el inicio.').waitFor({ timeout: 30000 });
-    await page.goto(B + '/');
-    await page.getByText('Prueba E2E entregados').waitFor({ timeout: 30000 });
-    if (await page.getByText('Números de ejemplo').count()) throw new Error('con números guardados no debe decir «de ejemplo»');
-    step('números de confianza guardados → aparecen en el inicio');
-    await page.goto(B + '/admin/ajustes');
-    for (let i = 0; i < 4 && (await page.locator('button[aria-label^="Quitar número"]').count()); i++) {
-      await page.locator('button[aria-label^="Quitar número"]').first().click();
-    }
-    await page.click('button:has-text("Guardar números")');
-    await page.getByText('La sección ya no se muestra').waitFor({ timeout: 30000 });
-    await page.goto(B + '/');
-    await page.getByText('Números de ejemplo').first().waitFor({ timeout: 30000 });
-    step('sin números guardados → vuelven los de ejemplo (solo en desarrollo)');
 
     // Ajustes: cambiar la contraseña cierra las otras sesiones
     const other = await (await browser.newContext()).newPage();
