@@ -2,6 +2,14 @@
 
 Lo más reciente va arriba.
 
+## 31 de octubre de 2026 (noche) — dirección nueva y detalles del celular
+
+- Dirección nueva (C. Pedro C. Colorado 216) y su enlace de Google Maps en todos los botones del mapa.
+- La galería de la ficha asoma la 2ª foto al cargar; sin la línea bajo el encabezado sobre las fotos.
+- Pie de página en celular: dirección en 2 renglones, horario y «Los autos se ven con cita».
+
+Falta: que el dueño lo valide en la vista previa #1; conectar Cloudinary; cambiar la contraseña `12345`.
+
 ## 31 de octubre de 2026 (tarde) — hero fijo, íconos y menos botones de WhatsApp
 
 - Hero: la foto ya no tiembla; se queda fija y la hoja blanca sube encima. Categorías con íconos a dos tonos.

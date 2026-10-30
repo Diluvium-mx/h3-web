@@ -8,7 +8,9 @@ Regla: aquí no se inventa nada. Lo que no está decidido dice **«sin decidir»
 ## 1. Qué es H3
 
 - **Nombre:** H3 Seminuevos. Lema del logo: «Ready to drive».
-- **Ciudad:** Villahermosa, Tabasco, México. Dirección: Av. Paseo Tabasco #315, Col. Municipal.
+- **Ciudad:** Villahermosa, Tabasco, México. Dirección (dato del dueño, 31-oct): **C. Pedro C. Colorado 216,
+  Col. Municipal, 86090 Villahermosa, Tab.** Google Maps: https://maps.app.goo.gl/dqzfUgVbiPhQqCmJ9 (lo usan
+  «Cómo llegar» y los demás botones del mapa). Antes decía Av. Paseo Tabasco #315.
   - **En la página solo se menciona Villahermosa, Tabasco.** No se mencionan ciudades cercanas, ni en
     los textos ni en el SEO (decisión del 27-oct).
 - **Contacto:** WhatsApp y teléfono (993) 246 7572.
@@ -23,7 +25,7 @@ Regla: aquí no se inventa nada. Lo que no está decidido dice **«sin decidir»
   - **No tienen lote ni inventario en la oficina.** Los autos no están ahí: quien se interesa manda mensaje y
     se le **agenda una cita** para ver el auto. Por eso el sitio ya no dice «Ven a conocerlo».
   - Al no tener lote, **sus costos son menores que los de un lote** y eso se refleja en el precio.
-  - La oficina (Av. Paseo Tabasco #315) sí se muestra en «Visítanos», para que se vea que es un negocio real.
+  - La oficina (C. Pedro C. Colorado 216) sí se muestra en «Visítanos», para que se vea que es un negocio real.
 - **Beneficios (dato del dueño, 30-oct), divididos en 2:**
   - **Al comprar un auto:** asesoramiento; autos confiables (ya verificados, validados y probados); papeles
     originales y documentación en regla, con ayuda en el papeleo; precio justo (sin lote, costos menores).
@@ -128,6 +130,10 @@ Acción principal: ver un auto y, ya en su ficha, mandar WhatsApp.
     se ve completa y más grande y las de los lados se alcanzan a ver. Después, la tarjeta «Visítanos».
 11. **Pie de página nuevo:** centrado, con el logo real de H3 (sin el nombre escrito en otra letra), enlaces,
     WhatsApp, teléfono, cómo llegar, redes, dirección y horario.
+- **Celular (31-oct):** el encabezado ya no deja una línea (negra en el inicio, blanca en las fichas) sobre las
+  fotos; en la ficha, la galería se recorre un poco al cargar y asoma la 2ª foto para que se entienda que se
+  desliza; en el pie de página la dirección va en 2 renglones parejos, luego el horario y «Los autos se ven
+  con cita» (en computadora queda igual).
 - **Microanimaciones (31-oct):** línea roja arriba que avanza al bajar, subrayados que se dibujan cuando la
   sección aparece y palabras resaltadas en cursiva roja en los títulos.
 - **Se quitaron (31-oct):** «Un toque y ya estás hablando con nosotros», «Tu próximo auto en 3 pasos», la

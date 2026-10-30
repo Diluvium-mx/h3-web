@@ -68,7 +68,7 @@ function HeaderView({ pathname }: { pathname: string | null }) {
   return (
     <>
       <header
-        className={`fixed inset-x-0 top-0 z-50 transition-[transform,background-color,border-color] duration-500 ease-[var(--ease-out-expo)] ${
+        className={`fixed inset-x-0 top-0 z-50 bg-origin-border transition-[transform,background-color,border-color] duration-500 ease-[var(--ease-out-expo)] ${
           hidden && !open ? "-translate-y-full" : ""
         } ${
           dark

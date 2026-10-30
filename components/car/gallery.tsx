@@ -82,6 +82,36 @@ export function Gallery({ images, alt, carId, sold, sections = {} }: Props) {
 
   const go = useCallback((delta: number) => scrollToIndex(track.current, Math.max(0, Math.min(total - 1, index + delta))), [index, total]);
 
+  // Al cargar, las fotos se recorren un poco y regresan: asoma la 2ª y se entiende que se pueden deslizar
+  // (pedido del dueño, 31-oct, para quien no note la barra ni el contador). Solo una vez y si no han tocado.
+  useEffect(() => {
+    const el = track.current;
+    if (!loaded || !el || total < 2 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const slides = Array.from(el.children).slice(0, 2) as HTMLElement[];
+    let anims: Animation[] = [];
+    const timer = window.setTimeout(() => {
+      if (el.scrollLeft > 4) return; // ya se deslizó
+      anims = slides.map((slide) =>
+        slide.animate(
+          [
+            { transform: "translateX(0)" },
+            { transform: "translateX(-22%)", offset: 0.45 },
+            { transform: "translateX(-22%)", offset: 0.6 },
+            { transform: "translateX(0)" },
+          ],
+          { duration: 1500, easing: "cubic-bezier(0.65, 0, 0.35, 1)" },
+        ),
+      );
+    }, 1200);
+    const stop = () => anims.forEach((a) => a.cancel());
+    el.addEventListener("pointerdown", stop, { once: true });
+    return () => {
+      window.clearTimeout(timer);
+      el.removeEventListener("pointerdown", stop);
+      stop();
+    };
+  }, [loaded, total]);
+
   if (!total) return <div className="skeleton aspect-square w-full lg:aspect-[5/6] lg:rounded-lg" />;
 
   return (

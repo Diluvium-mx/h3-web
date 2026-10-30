@@ -26,6 +26,7 @@ export function LocalBusinessJsonLd() {
         address: {
           "@type": "PostalAddress",
           streetAddress: `${site.address.street}, ${site.address.neighborhood}`,
+          postalCode: site.address.postalCode,
           addressLocality: site.address.city,
           addressRegion: site.address.state,
           addressCountry: site.address.country,

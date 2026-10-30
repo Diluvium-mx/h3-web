@@ -368,8 +368,8 @@ const FAQ: { q: string; a: ReactNode }[] = [
     q: "¿Dónde están?",
     a: (
       <>
-        Nuestra oficina está en {site.address.street}, {site.address.neighborhood}, {site.address.city},{" "}
-        {site.address.state}.{" "}
+        Nuestra oficina está en {site.address.street}, {site.address.neighborhood}, {site.address.postalCode}{" "}
+        {site.address.city}, {site.address.state}.{" "}
         <a href={site.mapsUrl} target="_blank" rel="noopener" className="font-semibold text-fg underline underline-offset-4">
           Abrir en Google Maps
         </a>
@@ -489,7 +489,8 @@ export function Closer({ rating, cars }: { rating: Rating; cars: Car[] }) {
             <p className="font-tech text-[11px] text-dim">Visítanos</p>
             <p className="font-display mt-3 text-[1.9rem] sm:text-4xl">{site.address.street}</p>
             <p className="mt-2 text-mute">
-              {site.address.neighborhood}, {site.address.city}, {site.address.state} · {site.hours}
+              {site.address.neighborhood}, {site.address.postalCode} {site.address.city}, {site.address.state} ·{" "}
+              {site.hours}
             </p>
             <div className="mt-5 flex items-center gap-2">
               {SOCIALS.map(({ href, label, Icon }) => (

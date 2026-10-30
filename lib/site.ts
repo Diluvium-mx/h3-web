@@ -9,15 +9,17 @@ export const site = {
   whatsapp: process.env.NEXT_PUBLIC_WHATSAPP ?? "529932467572",
   phoneDisplay: "(993) 246 7572",
   phoneHref: "tel:+529932467572",
+  // Dirección de la oficina (dato del dueño, 31-oct)
   address: {
-    street: "Av. Paseo Tabasco #315",
+    street: "C. Pedro C. Colorado 216",
     neighborhood: "Col. Municipal",
+    postalCode: "86090",
     city: "Villahermosa",
     state: "Tabasco",
     country: "MX",
   },
-  mapsUrl:
-    "https://www.google.com/maps/search/?api=1&query=Av.+Paseo+Tabasco+315,+Col.+Municipal,+Villahermosa,+Tabasco",
+  // Enlace de Google Maps que dio el dueño (31-oct): lo usan «Cómo llegar» y los demás botones del mapa
+  mapsUrl: "https://maps.app.goo.gl/dqzfUgVbiPhQqCmJ9",
   // Horario de atención (se muestra en el sitio y en Google como datos estructurados)
   hours: "Lun a Sáb 9:00–17:00 · Dom cerrado",
   openingHours: {

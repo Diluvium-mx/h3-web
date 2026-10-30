@@ -91,10 +91,21 @@ export function Footer() {
           ))}
         </div>
 
-        <p className="mt-8 text-sm text-white/55">
-          {site.address.street}, {site.address.neighborhood}, {site.address.city}, {site.address.state}
+        {/* En celular: dirección (en 2 renglones parejos), horario y «Los autos se ven con cita», cada uno en su
+            renglón (pedido del dueño, 31-oct). En computadora queda igual: dirección y luego horario · cita. */}
+        <p className="mt-8 text-sm leading-relaxed text-white/55">
           <span className="block">
-            {site.hours} · Los autos se ven con cita
+            <span className="block sm:inline">
+              {site.address.street}, {site.address.neighborhood},
+            </span>{" "}
+            <span className="block sm:inline">
+              {site.address.postalCode} {site.address.city}, {site.address.state}
+            </span>
+          </span>
+          <span className="block">
+            {site.hours}
+            <span className="hidden sm:inline"> · </span>
+            <span className="block sm:inline">Los autos se ven con cita</span>
           </span>
         </p>
       </div>
