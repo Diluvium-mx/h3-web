@@ -8,7 +8,7 @@ import { usingDefaultPassword } from "@/lib/admin-password";
 import { requireAdmin } from "@/lib/auth";
 import { sortNewest } from "@/lib/cars";
 import { cloudinaryEnabled } from "@/lib/images";
-import { listCars, storageMode } from "@/lib/storage";
+import { getStorageMode, listCars } from "@/lib/storage";
 
 export default function AdminPage() {
   return (
@@ -80,7 +80,7 @@ async function Dashboard() {
           </span>
         </Link>
       )}
-      <StorageBanner mode={storageMode} photos={cloudinaryEnabled} />
+      <StorageBanner mode={getStorageMode()} photos={cloudinaryEnabled} />
       {cars.length === 0 ? (
         <div className="rounded-lg bg-card p-10 text-center ring-1 ring-line">
           <p className="font-display text-2xl">Aún no hay autos</p>

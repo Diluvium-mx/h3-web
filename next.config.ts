@@ -39,6 +39,8 @@ const nextConfig: NextConfig = {
       process.env.URL ||
       "https://www.h3seminuevos.com",
     NEXT_PUBLIC_PREVIEW: preview ? "1" : "",
+    // En Netlify, el panel guarda en Netlify Blobs si no hay Upstash (ver lib/storage.ts)
+    H3_NETLIFY: process.env.NETLIFY === "true" ? "1" : "",
   },
   images: {
     // Las fotos se sirven optimizadas desde Cloudinary (ver lib/image-loader.ts),

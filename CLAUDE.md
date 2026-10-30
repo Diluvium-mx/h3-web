@@ -37,6 +37,12 @@
    En celular (ver `PRUEBAS-EN-CELULAR.md`): `npm run movil` para un teléfono real en el mismo Wi-Fi y
    `node scripts/recorrido-movil.mjs http://localhost:3000` para grabar el recorrido en video.
 
+   Panel publicado en Netlify (Netlify Blobs; cambia un precio y lo regresa):
+
+   ```bash
+   node scripts/e2e-panel-netlify.mjs https://deploy-preview-1--h3-seminuevos.netlify.app
+   ```
+
    Fotos en Cloudinary (con datos de prueba, nunca los reales):
 
    ```bash

@@ -31,11 +31,8 @@ function sameBytes(a: Uint8Array, b: Uint8Array) {
 }
 
 async function storedHash() {
-  try {
-    return await getSetting<string>(KEY);
-  } catch {
-    return null;
-  }
+  // Si el almacén no responde, se marca el error: nunca se vuelve a la contraseña inicial por una falla
+  return getSetting<string>(KEY);
 }
 
 // Huella de la contraseña guardada (sin revelarla); va dentro de la sesión

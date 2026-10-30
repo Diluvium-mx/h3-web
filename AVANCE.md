@@ -2,6 +2,14 @@
 
 Lo más reciente va arriba.
 
+## 30 de octubre de 2026 (noche) — el panel funciona en las 2 vistas previas
+
+- El panel ya no pide Upstash: en Netlify guarda en Netlify Blobs, incluido en el plan gratis.
+- Las 2 versiones comparten inventario y contraseña (`12345` hasta que se cambie en Ajustes).
+- Prueba nueva `scripts/e2e-panel-netlify.mjs`: entra, cambia un precio, revisa la ficha y lo regresa.
+
+Falta: conectar Cloudinary para subir fotos nuevas; cambiar la contraseña `12345`.
+
 ## 30 de octubre de 2026 (cierre) — las 2 versiones listas
 
 - Versión 2 (esta rama): https://deploy-preview-1--h3-seminuevos.netlify.app

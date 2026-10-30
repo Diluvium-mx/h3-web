@@ -4,7 +4,7 @@ import { ShopifyImport } from "@/components/admin/shopify-import";
 import { StorageBanner } from "@/components/admin/storage-banner";
 import { requireAdmin } from "@/lib/auth";
 import { cloudinaryEnabled } from "@/lib/images";
-import { storageMode } from "@/lib/storage";
+import { getStorageMode } from "@/lib/storage";
 
 export default function ImportPage() {
   return (
@@ -20,7 +20,7 @@ async function Import() {
   await requireAdmin();
   return (
     <>
-      <StorageBanner mode={storageMode} photos={cloudinaryEnabled} />
+      <StorageBanner mode={getStorageMode()} photos={cloudinaryEnabled} />
       <ShopifyImport defaultStore="https://www.h3seminuevos.com" />
     </>
   );

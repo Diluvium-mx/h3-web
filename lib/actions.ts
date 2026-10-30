@@ -18,7 +18,8 @@ import {
 import { requireAdmin } from "./auth";
 import { isEquipmentKey, isPhotoSection, type PhotoSection } from "./equipment";
 import { REVIEW_SOURCES, type Review } from "./reviews";
-import { createSessionToken, sessionConfigured, SESSION_COOKIE, SESSION_DAYS } from "./session";
+import { createSessionToken, SESSION_COOKIE, SESSION_DAYS } from "./session";
+import { sessionSecret } from "./session-secret";
 import { passwordVersion, setAdminPassword, verifyAdminPassword } from "./admin-password";
 import {
   clearLoginFailures,
@@ -46,8 +47,8 @@ export async function loginAction(_prev: { error?: string } | undefined, formDat
   if ((await loginFailures(ip)) >= MAX_LOGIN_FAILURES) {
     return { error: "Demasiados intentos. Espera 15 minutos e inténtalo de nuevo." };
   }
-  if (!sessionConfigured()) {
-    return { error: "Para usar el panel publicado hay que conectar Upstash (ver README, etapa 2)." };
+  if (!(await sessionSecret())) {
+    return { error: "Este hosting no tiene dónde guardar el panel: conecta Upstash (ver README, etapa 2)." };
   }
   const password = String(formData.get("password") ?? "");
   if (!(await verifyAdminPassword(password))) {
@@ -61,7 +62,9 @@ export async function loginAction(_prev: { error?: string } | undefined, formDat
 }
 
 async function startSession() {
-  (await cookies()).set(SESSION_COOKIE, await createSessionToken(await passwordVersion()), {
+  const key = await sessionSecret();
+  if (!key) throw new Error("Este hosting no tiene dónde guardar el panel: conecta Upstash (ver README).");
+  (await cookies()).set(SESSION_COOKIE, await createSessionToken(await passwordVersion(), key), {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
