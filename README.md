@@ -129,6 +129,13 @@ hasta la etapa 2.
 
 ### Enlace de vista previa (rama `desarrollo`, 0 créditos)
 
+**Enlace actual (30-oct): https://deploy-preview-1--h3-seminuevos.netlify.app**. Sale de la solicitud de
+cambios [Diluvium-mx/h3-web#1](https://github.com/Diluvium-mx/h3-web/pull/1) (`desarrollo` → `main`). Netlify la
+reconstruye sola con cada cambio que se sube a `desarrollo`, sin gastar créditos. **No fusionarla** hasta que el
+dueño diga «publica»: al fusionarla se publica `main` (15 créditos).
+
+Otra forma, sin solicitud de cambios, es activar las publicaciones de la rama:
+
 Sirve para ver los cambios desde cualquier celular, en cualquier parte, y para mandárselo al dueño. Se
 actualiza solo cada vez que se suben cambios a `desarrollo`. Según la documentación de Netlify, las
 publicaciones de ramas («branch deploys») **no gastan créditos**; solo las de producción (`main`) cuestan 15.

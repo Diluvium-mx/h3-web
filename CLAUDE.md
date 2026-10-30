@@ -49,3 +49,5 @@
    fotos siempre desde Cloudinary (nunca por el hosting).
 9. **Ramas:** trabaja y sube en la rama `desarrollo`. Netlify publica `main`, y cada vez gasta 15 de 300
    créditos al mes. Pasa los cambios a `main` solo cuando el dueño pida publicar.
+   La vista previa (0 créditos) sale de la solicitud de cambios #1 (`desarrollo` → `main`):
+   https://deploy-preview-1--h3-seminuevos.netlify.app. No la fusiones sin que el dueño diga «publica».

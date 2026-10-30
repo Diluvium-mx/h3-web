@@ -2,6 +2,15 @@
 
 Lo más reciente va arriba.
 
+## 30 de octubre de 2026 (tarde) — sitio en Netlify, público y con vista previa
+
+- Netlify conectado: el proyecto se llama `h3-seminuevos` y ya es público (antes pedía iniciar sesión).
+- La vista previa con el diseño nuevo sale de la solicitud de cambios #1 y se actualiza sola, sin créditos:
+  https://deploy-preview-1--h3-seminuevos.netlify.app. Se comprobó desde fuera: páginas, fotos, WhatsApp y
+  `noindex`.
+
+Falta: que el dueño la vea y diga qué ajustar; fusionar la solicitud #1 solo cuando diga «publica».
+
 ## 30 de octubre de 2026 — enlace de vista previa para cualquier celular
 
 - Se eligió la vista previa de la rama `desarrollo` en Netlify: enlace https fijo que se actualiza solo
