@@ -30,11 +30,18 @@
    node scripts/e2e-admin.mjs http://localhost:3000
    ```
 
-   La prueba del panel usa la contraseña de desarrollo local y modifica `data/cars.local.json` y
-   `data/reviews.local.json`; los dos están ignorados por git.
+   La prueba del panel usa la contraseña inicial `12345` (o `ADMIN_PASSWORD`) y modifica
+   `data/cars.local.json`, `data/reviews.local.json` y `data/settings.local.json` (este último lo respalda y
+   lo restaura al terminar); los tres están ignorados por git.
 
    En celular (ver `PRUEBAS-EN-CELULAR.md`): `npm run movil` para un teléfono real en el mismo Wi-Fi y
    `node scripts/recorrido-movil.mjs http://localhost:3000` para grabar el recorrido en video.
+
+   Panel publicado en Netlify (Netlify Blobs; cambia un precio y lo regresa):
+
+   ```bash
+   node scripts/e2e-panel-netlify.mjs https://deploy-preview-1--h3-seminuevos.netlify.app
+   ```
 
    Fotos en Cloudinary (con datos de prueba, nunca los reales):
 
@@ -48,3 +55,8 @@
    fotos siempre desde Cloudinary (nunca por el hosting).
 9. **Ramas:** trabaja y sube en la rama `desarrollo`. Netlify publica `main`, y cada vez gasta 15 de 300
    créditos al mes. Pasa los cambios a `main` solo cuando el dueño pida publicar.
+   La vista previa (0 créditos) sale de la solicitud de cambios #1 (`desarrollo` → `main`):
+   https://deploy-preview-1--h3-seminuevos.netlify.app. No la fusiones sin que el dueño diga «publica».
+   **Hay 2 versiones del diseño (30-oct):** la versión 2 (cambios del dueño) es `desarrollo` → vista previa #1;
+   la versión 1 (skill `/scroll-craft`) es la rama `version-scrollcraft` → solicitud #2 →
+   https://deploy-preview-2--h3-seminuevos.netlify.app. Los cambios de contenido van en las dos ramas.

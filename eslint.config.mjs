@@ -14,6 +14,8 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Archivos que genera la compilación local de Netlify
     ".netlify/**",
+    // Skill de terceros (/scroll-craft): se usa tal cual
+    ".claude/**",
   ]),
 ]);
 

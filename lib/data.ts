@@ -2,23 +2,28 @@ import "server-only";
 import { cacheLife, cacheTag } from "next/cache";
 import { isPublic, sortNewest, type Car } from "./cars";
 import { sortReviews } from "./reviews";
-import { listCars, listReviews } from "./storage";
+import { readCars, readReviews } from "./storage";
 
 // Lecturas cacheadas para el sitio público. El panel invalida la etiqueta
 // "cars" cada vez que se guarda un cambio, así que el sitio se actualiza al instante.
+// Si el almacén no se pudo leer (al compilar en Netlify, donde Netlify Blobs aún no existe), se usa el
+// inventario base solo por unos minutos: ya publicado, el sitio vuelve a leer y muestra los datos guardados.
 export async function getAllCars(): Promise<Car[]> {
   "use cache";
   cacheTag("cars");
-  cacheLife("days");
-  const cars = await listCars();
+  const { cars, live } = await readCars();
+  if (live) cacheLife("days");
+  else cacheLife("minutes");
   return cars.sort(sortNewest);
 }
 
 export async function getReviews() {
   "use cache";
   cacheTag("reviews");
-  cacheLife("days");
-  return (await listReviews()).sort(sortReviews);
+  const { reviews, live } = await readReviews();
+  if (live) cacheLife("days");
+  else cacheLife("minutes");
+  return reviews.sort(sortReviews);
 }
 
 export async function getPublicCars() {

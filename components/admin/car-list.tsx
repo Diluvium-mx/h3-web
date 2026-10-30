@@ -9,7 +9,7 @@ import { STATUS_LABEL, STATUSES, carName, formatKm, formatPrice, type Car, type 
 
 const STATUS_STYLE: Record<CarStatus, string> = {
   disponible: "bg-wa/15 text-wa-dark",
-  apartado: "bg-volt text-night",
+  apartado: "bg-night text-white",
   vendido: "bg-fg/10 text-mute",
 };
 
@@ -38,7 +38,7 @@ export function AdminCarList({ cars }: { cars: Car[] }) {
             key={s}
             type="button"
             onClick={() => setTab(s)}
-            className={`h-10 shrink-0 rounded-full border px-4 text-sm font-medium transition-colors ${
+            className={`h-10 shrink-0 rounded-md border px-4 text-sm font-medium transition-colors ${
               tab === s ? "border-night bg-night text-white" : "border-line text-fg/80"
             }`}
           >
@@ -54,11 +54,11 @@ export function AdminCarList({ cars }: { cars: Car[] }) {
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Buscar por marca, modelo o año"
-          className="h-12 w-full rounded-2xl border border-line bg-card pr-4 pl-11 focus:border-brand focus:outline-none"
+          className="h-12 w-full rounded-lg border border-line bg-card pr-4 pl-11 focus:border-fg/50 focus:outline-none"
         />
       </label>
       {error && (
-        <p className="mb-4 rounded-xl bg-brand/15 px-4 py-3 text-sm text-brand-hi" role="alert">
+        <p className="mb-4 rounded-md border-l-2 border-brand bg-brand-soft px-4 py-3 text-sm text-brand-hi" role="alert">
           {error}
         </p>
       )}
@@ -86,14 +86,14 @@ function Row({ car, onError }: { car: Car; onError: (e: string) => void }) {
 
   return (
     <li
-      className={`relative flex gap-3 rounded-2xl border border-line bg-card p-3 transition-opacity ${pending ? "opacity-60" : ""}`}
+      className={`relative flex gap-3 rounded-lg border border-line bg-card p-3 transition-opacity ${pending ? "opacity-60" : ""}`}
     >
-      <Link href={`/admin/autos/${car.id}`} className="relative size-20 shrink-0 overflow-hidden rounded-xl bg-soft sm:size-24">
+      <Link href={`/admin/autos/${car.id}`} className="relative size-20 shrink-0 overflow-hidden rounded-md bg-soft sm:size-24">
         {car.images[0] && (
           <Image src={car.images[0]} alt="" fill sizes="96px" quality={70} className="object-cover" />
         )}
         {car.featured && (
-          <span className="absolute top-1 left-1 grid size-6 place-items-center rounded-full bg-volt text-night">
+          <span className="absolute top-1 left-1 grid size-6 place-items-center rounded-md bg-night text-white">
             <Star className="size-3.5 fill-current" />
           </span>
         )}
@@ -116,7 +116,7 @@ function Row({ car, onError }: { car: Car; onError: (e: string) => void }) {
             <select
               value={car.status}
               onChange={(e) => run(() => updateCarAction(car.id, { status: e.target.value as CarStatus }))}
-              className={`h-9 appearance-none rounded-full border-0 px-3 pr-7 text-xs font-semibold ${STATUS_STYLE[car.status]}`}
+              className={`h-9 appearance-none rounded-md border-0 px-3 pr-7 text-xs font-semibold ${STATUS_STYLE[car.status]}`}
             >
               {STATUSES.map((s) => (
                 <option key={s} value={s} className="bg-card text-fg">
@@ -129,8 +129,8 @@ function Row({ car, onError }: { car: Car; onError: (e: string) => void }) {
           <button
             type="button"
             onClick={() => run(() => updateCarAction(car.id, { featured: !car.featured }))}
-            className={`inline-flex h-9 items-center gap-1 rounded-full border px-3 text-xs font-medium ${
-              car.featured ? "border-volt bg-volt text-night" : "border-line text-mute"
+            className={`inline-flex h-9 items-center gap-1 rounded-md border px-3 text-xs font-medium ${
+              car.featured ? "border-night bg-night text-white" : "border-line text-mute"
             }`}
             aria-pressed={car.featured}
           >
@@ -141,14 +141,14 @@ function Row({ car, onError }: { car: Car; onError: (e: string) => void }) {
             <Link
               href={`/autos/${car.slug}`}
               target="_blank"
-              className="grid size-9 place-items-center rounded-full text-mute hover:bg-soft hover:text-fg"
+              className="grid size-9 place-items-center rounded-md text-mute hover:bg-soft hover:text-fg"
               aria-label="Ver en el sitio"
             >
               <ExternalLink className="size-4" />
             </Link>
             <Link
               href={`/admin/autos/${car.id}`}
-              className="grid size-9 place-items-center rounded-full text-mute hover:bg-soft hover:text-fg"
+              className="grid size-9 place-items-center rounded-md text-mute hover:bg-soft hover:text-fg"
               aria-label="Editar"
             >
               <Pencil className="size-4" />
@@ -156,7 +156,7 @@ function Row({ car, onError }: { car: Car; onError: (e: string) => void }) {
             <button
               type="button"
               onClick={() => setConfirm(true)}
-              className="grid size-9 place-items-center rounded-full text-mute hover:bg-brand/15 hover:text-brand-hi"
+              className="grid size-9 place-items-center rounded-md text-mute hover:bg-brand/15 hover:text-brand-hi"
               aria-label="Eliminar"
             >
               <Trash2 className="size-4" />
@@ -165,12 +165,12 @@ function Row({ car, onError }: { car: Car; onError: (e: string) => void }) {
         </div>
       </div>
       {confirm && (
-        <div className="absolute inset-0 z-10 flex items-center justify-between gap-3 rounded-2xl bg-soft/95 px-4 backdrop-blur-sm animate-fade">
+        <div className="absolute inset-0 z-10 flex items-center justify-between gap-3 rounded-lg bg-soft/95 px-4 backdrop-blur-sm animate-fade">
           <p className="text-sm">
             ¿Eliminar <b>{car.model}</b> y sus fotos?
           </p>
           <div className="flex gap-2">
-            <button type="button" onClick={() => setConfirm(false)} className="h-10 rounded-full border border-line px-4 text-sm">
+            <button type="button" onClick={() => setConfirm(false)} className="h-10 rounded-md border border-line px-4 text-sm">
               No
             </button>
             <button
@@ -179,7 +179,7 @@ function Row({ car, onError }: { car: Car; onError: (e: string) => void }) {
                 setConfirm(false);
                 run(() => deleteCarAction(car.id));
               }}
-              className="h-10 rounded-full bg-brand px-4 text-sm font-semibold text-white"
+              className="h-10 rounded-md bg-brand px-4 text-sm font-semibold text-white"
             >
               Eliminar
             </button>

@@ -11,20 +11,22 @@ import {
   Clock,
   Cog,
   DoorOpen,
+  FileCheck,
+  FileText,
   Fuel,
   Gauge,
   ListChecks,
   MapPin,
   MessageCircle,
-  MessageCircleQuestion,
-  Navigation,
   PlayCircle,
   Send,
   Palette,
   Phone,
   Shield,
   ShieldCheck,
+  Users,
   Waypoints,
+  Wrench,
   Zap,
 } from "lucide-react";
 import { Gallery, PhotoGrid } from "@/components/car/gallery";
@@ -47,7 +49,6 @@ import {
   MISSING_INFO_TEXT,
   missingSpecs,
   parseVideo,
-  questionMessage,
   slugify,
   visitMessage,
   type Car,
@@ -122,26 +123,33 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
   const rating = reviewSummary(reviews);
   const sameType = all.filter((c) => c.status !== "vendido" && c.body === car.body).length;
 
-  // Resumen: los datos que más pregunta la gente. Si falta uno, se invita a preguntar por WhatsApp.
+  // Resumen: los datos que más pregunta la gente. Lo que no se tiene no se muestra (pedido del dueño, 29-oct);
+  // abajo de la ficha hay un aviso con botón de WhatsApp para preguntarlo.
   const summary: Spec[] = [
-    { Icon: Calendar, label: "Año", value: String(car.year), tone: "volt" },
-    { Icon: Gauge, label: "Kilometraje", value: car.mileage != null ? formatKm(car.mileage) : undefined, tone: "brand" },
-    { Icon: Cog, label: "Transmisión", value: car.transmission, tone: "night" },
-    { Icon: Fuel, label: "Combustible", value: car.fuel, tone: "brand" },
+    { Icon: Calendar, label: "Año", value: String(car.year) },
+    { Icon: Gauge, label: "Kilometraje", value: car.mileage != null ? formatKm(car.mileage) : undefined },
+    { Icon: Cog, label: "Transmisión", value: car.transmission },
+    { Icon: Fuel, label: "Combustible", value: car.fuel },
   ];
-  const extras = [
-    car.drivetrain && { Icon: Waypoints, label: "Tracción", value: car.drivetrain },
-    car.color && { Icon: Palette, label: "Color", value: car.color },
-    car.doors && { Icon: DoorOpen, label: "Puertas", value: String(car.doors) },
-    car.armored && { Icon: Shield, label: "Blindaje", value: "Sí" },
-    { Icon: MapPin, label: "Ubicación", value: `${site.address.city}, ${site.address.state}`, wide: true },
-  ].filter(Boolean) as Spec[];
+  // Documentos e historial: solo lo que el dueño confirmó en el panel
+  const history: Spec[] = [
+    { Icon: Users, label: "Dueños", value: car.ownerCount ? (car.ownerCount === 1 ? "Único dueño" : `${car.ownerCount} dueños`) : undefined },
+    { Icon: FileText, label: "Factura", value: car.invoice },
+    { Icon: Wrench, label: "Servicios", value: car.serviceHistory },
+    { Icon: FileCheck, label: "Papeles", value: car.papersInOrder ? "En regla" : undefined },
+  ];
   const details: Spec[] = [
     ...summary,
     { Icon: Zap, label: "Motor", value: car.engine },
     { Icon: CarIcon, label: "Tipo", value: car.body },
-    ...extras,
-  ];
+    { Icon: Waypoints, label: "Tracción", value: car.drivetrain },
+    { Icon: Palette, label: "Color", value: car.color },
+    { Icon: DoorOpen, label: "Puertas", value: car.doors ? String(car.doors) : undefined },
+    { Icon: Shield, label: "Blindaje", value: car.armored ? (car.armorLevel ?? "Sí") : undefined },
+    ...history,
+    { Icon: MapPin, label: "Ubicación", value: `${site.address.city}, ${site.address.state}` },
+  ].filter((spec) => spec.value);
+  const quick = summary.slice(1).filter((spec) => spec.value);
   const missing = missingSpecs(car);
   const video = parseVideo(car.video);
   const equipment = equipmentByGroup(car.equipment);
@@ -160,7 +168,7 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
       <div className="mx-auto max-w-7xl lg:px-6 lg:pt-24">
         <nav aria-label="Migas de pan" className="hidden items-center gap-2 pb-5 text-sm text-mute lg:flex">
           <Link href="/autos" className="inline-flex items-center gap-1 hover:text-fg">
-            <ChevronLeft className="size-4" /> Catálogo
+            <ChevronLeft className="size-4" /> Inventario
           </Link>
           <span>/</span>
           <span className="text-fg/80">{carTitle(car)}</span>
@@ -171,7 +179,7 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
             <Gallery images={car.images} alt={carTitle(car)} carId={car.id} sold={sold} sections={car.photoSections} />
             <Link
               href="/autos"
-              className="absolute top-20 left-4 grid size-11 place-items-center rounded-full bg-card/90 shadow-md backdrop-blur-md active:scale-95 lg:hidden"
+              className="absolute top-20 left-4 grid size-11 place-items-center rounded-md bg-card/90 shadow-md backdrop-blur-md active:scale-95 lg:hidden"
               aria-label="Volver al catálogo"
             >
               <ChevronLeft className="size-6" />
@@ -179,73 +187,85 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
           </div>
 
           {/* Panel de información: todo lo necesario para decidir, con el botón en el primer pantallazo */}
-          <div className="relative -mt-6 min-w-0 rounded-t-[2rem] bg-paper px-4 pt-6 sm:px-6 lg:sticky lg:top-24 lg:mt-0 lg:rounded-3xl lg:border lg:border-line lg:bg-card lg:p-8">
+          <div className="relative -mt-4 min-w-0 rounded-t-xl bg-paper px-4 pt-6 sm:px-6 lg:sticky lg:top-24 lg:mt-0 lg:rounded-lg lg:bg-card lg:p-8 lg:ring-1 lg:ring-line">
             <div className="stagger">
-              <div className="flex flex-wrap items-center gap-2">
-                <p className="font-tech text-xs text-brand-hi">
+              <div className="flex flex-wrap items-center gap-2.5">
+                <p className="font-tech flex items-center gap-3 text-[11px] text-dim">
+                  <span className="draw-line h-px w-6 rule-accent" />
                   {car.year} · {car.brand}
                 </p>
                 <StatusBadge status={car.status} />
                 {car.armored && (
-                  <span className="font-tech rounded-full bg-fg/10 px-2.5 py-1 text-[10px]">Blindado</span>
+                  <span className="font-tech inline-flex items-center gap-1 rounded-sm border border-fg/20 px-2 py-1 text-[10px]">
+                    <Shield className="size-3 text-brand" aria-hidden="true" /> Blindado
+                  </span>
                 )}
               </div>
-              <h1 className="font-display mt-2 text-[2.4rem] leading-[0.92] sm:text-5xl" style={vars({ "--i": 1 })}>
+              <h1 className="font-display mt-3 text-[2.4rem] leading-[0.98] sm:text-5xl" style={vars({ "--i": 1 })}>
                 {car.model}
-                {car.version && <span className="mt-1.5 block text-lg text-fg/60 sm:text-2xl">{car.version}</span>}
+                {car.version && (
+                  <span className="mt-2 block font-sans text-lg font-normal tracking-normal text-mute sm:text-xl">
+                    {car.version}
+                  </span>
+                )}
               </h1>
               <p
-                className={`mt-3 text-[2.1rem] font-bold tracking-tight sm:text-4xl ${sold ? "text-mute line-through" : ""}`}
+                className={`font-display mt-4 text-[2.2rem] leading-none sm:text-[2.6rem] ${sold ? "text-mute line-through" : ""}`}
                 style={vars({ "--i": 2 })}
               >
                 {formatPrice(car.price)}
-                <span className="ml-2 align-middle text-sm font-medium text-dim">MXN</span>
+                <span className="font-tech ml-2 align-middle text-[10px] text-dim">MXN</span>
               </p>
             </div>
 
-            {/* Resumen en una línea; si falta un dato, se pregunta con un toque */}
-            <ul className="mt-3 flex flex-wrap gap-1.5" aria-label="Resumen del auto">
-              {/* El año ya va arriba del título */}
-              {summary.slice(1).map((spec) => (
-                <QuickChip key={spec.label} spec={spec} car={car} />
-              ))}
-              {equipmentCount > 0 && (
-                <li>
-                  <a
-                    href="#equipamiento"
-                    className="inline-flex h-9 items-center gap-1.5 rounded-full bg-volt px-3 text-sm font-semibold text-night active:scale-95"
-                  >
-                    <ListChecks className="size-4" /> Equipamiento ({equipmentCount})
+            {/* Resumen: los datos que más se preguntan; si falta uno, se pregunta con un toque */}
+            {quick.length > 0 && (
+              <ul
+                className={`mt-6 grid divide-x divide-line border-y border-line ${quick.length === 3 ? "grid-cols-3" : "grid-cols-2"}`}
+                aria-label="Resumen del auto"
+              >
+                {/* El año ya va arriba del título */}
+                {quick.map((spec) => (
+                  <QuickSpec key={spec.label} spec={spec} />
+                ))}
+              </ul>
+            )}
+            {(equipmentCount > 0 || video) && (
+              <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-sm font-semibold">
+                {equipmentCount > 0 && (
+                  <a href="#equipamiento" className="group inline-flex items-center gap-1.5 py-1">
+                    <ListChecks className="size-4 text-brand" />
+                    <span className="underline decoration-line underline-offset-4 transition-colors group-hover:decoration-fg">
+                      Equipamiento ({equipmentCount})
+                    </span>
                   </a>
-                </li>
-              )}
-              {video && (
-                <li>
-                  <a
-                    href="#video"
-                    className="inline-flex h-9 items-center gap-1.5 rounded-full bg-night px-3 text-sm font-semibold text-white active:scale-95"
-                  >
-                    <PlayCircle className="size-4 text-volt" /> Ver video
+                )}
+                {video && (
+                  <a href="#video" className="group inline-flex items-center gap-1.5 py-1">
+                    <PlayCircle className="size-4 text-brand" />
+                    <span className="underline decoration-line underline-offset-4 transition-colors group-hover:decoration-fg">
+                      Ver video
+                    </span>
                   </a>
-                </li>
-              )}
-            </ul>
+                )}
+              </div>
+            )}
 
-            <div className="mt-5 grid gap-3">
+            <div className="mt-6 grid gap-3">
               <a
                 id="cta-principal"
                 href={carWhatsApp(car)}
                 target="_blank"
                 rel="noopener"
-                className="btn-shine group inline-flex h-14 items-center justify-center gap-3 rounded-full bg-wa px-6 text-base font-bold text-night shadow-[0_14px_40px_-12px_rgb(37_211_102/0.7)] transition-transform active:scale-[0.97]"
+                className="btn btn-wa btn-shine group h-14 text-base"
               >
                 <WhatsAppIcon className="size-6 transition-transform duration-500 group-hover:-rotate-12" />
                 {ctaLabel(car)}
               </a>
-              <ul className="flex flex-wrap justify-center gap-x-3 gap-y-1 text-xs text-mute">
+              <ul className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-mute">
                 {FUDS.map((f) => (
                   <li key={f} className="flex items-center gap-1">
-                    <Check className="size-3.5 text-wa-dark" strokeWidth={3} aria-hidden="true" />
+                    <Check className="size-3.5 text-ok" strokeWidth={2.5} aria-hidden="true" />
                     {f}
                   </li>
                 ))}
@@ -256,69 +276,70 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
                     href={whatsappUrl(visitMessage(car))}
                     target="_blank"
                     rel="noopener"
-                    className="inline-flex h-12 items-center justify-center gap-1.5 rounded-full border border-line bg-soft text-sm font-semibold transition-colors hover:border-fg/30"
+                    className="inline-flex h-12 items-center justify-center gap-1.5 rounded-md border border-line bg-card text-sm font-semibold transition-colors hover:border-fg/40"
                   >
-                    <CalendarCheck className="size-4 text-brand-hi" /> Visita
+                    <CalendarCheck className="size-4" /> Cita
                   </a>
                 )}
                 <a
                   href={site.phoneHref}
-                  className="inline-flex h-12 items-center justify-center gap-1.5 rounded-full border border-line bg-soft text-sm font-semibold transition-colors hover:border-fg/30"
+                  className="inline-flex h-12 items-center justify-center gap-1.5 rounded-md border border-line bg-card text-sm font-semibold transition-colors hover:border-fg/40"
                 >
-                  <Phone className="size-4 text-brand-hi" /> Llamar
+                  <Phone className="size-4" /> Llamar
                 </a>
                 <ShareButton title={carTitle(car)} url={carUrl(car)} />
               </div>
             </div>
 
             {/* Confianza: lo que es cierto de este auto y del negocio */}
-            <ul className="mt-6 grid gap-3 rounded-2xl bg-card p-4 text-sm ring-1 ring-line lg:bg-paper">
-              <li className="flex gap-3">
-                <ShieldCheck className="mt-0.5 size-5 shrink-0 text-wa-dark" />
+            <ul className="mt-6 divide-y divide-line border-t border-line text-sm">
+              <li className="flex gap-3 py-3.5">
+                <ShieldCheck className="mt-0.5 size-[1.15rem] shrink-0 text-brand" />
                 <span>
-                  <b>Auto verificado.</b> <span className="text-mute">Fotos reales de este auto y precio a la vista.</span>
+                  <b>Verificado y probado.</b>{" "}
+                  <span className="text-mute">Papeles originales, documentación en regla y fotos reales de este auto.</span>
                 </span>
               </li>
               {rating.count > 0 && (
                 <li>
-                  <Link href="/#resenas" className="flex gap-3">
+                  <Link href="/#resenas" className="flex gap-3 py-3.5">
                     <span className="mt-0.5 shrink-0">
                       <Stars value={rating.avg} className="size-3.5" />
                     </span>
                     <span>
                       <b>{rating.avg.toFixed(1)} de 5</b>{" "}
-                      <span className="text-mute underline">
+                      <span className="text-mute underline underline-offset-4">
                         en {rating.count} {rating.count === 1 ? "reseña" : "reseñas"} de clientes
                       </span>
                     </span>
                   </Link>
                 </li>
               )}
+              <li>
+                <a href={shareToSomeone} target="_blank" rel="noopener" className="flex gap-3 py-3.5">
+                  <Send className="mt-0.5 size-[1.15rem] shrink-0 text-brand" />
+                  <span>
+                    <b>¿Lo decides con alguien más?</b>{" "}
+                    <span className="text-mute underline underline-offset-4">Mándaselo por WhatsApp</span>
+                  </span>
+                </a>
+              </li>
               {!sold && (
                 <li>
-                  <a href="#dudas" className="flex gap-3">
-                    <MessageCircleQuestion className="mt-0.5 size-5 shrink-0 text-brand" />
+                  <a href={whatsappUrl(visitMessage(car))} target="_blank" rel="noopener" className="flex gap-3 py-3.5">
+                    <CalendarCheck className="mt-0.5 size-[1.15rem] shrink-0 text-brand" />
                     <span>
-                      <b>¿Dudas?</b>{" "}
-                      <span className="text-mute underline">Dueños, factura, servicios y más, aquí mismo</span>
+                      <b>Míralo con cita.</b>{" "}
+                      <span className="text-mute underline underline-offset-4">Agéndala por WhatsApp</span>
                     </span>
                   </a>
                 </li>
               )}
-              <li>
-                <a href={shareToSomeone} target="_blank" rel="noopener" className="flex gap-3">
-                  <Send className="mt-0.5 size-5 shrink-0 text-wa-dark" />
-                  <span>
-                    <b>¿Lo decides con alguien más?</b>{" "}
-                    <span className="text-mute underline">Mándaselo por WhatsApp</span>
-                  </span>
-                </a>
-              </li>
-              <li className="flex gap-3">
-                <MapPin className="mt-0.5 size-5 shrink-0 text-brand" />
+              <li className="flex gap-3 py-3.5">
+                <MapPin className="mt-0.5 size-[1.15rem] shrink-0 text-brand" />
                 <span>
-                  <b>Míralo en persona:</b>{" "}
-                  <a href={site.mapsUrl} target="_blank" rel="noopener" className="text-mute underline">
+                  <b>Oficina:</b>{" "}
+                  <a href={site.mapsUrl} target="_blank" rel="noopener" className="text-mute underline underline-offset-4">
                     {site.address.street}, {site.address.city}
                   </a>
                   <span className="block text-mute">{site.hours}</span>
@@ -331,14 +352,14 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
         <div className="px-4 sm:px-6 lg:grid lg:grid-cols-[1.25fr_1fr] lg:gap-10 lg:px-0">
           <div className="min-w-0">
             {car.images.length > 1 && (
-              <section className="mt-12 lg:hidden" aria-labelledby="fotos">
-                <h2 id="fotos" className="font-display text-3xl">
-                  {car.images.length} fotos <span className="text-brand">reales</span>
-                </h2>
+              <section className="mt-14 lg:hidden" aria-labelledby="fotos">
+                <SectionTitle id="fotos" eyebrow="Galería">
+                  {car.images.length} fotos reales
+                </SectionTitle>
                 <p className="mt-1 text-sm text-mute">
                   Todas son de este auto.{" "}
                   {car.photoSections && Object.keys(car.photoSections).length > 0
-                    ? "Elige exterior, interior o motor, y toca una para verla completa."
+                    ? "Elige exterior o interior y toca una para verla completa."
                     : "Toca una para verla completa."}
                 </p>
                 <div className="mt-5">
@@ -348,10 +369,10 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
             )}
 
             {video && (
-              <section id="video" className="mt-12 scroll-mt-24" aria-labelledby="video-title">
-                <h2 id="video-title" className="font-display text-3xl">
-                  Míralo en <span className="text-brand">video</span>
-                </h2>
+              <section id="video" className="mt-14 scroll-mt-24" aria-labelledby="video-title">
+                <SectionTitle id="video-title" eyebrow="Video">
+                  Míralo en video
+                </SectionTitle>
                 <div className="mt-5">
                   {video.kind === "youtube" ? (
                     <YouTubeVideo
@@ -365,9 +386,9 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
                       href={video.url}
                       target="_blank"
                       rel="noopener"
-                      className="flex items-center gap-4 rounded-3xl bg-night p-5 text-white transition-transform active:scale-[0.98]"
+                      className="flex items-center gap-4 rounded-lg bg-night p-5 text-white transition-transform active:scale-[0.98]"
                     >
-                      <span className="grid size-14 shrink-0 place-items-center rounded-full bg-brand">
+                      <span className="grid size-14 shrink-0 place-items-center rounded-full bg-white text-night">
                         <PlayCircle className="size-7" />
                       </span>
                       <span>
@@ -380,17 +401,17 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
               </section>
             )}
 
-            <section className="mt-12" aria-labelledby="ficha">
-              <h2 id="ficha" className="font-display text-3xl">
+            <section className="mt-14" aria-labelledby="ficha">
+              <SectionTitle id="ficha" eyebrow="Especificaciones">
                 Ficha técnica
-              </h2>
-              <ul className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
-                {details.map((spec) => (
-                  <SpecTile key={spec.label} spec={spec} car={car} />
+              </SectionTitle>
+              <dl className="mt-6 overflow-hidden rounded-lg bg-card px-5 ring-1 ring-line sm:grid sm:grid-cols-2 sm:gap-x-10 sm:px-7">
+                {details.map((spec, i) => (
+                  <SpecRow key={spec.label} spec={spec} i={i} />
                 ))}
-              </ul>
+              </dl>
               {missing.length > 0 && (
-                <div className="mt-4 flex flex-col gap-4 rounded-3xl bg-wa/10 p-5 ring-1 ring-wa/30 sm:flex-row sm:items-center">
+                <div className="mt-3 flex flex-col gap-4 rounded-lg bg-card p-5 ring-1 ring-line sm:flex-row sm:items-center">
                   <p className="flex-1 text-sm text-fg">
                     <b>{MISSING_INFO_TEXT}</b>
                     <span className="mt-1 block text-mute">Datos por confirmar: {missing.join(", ").toLowerCase()}.</span>
@@ -399,7 +420,7 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
                     href={whatsappUrl(infoMessage(car, missing))}
                     target="_blank"
                     rel="noopener"
-                    className="btn-shine inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-full bg-wa px-5 font-bold text-night active:scale-95"
+                    className="btn btn-wa btn-shine shrink-0"
                   >
                     <WhatsAppIcon className="size-5" /> Preguntar
                   </a>
@@ -408,24 +429,24 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
             </section>
 
             {equipmentCount > 0 && (
-              <section id="equipamiento" className="mt-12 scroll-mt-24" aria-labelledby="equipamiento-title">
-                <h2 id="equipamiento-title" className="font-display text-3xl">
+              <section id="equipamiento" className="mt-14 scroll-mt-24" aria-labelledby="equipamiento-title">
+                <SectionTitle id="equipamiento-title" eyebrow={`${equipmentCount} elementos`}>
                   Equipamiento
-                </h2>
-                <div className="mt-5 space-y-5">
+                </SectionTitle>
+                <div className="mt-6 space-y-7">
                   {equipment.map(({ group, items }) => (
                     <div key={group}>
-                      <h3 className="font-tech flex items-center gap-2 text-xs text-brand-hi">
-                        <span className="h-0.5 w-5 skew-x-[-20deg] bg-brand" />
-                        {group}
-                      </h3>
-                      <ul className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
-                        {items.map(({ key, label, Icon }) => (
-                          <li key={key} className="reveal flex items-center gap-2.5 rounded-2xl bg-card p-3 text-sm font-medium ring-1 ring-line">
-                            <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-volt-soft text-fg" aria-hidden="true">
-                              <Icon className="size-[1.1rem]" />
-                            </span>
+                      <h3 className="font-tech text-[11px] text-dim">{group}</h3>
+                      <ul className="mt-2 grid border-t border-line sm:grid-cols-2 sm:gap-x-10">
+                        {items.map(({ key, label, Icon }, i) => (
+                          <li
+                            key={key}
+                            className="reveal flex items-center gap-3 border-b border-line py-3 text-[15px]"
+                            style={vars({ "--i": i })}
+                          >
+                            <Icon className="size-[1.1rem] shrink-0 text-fg/70" strokeWidth={1.75} aria-hidden="true" />
                             <span className="leading-tight">{label}</span>
+                            <Check className="ml-auto size-4 shrink-0 text-brand" strokeWidth={2.5} aria-hidden="true" />
                           </li>
                         ))}
                       </ul>
@@ -436,17 +457,14 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
             )}
 
             {highlights.length > 0 && (
-              <section className="mt-12" aria-labelledby="destaca">
-                <h2 id="destaca" className="font-display text-3xl">
+              <section className="mt-14" aria-labelledby="destaca">
+                <SectionTitle id="destaca" eyebrow="Detalles">
                   Lo que destaca
-                </h2>
-                <ul className="mt-5 flex flex-wrap gap-2">
-                  {highlights.map((f) => (
-                    <li
-                      key={f}
-                      className="reveal flex items-center gap-2 rounded-full border border-line bg-card px-4 py-2.5 text-sm"
-                    >
-                      <span className="size-1.5 rotate-45 bg-brand" />
+                </SectionTitle>
+                <ul className="mt-6 grid gap-x-10 gap-y-3 sm:grid-cols-2">
+                  {highlights.map((f, i) => (
+                    <li key={f} className="reveal flex items-start gap-3 leading-snug" style={vars({ "--i": i })}>
+                      <span className="mt-2 size-1.5 shrink-0 rotate-45 bg-brand" />
                       {f}
                     </li>
                   ))}
@@ -455,17 +473,15 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
             )}
 
             {car.description && (
-              <section className="mt-12" aria-labelledby="descripcion">
-                <h2 id="descripcion" className="font-display text-3xl">
+              <section className="mt-14" aria-labelledby="descripcion">
+                <SectionTitle id="descripcion" eyebrow="Del vendedor">
                   Descripción
-                </h2>
-                <div className="mt-5 rounded-3xl border border-line bg-card p-5 leading-relaxed whitespace-pre-line text-fg/85 sm:p-7">
+                </SectionTitle>
+                <div className="mt-6 rounded-lg bg-card p-5 leading-relaxed whitespace-pre-line text-fg/85 ring-1 ring-line sm:p-7">
                   {car.description}
                 </div>
               </section>
             )}
-
-            {!sold && <CarQuestions car={car} />}
 
             {!sold && <NextSteps car={car} />}
 
@@ -476,9 +492,9 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
         {similar.length > 0 && (
           <section className="mt-16 px-4 pb-8 sm:px-6 lg:px-0" aria-labelledby="similares">
             <div className="flex items-end justify-between gap-4">
-              <h2 id="similares" className="font-display text-3xl sm:text-4xl">
+              <SectionTitle id="similares" eyebrow="Más opciones">
                 {sold ? "Te pueden interesar" : "También te puede gustar"}
-              </h2>
+              </SectionTitle>
               {sameType > 1 && (
                 <Link
                   href={`/autos?tipo=${encodeURIComponent(car.body)}`}
@@ -489,25 +505,25 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
                 </Link>
               )}
             </div>
-            <div className="no-scrollbar -mx-4 mt-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 sm:mx-0 sm:grid sm:grid-cols-2 sm:px-0 lg:grid-cols-4">
+            <div className="no-scrollbar -mx-4 mt-6 flex snap-x snap-mandatory scroll-px-4 gap-4 overflow-x-auto px-4 pb-4 sm:mx-0 sm:grid sm:grid-cols-2 sm:px-0 lg:grid-cols-4">
               {similar.map((c) => (
-                <CarCard key={c.id} car={c} className="w-[75vw] max-w-[320px] shrink-0 snap-start sm:w-auto sm:max-w-none" sizes="(min-width: 1024px) 24vw, (min-width: 640px) 45vw, 75vw" />
+                <CarCard
+                  key={c.id}
+                  car={c}
+                  variant="foto"
+                  className="reveal reveal-zoom w-[72vw] max-w-[300px] shrink-0 snap-start sm:w-auto sm:max-w-none"
+                  sizes="(min-width: 1024px) 24vw, (min-width: 640px) 45vw, 72vw"
+                />
               ))}
             </div>
             <div className="mt-4 flex flex-wrap gap-3 sm:hidden">
               {sameType > 1 && (
-                <Link
-                  href={`/autos?tipo=${encodeURIComponent(car.body)}`}
-                  className="flex h-12 flex-1 items-center justify-center gap-2 rounded-full border border-line bg-card text-sm font-semibold"
-                >
+                <Link href={`/autos?tipo=${encodeURIComponent(car.body)}`} className="btn btn-outline flex-1 text-sm">
                   Ver los {sameType} {TYPE_PLURAL[car.body] ?? car.body}
                 </Link>
               )}
-              <Link
-                href="/autos"
-                className="flex h-12 flex-1 items-center justify-center gap-2 rounded-full border border-line bg-card text-sm font-semibold"
-              >
-                Todo el catálogo
+              <Link href="/autos" className="btn btn-outline flex-1 text-sm">
+                Todo el inventario
               </Link>
             </div>
           </section>
@@ -521,22 +537,22 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
             <p className="truncate text-xs text-mute">
               {carName(car)} {car.year}
             </p>
-            <p className="text-lg font-bold">{formatPrice(car.price)}</p>
+            <p className="font-display text-xl">{formatPrice(car.price)}</p>
           </div>
           <a
             href={site.phoneHref}
             tabIndex={-1}
             aria-label="Llamar"
-            className="grid size-12 shrink-0 place-items-center rounded-full border border-line bg-card active:scale-95"
+            className="grid size-12 shrink-0 place-items-center rounded-md border border-line bg-card active:scale-95"
           >
-            <Phone className="size-5 text-brand-hi" />
+            <Phone className="size-5" />
           </a>
           <a
             href={carWhatsApp(car)}
             target="_blank"
             rel="noopener"
             tabIndex={-1}
-            className="btn-shine inline-flex h-12 items-center gap-2 rounded-full bg-wa px-5 font-bold text-night active:scale-95"
+            className="btn btn-wa btn-shine min-h-12 px-5"
           >
             <WhatsAppIcon className="size-5" />
             {ctaLabel(car, true)}
@@ -558,10 +574,12 @@ function GoneCar({ slug, cars }: { slug: string; cars: Car[] }) {
   const name = slug.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
   return (
     <div className="mx-auto max-w-7xl px-4 pt-28 pb-16 sm:px-6">
-      <div className="relative overflow-hidden rounded-[2rem] bg-card p-6 ring-1 ring-line sm:p-10">
-        <div className="speed-lines pointer-events-none absolute inset-0 opacity-50" />
+      <div className="relative overflow-hidden rounded-lg bg-card p-6 ring-1 ring-line sm:p-10">
         <div className="relative max-w-xl">
-          <p className="font-tech text-xs text-brand-hi">Ya no está disponible</p>
+          <p className="font-tech flex items-center gap-3 text-[11px] text-dim">
+            <span className="h-px w-8 rule-accent" />
+            Ya no está disponible
+          </p>
           <h1 className="font-display mt-3 text-4xl sm:text-5xl">Este auto ya no está</h1>
           <p className="mt-4 text-lg leading-relaxed text-mute">
             Puede que ya tenga nuevo dueño.{" "}
@@ -574,15 +592,15 @@ function GoneCar({ slug, cars }: { slug: string; cars: Car[] }) {
               href={whatsappUrl(`Hola ${site.name} 👋 Buscaba un auto que vi en su página (${name}) y ya no está. ¿Tienen algo parecido?`)}
               target="_blank"
               rel="noopener"
-              className="btn-shine inline-flex h-14 items-center gap-2 rounded-full bg-wa px-6 font-bold text-night active:scale-95"
+              className="btn btn-wa btn-shine"
             >
               <WhatsAppIcon className="size-5" /> Búscame uno parecido
             </a>
             <Link
               href={brand && sameBrand.length > 1 ? `/autos?marca=${encodeURIComponent(brand)}` : "/autos"}
-              className="inline-flex h-14 items-center gap-2 rounded-full bg-night px-6 font-semibold text-white active:scale-95"
+              className="btn btn-dark"
             >
-              {brand && sameBrand.length > 1 ? `Ver los ${sameBrand.length} ${brand}` : "Ver catálogo"} <ArrowRight className="size-4" />
+              {brand && sameBrand.length > 1 ? `Ver los ${sameBrand.length} ${brand}` : "Ver inventario"} <ArrowRight className="size-4" />
             </Link>
           </div>
         </div>
@@ -592,83 +610,14 @@ function GoneCar({ slug, cars }: { slug: string; cars: Car[] }) {
           <h2 id="parecidos" className="font-display text-3xl">
             {sameBrand.length ? `${brand} disponibles` : "Disponibles hoy"}
           </h2>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
             {picks.map((c) => (
-              <CarCard key={c.id} car={c} sizes="(min-width: 1024px) 24vw, (min-width: 640px) 45vw, 92vw" />
+              <CarCard key={c.id} car={c} className="h-full" sizes="(min-width: 1024px) 24vw, 50vw" />
             ))}
           </div>
         </section>
       )}
     </div>
-  );
-}
-
-// Las dudas de siempre, contestadas con los datos del auto. Si falta un dato, se pregunta con un toque
-// (el mensaje lleva la pregunta exacta). Nunca se inventa una respuesta.
-function CarQuestions({ car }: { car: Car }) {
-  const invoice = { Original: "Factura original.", "De empresa": "Factura de empresa.", Refacturada: "Refacturada." };
-  const items: { q: string; a?: ReactNode }[] = [
-    {
-      q: "¿Sigue disponible?",
-      a:
-        car.status === "apartado"
-          ? "Está apartado. Si se libera, te avisamos."
-          : "Sí, está a la venta. Escríbenos y te lo confirmamos al momento.",
-    },
-    { q: "¿Cuántos kilómetros tiene?", a: car.mileage != null ? formatKm(car.mileage) : undefined },
-    {
-      q: "¿Es automático o estándar?",
-      a: car.transmission === "Automática" ? "Automático." : car.transmission === "Manual" ? "Estándar (manual)." : undefined,
-    },
-    {
-      q: "¿Cuántos dueños ha tenido?",
-      a: car.ownerCount === 1 ? "Único dueño." : car.ownerCount ? `${car.ownerCount} dueños.` : undefined,
-    },
-    { q: "¿Qué factura tiene?", a: car.invoice ? invoice[car.invoice] : undefined },
-    {
-      q: "¿Tiene sus servicios?",
-      a: car.serviceHistory ? `Sí, servicios ${car.serviceHistory === "De agencia" ? "de agencia" : "al día"}.` : undefined,
-    },
-    { q: "¿Los papeles están en regla?", a: car.papersInOrder ? "Sí, papeles en regla." : undefined },
-    ...(car.armored ? [{ q: "¿Qué nivel de blindaje tiene?", a: car.armorLevel ? `${car.armorLevel}.` : undefined }] : []),
-    {
-      q: "¿Dónde lo puedo ver?",
-      a: (
-        <>
-          {site.address.street}, {site.address.city}. {site.hours}.{" "}
-          <a href={site.mapsUrl} target="_blank" rel="noopener" className="font-semibold text-brand-hi underline">
-            Cómo llegar
-          </a>
-        </>
-      ),
-    },
-  ];
-  return (
-    <section id="dudas" className="mt-12 scroll-mt-24" aria-labelledby="dudas-title">
-      <h2 id="dudas-title" className="font-display text-3xl">
-        Tus dudas, <span className="text-brand">resueltas</span>
-      </h2>
-      <p className="mt-1 text-sm text-mute">Lo que más nos preguntan de este auto. Si algo falta, pregúntalo con un toque.</p>
-      <dl className="mt-5 divide-y divide-line overflow-hidden rounded-3xl bg-card ring-1 ring-line">
-        {items.map(({ q, a }) => (
-          <div key={q} className="flex flex-col gap-1.5 p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:px-5">
-            <dt className="font-semibold">{q}</dt>
-            <dd className="text-fg/80 sm:text-right">
-              {a ?? (
-                <a
-                  href={whatsappUrl(questionMessage(car, q))}
-                  target="_blank"
-                  rel="noopener"
-                  className="inline-flex h-9 items-center gap-1.5 rounded-full bg-wa/15 px-3 text-sm font-semibold text-fg active:scale-95"
-                >
-                  <WhatsAppIcon className="size-4 text-wa-dark" /> Pregúntanos<span className="sr-only"> por WhatsApp</span>
-                </a>
-              )}
-            </dd>
-          </div>
-        ))}
-      </dl>
-    </section>
   );
 }
 
@@ -686,49 +635,38 @@ function NextSteps({ car }: { car: Car }) {
       text: "Te confirmamos si sigue disponible y cualquier dato que quieras saber.",
     },
     {
-      Icon: MapPin,
-      title: "Ven a conocerlo",
-      text: `${site.address.street}, ${site.address.neighborhood}, ${site.address.city}. ${site.hours}.`,
+      Icon: CalendarCheck,
+      title: "Agenda tu cita",
+      text: `No tenemos lote: te agendamos una cita para que veas este ${car.model} en persona.`,
     },
   ];
   return (
-    <section className="mt-12" aria-labelledby="pasos">
-      <h2 id="pasos" className="font-display text-3xl">
-        Así de <span className="text-brand">fácil</span>
-      </h2>
-      <ol className="relative mt-5 grid gap-3">
-        <span className="absolute top-8 bottom-8 left-[1.85rem] w-0.5 bg-gradient-to-b from-brand to-volt" aria-hidden="true" />
+    <section className="mt-14" aria-labelledby="pasos">
+      <SectionTitle id="pasos" eyebrow="Qué sigue">
+        Así de fácil
+      </SectionTitle>
+      <ol className="mt-6 border-t border-line">
         {steps.map(({ Icon, title, text }, i) => (
-          <li key={title} className="reveal relative flex gap-4 rounded-2xl border border-line bg-card p-4" style={vars({ "--i": i })}>
-            <span className="relative grid size-11 shrink-0 place-items-center rounded-xl bg-brand text-white">
-              <Icon className="size-5" />
-              <span className="font-display absolute -top-2 -right-2 grid size-6 -skew-x-6 place-items-center rounded-md bg-volt text-xs text-night">
-                {i + 1}
-              </span>
+          <li key={title} className="reveal group flex gap-5 border-b border-line py-5" style={vars({ "--i": i })}>
+            <span className="font-display w-10 shrink-0 text-3xl leading-none text-soft-2 transition-colors duration-500 group-hover:text-fg">
+              0{i + 1}
             </span>
-            <div>
-              <h3 className="font-semibold">{title}</h3>
+            <div className="min-w-0 flex-1">
+              <h3 className="flex items-center gap-2 font-semibold">
+                <Icon className="size-4 text-brand" aria-hidden="true" />
+                {title}
+              </h3>
               <p className="mt-1 text-sm leading-relaxed text-mute">{text}</p>
             </div>
           </li>
         ))}
       </ol>
-      <div className="mt-5 flex flex-wrap gap-3">
-        <a
-          href={carWhatsApp(car)}
-          target="_blank"
-          rel="noopener"
-          className="btn-shine inline-flex h-12 items-center gap-2 rounded-full bg-wa px-5 font-bold text-night active:scale-95"
-        >
+      <div className="mt-6 flex flex-wrap gap-3">
+        <a href={carWhatsApp(car)} target="_blank" rel="noopener" className="btn btn-wa btn-shine">
           <WhatsAppIcon className="size-5" /> {ctaLabel(car)}
         </a>
-        <a
-          href={site.mapsUrl}
-          target="_blank"
-          rel="noopener"
-          className="inline-flex h-12 items-center gap-2 rounded-full border border-line bg-card px-5 font-semibold"
-        >
-          <Navigation className="size-4" /> Cómo llegar
+        <a href={whatsappUrl(visitMessage(car))} target="_blank" rel="noopener" className="btn btn-outline">
+          <CalendarCheck className="size-4" /> Agendar cita
         </a>
       </div>
     </section>
@@ -739,18 +677,18 @@ function NextSteps({ car }: { car: Car }) {
 function ReviewSnippets({ reviews }: { reviews: Review[] }) {
   const top = [...reviews].sort((a, b) => b.stars - a.stars).slice(0, 2);
   return (
-    <section className="mt-12" aria-labelledby="opiniones">
+    <section className="mt-14" aria-labelledby="opiniones">
       <div className="flex items-end justify-between gap-4">
-        <h2 id="opiniones" className="font-display text-3xl">
-          Lo que dicen <span className="text-brand">nuestros clientes</span>
-        </h2>
-        <Link href="/#resenas" className="shrink-0 text-sm font-semibold text-brand-hi underline">
+        <SectionTitle id="opiniones" eyebrow="Clientes H3">
+          Lo que dicen nuestros clientes
+        </SectionTitle>
+        <Link href="/#resenas" className="shrink-0 text-sm font-semibold underline underline-offset-4">
           Ver todas
         </Link>
       </div>
       <div className="mt-5 grid gap-3 sm:grid-cols-2">
         {top.map((r) => (
-          <figure key={r.id} className="rounded-2xl bg-card p-5 ring-1 ring-line">
+          <figure key={r.id} className="rounded-lg bg-card p-5 ring-1 ring-line">
             <Stars value={r.stars} />
             {r.highlight && <p className="mt-2 font-semibold">«{r.highlight}»</p>}
             <blockquote className="mt-2 line-clamp-4 text-sm leading-relaxed text-fg/80">{r.text}</blockquote>
@@ -770,101 +708,64 @@ type Spec = {
   Icon: typeof Calendar;
   label: string;
   value?: string;
-  tone?: "brand" | "volt" | "night";
-  wide?: boolean;
 };
 
-const TONE: Record<NonNullable<Spec["tone"]>, string> = {
-  brand: "bg-brand-soft text-brand-hi",
-  volt: "bg-volt text-night",
-  night: "bg-night text-white",
-};
-
-// Dato del resumen en forma de chip. Si falta, el chip pregunta por WhatsApp.
-function QuickChip({ spec, car }: { spec: Spec; car: Car }) {
-  const { Icon, label, value, tone = "brand" } = spec;
-  if (!value) {
-    return (
-      <li>
-        <a
-          href={whatsappUrl(infoMessage(car, [label]))}
-          target="_blank"
-          rel="noopener"
-          className="inline-flex h-9 items-center gap-1.5 rounded-full bg-wa/15 px-3 text-sm font-semibold text-fg active:scale-95"
-        >
-          <WhatsAppIcon className="size-4 text-wa-dark" /> {label}: pregúntanos
-          <span className="sr-only"> por WhatsApp</span>
-        </a>
-      </li>
-    );
-  }
+function SectionTitle({ id, eyebrow, children }: { id: string; eyebrow: string; children: ReactNode }) {
   return (
-    <li
-      className={`inline-flex h-9 items-center gap-1.5 rounded-full px-3 text-sm font-semibold ${
-        tone === "volt" ? "bg-volt text-night" : "bg-card text-fg ring-1 ring-line"
-      }`}
-    >
-      <Icon className={`size-4 ${tone === "volt" ? "" : "text-brand"}`} aria-hidden="true" />
-      <span className="sr-only">{label}: </span>
-      {value}
+    <div>
+      <p className="font-tech flex items-center gap-3 text-[10px] text-dim">
+        <span className="h-px w-6 rule-accent" />
+        {eyebrow}
+      </p>
+      <h2 id={id} className="font-display mt-2.5 text-[1.85rem] sm:text-[2.1rem]">
+        {children}
+      </h2>
+    </div>
+  );
+}
+
+// Dato del resumen (kilometraje, transmisión, combustible). Solo se usa con datos confirmados.
+function QuickSpec({ spec }: { spec: Spec }) {
+  const { Icon, label, value } = spec;
+  return (
+    <li className="min-w-0 px-3 py-3.5 first:pl-0 last:pr-0">
+      <span className="font-tech flex items-center gap-1.5 text-[9px] text-dim">
+        <Icon className="hidden size-3.5 shrink-0 text-brand sm:block" aria-hidden="true" />
+        <span className="truncate">{label}</span>
+      </span>
+      <span className="mt-1.5 block truncate text-[15px] font-semibold">{value}</span>
     </li>
   );
 }
 
-// Un dato del auto. Si no se tiene, invita a preguntarlo por WhatsApp (nunca se inventa).
-function SpecTile({ spec, car }: { spec: Spec; car: Car }) {
-  const { Icon, label, value, tone = "brand", wide } = spec;
-  if (!value) {
-    return (
-      <li>
-        <a
-          href={whatsappUrl(infoMessage(car, [label]))}
-          target="_blank"
-          rel="noopener"
-          className="group flex h-full items-center gap-3 rounded-2xl bg-wa/10 p-4 ring-1 ring-wa/30 transition-transform active:scale-[0.97]"
-        >
-          <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-wa text-night">
-            <WhatsAppIcon className="size-5" />
-          </span>
-          <span className="min-w-0">
-            <span className="font-tech block text-[10px] text-fg/75">{label}</span>
-            <span className="block text-sm leading-tight font-semibold text-fg">
-              Pregúntanos<span className="sr-only"> por WhatsApp</span>
-            </span>
-          </span>
-        </a>
-      </li>
-    );
-  }
+// Una fila de la ficha técnica (solo datos confirmados; nunca se inventa)
+function SpecRow({ spec, i }: { spec: Spec; i: number }) {
+  const { Icon, label, value } = spec;
   return (
-    <li
-      className={`group flex items-center gap-3 rounded-2xl bg-card p-4 ring-1 ring-line transition-transform duration-300 hover:-translate-y-0.5 ${
-        wide ? "col-span-2 sm:col-span-1" : ""
-      }`}
+    <div
+      className="reveal group flex items-center gap-3 border-b border-line py-4 last:border-0 sm:[&:nth-last-child(2):nth-child(odd)]:border-0"
+      style={vars({ "--i": i })}
     >
-      <span
-        className={`grid size-10 shrink-0 place-items-center rounded-xl transition-transform duration-500 ease-[var(--ease-spring)] group-hover:-rotate-6 ${TONE[tone]}`}
+      <Icon
+        className="size-[1.1rem] shrink-0 text-dim transition-colors duration-300 group-hover:text-brand"
+        strokeWidth={1.75}
         aria-hidden="true"
-      >
-        <Icon className="size-5" />
-      </span>
-      <span className="min-w-0">
-        <span className="font-tech block text-[10px] text-dim">{label}</span>
-        <span className="block leading-tight font-semibold text-fg">{value}</span>
-      </span>
-    </li>
+      />
+      <dt className="text-sm text-mute">{label}</dt>
+      <dd className="ml-auto text-right font-semibold">{value}</dd>
+    </div>
   );
 }
 
 function CarSkeleton() {
   return (
     <div className="mx-auto max-w-7xl lg:grid lg:grid-cols-[1.25fr_1fr] lg:gap-10 lg:px-6 lg:pt-32">
-      <div className="skeleton aspect-square lg:aspect-[5/6] lg:rounded-3xl" />
+      <div className="skeleton aspect-square lg:aspect-[5/6] lg:rounded-lg" />
       <div className="space-y-4 px-4 pt-8 sm:px-6 lg:px-0 lg:pt-0">
-        <div className="skeleton h-4 w-32 rounded-full" />
-        <div className="skeleton h-12 w-3/4 rounded-xl" />
-        <div className="skeleton h-10 w-1/2 rounded-xl" />
-        <div className="skeleton mt-8 h-14 w-full rounded-full" />
+        <div className="skeleton h-4 w-32 rounded-sm" />
+        <div className="skeleton h-12 w-3/4 rounded-md" />
+        <div className="skeleton h-10 w-1/2 rounded-md" />
+        <div className="skeleton mt-8 h-14 w-full rounded-md" />
       </div>
     </div>
   );

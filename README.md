@@ -61,7 +61,8 @@ Estados de un auto:
 
 - Next.js 16 (App Router, Cache Components) + React 19 + Tailwind CSS 4.
 - **Netlify Free** para publicar el sitio.
-- **Upstash Redis Free** para guardar el inventario.
+- **Netlify Blobs** (incluido en Netlify Free, sin cuenta extra) para guardar el inventario, las reseñas y
+  la contraseña del panel. Opcional: Upstash Redis Free; si se conecta, se usa en su lugar.
 - **Cloudinary Free** para guardar y servir las fotos. Las fotos salen directo de Cloudinary ya
   optimizadas (AVIF/WebP), así no gastan créditos de Netlify.
 
@@ -75,8 +76,8 @@ Se hace en dos etapas.
 
 ### Etapa 1: tener el enlace (solo Netlify, ≈ 15 minutos)
 
-El sitio público queda completo con el inventario actual. El panel deja entrar, pero **no guarda cambios**
-hasta la etapa 2.
+El sitio público queda completo con el inventario actual y **el panel ya guarda cambios** en Netlify Blobs
+(30-oct). Las fotos nuevas necesitan Cloudinary (etapa 2).
 
 1. **Cuenta:** entra a [app.netlify.com](https://app.netlify.com/signup), elige **GitHub** para registrarte
    y acepta el plan **Free**.
@@ -94,33 +95,74 @@ hasta la etapa 2.
    6. Confirma con **Deploy** (o **Publish**). Tarda de 3 a 5 minutos.
 4. **Hazlo público**, si quedó privado: usa el botón **Make public** o ve a **Project configuration →
    General → Visitor access → Project visibility → Public**.
-5. **Contraseñas del panel**, si no las pusiste en el paso 3:
+5. **Secreto del panel**, si no lo pusiste en el paso 3:
    1. Ve a **Project configuration → Environment variables → Add a variable → Import from a .env file**.
-   2. Pega estas dos líneas con tus valores y toca **Import variables**:
+   2. Pega esta línea con tu valor y toca **Import variables**:
       ```
-      ADMIN_PASSWORD=tu-contraseña-larga
       AUTH_SECRET=texto-largo-y-aleatorio
       ```
    - Para el `AUTH_SECRET`, en la Terminal de la Mac corre `openssl rand -base64 32`.
-   - Para `ADMIN_PASSWORD`, usa 4 palabras al azar que **no aparezcan en el sitio**. Netlify revisa que las
-     contraseñas no se filtren en el código publicado, y una palabra común podría detener la publicación.
-6. **Vuelve a publicar** para que tome las contraseñas: **Deploys → Trigger deploy → Deploy project**.
+   - El `AUTH_SECRET` es opcional desde el 30-oct: sin él, el panel crea una llave al azar y la guarda en
+     Netlify Blobs.
+   - La contraseña inicial del panel es `12345` (decisión del dueño). Como el repositorio es público,
+     cualquiera puede saberla: **cámbiala en Panel → Ajustes** (se guarda cifrada en Netlify Blobs y vale
+     para producción y las vistas previas).
+   - Opcional: si agregas `ADMIN_PASSWORD`, esa reemplaza a `12345` desde el principio. Usa 4 palabras al
+     azar que **no aparezcan en el sitio**; Netlify revisa que las contraseñas no se filtren en el código
+     publicado, y una palabra común podría detener la publicación.
+6. **Vuelve a publicar** para que tome el secreto: **Deploys → Trigger deploy → Deploy project**.
 7. Abre `https://NOMBRE.netlify.app` en el celular. El panel está en `/admin`.
 
-### Etapa 2: que el panel guarde cambios y las fotos salgan de Cloudinary
+### Etapa 2: que las fotos nuevas salgan de Cloudinary
 
-1. **Upstash** ([upstash.com](https://upstash.com)): crea una cuenta y luego una base de datos Redis en el
-   plan Free. En la pestaña **REST API** copia `UPSTASH_REDIS_REST_URL` y `UPSTASH_REDIS_REST_TOKEN`.
+1. **Upstash (opcional):** ya no hace falta; el panel guarda en Netlify Blobs. Si algún día se quiere usar
+   Upstash ([upstash.com](https://upstash.com)), crea una base de datos Redis Free y copia
+   `UPSTASH_REDIS_REST_URL` y `UPSTASH_REDIS_REST_TOKEN` (ojo: los datos de Netlify Blobs no se pasan solos).
 2. **Cloudinary** ([cloudinary.com](https://cloudinary.com)): crea una cuenta gratis. En el **Dashboard**
    copia la «API environment variable», que tiene esta forma: `CLOUDINARY_URL=cloudinary://…`.
 3. Agrégalas en **Project configuration → Environment variables**, igual que en la etapa 1, y vuelve a
    publicar.
    - `NEXT_PUBLIC_SITE_URL`: no la agregues mientras no se conecte el dominio; el sitio usa sola la
      dirección `*.netlify.app`. Cuando se conecte, pon `https://www.h3seminuevos.com`.
-4. Entra a `https://NOMBRE.netlify.app/admin`, ve a **Importar de Shopify → Buscar → Importar
-   seleccionados**. Las fotos se copian de Shopify a Cloudinary.
-5. Cuando todo funcione, **cancela Shopify**. Importa las fotos **antes**, porque después desaparecen.
+4. Entra a `https://NOMBRE.netlify.app/admin` (el enlace discreto «Administración» está al final del
+   pie de página). Ve primero a **Ajustes**: cambia la contraseña `12345` y pon los números reales del
+   inicio (por ejemplo, autos entregados o años de experiencia).
+5. En el panel, ve a **Importar de Shopify → Buscar → Importar seleccionados**. Las fotos se copian de
+   Shopify a Cloudinary.
+6. Cuando todo funcione, **cancela Shopify**. Importa las fotos **antes**, porque después desaparecen.
    El dominio se conecta después (sin decidir).
+
+### Enlace de vista previa (rama `desarrollo`, 0 créditos)
+
+**Enlace actual (30-oct): https://deploy-preview-1--h3-seminuevos.netlify.app**. Sale de la solicitud de
+cambios [Diluvium-mx/h3-web#1](https://github.com/Diluvium-mx/h3-web/pull/1) (`desarrollo` → `main`). Netlify la
+reconstruye sola con cada cambio que se sube a `desarrollo`, sin gastar créditos. **No fusionarla** hasta que el
+dueño diga «publica»: al fusionarla se publica `main` (15 créditos).
+
+**Dos versiones del diseño (30-oct):** la versión 2 (cambios del dueño) está en la vista previa de arriba; la
+versión 1 (hecha con la skill `/scroll-craft`) sale de la rama `version-scrollcraft` y de la solicitud
+[Diluvium-mx/h3-web#2](https://github.com/Diluvium-mx/h3-web/pull/2):
+https://deploy-preview-2--h3-seminuevos.netlify.app. Ninguna se fusiona hasta que el dueño elija.
+
+Otra forma, sin solicitud de cambios, es activar las publicaciones de la rama:
+
+Sirve para ver los cambios desde cualquier celular, en cualquier parte, y para mandárselo al dueño. Se
+actualiza solo cada vez que se suben cambios a `desarrollo`. Según la documentación de Netlify, las
+publicaciones de ramas («branch deploys») **no gastan créditos**; solo las de producción (`main`) cuestan 15.
+
+1. Haz la etapa 1 (pasos 1 a 4). La primera publicación de `main` sí cuesta 15 créditos, una sola vez.
+2. En el proyecto: **Project configuration → Build & deploy → Continuous deployment → Branches and deploy
+   contexts → Configure → Let me add individual branches**, escribe `desarrollo` y **Save**. (En algunas
+   cuentas el menú dice **Developer settings** en lugar de **Build & deploy**.)
+3. El enlace queda así: `https://desarrollo--NOMBRE.netlify.app` (NOMBRE es el del paso 3.3). Aparece en
+   **Deploys** después del siguiente cambio que se suba a `desarrollo`.
+4. El proyecto debe ser **público** (paso 4) para que el dueño lo abra sin cuenta.
+
+En la vista previa los enlaces de WhatsApp apuntan a la misma vista previa y Google no la indexa
+(`robots.txt` y `X-Robots-Tag: noindex`). El panel funciona y guarda en Netlify Blobs: **el mismo
+inventario y la misma contraseña** en producción y en las 2 vistas previas. Para probarlo:
+`node scripts/e2e-panel-netlify.mjs https://deploy-preview-1--h3-seminuevos.netlify.app` (cambia un precio
+y lo regresa).
 
 ### Para no gastar créditos de más
 
@@ -156,7 +198,7 @@ npm run dev
 ```
 
 - Sin variables de entorno, el sitio usa `data/seed.json` (el inventario actual).
-- En local, el panel (`/admin`, contraseña `h3admin`) guarda en `data/cars.local.json` y
+- En local, el panel (`/admin`, contraseña inicial `12345`, que se cambia en Panel → Ajustes) guarda en `data/cars.local.json` y
   `data/reviews.local.json`, y las fotos en `public/uploads/` (todo ignorado por git).
 - Para usar los servicios reales en local, copia `.env.example` como `.env.local` y llénalo
   (no lo subas al repositorio).

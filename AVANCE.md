@@ -2,6 +2,105 @@
 
 Lo más reciente va arriba.
 
+## 30 de octubre de 2026 (noche) — el panel funciona en las 2 vistas previas
+
+- El panel ya no pide Upstash: en Netlify guarda en Netlify Blobs, incluido en el plan gratis.
+- Las 2 versiones comparten inventario y contraseña (`12345` hasta que se cambie en Ajustes).
+- Prueba nueva `scripts/e2e-panel-netlify.mjs`: entra, cambia un precio, revisa la ficha y lo regresa.
+
+Falta: conectar Cloudinary para subir fotos nuevas; cambiar la contraseña `12345`.
+
+## 30 de octubre de 2026 (noche) — versión 1 con la skill Scrollcraft
+
+- Hero con capas: fondo nocturno hecho con Arcads y el BMW M3 real recortado, con «PREMIUM» pasando detrás.
+- Recorrido del M3 con el scroll (exterior → interior → precio) y el mensaje de WhatsApp que se escribe solo.
+- Letras Archivo + Geist, gris frío y plata con un solo acento, grano en fondos oscuros; mismo contenido
+  que la versión 2.
+
+Falta: que el dueño compare las 2 vistas previas y elija; qué auto va en el hero si se vende el M3.
+
+## 30 de octubre de 2026 (noche) — versión 2 con los cambios del dueño
+
+- Hero con fotos fijas que se deslizan y cambian solas, sin luces; paleta natural y letra Albert Sans.
+- Beneficios divididos en «Al comprar un auto» y «Al vender tu auto»; inventario en 2 columnas; íconos y
+  pie de página nuevos; «Vende tu auto» con imagen de Arcads.
+- Los autos se ven con cita (ya no dice «Ven a conocerlo»); fotos solo Exterior e Interior.
+- Se corrigió un error 500 en Netlify al abrir el enlace de un auto que ya no existe (el encabezado leía la
+  ruta fuera de `<Suspense>`). Probado con la herramienta de Netlify en local.
+
+Falta: que el dueño revise la versión 2 en la vista previa #1; después, la versión 1 (Scrollcraft).
+
+## 30 de octubre de 2026 (noche) — análisis de Scrollcraft
+
+- Se analizó Scrollcraft, el skill de diseño que mandó el dueño. Está completo y gratis en GitHub (licencia
+  MIT), así que no hizo falta dejar un correo. Resumen y propuestas en `ANALISIS-SCROLLCRAFT.md`.
+- Según su lista, todavía delatan IA en H3: el texto con degradado, la etiqueta sobre cada título, los 3
+  pasos en tarjetas iguales, las etiquetas sobre fotos y la paleta crema con champaña.
+
+Falta: que el dueño elija qué propuestas hacer (limpieza, hero con capas, «el mensaje se escribe solo»).
+
+## 30 de octubre de 2026 (tarde) — sitio en Netlify, público y con vista previa
+
+- Netlify conectado: el proyecto se llama `h3-seminuevos` y ya es público (antes pedía iniciar sesión).
+- La vista previa con el diseño nuevo sale de la solicitud de cambios #1 y se actualiza sola, sin créditos:
+  https://deploy-preview-1--h3-seminuevos.netlify.app. Se comprobó desde fuera: páginas, fotos, WhatsApp y
+  `noindex`.
+
+Falta: que el dueño la vea y diga qué ajustar; fusionar la solicitud #1 solo cuando diga «publica».
+
+## 30 de octubre de 2026 — enlace de vista previa para cualquier celular
+
+- Se eligió la vista previa de la rama `desarrollo` en Netlify: enlace https fijo que se actualiza solo
+  y no gasta créditos (las publicaciones de ramas cuestan 0, según la documentación de Netlify).
+- El sitio ya está listo para eso: en la vista previa sus enlaces apuntan a ella misma y Google no la indexa.
+  Pasos en el README.
+
+Falta: crear la cuenta de Netlify, importar el repositorio y activar la rama `desarrollo` (unos 5 minutos).
+
+## 29 de octubre de 2026 — más impacto, color sutil y ficha más limpia
+
+- Hero a pantalla completa en celular con fotos reales, tratamiento de cine, estelas de luz y accesos
+  rápidos por tipo. Paleta con color sutil (medianoche, carmesí y champaña) y franja de marcas con logos.
+- Botones de WhatsApp en verde oscuro con brillo, WhatsApp en cada tarjeta, buscador fijo en el inventario
+  y pie de página oscuro. Se quitaron los números de confianza.
+- Ficha: botón «Cerrar» claro en pantalla completa, sin filas vacías y sin «Tus dudas». Pasan 27 pruebas
+  del sitio, 21 del panel y 3 de Cloudinary.
+
+Falta: que el dueño lo vea en su celular (el mismo comando de siempre) y diga qué más ajustar.
+
+## 28 de octubre de 2026 (noche 4) — análisis de los videos al día
+
+- `ANALISIS-VIDEOS.md` ahora describe el inicio actual (estilo premium y correcciones del dueño) y agrega
+  una lista de dónde el sitio se aparta del método de los videos.
+- Se entregó al dueño un PDF con el análisis y las transcripciones completas de los 2 videos traducidas
+  al español, con sus minutos (no se sube al repositorio por ser contenido de terceros).
+
+Falta: que el dueño revise el sitio y el análisis y diga qué cambiar.
+
+## 28 de octubre de 2026 (noche 3) — comando para actualizar la Mac
+
+- El dueño no veía los cambios: estaban en GitHub, pero la carpeta de su Mac seguía con la versión
+  anterior. Se agregó `npm run actualizar`, que baja la rama `desarrollo` (y guarda aparte lo que `next dev`
+  haya cambiado). Se explicó en `PRUEBAS-EN-CELULAR.md`.
+
+- Como los comandos de git no le funcionaron, se agregó un comando de una sola línea que no necesita git
+  (`scripts/ver-en-mac.sh`): baja la versión nueva, apaga el sitio viejo y muestra el QR.
+
+Falta: que el dueño corra ese comando en su Mac y revise el estilo premium en el celular.
+
+## 28 de octubre de 2026 (noche 2) — estilo premium y panel con contraseña cambiable
+
+- Se aplicaron las correcciones del dueño: colores premium (tinta, grafito y plata con rojo de acento),
+  título claro, sin «óvalos» ni amarillo, categorías con íconos propios, tarjetas y ficha técnica más
+  premium, y «¿Quieres vender tu auto?» más grande y arriba. Se quitaron «13 autos disponibles hoy», el
+  presupuesto y el botón de Waze.
+- Números de confianza de ejemplo (solo se ven en desarrollo) y microanimaciones.
+- Panel: contraseña `12345` que se cambia en **Ajustes**, enlace discreto en el pie de página y formulario
+  de auto en 4 pasos. Pasan 26 pruebas del sitio, 23 del panel y 3 de Cloudinary.
+
+Falta: que el dueño revise en su celular, cambie `12345` y ponga los números reales cuando el panel
+guarde en Upstash.
+
 ## 28 de octubre de 2026 (noche) — pasos para publicar en Netlify
 
 - Se escribieron los pasos actuales de Netlify en el README. Las cuentas nuevas crean proyectos privados

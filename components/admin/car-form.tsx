@@ -43,15 +43,50 @@ const FEATURE_IDEAS = [
 ];
 
 const field =
-  "h-12 w-full rounded-xl border border-line bg-soft px-4 text-fg placeholder:text-dim focus:border-brand focus:outline-none";
+  "h-12 w-full rounded-md border border-line bg-paper px-4 text-fg placeholder:text-dim focus:border-fg/50 focus:bg-card focus:ring-4 focus:ring-fg/5 focus:outline-none";
 
-function Section({ title, hint, children }: { title: string; hint?: string; children: ReactNode }) {
+function Section({ step, title, hint, children }: { step?: number; title: string; hint?: string; children: ReactNode }) {
   return (
-    <section className="rounded-3xl border border-line bg-card p-4 sm:p-6">
-      <h2 className="font-display text-xl">{title}</h2>
-      {hint && <p className="mt-1 text-sm text-mute">{hint}</p>}
+    <section className="rounded-lg bg-card p-4 ring-1 ring-line sm:p-6">
+      <h2 className="flex items-center gap-3 font-display text-xl">
+        {step && (
+          <span className="grid size-8 shrink-0 place-items-center rounded-md bg-night text-sm text-white">{step}</span>
+        )}
+        {title}
+      </h2>
+      {hint && <p className="mt-2 text-sm text-mute">{hint}</p>}
       <div className="mt-5 space-y-4">{children}</div>
     </section>
+  );
+}
+
+// Lo opcional va plegado para que subir un auto sea rápido
+function MoreDetails({ open, children }: { open: boolean; children: ReactNode }) {
+  return (
+    <details open={open} className="group rounded-lg bg-card ring-1 ring-line">
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-4 sm:p-6 [&::-webkit-details-marker]:hidden">
+        <span>
+          <span className="block font-display text-xl">Más detalles (opcional)</span>
+          <span className="mt-1 block text-sm text-mute">
+            Motor, color, documentos, equipamiento, video… Lo que no llenes aparece como «Pregúntanos».
+          </span>
+        </span>
+        <Plus className="size-5 shrink-0 transition-transform duration-300 group-open:rotate-45" aria-hidden="true" />
+      </summary>
+      <div className="space-y-4 border-t border-line p-4 sm:p-6">{children}</div>
+    </details>
+  );
+}
+
+function SubSection({ title, hint, children }: { title: string; hint?: string; children: ReactNode }) {
+  return (
+    <div className="space-y-4 border-b border-line pb-6 last:border-0 last:pb-0">
+      <div>
+        <h3 className="font-tech text-[11px] text-dim">{title}</h3>
+        {hint && <p className="mt-1 text-sm text-mute">{hint}</p>}
+      </div>
+      {children}
+    </div>
   );
 }
 
@@ -73,12 +108,14 @@ function Pills<T extends string>({
   onChange,
   allowEmpty = true,
   label,
+  labels,
 }: {
   value?: T;
   options: readonly T[];
   onChange: (v?: T) => void;
   allowEmpty?: boolean;
   label: string;
+  labels?: Record<T, string>;
 }) {
   return (
     <div>
@@ -91,11 +128,11 @@ function Pills<T extends string>({
             role="radio"
             aria-checked={value === o}
             onClick={() => onChange(value === o && allowEmpty ? undefined : o)}
-            className={`h-10 rounded-full border px-4 text-sm font-medium transition-colors ${
-              value === o ? "border-brand bg-brand text-white" : "border-line bg-soft text-fg/80"
+            className={`h-10 rounded-md border px-4 text-sm font-medium transition-colors ${
+              value === o ? "border-night bg-night text-white" : "border-line bg-paper text-fg/80 hover:border-fg/40"
             }`}
           >
-            {o}
+            {labels?.[o] ?? o}
           </button>
         ))}
       </div>
@@ -271,14 +308,18 @@ export function CarForm({
       className="space-y-4"
     >
       {error && (
-        <p className="rounded-2xl bg-brand/15 px-4 py-3 text-sm text-brand-hi" role="alert">
+        <p className="rounded-md border-l-2 border-brand bg-brand-soft px-4 py-3 text-sm text-brand-hi" role="alert">
           {error}
         </p>
       )}
 
-      <Section title="Fotos" hint="La primera es la portada. Se comprimen solas antes de subir. Marca la sección de cada foto (exterior, interior, motor o detalles) y en la página se podrán ver por sección.">
+      <Section
+        step={1}
+        title="Fotos"
+        hint="La primera es la portada. Se comprimen solas antes de subir. Si quieres, marca si cada foto es del exterior o del interior."
+      >
         {uploadMode === "none" ? (
-          <p className="rounded-xl bg-soft p-4 text-sm text-mute">
+          <p className="rounded-md bg-paper p-4 text-sm text-mute">
             Conecta Cloudinary para poder subir fotos (ver README).
           </p>
         ) : (
@@ -302,9 +343,9 @@ export function CarForm({
                 e.preventDefault();
                 addFiles(e.dataTransfer.files);
               }}
-              className="flex w-full flex-col items-center gap-2 rounded-2xl border-2 border-dashed border-line bg-soft/50 px-4 py-8 text-center transition-colors hover:border-brand/60"
+              className="flex w-full flex-col items-center gap-2 rounded-lg border-2 border-dashed border-line bg-paper px-4 py-8 text-center transition-colors hover:border-fg/40"
             >
-              <ImagePlus className="size-8 text-brand-hi" />
+              <ImagePlus className="size-8 text-brand" />
               <span className="font-semibold">Agregar fotos</span>
               <span className="text-xs text-mute">Desde tu galería o cámara · puedes elegir varias</span>
             </button>
@@ -325,8 +366,8 @@ export function CarForm({
                 className={`flex flex-col gap-1 ${dragIndex === i ? "opacity-40" : ""}`}
               >
                 <div
-                  className={`group relative aspect-[3/4] overflow-hidden rounded-xl bg-soft ring-2 ${
-                    i === 0 ? "ring-brand" : "ring-transparent"
+                  className={`group relative aspect-[3/4] overflow-hidden rounded-md bg-soft ring-2 ${
+                    i === 0 ? "ring-night" : "ring-transparent"
                   }`}
                 >
                   {p.url ? (
@@ -338,7 +379,7 @@ export function CarForm({
                   {!p.url && !p.error && (
                     <div className="absolute inset-0 grid place-items-center">
                       <Loader2 className="size-6 animate-spin" />
-                      <span className="absolute inset-x-2 bottom-2 h-1 overflow-hidden rounded-full bg-white/20">
+                      <span className="absolute inset-x-2 bottom-2 h-1 overflow-hidden bg-white/20">
                         <span className="block h-full bg-brand transition-all" style={{ width: `${Math.max(8, p.progress)}%` }} />
                       </span>
                     </div>
@@ -346,13 +387,13 @@ export function CarForm({
                   {p.error && (
                     <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-paper/80 p-2 text-center text-[11px] text-brand-hi">
                       {p.error}
-                      <button type="button" onClick={() => setPhotos((ps) => ps.filter((x) => x.key !== p.key))} className="rounded-full bg-soft px-3 py-1 text-fg">
+                      <button type="button" onClick={() => setPhotos((ps) => ps.filter((x) => x.key !== p.key))} className="rounded-md bg-soft px-3 py-1 text-fg">
                         Quitar
                       </button>
                     </div>
                   )}
                   {i === 0 && p.url && (
-                    <span className="font-tech absolute top-1.5 left-1.5 rounded-full bg-brand px-2 py-0.5 text-[9px] text-white">Portada</span>
+                    <span className="font-tech absolute top-1.5 left-1.5 rounded-sm bg-night px-2 py-0.5 text-[9px] text-white">Portada</span>
                   )}
                   {p.url && (
                     <>
@@ -362,21 +403,21 @@ export function CarForm({
                           setPhotos((ps) => ps.filter((x) => x.key !== p.key));
                           setDirty(true);
                         }}
-                        className="absolute top-1 right-1 grid size-7 place-items-center rounded-full bg-paper/80 text-brand-hi"
+                        className="absolute top-1 right-1 grid size-7 place-items-center rounded-md bg-paper/85 text-brand-hi"
                         aria-label="Quitar foto"
                       >
                         <Trash2 className="size-3.5" />
                       </button>
                       <div className="absolute inset-x-1 bottom-1 flex items-center justify-between">
-                        <button type="button" onClick={() => move(i, i - 1)} disabled={i === 0} className="grid size-7 place-items-center rounded-full bg-paper/80 disabled:opacity-30" aria-label="Mover a la izquierda">
+                        <button type="button" onClick={() => move(i, i - 1)} disabled={i === 0} className="grid size-7 place-items-center rounded-md bg-paper/85 disabled:opacity-30" aria-label="Mover a la izquierda">
                           <ArrowLeft className="size-3.5" />
                         </button>
                         {i !== 0 && (
-                          <button type="button" onClick={() => move(i, 0)} className="grid size-7 place-items-center rounded-full bg-paper/80" aria-label="Usar como portada">
+                          <button type="button" onClick={() => move(i, 0)} className="grid size-7 place-items-center rounded-md bg-paper/85" aria-label="Usar como portada">
                             <Star className="size-3.5" />
                           </button>
                         )}
-                        <button type="button" onClick={() => move(i, i + 1)} disabled={i === photos.length - 1} className="grid size-7 place-items-center rounded-full bg-paper/80 disabled:opacity-30" aria-label="Mover a la derecha">
+                        <button type="button" onClick={() => move(i, i + 1)} disabled={i === photos.length - 1} className="grid size-7 place-items-center rounded-md bg-paper/85 disabled:opacity-30" aria-label="Mover a la derecha">
                           <ArrowRight className="size-3.5" />
                         </button>
                       </div>
@@ -392,8 +433,8 @@ export function CarForm({
                       setDirty(true);
                     }}
                     aria-label={`Sección de la foto ${i + 1}`}
-                    className={`h-9 w-full rounded-lg border px-1.5 text-xs font-medium ${
-                      p.section ? "border-brand/40 bg-brand-soft text-brand-hi" : "border-line bg-soft text-mute"
+                    className={`h-9 w-full rounded-md border px-1.5 text-xs font-medium ${
+                      p.section ? "border-night bg-night text-white" : "border-line bg-paper text-mute"
                     }`}
                   >
                     <option value="">Sin sección</option>
@@ -410,7 +451,7 @@ export function CarForm({
         )}
       </Section>
 
-      <Section title="Datos principales">
+      <Section step={2} title="Datos del auto">
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label="Marca">
             <input className={field} value={v.brand} onChange={(e) => set("brand", e.target.value)} list="brands" placeholder="Ej. BMW" required />
@@ -439,11 +480,23 @@ export function CarForm({
             <input className={field} value={withCommas(v.mileage)} onChange={(e) => set("mileage", digits(e.target.value).slice(0, 7))} inputMode="numeric" placeholder="45,000" />
           </Field>
         </div>
-      </Section>
-
-      <Section title="Características">
         <Pills label="Tipo" value={v.body} options={BODY_TYPES} onChange={(x) => set("body", x)} allowEmpty={false} />
         <Pills label="Transmisión" value={v.transmission} options={TRANSMISSIONS} onChange={(x) => set("transmission", x)} />
+      </Section>
+
+      <Section step={3} title="Descripción" hint="Cuéntalo como se lo contarías a un cliente.">
+        <textarea
+          className={`${field} h-auto min-h-40 py-3 leading-relaxed`}
+          value={v.description}
+          onChange={(e) => set("description", e.target.value)}
+          placeholder="Estado, servicios, extras, por qué vale la pena…"
+          maxLength={6000}
+        />
+        <p className="text-right text-xs text-dim">{v.description.length} / 6000</p>
+      </Section>
+
+      <MoreDetails open={Boolean(initial)}>
+      <SubSection title="Características">
         <Pills label="Combustible" value={v.fuel} options={FUELS} onChange={(x) => set("fuel", x)} />
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label="Motor" hint="Opcional">
@@ -459,7 +512,7 @@ export function CarForm({
             <input className={field} value={v.doors} onChange={(e) => set("doors", digits(e.target.value).slice(0, 1))} inputMode="numeric" placeholder="4" />
           </Field>
         </div>
-        <label className="flex items-center justify-between gap-4 rounded-xl bg-soft p-4">
+        <label className="flex items-center justify-between gap-4 rounded-md bg-paper p-4">
           <span>
             <span className="block font-medium">Blindado</span>
             <span className="text-sm text-mute">Aparece en la categoría «Blindados»</span>
@@ -471,12 +524,9 @@ export function CarForm({
             <input className={field} value={v.armorLevel} onChange={(e) => set("armorLevel", e.target.value)} maxLength={60} placeholder="Ej. Nivel 3 Plus" />
           </Field>
         )}
-      </Section>
+      </SubSection>
 
-      <Section
-        title="Documentos e historial"
-        hint="Lo que más pregunta quien compra. Lo que no llenes aparece en la página como «Pregúntanos»."
-      >
+      <SubSection title="Documentos e historial" hint="Lo que más pregunta quien compra.">
         <Field label="Número de dueños" hint="Opcional · 1 = único dueño">
           <input
             className={field}
@@ -488,7 +538,7 @@ export function CarForm({
         </Field>
         <Pills label="Factura" value={v.invoice} options={INVOICES} onChange={(x) => set("invoice", x)} />
         <Pills label="Servicios" value={v.serviceHistory} options={SERVICE_HISTORY} onChange={(x) => set("serviceHistory", x)} />
-        <label className="flex items-center justify-between gap-4 rounded-xl bg-soft p-4">
+        <label className="flex items-center justify-between gap-4 rounded-md bg-paper p-4">
           <span>
             <span className="block font-medium">Papeles en regla</span>
             <span className="text-sm text-mute">Márcalo solo si ya lo revisaste</span>
@@ -500,14 +550,14 @@ export function CarForm({
             className="size-6 accent-[var(--color-brand)]"
           />
         </label>
-      </Section>
+      </SubSection>
 
-      <Section title="Lo que destaca" hint="Frases cortas que aparecen como etiquetas.">
+      <SubSection title="Lo que destaca" hint="Frases cortas que aparecen en la ficha.">
         <div className="flex flex-wrap gap-2">
           {v.features.map((f) => (
-            <span key={f} className="inline-flex items-center gap-1 rounded-full bg-brand/15 py-1.5 pr-1.5 pl-3 text-sm text-fg">
+            <span key={f} className="inline-flex items-center gap-1 rounded-md bg-night py-1.5 pr-1.5 pl-3 text-sm text-white">
               {f}
-              <button type="button" onClick={() => set("features", v.features.filter((x) => x !== f))} className="grid size-6 place-items-center rounded-full hover:bg-brand/30" aria-label={`Quitar ${f}`}>
+              <button type="button" onClick={() => set("features", v.features.filter((x) => x !== f))} className="grid size-6 place-items-center rounded-sm hover:bg-white/15" aria-label={`Quitar ${f}`}>
                 <X className="size-3.5" />
               </button>
             </span>
@@ -527,20 +577,20 @@ export function CarForm({
             placeholder="Ej. Escape modificado"
             maxLength={60}
           />
-          <button type="button" onClick={() => addFeature(featureDraft)} className="grid size-12 shrink-0 place-items-center rounded-xl bg-soft-2" aria-label="Agregar">
+          <button type="button" onClick={() => addFeature(featureDraft)} className="grid size-12 shrink-0 place-items-center rounded-md bg-soft-2" aria-label="Agregar">
             <Plus className="size-5" />
           </button>
         </div>
         <div className="flex flex-wrap gap-1.5">
           {FEATURE_IDEAS.filter((f) => !v.features.includes(f)).map((f) => (
-            <button key={f} type="button" onClick={() => addFeature(f)} className="rounded-full border border-dashed border-line px-3 py-1.5 text-xs text-mute hover:border-fg/40 hover:text-fg">
+            <button key={f} type="button" onClick={() => addFeature(f)} className="rounded-md border border-dashed border-line px-3 py-1.5 text-xs text-mute hover:border-fg/40 hover:text-fg">
               + {f}
             </button>
           ))}
         </div>
-      </Section>
+      </SubSection>
 
-      <Section title="Equipamiento" hint="Marca solo lo que tiene este auto. En la página se ve agrupado y con íconos.">
+      <SubSection title="Equipamiento" hint="Marca solo lo que tiene este auto. En la página se ve agrupado y con íconos.">
         {EQUIPMENT_GROUPS.map((group) => (
           <div key={group}>
             <span className="mb-1.5 block text-sm font-medium text-fg/90">{group}</span>
@@ -553,8 +603,8 @@ export function CarForm({
                     type="button"
                     aria-pressed={on}
                     onClick={() => set("equipment", on ? v.equipment.filter((k) => k !== key) : [...v.equipment, key])}
-                    className={`inline-flex h-10 items-center gap-1.5 rounded-full border px-3.5 text-sm font-medium transition-colors ${
-                      on ? "border-brand bg-brand text-white" : "border-line bg-soft text-fg/80"
+                    className={`inline-flex h-10 items-center gap-1.5 rounded-md border px-3.5 text-sm font-medium transition-colors ${
+                      on ? "border-night bg-night text-white" : "border-line bg-paper text-fg/80 hover:border-fg/40"
                     }`}
                   >
                     <Icon className="size-4" aria-hidden="true" />
@@ -565,20 +615,9 @@ export function CarForm({
             </div>
           </div>
         ))}
-      </Section>
+      </SubSection>
 
-      <Section title="Descripción">
-        <textarea
-          className={`${field} h-auto min-h-48 py-3 leading-relaxed`}
-          value={v.description}
-          onChange={(e) => set("description", e.target.value)}
-          placeholder="Cuenta la historia del auto: estado, servicios, extras, por qué vale la pena…"
-          maxLength={6000}
-        />
-        <p className="text-right text-xs text-dim">{v.description.length} / 6000</p>
-      </Section>
-
-      <Section title="Video (opcional)" hint="Un recorrido del auto ayuda mucho a decidir. YouTube se ve dentro de la página; TikTok, Instagram y Facebook abren la red social.">
+      <SubSection title="Video" hint="Un recorrido del auto ayuda mucho a decidir. YouTube se ve dentro de la página; TikTok, Instagram y Facebook abren la red social.">
         <Field label="Enlace del video">
           <input
             className={field}
@@ -589,13 +628,15 @@ export function CarForm({
             placeholder="https://youtube.com/shorts/… o https://www.tiktok.com/@…"
           />
         </Field>
-      </Section>
+      </SubSection>
+      </MoreDetails>
 
-      <Section title="Publicación">
+      <Section step={4} title="Publicar">
         <Pills
           label="Estado"
           value={v.status}
           options={STATUSES}
+          labels={STATUS_LABEL}
           onChange={(x) => x && set("status", x)}
           allowEmpty={false}
         />
@@ -607,7 +648,7 @@ export function CarForm({
               ? "sigue visible con la etiqueta «Apartado»."
               : "visible en el catálogo."}
         </p>
-        <label className="flex items-center justify-between gap-4 rounded-xl bg-soft p-4">
+        <label className="flex items-center justify-between gap-4 rounded-md bg-paper p-4">
           <span>
             <span className="block font-medium">Destacado</span>
             <span className="text-sm text-mute">Aparece primero en el inicio</span>
@@ -618,14 +659,10 @@ export function CarForm({
 
       <div className="sticky bottom-0 z-30 -mx-4 border-t border-line bg-paper/90 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur-xl">
         <div className="flex gap-3">
-          <Link href="/admin" className="inline-flex h-14 items-center rounded-full border border-line px-5 font-medium">
+          <Link href="/admin" className="btn btn-outline h-14">
             Cancelar
           </Link>
-          <button
-            type="submit"
-            disabled={saving || uploading}
-            className="btn-shine flex h-14 flex-1 items-center justify-center gap-2 rounded-full bg-brand font-semibold text-white disabled:opacity-60"
-          >
+          <button type="submit" disabled={saving || uploading} className="btn btn-dark btn-shine h-14 flex-1 disabled:opacity-60">
             {(saving || uploading) && <Loader2 className="size-5 animate-spin" />}
             {uploading ? "Subiendo fotos…" : saving ? "Guardando…" : initial ? "Guardar cambios" : "Publicar auto"}
           </button>

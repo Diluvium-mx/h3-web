@@ -6,7 +6,7 @@ import { vars } from "@/lib/ui";
 
 export function Stars({ value, className = "size-4" }: { value: number; className?: string }) {
   return (
-    <span className="flex text-volt" role="img" aria-label={`${value} de 5 estrellas`}>
+    <span className="flex text-fg" role="img" aria-label={`${value} de 5 estrellas`}>
       {Array.from({ length: 5 }, (_, i) => (
         <Star key={i} className={`${className} ${i < Math.round(value) ? "fill-current" : "text-soft-2"}`} />
       ))}
@@ -25,10 +25,9 @@ export function ReviewsWall({ reviews }: { reviews: Review[] }) {
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <SectionHeading
           id="resenas"
-          eyebrow="Clientes H3"
           title={
             <>
-              Lo que dicen quienes <span className="text-brand">ya compraron</span>
+              Lo que dicen quienes ya compraron
             </>
           }
         />
@@ -42,7 +41,7 @@ export function ReviewsWall({ reviews }: { reviews: Review[] }) {
           {ordered.slice(0, 9).map((r, i) => (
             <figure
               key={r.id}
-              className="reveal mb-4 break-inside-avoid overflow-hidden rounded-3xl bg-card ring-1 ring-line"
+              className="reveal mb-4 break-inside-avoid overflow-hidden rounded-lg bg-card ring-1 ring-line transition-transform duration-500 ease-[var(--ease-out-expo)] hover:-translate-y-1"
               style={vars({ "--i": i })}
             >
               {r.photo && (
@@ -66,7 +65,7 @@ export function ReviewsWall({ reviews }: { reviews: Review[] }) {
                   <b>{r.name}</b>
                   {r.car && <span className="text-mute">· {r.car}</span>}
                   {r.source && (
-                    <span className="font-tech ml-auto rounded-full bg-soft px-2.5 py-1 text-[10px] text-mute">
+                    <span className="font-tech ml-auto border-l border-line pl-2 text-[10px] text-dim">
                       {r.source === "En persona" ? "En persona" : `Reseña de ${r.source}`}
                     </span>
                   )}
