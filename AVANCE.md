@@ -2,6 +2,14 @@
 
 Lo más reciente va arriba.
 
+## 30 de octubre de 2026 (cierre) — las 2 versiones listas
+
+- Versión 2 (esta rama): https://deploy-preview-1--h3-seminuevos.netlify.app
+- Versión 1 (rama `version-scrollcraft`, hecha con la skill): https://deploy-preview-2--h3-seminuevos.netlify.app
+- Las dos pasan la prueba completa del sitio desde su enlace público.
+
+Falta: que el dueño compare y elija; luego se integra la elegida en `desarrollo` y se publica cuando diga «publica».
+
 ## 30 de octubre de 2026 (noche) — versión 2 con los cambios del dueño
 
 - Hero con fotos fijas que se deslizan y cambian solas, sin luces; paleta natural y letra Albert Sans.
