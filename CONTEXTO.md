@@ -100,6 +100,23 @@ No se busca vender en línea: no hay carrito ni pagos.
 
 ## 3. Secciones de la página (en orden)
 
+> **Esta rama (`version-scrollcraft`) es la versión 1**, hecha con la skill `/scroll-craft`. Tiene el mismo
+> contenido del negocio que la versión 2 (rama `desarrollo`, descrita abajo); cambia el diseño:
+> - **Hero con capas reales:** fondo nocturno hecho con Arcads (sin autos), la palabra «PREMIUM» gigante
+>   detrás del **BMW M3 real del inventario recortado** (con su reflejo en el piso mojado) y el texto al
+>   frente. Al bajar, cada capa se mueve a su velocidad. Si el M3 se vende, hay que cambiar la imagen
+>   (qué auto usar: **sin decidir**).
+> - **Recorrido de un auto con el scroll** (después del inventario): la foto queda fija y pasa del exterior
+>   al interior del M3; al final, precio, «Me interesa» y «Ver todas las fotos».
+> - **Movimiento firma «el mensaje se escribe solo»:** al bajar, el WhatsApp se escribe frente al visitante
+>   con la foto, el modelo, el precio y el enlace, y se marca como enviado. Reemplaza «Atención 1 a 1».
+> - Letras **Archivo** (ancha, títulos) y **Geist** (texto); gris frío y plata con el rojo como único
+>   acento; grano fotográfico en los fondos oscuros.
+> - Etiqueta pequeña solo en 1 de cada 3 títulos, sin números en el menú y sin etiquetas encima de las
+>   fotos (van junto al año).
+> - Con «reducir movimiento» o sin JavaScript, todo se ve completo y quieto.
+> - Vista previa: https://deploy-preview-2--h3-seminuevos.netlify.app (solicitud #2).
+
 **Inicio (`/`)** — estructura del método de los 2 videos de landing pages que mandó el dueño (análisis en
 `ANALISIS-VIDEOS.md`), con los cambios del dueño del 30-oct (**versión 2**). Acción principal: ver un auto y
 mandar WhatsApp.

@@ -1,12 +1,18 @@
 import type { Metadata, Viewport } from "next";
-import { Albert_Sans } from "next/font/google";
+import { Archivo, Geist } from "next/font/google";
 import { site } from "@/lib/site";
 import "./globals.css";
 
-// Una sola familia (pedido del dueño, 30-oct: la tipografía anterior se veía «hecha con IA").
-// Albert Sans: grotesca escandinava, sobria y natural; variable (todos los pesos en un archivo).
-const albert = Albert_Sans({
-  variable: "--font-albert",
+// Versión 1 (skill /scroll-craft): Archivo ancha para títulos (carácter automotriz, de ficha técnica) y
+// Geist para el texto. Archivo es variable también en anchura (wdth), así se usa una sola descarga.
+const archivo = Archivo({
+  variable: "--font-archivo",
+  subsets: ["latin"],
+  axes: ["wdth"],
+  display: "swap",
+});
+const geist = Geist({
+  variable: "--font-geist",
   subsets: ["latin"],
   display: "swap",
 });
@@ -39,7 +45,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f4f3f0",
+  themeColor: "#eef0f2",
   colorScheme: "light",
 };
 
@@ -48,7 +54,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="es-MX"
       data-scroll-behavior="smooth"
-      className={`${albert.variable} antialiased`}
+      className={`${archivo.variable} ${geist.variable} antialiased`}
     >
       <body className="min-h-dvh">{children}</body>
     </html>

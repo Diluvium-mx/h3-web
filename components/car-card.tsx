@@ -90,12 +90,10 @@ export function CarCard({
       >
         <CardImage car={car} sizes={sizes} preload={preload} />
         <div className="absolute inset-0 bg-gradient-to-t from-night via-night/30 via-45% to-transparent" />
-        <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
-          <StatusBadge status={car.status} />
-        </div>
         <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
-          <p className="text-[11px] font-medium text-white/70">
+          <p className="flex items-center gap-2 text-[11px] font-medium text-white/70">
             {car.year} · {car.brand}
+            <StatusBadge status={car.status} />
           </p>
           <h3 className="font-display mt-1 text-2xl">
             <CardLink car={car}>{car.model}</CardLink>
@@ -119,21 +117,16 @@ export function CarCard({
       <div className="relative aspect-[4/3] overflow-hidden bg-soft">
         <CardImage car={car} sizes={sizes} preload={preload} />
         <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-night/35 to-transparent" />
-        <div className="absolute top-2 left-2 flex flex-wrap gap-1.5 @[15rem]:top-3 @[15rem]:left-3">
-          <StatusBadge status={car.status} />
-          {badges.slice(0, 1).map((b) => (
-            <span
-              key={b}
-              className="hidden rounded-sm bg-night/75 px-2 py-1 text-[10px] font-semibold tracking-wide text-white uppercase @[15rem]:inline"
-            >
-              {b}
-            </span>
-          ))}
-        </div>
       </div>
       <div className="flex flex-1 flex-col p-3 @[15rem]:p-5">
-        <p className="text-[11px] font-medium text-dim @[15rem]:text-xs">
+        <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] font-medium text-dim @[15rem]:text-xs">
           {car.year} · {car.brand}
+          <StatusBadge status={car.status} />
+          {badges.slice(0, 1).map((b) => (
+            <span key={b} className="hidden text-brand-hi @[15rem]:inline">
+              · {b}
+            </span>
+          ))}
         </p>
         <h3 className="font-display mt-1 text-[1.05rem] leading-tight text-fg @[15rem]:text-[1.4rem]">
           <CardLink car={car}>{car.model}</CardLink>

@@ -29,16 +29,17 @@ const step = (m) => console.log('✔', m);
     if (!(await heroCta.isVisible())) throw new Error('el botón principal no se ve sin hacer scroll');
     const box = await heroCta.boundingBox();
     if (box.y + box.height > 844) throw new Error('el botón principal queda abajo del primer pantallazo');
-    // 30-oct (versión 2): fotos en carrusel que se desliza y cambia solo; el auto va abajo a la derecha; sin «¿Qué buscas?»
-    const slides = page.locator('[aria-roledescription="carrusel de autos"] > [aria-roledescription="auto"]');
-    if ((await slides.count()) < 3) throw new Error('el hero debería tener un carrusel de autos');
-    const caption = slides.first().locator('a[href^="/autos/"]');
-    const cap = await caption.boundingBox();
-    const hero = await page.locator('[aria-roledescription="carrusel de autos"]').boundingBox();
-    if (cap.x + cap.width < hero.x + hero.width * 0.75 || cap.y < hero.y + hero.height / 2) throw new Error('el auto debería ir abajo a la derecha de la foto');
-    if (await page.getByText('¿Qué buscas?').count()) throw new Error('debería haberse quitado «¿Qué buscas?» del hero');
-    await page.waitForFunction(() => document.querySelector('[aria-roledescription="carrusel de autos"]').scrollLeft > 0, null, { timeout: 9000 });
-    step('hero: título y botón en el primer pantallazo; carrusel que avanza solo con el auto abajo a la derecha');
+    // Versión 1 (skill /scroll-craft): hero con capas reales (fondo nocturno, «premium» detrás del auto real)
+    if (!(await page.locator('#hero-title').isVisible().catch(() => true))) throw new Error('falta el título del hero');
+    const car = page.locator('section[aria-labelledby=hero-title] img[src*="m3-recorte"]').first();
+    await car.waitFor({ state: 'attached' });
+    const z = await page.evaluate(() => {
+      const word = [...document.querySelectorAll('#hero-title span')].find((e) => e.textContent.trim() === 'premium');
+      const carLayer = document.querySelector('section[aria-labelledby=hero-title] img[src*="m3-recorte"]').closest('.z-20');
+      return [getComputedStyle(word.closest('.z-10')).zIndex, getComputedStyle(carLayer).zIndex];
+    });
+    if (!(Number(z[0]) < Number(z[1]))) throw new Error('la palabra «premium» debe ir detrás del auto: ' + z);
+    step('hero con capas: título y botón en el primer pantallazo, «premium» detrás del auto real');
     // Lo que el dueño pidió quitar (28-oct)
     for (const gone of ['autos disponibles hoy', '¿Cuál es tu presupuesto?', 'Ver del más barato al más caro']) {
       if (await page.getByText(gone).count()) throw new Error('debería haberse quitado: ' + gone);
@@ -71,6 +72,20 @@ const step = (m) => console.log('✔', m);
     const diff = page.locator('#diferencia');
     if ((await sell.boundingBox()).y > (await diff.boundingBox()).y) throw new Error('«Vende tu auto» debe ir más arriba');
     step('beneficios en 2 (al comprar / al vender), carrusel de autos verificados y «Vende tu auto»');
+    // Recorrido de un auto: al final del scroll se ven el precio y los botones
+    const tour = page.locator('section[aria-label^="Recorrido"]');
+    await tour.evaluate((el) => window.scrollTo(0, el.getBoundingClientRect().top + scrollY + el.offsetHeight - innerHeight - 5));
+    await tour.locator('a', { hasText: 'Me interesa' }).waitFor({ state: 'visible' });
+    // Movimiento firma: al bajar, el mensaje se escribe solo y se envía
+    const msg = page.locator('section[aria-labelledby=mensaje]');
+    await msg.evaluate((el) => window.scrollTo(0, el.getBoundingClientRect().top + scrollY + (el.offsetHeight - innerHeight) * 0.5));
+    await page.waitForTimeout(400);
+    const partial = await msg.locator('p.whitespace-pre-line').innerText();
+    await msg.evaluate((el) => window.scrollTo(0, el.getBoundingClientRect().top + scrollY + el.offsetHeight - innerHeight - 5));
+    await msg.getByText('✓✓').waitFor();
+    const full = await msg.locator('p.whitespace-pre-line').innerText();
+    if (!(partial.length < full.length && full.includes('¿Sigue disponible?'))) throw new Error('el mensaje no se escribe con el scroll: ' + partial.length + ' / ' + full.length);
+    step('recorrido del auto (termina en precio y botones) y el mensaje que se escribe solo al bajar');
     if (await page.getByText('Ven a conocerlo').count()) throw new Error('los autos no están en un lote: no debe decir «Ven a conocerlo»');
     await page.getByRole('heading', { name: 'Agenda tu cita' }).waitFor();
     const faq = page.locator('details', { hasText: '¿Puedo ver el auto en persona?' });

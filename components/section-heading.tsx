@@ -9,7 +9,8 @@ export function SectionHeading({
   id,
   dark,
 }: {
-  eyebrow: string;
+  /** Versión 1: la etiqueta va solo en 1 de cada 3 títulos (guía de /scroll-craft) */
+  eyebrow?: string;
   title: ReactNode;
   action?: { href: string; label: string };
   id?: string;
@@ -18,11 +19,13 @@ export function SectionHeading({
   return (
     <div className="reveal mb-8 flex items-end justify-between gap-4">
       <div>
-        <p className={`font-tech flex items-center gap-3 text-[11px] ${dark ? "text-silver" : "text-dim"}`}>
-          <span className="h-px w-8 rule-accent" />
-          {eyebrow}
-        </p>
-        <h2 id={id} className={`font-display mt-4 text-[2rem] sm:text-5xl ${dark ? "text-white" : ""}`}>
+        {eyebrow && (
+          <p className={`font-tech mb-4 flex items-center gap-3 text-[11px] ${dark ? "text-silver" : "text-dim"}`}>
+            <span className="h-px w-8 rule-accent" />
+            {eyebrow}
+          </p>
+        )}
+        <h2 id={id} className={`font-display text-[2rem] sm:text-5xl ${dark ? "text-white" : ""}`}>
           {title}
         </h2>
       </div>

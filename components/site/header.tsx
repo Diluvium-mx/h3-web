@@ -176,7 +176,6 @@ function HeaderView({ pathname }: { pathname: string | null }) {
                 style={vars({ "--i": i })}
                 className="group font-display flex items-center gap-4 border-b border-white/10 py-4 text-[2rem] active:text-brand-glow"
               >
-                <span className="font-tech text-[10px] text-brand-glow">0{i + 1}</span>
                 {item.label}
                 <ArrowRight className="ml-auto size-5 text-white/40 transition-transform duration-500 group-hover:translate-x-1" />
               </Link>

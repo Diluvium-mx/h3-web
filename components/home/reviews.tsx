@@ -25,7 +25,6 @@ export function ReviewsWall({ reviews }: { reviews: Review[] }) {
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <SectionHeading
           id="resenas"
-          eyebrow="Clientes H3"
           title={
             <>
               Lo que dicen quienes ya compraron

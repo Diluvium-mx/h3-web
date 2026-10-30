@@ -1,38 +1,40 @@
 @import "tailwindcss";
 
 @theme {
-  /* Versión 2 (30-oct): natural y sobria. Carbón, blanco hueso y el rojo de la marca, sin degradados de
-     colores ni resplandores (el dueño sintió el azul con rojo y verde como «videojuego»). */
-  --color-paper: #f4f3f0; /* fondo de página */
-  --color-card: #ffffff; /* tarjetas y paneles */
-  --color-soft: #ecebe7; /* campos */
-  --color-soft-2: #dfddd8;
-  --color-line: rgb(22 22 22 / 0.1);
-  --color-fg: #161616; /* texto */
-  --color-mute: #54524e;
-  --color-dim: #6e6b66;
-  --color-night: #141414; /* superficies oscuras: carbón */
-  --color-graphite: #1e1e1e;
-  --color-steel: #2c2c2b;
-  --color-silver: #b5b2ac;
-  /* Marca */
+  /* Versión 1 (skill /scroll-craft, 30-oct): «Nocturno». Gris frío y plata en lugar de crema y champaña,
+     un solo acento (el rojo de la marca) y fondos oscuros con grano. El verde queda solo para WhatsApp
+     y las palomitas. */
+  --color-paper: #eef0f2; /* fondo de página: gris frío muy claro */
+  --color-card: #ffffff;
+  --color-soft: #e4e7ea;
+  --color-soft-2: #d3d7dc;
+  --color-line: rgb(14 17 22 / 0.1);
+  --color-fg: #0e1116;
+  --color-mute: #4b525c;
+  --color-dim: #656d78;
+  --color-night: #0b0d10; /* noche */
+  --color-graphite: #15181d;
+  --color-steel: #23272e;
+  --color-silver: #b9c0c9; /* plata fría */
+  --color-chrome: #dfe3e8; /* cromo: textos grandes sobre la noche */
+  /* Marca: el único acento */
   --color-brand: #c8102e;
-  --color-brand-hi: #a50d22; /* rojo para texto pequeño sobre fondo claro */
+  --color-brand-hi: #a50d22;
   --color-brand-soft: #f8e7ea;
-  --color-brand-glow: #ef4a5e; /* rojo legible sobre fondo oscuro */
+  --color-brand-glow: #ef4a5e;
   --color-gold: #a8895a; /* estrellas de reseñas */
   --color-gold-soft: #f1ebe0;
   --color-azure: #3b6fd8;
   --color-ok: #168f4a; /* palomitas verdes */
   --color-ok-soft: #e6f4ec;
-  --color-wa: #25d366; /* verde de WhatsApp (ícono) */
-  --color-wa-deep: #0f8a45; /* botones: verde WhatsApp oscuro, legible con texto blanco */
+  --color-wa: #25d366;
+  --color-wa-deep: #0f8a45;
   --color-wa-deeper: #0b6e37;
-  --color-wa-dark: #0b7a3e; /* texto verde sobre fondo claro */
+  --color-wa-dark: #0b7a3e;
 
-  --font-sans: var(--font-albert), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-albert), ui-sans-serif, system-ui, sans-serif;
-  --font-tech: var(--font-albert), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-tech: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -196,16 +198,18 @@ body {
 /* Títulos: misma familia, más peso y letras más juntas mientras más grande es el texto */
 .font-display {
   font-family: var(--font-display);
-  font-weight: 650;
-  letter-spacing: -0.035em;
-  line-height: 1.05;
+  font-weight: 700;
+  font-stretch: 112%;
+  letter-spacing: -0.025em;
+  line-height: 1.02;
   text-wrap: balance;
 }
-/* Etiquetas pequeñas: mayúsculas con algo de espacio */
+/* Etiquetas pequeñas: Archivo ancha en mayúsculas */
 .font-tech {
   font-family: var(--font-tech);
   font-weight: 600;
-  letter-spacing: 0.12em;
+  font-stretch: 125%;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 .text-outline {
@@ -218,8 +222,8 @@ body {
   background: var(--color-brand);
 }
 
-/* Superficie oscura natural: carbón con una luz suave desde arriba, como un estudio.
-   Necesita una posición (relative, absolute o fixed) en el mismo elemento. */
+/* Noche: superficie oscura con una luz fría desde arriba y grano fotográfico (4-5 %), para que no se vea
+   plana. Necesita una posición (relative, absolute o fixed) en el mismo elemento. */
 .glow-night {
   isolation: isolate;
   background-color: var(--color-night);
@@ -230,7 +234,17 @@ body {
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: radial-gradient(70% 55% at 50% 0%, rgb(255 255 255 / 0.07), transparent 70%);
+  background: radial-gradient(70% 55% at 50% 0%, rgb(200 214 230 / 0.08), transparent 70%);
+}
+.glow-night::after,
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 /* Fondo claro de sección alterna */

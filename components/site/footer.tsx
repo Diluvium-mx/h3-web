@@ -81,7 +81,7 @@ function ContactCard({
 
 export function Footer() {
   return (
-    <footer className="relative overflow-hidden bg-night text-white">
+    <footer className="grain relative overflow-hidden bg-night text-white">
       <div className="rule-accent h-0.5" aria-hidden="true" />
       <div className="relative mx-auto max-w-7xl px-4 pt-14 sm:px-6 sm:pt-20">
         {/* Logo y lema */}

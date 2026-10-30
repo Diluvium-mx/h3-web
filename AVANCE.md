@@ -2,6 +2,15 @@
 
 Lo más reciente va arriba.
 
+## 30 de octubre de 2026 (noche) — versión 1 con la skill Scrollcraft
+
+- Hero con capas: fondo nocturno hecho con Arcads y el BMW M3 real recortado, con «PREMIUM» pasando detrás.
+- Recorrido del M3 con el scroll (exterior → interior → precio) y el mensaje de WhatsApp que se escribe solo.
+- Letras Archivo + Geist, gris frío y plata con un solo acento, grano en fondos oscuros; mismo contenido
+  que la versión 2.
+
+Falta: que el dueño compare las 2 vistas previas y elija; qué auto va en el hero si se vende el M3.
+
 ## 30 de octubre de 2026 (noche) — versión 2 con los cambios del dueño
 
 - Hero con fotos fijas que se deslizan y cambian solas, sin luces; paleta natural y letra Albert Sans.

@@ -27,7 +27,9 @@ import { SOCIALS } from "@/components/site/footer";
 import { WhatsAppIcon } from "@/components/icons";
 import { FUDS, GENERAL_MESSAGE, countTypes, type Rating } from "@/components/home/hero";
 import { Stars } from "@/components/home/reviews";
-import { carTitle, formatPrice, type Car } from "@/lib/cars";
+import { CarTour, type TourFrame } from "@/components/home/car-tour";
+import { MessageWrites } from "@/components/home/message-writes";
+import { carTitle, carWhatsApp, formatKm, formatPrice, type Car } from "@/lib/cars";
 import { site, whatsappUrl } from "@/lib/site";
 import { vars } from "@/lib/ui";
 
@@ -112,11 +114,10 @@ export function Benefits() {
   return (
     <section className="py-20 sm:py-28" aria-labelledby="beneficios">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <SectionHeading id="beneficios" eyebrow="Beneficios" title="Lo que hacemos por ti" />
+        <SectionHeading id="beneficios" title="Lo que hacemos por ti" />
         <div className="grid gap-4 lg:grid-cols-2 lg:gap-6">
           <article className="reveal flex flex-col rounded-lg bg-card p-6 ring-1 ring-line sm:p-9" aria-labelledby="al-comprar">
-            <p className="font-tech text-[11px] text-dim">Compra tu auto</p>
-            <h3 id="al-comprar" className="font-display mt-3 text-[1.9rem] sm:text-4xl">
+            <h3 id="al-comprar" className="font-display text-[1.9rem] sm:text-4xl">
               Al comprar un auto
             </h3>
             <BenefitList items={BUY_BENEFITS} />
@@ -129,8 +130,7 @@ export function Benefits() {
             style={vars({ "--i": 1 })}
             aria-labelledby="al-vender"
           >
-            <p className="font-tech relative text-[11px] text-white/55">Vende tu auto</p>
-            <h3 id="al-vender" className="font-display relative mt-3 text-[1.9rem] sm:text-4xl">
+            <h3 id="al-vender" className="font-display relative text-[1.9rem] sm:text-4xl">
               Al vender tu auto
             </h3>
             <div className="relative">
@@ -206,11 +206,7 @@ export function BuySection({ cars }: { cars: Car[] }) {
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="reveal flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
           <div>
-            <p className="font-tech flex items-center gap-3 text-[11px] text-dim">
-              <span className="rule-accent h-px w-8" />
-              Autos verificados
-            </p>
-            <h2 id="compra" className="font-display mt-4 max-w-xl text-[2.1rem] sm:text-5xl">
+            <h2 id="compra" className="font-display max-w-xl text-[2.1rem] sm:text-5xl">
               Verificados, probados y con sus papeles en regla.
             </h2>
           </div>
@@ -357,78 +353,68 @@ export function Comparison() {
   );
 }
 
-// ---------- Atención 1 a 1: así se ve el mensaje que se manda ----------
+// ---------- Recorrido de un auto con el scroll (versión 1) ----------
 
-// Mismo texto que arma el sitio al tocar «Me interesa»
-function ChatMock({ car }: { car: Car }) {
-  const host = site.url.replace(/^https?:\/\//, "");
+// Se usa el auto del hero (BMW M3) mientras esté publicado; si no, el primer destacado con fotos de
+// exterior e interior.
+const TOUR_SLUG = "bmw-m3-2018";
+// Fotos de interior elegidas para el M3 (asientos y detalle del asiento M); si cambian, se usan las primeras
+const TOUR_INTERIOR = [7, 9];
+
+export function Tour({ cars }: { cars: Car[] }) {
+  const split = (c: Car) => {
+    const interior = c.images.filter((u) => c.photoSections?.[u] === "interior");
+    const exterior = c.images.filter((u) => c.photoSections?.[u] !== "interior");
+    return { exterior, interior };
+  };
+  const ok = (c: Car) => c.status !== "vendido" && split(c).exterior.length >= 2 && split(c).interior.length >= 2;
+  const car = cars.find((c) => c.slug === TOUR_SLUG && ok(c)) ?? cars.find(ok);
+  if (!car) return null;
+  const { exterior, interior } = split(car);
+  const pick = (i: number, fallback: number) =>
+    interior[car.slug === TOUR_SLUG && interior[i] ? i : Math.min(fallback, interior.length - 1)];
+  const facts = [car.year, car.mileage != null && formatKm(car.mileage), car.transmission].filter(Boolean).join(" · ");
+  const frames: TourFrame[] = [
+    { src: exterior[0], label: "Exterior", title: `${car.brand} ${car.model}`, text: facts },
+    {
+      src: exterior[Math.min(4, exterior.length - 1)],
+      label: "Exterior",
+      title: "Fotos reales, de este auto.",
+      text: "Así se ve hoy. Nada de fotos de catálogo.",
+    },
+    {
+      src: pick(TOUR_INTERIOR[0], 0),
+      label: "Interior",
+      title: "Por dentro.",
+      text: "Verificado y probado, con papeles originales y documentación en regla.",
+    },
+    {
+      src: pick(TOUR_INTERIOR[1], 1),
+      label: "Interior",
+      title: formatPrice(car.price),
+      text: "Escríbenos y te agendamos una cita para que lo veas en persona.",
+    },
+  ];
   return (
-    <div className="relative mx-auto w-full max-w-sm overflow-hidden rounded-2xl bg-[#efeae2] shadow-[0_30px_70px_-30px_rgb(20_20_20/0.5)] ring-1 ring-line">
-      <div className="flex items-center gap-3 bg-[#0b141a] px-4 py-3 text-white">
-        <span className="grid size-9 place-items-center rounded-full bg-white">
-          <Image src="/brand/mark-dark.png" alt="" width={344} height={186} className="w-6" />
-        </span>
-        <div className="leading-tight">
-          <p className="text-sm font-semibold">{site.name}</p>
-          <p className="text-[11px] text-white/70">en línea</p>
-        </div>
-      </div>
-      <div className="space-y-2 p-4 pb-5">
-        <div className="reveal ml-auto max-w-[88%] rounded-xl rounded-tr-sm bg-[#d9fdd3] p-1.5 text-[13px] leading-snug text-[#111b21] shadow-sm">
-          <div className="flex gap-2 rounded-lg bg-black/5 p-1.5">
-            <span className="relative size-14 shrink-0 overflow-hidden rounded-md bg-soft">
-              <Image src={car.images[0]} alt="" fill sizes="56px" quality={70} className="object-cover" />
-            </span>
-            <span className="min-w-0 py-0.5">
-              <span className="line-clamp-2 font-semibold">
-                {carTitle(car)} | {site.name}
-              </span>
-              <span className="block truncate text-[11px] text-black/50">{host}</span>
-            </span>
-          </div>
-          <p className="px-1.5 pt-2 pb-1">
-            Hola {site.name} 👋 Me interesa el <b>{carTitle(car)}</b> ({formatPrice(car.price)}) que vi en su página.
-            ¿Sigue disponible?
-          </p>
-          <p className="px-1.5 text-right text-[10px] text-black/45">✓✓</p>
-        </div>
-        <div className="inline-flex items-center gap-1 rounded-xl rounded-tl-sm bg-white px-3.5 py-3 shadow-sm" aria-hidden="true">
-          {[0, 1, 2].map((i) => (
-            <span key={i} className="typing-dot size-1.5 rounded-full bg-black/40" style={vars({ "--i": i })} />
-          ))}
-        </div>
-      </div>
-    </div>
+    <CarTour frames={frames} alt={carTitle(car)} slug={car.slug} price={formatPrice(car.price)} waHref={carWhatsApp(car)} />
   );
 }
 
-export function Attention({ featured }: { featured: Car[] }) {
-  const car = featured.find((c) => c.images[0]);
+// ---------- Movimiento firma (versión 1): el mensaje se escribe solo ----------
+
+export function Signature({ featured }: { featured: Car[] }) {
+  const car = featured.find((c) => c.images[0] && c.status === "disponible");
   if (!car) return null;
   return (
-    <section className="py-20 sm:py-28" aria-labelledby="atencion">
-      <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:gap-20">
-        <div className="reveal reveal-zoom lg:order-2">
-          <ChatMock car={car} />
-        </div>
-        <div className="reveal">
-          <p className="font-tech flex items-center gap-3 text-[11px] text-dim">
-            <span className="rule-accent h-px w-8" />
-            Atención 1 a 1
-          </p>
-          <h2 id="atencion" className="font-display mt-4 text-[2rem] sm:text-[2.6rem]">
-            Un toque y ya estás hablando con nosotros.
-          </h2>
-          <p className="mt-4 max-w-lg text-lg leading-relaxed text-mute">
-            Toca «Me interesa» en cualquier auto: el WhatsApp ya lleva el modelo, el precio y el enlace. Sin
-            registros ni formularios, y te respondemos de inmediato.
-          </p>
-          <div className="mt-7">
-            <WhatsAppCta message={GENERAL_MESSAGE}>Escríbenos ahora</WhatsAppCta>
-          </div>
-        </div>
-      </div>
-    </section>
+    <MessageWrites
+      title={carTitle(car)}
+      price={formatPrice(car.price)}
+      image={car.images[0]}
+      host={site.url.replace(/^https?:\/\//, "")}
+      message={`Hola ${site.name} 👋 Me interesa el ${carTitle(car)} (${formatPrice(car.price)}) que vi en su página. ¿Sigue disponible?`}
+      href={carWhatsApp(car)}
+      brandName={site.name}
+    />
   );
 }
 
@@ -448,7 +434,7 @@ export function HowItWorks() {
   return (
     <section className="bg-card py-20 sm:py-28" aria-labelledby="como-funciona">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <SectionHeading id="como-funciona" eyebrow="Así de fácil" title="Tu próximo auto en 3 pasos." />
+        <SectionHeading id="como-funciona" title="Tu próximo auto en 3 pasos." />
         <ol className="relative grid gap-8 md:grid-cols-3 md:gap-10">
           {/* Línea que une los pasos (vertical en celular, horizontal en computadora) */}
           <span className="absolute top-6 bottom-6 left-6 w-px bg-line md:hidden" aria-hidden="true" />
@@ -482,7 +468,7 @@ export function SoldStrip({ cars }: { cars: Car[] }) {
   return (
     <section className="py-16" aria-labelledby="vendidos">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <SectionHeading id="vendidos" eyebrow="Ya tienen nuevo dueño" title="Recién vendidos" />
+        <SectionHeading id="vendidos" title="Recién vendidos" />
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           {cars.slice(0, 4).map((car) => (
             <CarCard key={car.id} car={car} sizes="(min-width: 640px) 25vw, 50vw" />
@@ -563,7 +549,7 @@ export function Faq() {
     <section className="py-20 sm:py-28" aria-labelledby="preguntas">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
         <div>
-          <SectionHeading id="preguntas" eyebrow="Sin dudas" title="Preguntas frecuentes" />
+          <SectionHeading id="preguntas" title="Preguntas frecuentes" />
           <p className="reveal -mt-2 text-mute">
             ¿No ves tu pregunta?{" "}
             <a
