@@ -2,6 +2,7 @@ import { Header } from "@/components/site/header";
 import { Footer } from "@/components/site/footer";
 import { WhatsAppFab } from "@/components/site/whatsapp-fab";
 import { LocalBusinessJsonLd } from "@/components/site/json-ld";
+import { Reveal } from "@/components/reveal";
 
 export default function SiteLayout({ children }: LayoutProps<"/">) {
   return (
@@ -16,6 +17,7 @@ export default function SiteLayout({ children }: LayoutProps<"/">) {
       <main id="contenido">{children}</main>
       <Footer />
       <WhatsAppFab />
+      <Reveal />
       <LocalBusinessJsonLd />
     </>
   );

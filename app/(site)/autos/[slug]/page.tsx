@@ -18,7 +18,6 @@ import {
   ListChecks,
   MapPin,
   MessageCircle,
-  Navigation,
   PlayCircle,
   Send,
   Palette,
@@ -266,7 +265,7 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
               <ul className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-mute">
                 {FUDS.map((f) => (
                   <li key={f} className="flex items-center gap-1">
-                    <Check className="size-3.5 text-brand" strokeWidth={2.5} aria-hidden="true" />
+                    <Check className="size-3.5 text-ok" strokeWidth={2.5} aria-hidden="true" />
                     {f}
                   </li>
                 ))}
@@ -279,7 +278,7 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
                     rel="noopener"
                     className="inline-flex h-12 items-center justify-center gap-1.5 rounded-md border border-line bg-card text-sm font-semibold transition-colors hover:border-fg/40"
                   >
-                    <CalendarCheck className="size-4" /> Visita
+                    <CalendarCheck className="size-4" /> Cita
                   </a>
                 )}
                 <a
@@ -297,7 +296,8 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
               <li className="flex gap-3 py-3.5">
                 <ShieldCheck className="mt-0.5 size-[1.15rem] shrink-0 text-brand" />
                 <span>
-                  <b>Auto verificado.</b> <span className="text-mute">Fotos reales de este auto y precio a la vista.</span>
+                  <b>Verificado y probado.</b>{" "}
+                  <span className="text-mute">Papeles originales, documentación en regla y fotos reales de este auto.</span>
                 </span>
               </li>
               {rating.count > 0 && (
@@ -324,10 +324,21 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
                   </span>
                 </a>
               </li>
+              {!sold && (
+                <li>
+                  <a href={whatsappUrl(visitMessage(car))} target="_blank" rel="noopener" className="flex gap-3 py-3.5">
+                    <CalendarCheck className="mt-0.5 size-[1.15rem] shrink-0 text-brand" />
+                    <span>
+                      <b>Míralo con cita.</b>{" "}
+                      <span className="text-mute underline underline-offset-4">Agéndala por WhatsApp</span>
+                    </span>
+                  </a>
+                </li>
+              )}
               <li className="flex gap-3 py-3.5">
                 <MapPin className="mt-0.5 size-[1.15rem] shrink-0 text-brand" />
                 <span>
-                  <b>Míralo en persona:</b>{" "}
+                  <b>Oficina:</b>{" "}
                   <a href={site.mapsUrl} target="_blank" rel="noopener" className="text-mute underline underline-offset-4">
                     {site.address.street}, {site.address.city}
                   </a>
@@ -348,7 +359,7 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
                 <p className="mt-1 text-sm text-mute">
                   Todas son de este auto.{" "}
                   {car.photoSections && Object.keys(car.photoSections).length > 0
-                    ? "Elige exterior, interior o motor, y toca una para verla completa."
+                    ? "Elige exterior o interior y toca una para verla completa."
                     : "Toca una para verla completa."}
                 </p>
                 <div className="mt-5">
@@ -494,9 +505,15 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
                 </Link>
               )}
             </div>
-            <div className="no-scrollbar -mx-4 mt-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 sm:mx-0 sm:grid sm:grid-cols-2 sm:px-0 lg:grid-cols-4">
+            <div className="no-scrollbar -mx-4 mt-6 flex snap-x snap-mandatory scroll-px-4 gap-4 overflow-x-auto px-4 pb-4 sm:mx-0 sm:grid sm:grid-cols-2 sm:px-0 lg:grid-cols-4">
               {similar.map((c) => (
-                <CarCard key={c.id} car={c} className="w-[75vw] max-w-[320px] shrink-0 snap-start sm:w-auto sm:max-w-none" sizes="(min-width: 1024px) 24vw, (min-width: 640px) 45vw, 75vw" />
+                <CarCard
+                  key={c.id}
+                  car={c}
+                  variant="foto"
+                  className="reveal reveal-zoom w-[72vw] max-w-[300px] shrink-0 snap-start sm:w-auto sm:max-w-none"
+                  sizes="(min-width: 1024px) 24vw, (min-width: 640px) 45vw, 72vw"
+                />
               ))}
             </div>
             <div className="mt-4 flex flex-wrap gap-3 sm:hidden">
@@ -593,9 +610,9 @@ function GoneCar({ slug, cars }: { slug: string; cars: Car[] }) {
           <h2 id="parecidos" className="font-display text-3xl">
             {sameBrand.length ? `${brand} disponibles` : "Disponibles hoy"}
           </h2>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
             {picks.map((c) => (
-              <CarCard key={c.id} car={c} sizes="(min-width: 1024px) 24vw, (min-width: 640px) 45vw, 92vw" />
+              <CarCard key={c.id} car={c} className="h-full" sizes="(min-width: 1024px) 24vw, 50vw" />
             ))}
           </div>
         </section>
@@ -618,9 +635,9 @@ function NextSteps({ car }: { car: Car }) {
       text: "Te confirmamos si sigue disponible y cualquier dato que quieras saber.",
     },
     {
-      Icon: MapPin,
-      title: "Ven a conocerlo",
-      text: `${site.address.street}, ${site.address.neighborhood}, ${site.address.city}. ${site.hours}.`,
+      Icon: CalendarCheck,
+      title: "Agenda tu cita",
+      text: `No tenemos lote: te agendamos una cita para que veas este ${car.model} en persona.`,
     },
   ];
   return (
@@ -648,8 +665,8 @@ function NextSteps({ car }: { car: Car }) {
         <a href={carWhatsApp(car)} target="_blank" rel="noopener" className="btn btn-wa btn-shine">
           <WhatsAppIcon className="size-5" /> {ctaLabel(car)}
         </a>
-        <a href={site.mapsUrl} target="_blank" rel="noopener" className="btn btn-outline">
-          <Navigation className="size-4" /> Cómo llegar
+        <a href={whatsappUrl(visitMessage(car))} target="_blank" rel="noopener" className="btn btn-outline">
+          <CalendarCheck className="size-4" /> Agendar cita
         </a>
       </div>
     </section>

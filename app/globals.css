@@ -1,36 +1,38 @@
 @import "tailwindcss";
 
 @theme {
-  /* Tema premium con color sutil (29-oct): medianoche azulado, carmesí con brillo y champaña.
-     Lujo + velocidad, sin colores de juguete. */
-  --color-paper: #f6f5f1; /* fondo de página, cálido */
+  /* Versión 2 (30-oct): natural y sobria. Carbón, blanco hueso y el rojo de la marca, sin degradados de
+     colores ni resplandores (el dueño sintió el azul con rojo y verde como «videojuego»). */
+  --color-paper: #f4f3f0; /* fondo de página */
   --color-card: #ffffff; /* tarjetas y paneles */
-  --color-soft: #efede7; /* campos */
-  --color-soft-2: #e2dfd6;
-  --color-line: rgb(10 15 26 / 0.1);
-  --color-fg: #0a0f1a; /* texto: tinta medianoche */
-  --color-mute: #4a5160;
-  --color-dim: #656c79;
-  --color-night: #0a0f1a; /* superficies oscuras: medianoche */
-  --color-graphite: #121a2b;
-  --color-steel: #1f2b42;
-  --color-silver: #aab3c2;
+  --color-soft: #ecebe7; /* campos */
+  --color-soft-2: #dfddd8;
+  --color-line: rgb(22 22 22 / 0.1);
+  --color-fg: #161616; /* texto */
+  --color-mute: #54524e;
+  --color-dim: #6e6b66;
+  --color-night: #141414; /* superficies oscuras: carbón */
+  --color-graphite: #1e1e1e;
+  --color-steel: #2c2c2b;
+  --color-silver: #b5b2ac;
   /* Marca */
-  --color-brand: #d0122e; /* carmesí de carreras */
+  --color-brand: #c8102e;
   --color-brand-hi: #a50d22; /* rojo para texto pequeño sobre fondo claro */
-  --color-brand-soft: #fae7ea;
-  --color-brand-glow: #ff3d55; /* brillos sobre fondo oscuro */
-  --color-gold: #c6a76a; /* champaña: detalles de lujo */
-  --color-gold-soft: #f3ecdf;
-  --color-azure: #3b6fd8; /* azul profundo, solo en resplandores */
+  --color-brand-soft: #f8e7ea;
+  --color-brand-glow: #ef4a5e; /* rojo legible sobre fondo oscuro */
+  --color-gold: #a8895a; /* estrellas de reseñas */
+  --color-gold-soft: #f1ebe0;
+  --color-azure: #3b6fd8;
+  --color-ok: #168f4a; /* palomitas verdes */
+  --color-ok-soft: #e6f4ec;
   --color-wa: #25d366; /* verde de WhatsApp (ícono) */
-  --color-wa-deep: #0e8a45; /* botones: verde WhatsApp oscuro, legible con texto blanco */
-  --color-wa-deeper: #086b35;
+  --color-wa-deep: #0f8a45; /* botones: verde WhatsApp oscuro, legible con texto blanco */
+  --color-wa-deeper: #0b6e37;
   --color-wa-dark: #0b7a3e; /* texto verde sobre fondo claro */
 
-  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-saira-tech), var(--font-geist), ui-sans-serif, sans-serif;
-  --font-tech: var(--font-saira-tech), var(--font-geist), ui-sans-serif, sans-serif;
+  --font-sans: var(--font-albert), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-albert), ui-sans-serif, system-ui, sans-serif;
+  --font-tech: var(--font-albert), ui-sans-serif, system-ui, sans-serif;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -160,17 +162,15 @@ body {
   }
 }
 
-/* WhatsApp: verde oscuro de la marca, con resplandor (y luz diagonal con .btn-shine) */
+/* WhatsApp: verde oscuro de la marca, sólido y sin resplandor (la luz diagonal va con .btn-shine) */
 @utility btn-wa {
-  background: linear-gradient(135deg, #13a052 0%, var(--color-wa-deep) 45%, var(--color-wa-deeper) 100%);
+  background: var(--color-wa-deep);
   color: white;
   box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.22),
-    0 10px 28px -10px rgb(37 211 102 / 0.7);
+    inset 0 1px 0 rgb(255 255 255 / 0.16),
+    0 8px 20px -12px rgb(20 20 20 / 0.45);
   &:hover {
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.28),
-      0 16px 36px -10px rgb(37 211 102 / 0.85);
+    background: var(--color-wa-deeper);
   }
 }
 
@@ -193,18 +193,19 @@ body {
   }
 }
 
-/* Tipografía premium: Saira expandida en peso medio, sin cursiva (estilo de marcas de autos de lujo) */
+/* Títulos: misma familia, más peso y letras más juntas mientras más grande es el texto */
 .font-display {
-  font-family: var(--font-tech);
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-weight: 650;
   letter-spacing: -0.035em;
-  line-height: 1.04;
+  line-height: 1.05;
+  text-wrap: balance;
 }
-/* Etiquetas pequeñas: mayúsculas con espacio, como los emblemas de un auto */
+/* Etiquetas pequeñas: mayúsculas con algo de espacio */
 .font-tech {
   font-family: var(--font-tech);
   font-weight: 600;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 .text-outline {
@@ -212,26 +213,12 @@ body {
   -webkit-text-stroke: 1px rgb(10 15 26 / 0.35);
 }
 
-/* Texto con degradado carmesí → champaña (para una palabra clave, con mesura) */
-.text-gradient {
-  background: linear-gradient(100deg, var(--color-brand-glow) 0%, #ff7a59 45%, var(--color-gold) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-.text-gradient-dark {
-  background: linear-gradient(100deg, var(--color-brand) 0%, #c2410c 55%, #9a7b3f 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-/* Línea de acento: carmesí que se funde a champaña */
+/* Línea de acento: rojo de la marca, sólido */
 .rule-accent {
-  background: linear-gradient(90deg, var(--color-brand), var(--color-gold));
+  background: var(--color-brand);
 }
 
-/* Superficie oscura con resplandores de color que se mueven lento (sutil).
+/* Superficie oscura natural: carbón con una luz suave desde arriba, como un estudio.
    Necesita una posición (relative, absolute o fixed) en el mismo elemento. */
 .glow-night {
   isolation: isolate;
@@ -240,30 +227,20 @@ body {
 .glow-night::before {
   content: "";
   position: absolute;
-  inset: -20%;
+  inset: 0;
   z-index: -1;
   pointer-events: none;
-  background:
-    radial-gradient(38% 32% at 85% 12%, rgb(208 18 46 / 0.32), transparent 70%),
-    radial-gradient(40% 35% at 8% 92%, rgb(59 111 216 / 0.2), transparent 70%),
-    radial-gradient(30% 25% at 55% 55%, rgb(198 167 106 / 0.08), transparent 70%);
-  animation: drift 18s ease-in-out infinite alternate;
-}
-@keyframes drift {
-  to {
-    transform: translate3d(-4%, 3%, 0) scale(1.06);
-  }
+  background: radial-gradient(70% 55% at 50% 0%, rgb(255 255 255 / 0.07), transparent 70%);
 }
 
-/* Fondo claro con un tinte de color muy leve */
+/* Fondo claro de sección alterna */
 .tint-warm {
-  background:
-    radial-gradient(60rem 26rem at 100% 0%, rgb(198 167 106 / 0.12), transparent 60%),
-    radial-gradient(50rem 24rem at 0% 100%, rgb(208 18 46 / 0.05), transparent 60%), var(--color-card);
+  background: var(--color-card);
 }
 
-/* Estelas de luz (velocidad), solo CSS */
+/* Estelas de luz (versión anterior). En esta versión no se muestran. */
 .light-trails {
+  display: none;
   position: absolute;
   inset: 0;
   overflow: hidden;
@@ -454,16 +431,8 @@ body {
   animation-delay: calc(var(--i, 0) * 80ms + 120ms);
 }
 
-/* Aparece al hacer scroll (sin JavaScript) */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .reveal {
-      animation: rise linear both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 55%;
-    }
-  }
-}
+/* .reveal, .reveal-zoom y .reveal-left: aparecen al entrar en pantalla. La animación la hace
+   components/reveal.tsx con Web Animations (no cambia clases ni estilos del HTML). */
 
 /* «Escribiendo…» del chat de ejemplo */
 .typing-dot {

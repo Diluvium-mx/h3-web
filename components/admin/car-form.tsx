@@ -316,7 +316,7 @@ export function CarForm({
       <Section
         step={1}
         title="Fotos"
-        hint="La primera es la portada. Se comprimen solas antes de subir. Si quieres, marca la sección de cada foto (exterior, interior, motor o detalles)."
+        hint="La primera es la portada. Se comprimen solas antes de subir. Si quieres, marca si cada foto es del exterior o del interior."
       >
         {uploadMode === "none" ? (
           <p className="rounded-md bg-paper p-4 text-sm text-mute">

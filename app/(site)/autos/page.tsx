@@ -15,11 +15,8 @@ export default async function CatalogPage() {
   const cars = await getPublicCars();
   return (
     <>
-      {/* Franja oscura con color, como el inicio; el buscador queda flotando sobre su borde */}
+      {/* Franja oscura como el inicio; el buscador queda flotando sobre su borde */}
       <header className="glow-night relative overflow-hidden px-4 pt-24 pb-14 text-white sm:px-6 sm:pt-32 sm:pb-20">
-        <div className="light-trails" aria-hidden="true">
-          <span style={{ top: "62%", ...vars({ "--d": "6s", "--delay": "0.8s" }) }} />
-        </div>
         <div className="stagger relative mx-auto max-w-7xl">
           <p className="font-tech flex items-center gap-3 text-[11px] text-white/65" style={vars({ "--i": 0 })}>
             <span className="draw-line rule-accent h-px w-8" />
@@ -29,7 +26,7 @@ export default async function CatalogPage() {
             Inventario
           </h1>
           <p className="mt-3 max-w-xl text-white/70" style={vars({ "--i": 2 })}>
-            Autos listos para manejar. Toca el que te guste y escríbenos directo por WhatsApp.
+            Autos verificados y con papeles en regla. Toca el que te guste y escríbenos por WhatsApp para agendar tu cita.
           </p>
         </div>
       </header>

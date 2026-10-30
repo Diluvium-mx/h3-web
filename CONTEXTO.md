@@ -19,6 +19,18 @@ Regla: aquí no se inventa nada. Lo que no está decidido dice **«sin decidir»
 - **Qué vende:** autos seminuevos, la mayoría de gama alta. Al 27-oct-2026 hay 13 autos publicados,
   de $209,000 a $2,850,000 MXN. Algunos ejemplos son una Mercedes-AMG G63, un BMW M3, un Mustang GT,
   una Cheyenne High Country y dos camionetas blindadas.
+- **Cómo trabajan (dato del dueño, 30-oct):**
+  - **No tienen lote ni inventario en la oficina.** Los autos no están ahí: quien se interesa manda mensaje y
+    se le **agenda una cita** para ver el auto. Por eso el sitio ya no dice «Ven a conocerlo».
+  - Al no tener lote, **sus costos son menores que los de un lote** y eso se refleja en el precio.
+  - La oficina (Av. Paseo Tabasco #315) sí se muestra en «Visítanos», para que se vea que es un negocio real.
+- **Beneficios (dato del dueño, 30-oct), divididos en 2:**
+  - **Al comprar un auto:** asesoramiento; autos confiables (ya verificados, validados y probados); papeles
+    originales y documentación en regla, con ayuda en el papeleo; precio justo (sin lote, costos menores).
+  - **Al vender tu auto:** ganas más que vendiéndolo a un lote («sácale más valor a tu vehículo», lo más
+    importante); evita estafas (ellos filtran a los interesados); sin citas con desconocidos (ellos se
+    encargan de las citas); ayuda con el papeleo, el trámite y la baja de las placas; evaluación correcta
+    (vender a precio correcto).
 - **Otros servicios:**
   - **Compran autos directamente**, pero la página **no debe decirlo**. Solo aparece la opción «Vende tu
     auto» y los detalles los ve el encargado por WhatsApp.
@@ -89,41 +101,48 @@ No se busca vender en línea: no hay carrito ni pagos.
 ## 3. Secciones de la página (en orden)
 
 **Inicio (`/`)** — estructura del método de los 2 videos de landing pages que mandó el dueño (análisis en
-`ANALISIS-VIDEOS.md`), con el estilo premium y las correcciones del dueño (28 y 29-oct). Acción principal: ver
-un auto y mandar WhatsApp.
+`ANALISIS-VIDEOS.md`), con los cambios del dueño del 30-oct (**versión 2**). Acción principal: ver un auto y
+mandar WhatsApp.
 1. **Encabezado fijo:** logo, Inventario, Vende tu auto, Contacto y botón de WhatsApp. Arriba de las páginas
    con franja oscura va en blanco. En celular lleva un menú oscuro de pantalla completa.
-2. **Hero a pantalla completa en celular** (29-oct):
-   - Fotos reales de los autos destacados arriba, con zoom lento, que se funden hacia el texto. Arriba, el
-     auto que se ve con su precio (enlace a su ficha) y barras de avance.
-   - Tratamiento de cine: oscurecido, resplandor carmesí y azul, y estelas de luz que cruzan (velocidad).
-   - Título «**Autos seminuevos premium en Villahermosa.**» («premium» con degradado carmesí → champaña).
-   - Subtítulo: «Revisados a detalle, con precio a la vista y atención directa por WhatsApp.».
-   - Botones «Ver inventario» y «WhatsApp».
-   - **«¿Qué buscas?»:** accesos rápidos por tipo (SUV, Deportivos, Blindados…) que abren el inventario
-     filtrado.
-   - Quita-miedos (✓ Precio a la vista, etc.) solo en pantallas grandes; en celular el subtítulo ya lo dice.
+2. **Hero** (30-oct): sin luces, sin resplandores de colores y sin zoom.
+   - **Carrusel de fotos reales** de los autos destacados: se desliza con el dedo y cambia solo cada 5
+     segundos (se pausa si el visitante lo toca). El auto que se ve, con su precio, va **abajo a la derecha
+     de la foto** (enlace a su ficha).
+   - Título «**Autos seminuevos premium en Villahermosa.**» y subtítulo «Verificados, con papeles en regla y
+     a precio justo. Escríbenos y te asesoramos por WhatsApp.».
+   - Botones «Ver inventario» y «WhatsApp». **Se quitó «¿Qué buscas?»** (se repetía con las categorías).
+   - Quita-miedos (✓ Autos verificados ✓ Papeles en regla ✓ Precio a la vista) solo en pantallas grandes.
    - Si hay reseñas reales, la calificación va arriba del título.
-3. **Franja de marcas en movimiento** con el **logo** y el nombre de cada marca del inventario (29-oct).
-   Se quitaron los números de confianza (años de experiencia, autos entregados y tiempo de respuesta).
-4. **«Autos listos para manejar»:** categorías con íconos propios y autos destacados.
-5. **«¿Quieres vender tu auto?»:** sección grande en fondo oscuro con color, 3 pasos y botón «Vender mi
-   auto». Va justo después del inventario.
-6. **Reseñas de clientes:** solo aparece si el dueño agrega reseñas **reales** en el panel. Van todas a la
-   vista, sin carrusel, con estrellas, frase destacada, foto opcional y origen (Google, Facebook…).
-7. **«Comprar un seminuevo no tiene que ser una apuesta.»:** 5 comparaciones «lo de siempre» contra
-   «en H3».
-8. **2 beneficios con imagen:** autos verificados (foto real con su ficha) y atención 1 a 1 (ilustración
-   animada del WhatsApp que se manda, con el texto real).
-9. **«Tu próximo auto en 3 pasos»:** elige, escríbenos y ven a conocerlo.
-10. **«Recién vendidos»:** solo aparece si hay autos marcados como vendidos.
-11. **Preguntas frecuentes** (6), contestadas solo con datos confirmados.
-12. **Cierre:** «Cada auto es único: cuando se vende, ya no vuelve.», quita-miedos, WhatsApp, inventario,
-    dirección, horario, Google Maps, teléfono y redes (sin Waze).
-13. **Pie de página oscuro** (con un enlace discreto «Administración» al final, para el dueño) y **botón
-    flotante de WhatsApp**.
+3. **Franja de marcas en movimiento** con el **logo** y el nombre de cada marca del inventario.
+4. **«Autos listos para manejar»:** categorías con íconos nuevos (siluetas sólidas, más separadas) y
+   **8 autos en 2 columnas** en celular (4 en computadora), con «Ver todos» abajo.
+5. **«Lo que hacemos por ti»: beneficios divididos en 2** (30-oct): «Al comprar un auto» (tarjeta clara,
+   botón «Ver autos disponibles») y «Al vender tu auto» (tarjeta oscura, botones «Vender mi auto» y
+   «Preguntar»).
+6. **«Autos verificados»:** carrusel de tarjetas grandes con foto (se desliza hacia la derecha). Reemplaza
+   la foto de la Mercedes con «Ver la ficha de este auto».
+7. **«Vende tu auto» — «Sácale más valor a tu vehículo.»:** imagen hecha con Arcads (llave, carpeta y
+   pluma), «Ganas más que en un lote», 3 pasos y botones.
+8. **Reseñas de clientes:** solo aparece si el dueño agrega reseñas **reales** en el panel.
+9. **«Compra con certeza, no a ciegas.»** (antes «Comprar un seminuevo no tiene que ser una apuesta»): 5
+   comparaciones con **palomitas verdes**, incluida «Sin lote: costos menores y precio justo».
+10. **Atención 1 a 1:** ilustración animada del WhatsApp que se manda, con el texto real.
+11. **«Tu próximo auto en 3 pasos»:** elige, escríbenos y **agenda tu cita** (línea de tiempo).
+12. **«Recién vendidos»:** solo aparece si hay autos marcados como vendidos.
+13. **Preguntas frecuentes** (7), contestadas solo con datos confirmados (ver con cita, precios justos por
+    no tener lote, papeles en regla, cómo vender).
+14. **Cierre rediseñado:** «Cada auto es único. Cuando se vende, ya no vuelve.», palomitas verdes, WhatsApp,
+    inventario y 3 autos reales del inventario. Abajo, la tarjeta **«Visítanos»** con la dirección de la
+    oficina, horario, redes, «Cómo llegar» y teléfono.
+15. **Pie de página nuevo** (30-oct): logo grande, frase, redes, 3 tarjetas de contacto (WhatsApp, llamar y
+    oficina), enlaces de Compra y Vende, «Los autos se ven con cita», el nombre gigante de fondo y «Volver
+    arriba». Enlace discreto «Administración». **Botón flotante de WhatsApp.**
+16. **Animaciones de entrada** en todo el sitio: cada bloque aparece al llegar a él (Web Animations, sin
+    cambiar el HTML; con «reducir movimiento» no se anima).
 
-**Catálogo (`/autos`)** — título «Inventario» sobre una franja oscura con color, empezando por celular:
+**Catálogo (`/autos`)** — título «Inventario» sobre una franja oscura, empezando por celular. **Autos en 2
+columnas** también en celular (30-oct):
 - **Buscador y filtros:**
   - El buscador flota sobre el borde de la franja y, al bajar, **se queda fijo** debajo del encabezado.
   - El botón de filtros se pone negro cuando hay filtros activos.
@@ -146,15 +165,16 @@ y las ideas de la investigación de repos (`INVESTIGACION-REPOS.md`).
   - Botón principal de WhatsApp. Cambia según el estado: «Me interesa este auto», «Avísame si se libera»
     (apartado) o «Búscame uno similar» (vendido).
   - Quita-miedos: ✓ Te respondemos de inmediato ✓ El mensaje ya lleva este auto ✓ Sin registros.
-  - Botones de visita, llamar y compartir.
+  - Botones de cita, llamar y compartir.
 - **Confianza:**
-  - «Auto verificado. Fotos reales de este auto y precio a la vista.»
+  - «Verificado y probado. Papeles originales, documentación en regla y fotos reales de este auto.»
   - Calificación real si hay reseñas.
   - «¿Lo decides con alguien más? Mándaselo por WhatsApp» (lo manda a quien el cliente elija).
-  - Dirección y horario.
+  - «Míralo con cita. Agéndala por WhatsApp» (30-oct) y la dirección de la oficina con horario.
 - **«N fotos reales»:** todas las fotos en cuadrícula (en celular). Al tocar una se abre en pantalla
   completa, con un botón blanco **«✕ Cerrar»** bien visible arriba a la derecha (29-oct).
-- **Fotos por sección** (desde el 28-oct): pestañas «Todas · Exterior · Interior · Motor · Detalles» con
+- **Fotos por sección** (desde el 28-oct; **solo Exterior e Interior desde el 30-oct**: las fotos que tenían
+  «Motor» o «Detalles» cuentan como Exterior): pestañas «Todas · Exterior · Interior» con
   el número de fotos de cada una. En escritorio filtran las miniaturas, y la galería dice en qué sección va
   («Interior · 4/22»). Solo aparecen si el auto tiene fotos con sección.
 - **Equipamiento** (desde el 28-oct): lista fija con íconos, agrupada en Confort, Tecnología, Seguridad y
@@ -170,21 +190,26 @@ y las ideas de la investigación de repos (`INVESTIGACION-REPOS.md`).
   mensaje; te respondemos de inmediato.», qué datos faltan y el botón «Preguntar» (27-oct). Nunca se
   inventa el dato.
 - «Lo que destaca» y descripción.
-- **«Así de fácil»:** 3 pasos (escríbenos, te respondemos de inmediato y ven a conocerlo).
+- **«Así de fácil»:** 3 pasos (escríbenos, te respondemos de inmediato y **agenda tu cita**) con botones
+  de WhatsApp y «Agendar cita».
 - **«Tus dudas, resueltas» se quitó** (29-oct): tenía muchos botones «Pregúntanos». Lo que el dueño confirma
   (dueños, factura, servicios, papeles y nivel de blindaje) ahora sale como filas de la ficha técnica.
 - Reseñas reales, si hay.
-- Autos similares y «Ver los N del mismo tipo».
+- **«También te puede gustar»:** tarjetas grandes con la foto de fondo, en carrusel en celular, y «Ver los
+  N del mismo tipo».
 - En celular aparece una barra fija de WhatsApp y llamada al bajar.
 - **Enlace de un auto que ya no existe** (por ejemplo, uno viejo que circula por WhatsApp): muestra «Este
   auto ya no está» con autos de la misma marca y «Búscame uno parecido». Google no lo indexa.
 - Migas de pan para Google.
 
-**Vende tu auto (`/vende-tu-auto`)** — título «¿Quieres vender tu auto?» sobre franja oscura.
-- Pasos:
+**Vende tu auto (`/vende-tu-auto`)** — título «Sácale más valor a tu vehículo.» sobre franja oscura, con la
+imagen de Arcads en pantallas grandes (30-oct).
+- En celular, el formulario va primero; después «Por qué vender con H3» (ganas más que en un lote, evita
+  estafas, sin citas con desconocidos, papeleo y placas, evaluación correcta) y «Cómo funciona»:
   1. Cuéntanos de tu auto.
-  2. Envía fotos por WhatsApp.
-  3. Te atendemos por WhatsApp.
+  2. Mándanos fotos por WhatsApp.
+  3. Te damos una evaluación correcta.
+  4. Nos encargamos de la venta (filtramos interesados, agendamos citas, papeleo y placas).
 - Formulario de 3 partes:
   1. Datos del auto.
   2. Detalles.
@@ -202,7 +227,7 @@ y las ideas de la investigación de repos (`INVESTIGACION-REPOS.md`).
   transmisión), 3) descripción y 4) publicar. Todo lo demás va plegado en «Más detalles (opcional)».
 - Alta y edición de autos con fotos (se comprimen en el teléfono).
 - Importar de Shopify.
-- **Sección de cada foto** (exterior, interior, motor o detalles): un selector debajo de cada foto.
+- **Sección de cada foto** (exterior o interior, desde el 30-oct): un selector debajo de cada foto.
 - **Documentos e historial:** número de dueños, factura (original, de empresa o refacturada), servicios
   (de agencia o al día), papeles en regla y nivel de blindaje.
 - **Equipamiento:** botones para marcar, de una lista fija de 25 opciones en 4 grupos (`lib/equipment.ts`).
@@ -230,28 +255,25 @@ y las ideas de la investigación de repos (`INVESTIGACION-REPOS.md`).
 | Colores | Tema claro premium desde el 28-oct | `app/globals.css` (`@theme`) |
 | Íconos de categorías | Dibujados para el sitio (SUV, deportivo, blindado, pickup…) | `components/body-icons.tsx` |
 | Logos de marcas (franja en movimiento) | Simple Icons, licencia CC0, en un solo color; Aodes no tiene y va solo con su nombre | `components/brand-logos.tsx` |
-| Tipografía de títulos y etiquetas | Saira expandida normal 600 (sin itálica), en archivo propio | `app/fonts/` |
-| Tipografía de texto | Geist | `app/layout.tsx` |
+| Tipografía (versión 2, 30-oct) | **Albert Sans** para títulos y texto (Saira y Geist se veían «muy IA») | `app/layout.tsx` |
+| Imagen de «Vende tu auto» | Hecha con Arcads: llave, carpeta y pluma (sin autos, para no chocar con «fotos reales»). Única imagen decorativa (61 KB) servida por el hosting; las fotos de autos siguen en Cloudinary | `public/img/vende-tu-auto.webp` |
 | Datos del negocio | Teléfono, dirección, horario y redes | `lib/site.ts` |
 | Inventario inicial | 13 autos de Shopify con datos revisados | `data/seed.json` |
 | Fotos de los autos | 189 fotos en el CDN de Shopify; se copian a **Cloudinary** con el importador del panel | Enlaces dentro de `data/seed.json` |
 
-Colores del tema premium con color sutil (29-oct). Medianoche azulado, carmesí con brillo y champaña:
+Colores de la **versión 2** (30-oct): paleta natural, sin degradados ni resplandores de colores (el dueño
+sentía que el azul, el rojo y el verde juntos se veían «de videojuego»):
 
 | Uso | Color |
 | --- | --- |
-| Fondo (cálido) | `#f6f5f1` |
+| Fondo (papel) | `#f4f3f0` |
 | Tarjetas | `#ffffff` |
-| Texto y botones principales (medianoche) | `#0a0f1a` |
-| Secciones oscuras: medianoche con resplandores carmesí, azul y champaña que se mueven lento | `#0a0f1a` · `#121a2b` |
-| Carmesí de marca (líneas, palomitas, detalles) | `#d0122e` |
-| Carmesí brillante sobre fondo oscuro | `#ff3d55` |
-| Champaña (detalles de lujo, degradados) | `#c6a76a` |
-| Azul profundo (solo en resplandores) | `#3b6fd8` |
-| Botones de WhatsApp: verde oscuro de WhatsApp en degradado, texto blanco, resplandor y luz diagonal | `#13a052` → `#0e8a45` → `#086b35` |
+| Texto, botones y secciones oscuras (negro natural) | `#161616` · `#141414` |
+| Rojo de marca (solo líneas y detalles pequeños) | `#c8102e` |
+| Palomitas y «ganas más» (verde) | `#168f4a` |
+| Botones de WhatsApp: verde oscuro sólido con luz diagonal | `#0f8a45` → `#0b6e37` al pasar el cursor |
 
-Las líneas de acento van en degradado carmesí → champaña. Sin amarillo, sin franjas de carreras y sin
-formas ovaladas («píldoras»).
+Sin amarillo, sin texto en degradado, sin franjas de carreras y sin formas ovaladas («píldoras»).
 
 Notas:
 - **Las fotos desaparecerán al cancelar Shopify.** Hay que copiarlas a Cloudinary (Panel → Importar de
@@ -433,6 +455,14 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
   - Panel: contraseña `12345` cambiable en **Ajustes**, números de confianza editables, enlace discreto en
     el pie de página y formulario de auto en 4 pasos con lo opcional plegado.
   - Pruebas: 26 del sitio, 23 del panel y 3 de Cloudinary simulado. Lighthouse no se corrió esta vez.
+- **30-oct (versión 2, cambios del dueño):**
+  - Hero con carrusel de fotos fijas que se desliza y cambia solo; el auto va abajo a la derecha; sin
+    luces ni «¿Qué buscas?». Paleta natural y tipografía Albert Sans.
+  - Íconos de categorías nuevos; inventario en 2 columnas (inicio y catálogo); beneficios divididos en «al
+    comprar» y «al vender»; carrusel de «Autos verificados»; «Vende tu auto» con imagen de Arcads.
+  - Los autos se ven con cita en todo el sitio; fotos solo Exterior e Interior; cierre y pie de página
+    nuevos; animaciones de entrada en todo el sitio.
+  - Pruebas: 28 del sitio, 21 del panel y 3 de Cloudinary simulado. Lighthouse no se corrió.
 - **29-oct (más impacto y color):**
   - Hero a pantalla completa en celular con fotos reales y tratamiento de cine, accesos rápidos por tipo y
     estelas de luz. Paleta con color sutil (medianoche, carmesí y champaña).
@@ -451,9 +481,10 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
 
 1. **Crear las cuentas gratuitas** y poner sus variables en Netlify (ver README, etapas 1 y 2):
    - **Netlify: hecho (30-oct).** Proyecto `h3-seminuevos`, público. Producción (`main`):
-     https://h3-seminuevos.netlify.app. **Vista previa con lo más nuevo:**
-     https://deploy-preview-1--h3-seminuevos.netlify.app (solicitud de cambios #1, no se fusiona hasta que el
-     dueño diga «publica»).
+     https://h3-seminuevos.netlify.app. **Vistas previas:** versión 2 en
+     https://deploy-preview-1--h3-seminuevos.netlify.app (solicitud #1) y versión 1 (Scrollcraft) en
+     https://deploy-preview-2--h3-seminuevos.netlify.app (solicitud #2). Ninguna se fusiona hasta que el
+     dueño elija una y diga «publica».
    - Después Upstash y Cloudinary, para que el panel guarde cambios.
    - Las crea quien lleva el proyecto. Con qué correo: **sin decidir**.
 2. **Publicar en Netlify y verificar con las cuentas reales:**
@@ -501,9 +532,21 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
   de la solicitud de cambios `desarrollo` → `main`: https://deploy-preview-1--h3-seminuevos.netlify.app. Se
   actualiza sola con cada cambio y no gasta créditos. Se descartaron Vercel Hobby (no permite uso comercial) y los artefactos de Claude (no
   alojan un sitio con servidor y panel).
-- **Imágenes con IA (Arcads): no se usaron** (29-oct). Las fotos reales lucen bien con el tratamiento de cine.
-  Además, autos generados chocarían con la promesa «Fotos reales de cada auto» y suelen verse hechos con
-  IA. Si el dueño quiere un fondo o ambiente generado, se puede agregar.
+- **Imágenes con IA (Arcads):** el 29-oct no se usaron. El 30-oct el dueño pidió una para «Vende tu auto»:
+  se usa **una sola** (llave, carpeta y pluma), **sin autos generados**, para no chocar con la promesa
+  «Fotos reales de cada auto».
+- **Dos versiones del diseño (30-oct)**, cada una con su enlace público de vista previa (0 créditos):
+  - **Versión 2 (cambios del dueño):** rama `desarrollo`, solicitud de cambios #1 →
+    https://deploy-preview-1--h3-seminuevos.netlify.app.
+  - **Versión 1 (con la skill `/scroll-craft`):** rama `version-scrollcraft`, solicitud de cambios #2 →
+    https://deploy-preview-2--h3-seminuevos.netlify.app.
+  - Las dos llevan el mismo contenido del negocio; cambia el diseño. El dueño elige cuál se publica.
+- **Versión 2 (30-oct):** hero con carrusel de fotos fijas (sin luces), paleta natural, Albert Sans, íconos
+  nuevos, inventario en 2 columnas, beneficios divididos en «al comprar» y «al vender», palomitas verdes,
+  los autos se ven **con cita** (nunca «Ven a conocerlo»), fotos solo Exterior e Interior, pie de página
+  nuevo y animaciones de entrada en todo el sitio.
+- **Skill `/scroll-craft`** (MIT, de nateherkai) instalada en `.claude/skills/scroll-craft/`: solo se usa
+  cuando alguien escribe `/scroll-craft`; Claude no la carga solo.
 - **Panel con contraseña inicial `12345`**, que se cambia dentro del panel, y acceso discreto en el pie de
   página (28-oct).
 - **Características de cada auto resumidas** y fáciles de entender (27-oct).
@@ -527,8 +570,8 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
   datos nuevos (28-oct).
 - **No se agregan** calculadora de mensualidades, prueba de manejo, garantía ni historial mientras no haya
   datos reales (28-oct).
-- **Fotos por sección** (exterior, interior, motor y detalles) y **equipamiento con lista fija**, que el
-  dueño marca en el panel (28-oct).
+- **Fotos por sección** y **equipamiento con lista fija**, que el dueño marca en el panel (28-oct). Desde el
+  30-oct las secciones son solo **Exterior e Interior**.
 - **Lo único que se ofrece son autos a la venta.** Todo debe verse muy profesional y cada ficha debe
   contestar las dudas ahí mismo (28-oct).
 - **De dónde llegan:** anuncios en redes y Google («seminuevos en Villahermosa, Tabasco») (28-oct).

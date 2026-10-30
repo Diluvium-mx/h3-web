@@ -1,7 +1,25 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { ArrowRight, Check, MessageCircle, Navigation, Phone, Plus, Search, ShieldCheck, X } from "lucide-react";
+import {
+  ArrowRight,
+  CalendarCheck,
+  Check,
+  CircleDollarSign,
+  FileCheck,
+  FileText,
+  Gauge,
+  Headset,
+  MessageCircle,
+  Navigation,
+  Phone,
+  Plus,
+  Search,
+  ShieldCheck,
+  TrendingUp,
+  UserX,
+  X,
+} from "lucide-react";
 import { CarCard } from "@/components/car-card";
 import { CategoryTileContent, categoryTileClass } from "@/components/category-tile";
 import { SectionHeading } from "@/components/section-heading";
@@ -9,7 +27,7 @@ import { SOCIALS } from "@/components/site/footer";
 import { WhatsAppIcon } from "@/components/icons";
 import { FUDS, GENERAL_MESSAGE, countTypes, type Rating } from "@/components/home/hero";
 import { Stars } from "@/components/home/reviews";
-import { carName, carTitle, formatKm, formatPrice, type Car } from "@/lib/cars";
+import { carTitle, formatPrice, type Car } from "@/lib/cars";
 import { site, whatsappUrl } from "@/lib/site";
 import { vars } from "@/lib/ui";
 
@@ -31,24 +49,124 @@ function WhatsAppCta({ message, children }: { message: string; children: ReactNo
   );
 }
 
-// ---------- Inventario: categorías con ícono y autos destacados ----------
+// Palomita verde en círculo (pedido del dueño: verde en lugar de rojo)
+function OkMark({ className = "" }: { className?: string }) {
+  return (
+    <span className={`grid size-6 shrink-0 place-items-center rounded-full bg-ok text-white ${className}`} aria-hidden="true">
+      <Check className="size-3.5" strokeWidth={3} />
+    </span>
+  );
+}
+
+const VISIT_MESSAGE = `Hola ${site.name} 👋 Me gustaría agendar una cita para ver un auto. ¿Qué días tienen disponibles?`;
+const SELL_MESSAGE = `Hola ${site.name} 👋 Quiero vender mi auto. ¿Cómo funciona?`;
+
+// ---------- Beneficios divididos en 2: al comprar y al vender (dato del dueño, 30-oct) ----------
+
+const BUY_BENEFITS = [
+  { Icon: Headset, title: "Asesoramiento", text: "Te orientamos para elegir el auto que de verdad te conviene." },
+  { Icon: ShieldCheck, title: "Autos confiables", text: "Ya verificados, validados y probados antes de publicarse." },
+  {
+    Icon: FileCheck,
+    title: "Papeles en regla",
+    text: "Papeles originales, documentación en regla y te ayudamos con el papeleo.",
+  },
+  {
+    Icon: CircleDollarSign,
+    title: "Precio justo",
+    text: "No tenemos lote: nuestros costos son menores que los de un lote de autos.",
+  },
+];
+
+const SELL_BENEFITS = [
+  { Icon: TrendingUp, title: "Ganas más que en un lote", text: "Sácale más valor a tu vehículo." },
+  { Icon: ShieldCheck, title: "Evita estafas", text: "Filtramos a los interesados por ti." },
+  { Icon: UserX, title: "Sin citas con desconocidos", text: "Nosotros nos encargamos de las citas." },
+  { Icon: FileText, title: "Papeleo y placas", text: "Te ayudamos con el papeleo, el trámite y la baja de las placas." },
+  { Icon: Gauge, title: "Precio correcto", text: "Una evaluación correcta de tu auto." },
+];
+
+function BenefitList({ items, dark }: { items: typeof BUY_BENEFITS; dark?: boolean }) {
+  return (
+    <ul className="mt-7 space-y-5">
+      {items.map(({ Icon, title, text }, i) => (
+        <li key={title} className="reveal group flex gap-4" style={vars({ "--i": i })}>
+          <span
+            className={`grid size-11 shrink-0 place-items-center rounded-md transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:-translate-y-0.5 ${
+              dark ? (i === 0 ? "bg-ok text-white" : "bg-white/[0.08] text-white ring-1 ring-white/10") : "bg-night text-white"
+            }`}
+          >
+            <Icon className="size-5" strokeWidth={1.75} />
+          </span>
+          <div>
+            <h4 className="font-semibold">{title}</h4>
+            <p className={`mt-0.5 text-sm leading-relaxed ${dark ? "text-white/65" : "text-mute"}`}>{text}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+export function Benefits() {
+  return (
+    <section className="py-20 sm:py-28" aria-labelledby="beneficios">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <SectionHeading id="beneficios" eyebrow="Beneficios" title="Lo que hacemos por ti" />
+        <div className="grid gap-4 lg:grid-cols-2 lg:gap-6">
+          <article className="reveal flex flex-col rounded-lg bg-card p-6 ring-1 ring-line sm:p-9" aria-labelledby="al-comprar">
+            <p className="font-tech text-[11px] text-dim">Compra tu auto</p>
+            <h3 id="al-comprar" className="font-display mt-3 text-[1.9rem] sm:text-4xl">
+              Al comprar un auto
+            </h3>
+            <BenefitList items={BUY_BENEFITS} />
+            <div className="mt-auto pt-9">
+              <CtaLink href="/autos">Ver autos disponibles</CtaLink>
+            </div>
+          </article>
+          <article
+            className="reveal glow-night relative flex flex-col overflow-hidden rounded-lg p-6 text-white sm:p-9"
+            style={vars({ "--i": 1 })}
+            aria-labelledby="al-vender"
+          >
+            <p className="font-tech relative text-[11px] text-white/55">Vende tu auto</p>
+            <h3 id="al-vender" className="font-display relative mt-3 text-[1.9rem] sm:text-4xl">
+              Al vender tu auto
+            </h3>
+            <div className="relative">
+              <BenefitList items={SELL_BENEFITS} dark />
+            </div>
+            <div className="relative mt-auto flex flex-wrap gap-3 pt-9">
+              <CtaLink href="/vende-tu-auto" light>
+                Vender mi auto
+              </CtaLink>
+              <WhatsAppCta message={SELL_MESSAGE}>Preguntar</WhatsAppCta>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ---------- Inventario: categorías con ícono y 8 autos en 2 columnas ----------
 
 export function Inventory({ cars, featured }: { cars: Car[]; featured: Car[] }) {
   const tiles = countTypes(cars);
 
   return (
-    <section className="pt-12 pb-16 sm:pt-20 sm:pb-24" aria-labelledby="destacados">
+    <section className="pt-16 pb-16 sm:pt-24 sm:pb-24" aria-labelledby="destacados">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <SectionHeading
           id="destacados"
           eyebrow="Inventario"
           title="Autos listos para manejar"
-          action={{ href: "/autos", label: "Ver todo el inventario" }}
+          action={{ href: "/autos", label: "Ver todos" }}
         />
       </div>
       <nav
         aria-label="Explora por tipo"
-        className="no-scrollbar mb-8 flex snap-x scroll-px-4 gap-2.5 overflow-x-auto px-4 pb-1 sm:scroll-px-6 sm:px-6 lg:mx-auto lg:max-w-7xl"
+        className="no-scrollbar mb-8 flex snap-x scroll-px-4 gap-3.5 overflow-x-auto px-4 pb-2 sm:scroll-px-6 sm:px-6 lg:mx-auto lg:max-w-7xl"
       >
         {tiles.map(([t, count], i) => (
           <Link
@@ -61,74 +179,127 @@ export function Inventory({ cars, featured }: { cars: Car[]; featured: Car[] }) 
           </Link>
         ))}
       </nav>
-      <div className="no-scrollbar flex snap-x snap-mandatory scroll-px-4 gap-4 overflow-x-auto px-4 pb-4 sm:scroll-px-6 sm:px-6 lg:mx-auto lg:grid lg:max-w-7xl lg:grid-cols-4 lg:overflow-visible">
-        {featured.map((car) => (
+      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-3 px-4 sm:gap-4 sm:px-6 lg:grid-cols-4">
+        {featured.slice(0, 8).map((car, i) => (
+          <div key={car.id} className="reveal" style={vars({ "--i": i % 4 })}>
+            <CarCard car={car} sizes="(min-width: 1024px) 24vw, 50vw" className="h-full" />
+          </div>
+        ))}
+      </div>
+      <div className="mt-8 px-4 text-center sm:px-6">
+        <Link href="/autos" className="btn btn-dark btn-shine group w-full sm:w-auto">
+          Ver todos
+          <ArrowRight className="size-4 transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:translate-x-1" />
+        </Link>
+      </div>
+    </section>
+  );
+}
+
+// ---------- Compra tu auto: carrusel de autos verificados ----------
+
+export function BuySection({ cars }: { cars: Car[] }) {
+  const withPhoto = cars.filter((c) => c.images[0]).slice(0, 8);
+  if (!withPhoto.length) return null;
+  return (
+    <section className="overflow-hidden bg-card py-20 sm:py-28" aria-labelledby="compra">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="reveal flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
+          <div>
+            <p className="font-tech flex items-center gap-3 text-[11px] text-dim">
+              <span className="rule-accent h-px w-8" />
+              Autos verificados
+            </p>
+            <h2 id="compra" className="font-display mt-4 max-w-xl text-[2.1rem] sm:text-5xl">
+              Verificados, probados y con sus papeles en regla.
+            </h2>
+          </div>
+          <p className="max-w-md text-lg leading-relaxed text-mute">
+            Toca el que te guste y te agendamos una cita para que lo veas en persona.
+            <span className="mt-1 block text-sm text-dim lg:hidden">Desliza para ver más →</span>
+          </p>
+        </div>
+      </div>
+      {/* Carrusel de tarjetas grandes: se desliza hacia la derecha */}
+      <div className="no-scrollbar mt-10 flex snap-x snap-mandatory scroll-px-4 gap-4 overflow-x-auto px-4 pb-2 sm:scroll-px-6 sm:px-6 lg:scroll-px-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))] lg:px-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))]">
+        {withPhoto.map((car) => (
           <CarCard
             key={car.id}
             car={car}
-            className="w-[80vw] max-w-[340px] shrink-0 snap-start lg:w-auto lg:max-w-none"
-            sizes="(min-width: 1024px) 24vw, 80vw"
+            variant="foto"
+            className="reveal reveal-zoom w-[80vw] max-w-[360px] shrink-0 snap-start"
+            sizes="(min-width: 640px) 360px, 80vw"
           />
         ))}
       </div>
-      <div className="mt-8 flex justify-center px-4">
+      <div className="mx-auto mt-8 max-w-7xl px-4 sm:px-6">
         <CtaLink href="/autos">Ver todo el inventario</CtaLink>
       </div>
     </section>
   );
 }
 
-// ---------- Vende tu auto: grande y arriba (pedido del dueño, 28-oct) ----------
+// ---------- Vende tu auto: imagen, cómo funciona y botones ----------
 
 const SELL_STEPS = [
-  { title: "Cuéntanos de tu auto", text: "Marca, modelo, año y kilometraje. Toma menos de un minuto." },
-  { title: "Envía fotos por WhatsApp", text: "El mensaje se arma solo; tú agregas las fotos." },
-  { title: "Te atendemos por WhatsApp", text: "El encargado revisa tus datos y te responde por ahí." },
+  { title: "Cuéntanos de tu auto", text: "Marca, modelo, año y fotos. Toma un minuto." },
+  { title: "Te damos una evaluación correcta", text: "Te decimos cuánto vale tu auto." },
+  { title: "Nos encargamos de la venta", text: "Filtramos a los interesados, agendamos las citas y te ayudamos con el papeleo." },
 ];
 
 export function SellSection() {
   return (
-    <section className="glow-night relative overflow-hidden py-20 text-white sm:py-28" aria-labelledby="vende">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
-      <div className="light-trails" aria-hidden="true">
-        <span style={{ top: "18%", ...vars({ "--d": "6s", "--delay": "0.6s" }) }} />
-        <span style={{ top: "64%", ...vars({ "--d": "7.5s", "--delay": "3s" }) }} />
-      </div>
-      <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[1.1fr_1fr] lg:items-end lg:gap-20">
-        <div className="reveal">
-          <p className="font-tech flex items-center gap-3 text-[11px] text-silver">
-            <span className="h-px w-8 rule-accent" />
-            Vende tu auto
-          </p>
-          <h2 id="vende" className="font-display mt-5 text-[2.6rem] leading-[1.02] sm:text-7xl">
-            ¿Quieres vender <span className="text-gradient">tu auto</span>?
-          </h2>
-          <p className="mt-6 max-w-lg text-lg leading-relaxed text-white/75">
-            Cuéntanos de tu auto en menos de un minuto y te atendemos por WhatsApp. Sin vueltas y sin compromiso.
-          </p>
-          <div className="mt-9 flex flex-wrap gap-3">
-            <CtaLink href="/vende-tu-auto" light>
-              Vender mi auto
-            </CtaLink>
+    <section className="py-20 sm:py-28" aria-labelledby="vende">
+      <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:items-center lg:gap-16">
+        <div className="reveal reveal-zoom relative">
+          <div className="relative aspect-[16/10] overflow-hidden rounded-lg bg-soft shadow-[0_30px_60px_-34px_rgb(20_20_20/0.55)]">
+            <Image
+              src="/img/vende-tu-auto.webp"
+              alt="Llave de un auto junto a una carpeta de documentos y una pluma: vender tu auto con el papeleo en orden"
+              fill
+              sizes="(min-width: 1024px) 46vw, 92vw"
+              className="object-cover"
+            />
+          </div>
+          {/* Lo más importante para quien vende, encima de la foto */}
+          <div className="absolute -bottom-6 left-4 flex items-center gap-3 rounded-md bg-night px-4 py-3 text-white shadow-[0_18px_40px_-18px_rgb(20_20_20/0.7)] sm:left-6">
+            <TrendingUp className="size-5 text-wa" />
+            <p className="text-sm leading-tight">
+              <b className="block font-semibold">Ganas más que en un lote</b>
+              <span className="text-white/70">Nosotros nos encargamos de lo difícil</span>
+            </p>
           </div>
         </div>
-        <ol className="grid gap-px overflow-hidden rounded-lg bg-white/10 ring-1 ring-white/10">
-          {SELL_STEPS.map((s, i) => (
-            <li
-              key={s.title}
-              className="reveal group flex gap-5 bg-graphite/90 p-5 backdrop-blur-sm transition-colors duration-500 hover:bg-steel/80 sm:p-6"
-              style={vars({ "--i": i })}
-            >
-              <span className="font-display text-3xl leading-none text-white/30 transition-colors duration-500 group-hover:text-brand-glow">
-                0{i + 1}
-              </span>
-              <div>
-                <h3 className="font-semibold">{s.title}</h3>
-                <p className="mt-1 text-sm leading-relaxed text-white/65">{s.text}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
+        <div className="reveal pt-6 lg:pt-0">
+          <p className="font-tech flex items-center gap-3 text-[11px] text-dim">
+            <span className="rule-accent h-px w-8" />
+            Vende tu auto
+          </p>
+          <h2 id="vende" className="font-display mt-4 text-[2.1rem] sm:text-5xl">
+            Sácale más valor a tu vehículo.
+          </h2>
+          <p className="mt-5 max-w-lg text-lg leading-relaxed text-mute">
+            Vendiéndolo con nosotros normalmente ganas más que vendiéndolo a un lote de autos, sin exponerte a
+            estafas ni a citas con desconocidos.
+          </p>
+          <ol className="mt-8 space-y-4">
+            {SELL_STEPS.map(({ title, text }, i) => (
+              <li key={title} className="reveal flex gap-4" style={vars({ "--i": i })}>
+                <span className="font-display grid size-9 shrink-0 place-items-center rounded-full bg-night text-sm text-white">
+                  {i + 1}
+                </span>
+                <span>
+                  <b className="block font-semibold">{title}</b>
+                  <span className="text-sm leading-relaxed text-mute">{text}</span>
+                </span>
+              </li>
+            ))}
+          </ol>
+          <div className="mt-9 flex flex-wrap gap-3">
+            <CtaLink href="/vende-tu-auto">Vender mi auto</CtaLink>
+            <WhatsAppCta message={SELL_MESSAGE}>Preguntar</WhatsAppCta>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -139,55 +310,45 @@ export function SellSection() {
 const OLD_VS_H3 = [
   { old: "Precio «por inbox»", h3: "Precio a la vista en cada auto" },
   { old: "Fotos de internet o de otro auto", h3: "Fotos reales del auto que vas a ver" },
+  { old: "Papeles dudosos", h3: "Papeles originales y documentación en regla" },
+  { old: "Costos de lote en el precio", h3: "Sin lote: costos menores y precio justo" },
   { old: "Mensajes en visto", h3: "Te respondemos de inmediato por WhatsApp" },
-  { old: "Datos a medias", h3: "Ficha clara y, si falta algo, te lo decimos" },
-  { old: "Vas a verlo y ya se vendió", h3: "Te confirmamos al momento si sigue disponible" },
 ];
 
 export function Comparison() {
   return (
-    <section className="py-20 sm:py-28" aria-labelledby="diferencia">
+    <section className="bg-card py-20 sm:py-28" aria-labelledby="diferencia">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-16">
         <div className="reveal">
-          <p className="font-tech flex items-center gap-3 text-[11px] text-dim">
-            <span className="h-px w-8 rule-accent" />
-            La diferencia H3
-          </p>
-          <h2 id="diferencia" className="font-display mt-4 text-[2rem] sm:text-5xl">
-            Comprar un seminuevo no tiene que ser una apuesta.
+          <h2 id="diferencia" className="font-display text-[2.1rem] sm:text-5xl">
+            Compra con certeza, no a ciegas.
           </h2>
           <p className="mt-5 max-w-md text-lg leading-relaxed text-mute">
-            Precios que solo te dan por mensaje, fotos que no son del auto, datos a medias y mensajes en visto. Así
-            se pierde tiempo y confianza. En H3 lo hacemos diferente.
+            Precios que solo te dan por mensaje, fotos que no son del auto y papeles dudosos hacen perder tiempo y
+            confianza. En H3 lo hacemos diferente.
           </p>
           <div className="mt-8 hidden lg:block">
             <CtaLink href="/autos">Ver autos disponibles</CtaLink>
           </div>
         </div>
-        <div className="overflow-hidden rounded-lg bg-card ring-1 ring-line">
-          <div className="hidden grid-cols-2 border-b border-line px-6 py-3 sm:grid">
-            <p className="font-tech text-[10px] text-dim">Lo de siempre</p>
-            <p className="font-tech text-[10px] text-fg">En H3</p>
-          </div>
-          <ul className="divide-y divide-line">
-            {OLD_VS_H3.map((row, i) => (
-              <li
-                key={row.h3}
-                className="reveal grid gap-1.5 px-5 py-4 sm:grid-cols-2 sm:items-center sm:gap-4 sm:px-6"
-                style={vars({ "--i": i })}
-              >
-                <p className="flex items-center gap-2.5 text-sm text-dim">
-                  <X className="size-4 shrink-0" aria-hidden="true" />
+        <ul className="space-y-3">
+          {OLD_VS_H3.map((row, i) => (
+            <li
+              key={row.h3}
+              className="reveal flex items-center gap-4 rounded-lg bg-paper p-4 ring-1 ring-line transition-transform duration-500 ease-[var(--ease-out-expo)] hover:-translate-y-0.5 sm:p-5"
+              style={vars({ "--i": i })}
+            >
+              <OkMark className="size-8" />
+              <span className="min-w-0">
+                <span className="block font-semibold leading-snug sm:text-lg">{row.h3}</span>
+                <span className="mt-0.5 flex items-center gap-1.5 text-[13px] text-dim">
+                  <X className="size-3.5 shrink-0" aria-hidden="true" />
                   <span className="line-through decoration-dim/60">{row.old}</span>
-                </p>
-                <p className="flex items-center gap-2.5 font-medium">
-                  <Check className="size-4 shrink-0 text-brand" strokeWidth={2.5} aria-hidden="true" />
-                  {row.h3}
-                </p>
-              </li>
-            ))}
-          </ul>
-        </div>
+                </span>
+              </span>
+            </li>
+          ))}
+        </ul>
         <div className="lg:hidden">
           <CtaLink href="/autos">Ver autos disponibles</CtaLink>
         </div>
@@ -196,42 +357,13 @@ export function Comparison() {
   );
 }
 
-// ---------- Beneficios (qué ganas tú), cada uno con su imagen y su botón ----------
+// ---------- Atención 1 a 1: así se ve el mensaje que se manda ----------
 
-function SpecPhoto({ car }: { car: Car }) {
-  return (
-    <Link href={`/autos/${car.slug}`} className="group relative block aspect-[4/3] overflow-hidden rounded-lg bg-soft">
-      <Image
-        src={car.images[0]}
-        alt={carTitle(car)}
-        fill
-        sizes="(min-width: 1024px) 40vw, 92vw"
-        quality={70}
-        className="object-cover object-[50%_62%] transition-transform duration-[1.2s] ease-[var(--ease-out-expo)] group-hover:scale-105"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-night/80 via-night/10 to-transparent" />
-      <span className="font-tech absolute top-4 left-4 inline-flex items-center gap-1.5 rounded-sm bg-white/90 px-2.5 py-1.5 text-[10px] text-fg backdrop-blur-md">
-        <ShieldCheck className="size-3.5 text-brand" /> Auto verificado
-      </span>
-      <div className="absolute inset-x-5 bottom-5 text-white">
-        <p className="font-tech text-[10px] text-white/70">
-          {car.year} · {car.mileage != null ? formatKm(car.mileage) : "Km: pregúntanos"}
-          {car.transmission && ` · ${car.transmission}`}
-        </p>
-        <div className="mt-1.5 flex items-end justify-between gap-4">
-          <p className="font-display text-2xl">{carName(car)}</p>
-          <p className="font-display shrink-0 text-xl">{formatPrice(car.price)}</p>
-        </div>
-      </div>
-    </Link>
-  );
-}
-
-// Así se ve el mensaje que se manda al tocar «Me interesa» (mismo texto que arma el sitio)
+// Mismo texto que arma el sitio al tocar «Me interesa»
 function ChatMock({ car }: { car: Car }) {
   const host = site.url.replace(/^https?:\/\//, "");
   return (
-    <div className="relative mx-auto w-full max-w-sm overflow-hidden rounded-2xl bg-[#efeae2] shadow-[0_30px_70px_-30px_rgb(12_13_15/0.5)] ring-1 ring-line">
+    <div className="relative mx-auto w-full max-w-sm overflow-hidden rounded-2xl bg-[#efeae2] shadow-[0_30px_70px_-30px_rgb(20_20_20/0.5)] ring-1 ring-line">
       <div className="flex items-center gap-3 bg-[#0b141a] px-4 py-3 text-white">
         <span className="grid size-9 place-items-center rounded-full bg-white">
           <Image src="/brand/mark-dark.png" alt="" width={344} height={186} className="w-6" />
@@ -270,111 +402,73 @@ function ChatMock({ car }: { car: Car }) {
   );
 }
 
-function ValueRow({
-  eyebrow,
-  title,
-  text,
-  visual,
-  cta,
-  flip,
-}: {
-  eyebrow: string;
-  title: ReactNode;
-  text: ReactNode;
-  visual: ReactNode;
-  cta: ReactNode;
-  flip?: boolean;
-}) {
+export function Attention({ featured }: { featured: Car[] }) {
+  const car = featured.find((c) => c.images[0]);
+  if (!car) return null;
   return (
-    <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-20">
-      <div className={`reveal ${flip ? "lg:order-2" : ""}`}>{visual}</div>
-      <div className="reveal">
-        <p className="font-tech flex items-center gap-3 text-[11px] text-dim">
-          <span className="h-px w-8 rule-accent" />
-          {eyebrow}
-        </p>
-        <h3 className="font-display mt-4 text-[1.85rem] sm:text-[2.6rem]">{title}</h3>
-        <p className="mt-4 max-w-lg text-lg leading-relaxed text-mute">{text}</p>
-        <div className="mt-7">{cta}</div>
-      </div>
-    </div>
-  );
-}
-
-export function ValueProps({ featured }: { featured: Car[] }) {
-  const withPhoto = featured.filter((c) => c.images[0]);
-  if (!withPhoto.length) return null;
-  const specCar = withPhoto.find((c) => c.mileage != null && c.transmission) ?? withPhoto[0];
-  const chatCar = withPhoto.find((c) => c.id !== specCar.id) ?? specCar;
-  return (
-    <section className="tint-warm py-20 sm:py-28" aria-labelledby="beneficios">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <h2 id="beneficios" className="sr-only">
-          Por qué comprar en H3
-        </h2>
-        <div className="space-y-20 sm:space-y-28">
-          <ValueRow
-            eyebrow="Autos verificados"
-            title="Maneja tranquilo: autos verificados y con ficha clara."
-            text="Cada auto se publica con fotos reales y su ficha: año, kilometraje, transmisión y más. ¿Te quedó una duda? Pregúntanos y te respondemos de inmediato."
-            visual={<SpecPhoto car={specCar} />}
-            cta={
-              <Link href={`/autos/${specCar.slug}`} className="group inline-flex items-center gap-2 font-semibold">
-                <span className="bg-[linear-gradient(currentColor,currentColor)] bg-[length:100%_1px] bg-left-bottom bg-no-repeat pb-0.5">
-                  Ver la ficha de este auto
-                </span>
-                <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-            }
-          />
-          <ValueRow
-            flip
-            eyebrow="Atención 1 a 1"
-            title="Un toque y ya estás hablando con nosotros."
-            text="Toca «Me interesa» en cualquier auto: el WhatsApp ya lleva el modelo, el precio y el enlace. Sin registros ni formularios, y te respondemos de inmediato."
-            visual={<ChatMock car={chatCar} />}
-            cta={<WhatsAppCta message={GENERAL_MESSAGE}>Escríbenos ahora</WhatsAppCta>}
-          />
+    <section className="py-20 sm:py-28" aria-labelledby="atencion">
+      <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:gap-20">
+        <div className="reveal reveal-zoom lg:order-2">
+          <ChatMock car={car} />
+        </div>
+        <div className="reveal">
+          <p className="font-tech flex items-center gap-3 text-[11px] text-dim">
+            <span className="rule-accent h-px w-8" />
+            Atención 1 a 1
+          </p>
+          <h2 id="atencion" className="font-display mt-4 text-[2rem] sm:text-[2.6rem]">
+            Un toque y ya estás hablando con nosotros.
+          </h2>
+          <p className="mt-4 max-w-lg text-lg leading-relaxed text-mute">
+            Toca «Me interesa» en cualquier auto: el WhatsApp ya lleva el modelo, el precio y el enlace. Sin
+            registros ni formularios, y te respondemos de inmediato.
+          </p>
+          <div className="mt-7">
+            <WhatsAppCta message={GENERAL_MESSAGE}>Escríbenos ahora</WhatsAppCta>
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-// ---------- Cómo funciona: que se vea fácil ----------
+// ---------- Cómo funciona: los autos se ven con cita ----------
 
 const STEPS = [
   { Icon: Search, title: "Elige el tuyo", text: "Filtra por tipo, marca, precio y año. Cada auto tiene fotos reales, precio y ficha." },
   { Icon: MessageCircle, title: "Escríbenos", text: "Toca «Me interesa»: el mensaje ya lleva el auto. Te respondemos de inmediato." },
   {
-    Icon: Navigation,
-    title: "Ven a conocerlo",
-    text: `${site.address.street}, ${site.address.city}. Lunes a sábado de 9:00 a 17:00.`,
+    Icon: CalendarCheck,
+    title: "Agenda tu cita",
+    text: "No tenemos lote: te agendamos una cita para que veas el auto en persona.",
   },
 ];
 
 export function HowItWorks() {
   return (
-    <section className="py-20 sm:py-28" aria-labelledby="como-funciona">
+    <section className="bg-card py-20 sm:py-28" aria-labelledby="como-funciona">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <SectionHeading id="como-funciona" eyebrow="Así de fácil" title="Tu próximo auto en 3 pasos." />
-        <ol className="grid gap-px overflow-hidden rounded-lg bg-line ring-1 ring-line md:grid-cols-3">
+        <ol className="relative grid gap-8 md:grid-cols-3 md:gap-10">
+          {/* Línea que une los pasos (vertical en celular, horizontal en computadora) */}
+          <span className="absolute top-6 bottom-6 left-6 w-px bg-line md:hidden" aria-hidden="true" />
+          <span className="absolute top-6 right-[16%] left-[16%] hidden h-px bg-line md:block" aria-hidden="true" />
           {STEPS.map(({ Icon, title, text }, i) => (
-            <li key={title} className="reveal group relative bg-card p-6 sm:p-8" style={vars({ "--i": i })}>
-              <div className="flex items-center justify-between">
-                <span className="font-display text-5xl leading-none text-soft-2 transition-colors duration-500 group-hover:text-brand">
-                  0{i + 1}
-                </span>
-                <Icon className="size-5 text-brand" strokeWidth={1.75} />
+            <li key={title} className="reveal group relative flex gap-5 md:block" style={vars({ "--i": i })}>
+              <span className="relative z-10 grid size-12 shrink-0 place-items-center rounded-full bg-night text-white ring-8 ring-card transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:-translate-y-1 md:mx-auto">
+                <Icon className="size-5" strokeWidth={1.75} />
+              </span>
+              <div className="md:mt-5 md:text-center">
+                <p className="text-xs font-semibold text-dim">Paso {i + 1}</p>
+                <h3 className="font-display mt-1 text-xl">{title}</h3>
+                <p className="mt-2 leading-relaxed text-mute">{text}</p>
               </div>
-              <h3 className="font-display mt-8 text-xl">{title}</h3>
-              <p className="mt-2 leading-relaxed text-mute">{text}</p>
-              <span className="absolute inset-x-0 top-0 h-0.5 origin-left scale-x-0 rule-accent transition-transform duration-700 ease-[var(--ease-out-expo)] group-hover:scale-x-100" />
             </li>
           ))}
         </ol>
-        <div className="mt-8">
-          <CtaLink href="/autos">Empezar: ver autos</CtaLink>
+        <div className="mt-10 flex flex-wrap justify-center gap-3">
+          <CtaLink href="/autos">Ver autos</CtaLink>
+          <WhatsAppCta message={VISIT_MESSAGE}>Agendar cita</WhatsAppCta>
         </div>
       </div>
     </section>
@@ -386,7 +480,7 @@ export function HowItWorks() {
 export function SoldStrip({ cars }: { cars: Car[] }) {
   if (!cars.length) return null;
   return (
-    <section className="pb-16" aria-labelledby="vendidos">
+    <section className="py-16" aria-labelledby="vendidos">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <SectionHeading id="vendidos" eyebrow="Ya tienen nuevo dueño" title="Recién vendidos" />
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -399,7 +493,7 @@ export function SoldStrip({ cars }: { cars: Car[] }) {
   );
 }
 
-// ---------- Preguntas frecuentes: quitar dudas antes del último botón ----------
+// ---------- Preguntas frecuentes ----------
 
 const FAQ: { q: string; a: ReactNode }[] = [
   {
@@ -412,47 +506,52 @@ const FAQ: { q: string; a: ReactNode }[] = [
     ),
   },
   {
-    q: "Le falta un dato al auto (por ejemplo, el kilometraje). ¿Qué hago?",
-    a: (
-      <>
-        Preferimos no poner un dato que no tenemos confirmado. Mándanos un mensaje y te respondemos de
-        inmediato.
-      </>
-    ),
-  },
-  {
     q: "¿Puedo ver el auto en persona?",
     a: (
       <>
-        Sí. Estamos en {site.address.street}, {site.address.neighborhood}, {site.address.city}, de lunes a sábado de
-        9:00 a 17:00. Escríbenos antes y te confirmamos que el auto esté disponible.
+        Sí, con cita. No tenemos lote: escríbenos por WhatsApp y te agendamos una cita para que veas el auto.
       </>
     ),
   },
   {
-    q: "¿Tengo que registrarme o llenar un formulario?",
-    a: <>No. Ves todo el inventario sin registrarte y nos escribes directo por WhatsApp.</>,
+    q: "¿Por qué sus precios son justos?",
+    a: <>Porque no tenemos lote. Nuestros costos son menores que los de un lote de autos y eso se refleja en el precio.</>,
   },
   {
-    q: "¿Dónde están exactamente?",
+    q: "¿Los autos tienen sus papeles en regla?",
     a: (
       <>
-        En {site.address.street}, {site.address.neighborhood}, {site.address.city}, {site.address.state}.{" "}
-        <a href={site.mapsUrl} target="_blank" rel="noopener" className="font-semibold text-fg underline">
-          Abrir en Google Maps
-        </a>
+        Sí. Cada auto se verifica, se valida y se prueba antes de publicarse: papeles originales y documentación en
+        regla. Además te ayudamos con el papeleo.
+      </>
+    ),
+  },
+  {
+    q: "Le falta un dato al auto (por ejemplo, el kilometraje). ¿Qué hago?",
+    a: <>Preferimos no poner un dato que no tenemos confirmado. Mándanos un mensaje y te respondemos de inmediato.</>,
+  },
+  {
+    q: "Quiero vender mi auto. ¿Cómo funciona?",
+    a: (
+      <>
+        Nos cuentas de tu auto y lo evaluamos. Filtramos a los interesados, nos encargamos de las citas y te ayudamos
+        con el papeleo y las placas. Normalmente ganas más que vendiéndolo a un lote.{" "}
+        <Link href="/vende-tu-auto" className="font-semibold text-fg underline underline-offset-4">
+          Vender mi auto
+        </Link>
         .
       </>
     ),
   },
   {
-    q: "Quiero vender mi auto. ¿Me pueden ayudar?",
+    q: "¿Dónde están?",
     a: (
       <>
-        Sí. Cuéntanos de tu auto en menos de un minuto y te atendemos por WhatsApp.{" "}
-        <Link href="/vende-tu-auto" className="font-semibold text-fg underline">
-          Vender mi auto
-        </Link>
+        Nuestra oficina está en {site.address.street}, {site.address.neighborhood}, {site.address.city},{" "}
+        {site.address.state}.{" "}
+        <a href={site.mapsUrl} target="_blank" rel="noopener" className="font-semibold text-fg underline underline-offset-4">
+          Abrir en Google Maps
+        </a>
         .
       </>
     ),
@@ -461,7 +560,7 @@ const FAQ: { q: string; a: ReactNode }[] = [
 
 export function Faq() {
   return (
-    <section className="tint-warm py-20 sm:py-28" aria-labelledby="preguntas">
+    <section className="py-20 sm:py-28" aria-labelledby="preguntas">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
         <div>
           <SectionHeading id="preguntas" eyebrow="Sin dudas" title="Preguntas frecuentes" />
@@ -471,7 +570,7 @@ export function Faq() {
               href={whatsappUrl(`Hola ${site.name} 👋 Tengo una pregunta:`)}
               target="_blank"
               rel="noopener"
-              className="font-semibold text-wa-dark underline"
+              className="font-semibold text-wa-dark underline underline-offset-4"
             >
               Pregúntanos por WhatsApp
             </a>
@@ -484,7 +583,7 @@ export function Faq() {
               <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-4 py-5 font-semibold [&::-webkit-details-marker]:hidden">
                 {q}
                 <Plus
-                  className="size-5 shrink-0 text-dim transition-transform duration-500 ease-[var(--ease-out-expo)] group-open:rotate-45 group-open:text-brand"
+                  className="size-5 shrink-0 text-dim transition-transform duration-500 ease-[var(--ease-out-expo)] group-open:rotate-45 group-open:text-fg"
                   aria-hidden="true"
                 />
               </summary>
@@ -497,77 +596,105 @@ export function Faq() {
   );
 }
 
-// ---------- Cierre: resumen, urgencia real y contacto ----------
+// ---------- Cierre: cada auto es único (rediseño 30-oct) ----------
 
-export function Closer({ rating }: { rating: Rating }) {
+export function Closer({ rating, cars }: { rating: Rating; cars: Car[] }) {
+  const strip = cars.filter((c) => c.images[0]).slice(0, 3);
   return (
-    <section id="contacto" className="scroll-mt-20 px-4 pt-6 pb-16 sm:px-6 sm:pb-24" aria-labelledby="contacto-title">
-      <div className="mx-auto grid max-w-7xl gap-4 lg:grid-cols-[1.3fr_1fr]">
-        <div className="reveal glow-night relative overflow-hidden rounded-lg p-7 text-white sm:p-12">
-          <div className="light-trails" aria-hidden="true">
-            <span style={{ top: "30%", ...vars({ "--d": "6.5s", "--delay": "1.4s" }) }} />
+    <section id="contacto" className="scroll-mt-20" aria-labelledby="contacto-title">
+      <div className="glow-night relative overflow-hidden py-20 text-white sm:py-28">
+        <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-16">
+          <div className="reveal">
+            {rating.count > 0 && (
+              <div className="mb-6 flex items-center gap-2 text-sm text-white/80">
+                <Stars value={rating.avg} className="size-4" />
+                {rating.avg.toFixed(1)} · {rating.count} {rating.count === 1 ? "reseña" : "reseñas"}
+              </div>
+            )}
+            <h2 id="contacto-title" className="font-display text-[2.6rem] leading-[1] sm:text-7xl">
+              Cada auto es único.
+              <span className="mt-2 block text-white/45">Cuando se vende, ya no vuelve.</span>
+            </h2>
+            <p className="mt-6 max-w-md text-lg leading-relaxed text-white/72">
+              ¿Ya viste el tuyo? Escríbenos hoy y te confirmamos al momento si sigue disponible.
+            </p>
+            <ul className="mt-6 space-y-2.5">
+              {FUDS.map((f) => (
+                <li key={f} className="flex items-center gap-3 text-white/90">
+                  <OkMark />
+                  {f}
+                </li>
+              ))}
+            </ul>
+            <div className="mt-9 flex flex-wrap gap-3">
+              <WhatsAppCta message={GENERAL_MESSAGE}>Escríbenos por WhatsApp</WhatsAppCta>
+              <CtaLink href="/autos" light>
+                Ver inventario
+              </CtaLink>
+            </div>
           </div>
-          {rating.count > 0 && (
-            <div className="mb-6 flex items-center gap-2 text-sm text-white/80">
-              <Stars value={rating.avg} className="size-4" />
-              {rating.avg.toFixed(1)} · {rating.count} {rating.count === 1 ? "reseña" : "reseñas"}
+          {/* Tres autos reales del inventario, escalonados */}
+          {strip.length > 0 && (
+            <div className="grid grid-cols-3 items-end gap-3" aria-label="Algunos autos disponibles">
+              {strip.map((car, i) => (
+                <Link
+                  key={car.id}
+                  href={`/autos/${car.slug}`}
+                  className={`reveal group relative block overflow-hidden rounded-lg bg-graphite ${
+                    i === 1 ? "aspect-[3/5]" : "aspect-[3/4]"
+                  }`}
+                  style={vars({ "--i": i })}
+                >
+                  <Image
+                    src={car.images[0]}
+                    alt={carTitle(car)}
+                    fill
+                    sizes="(min-width: 1024px) 14vw, 31vw"
+                    quality={70}
+                    className="object-cover transition-transform duration-[1.2s] ease-[var(--ease-out-expo)] group-hover:scale-105"
+                  />
+                  <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-night/90 to-transparent p-2.5 pt-8 text-[11px] leading-tight font-semibold sm:p-3 sm:text-xs">
+                    {car.model}
+                    <span className="block font-normal text-white/70">{formatPrice(car.price)}</span>
+                  </span>
+                </Link>
+              ))}
             </div>
           )}
-          <p className="font-tech flex items-center gap-3 text-[11px] text-silver">
-            <span className="h-px w-8 rule-accent" />
-            Cada auto es único
-          </p>
-          <h2 id="contacto-title" className="font-display mt-4 text-[2.2rem] leading-[1.04] sm:text-6xl">
-            Cuando se vende, <span className="text-gradient">ya no vuelve</span>.
-          </h2>
-          <p className="mt-5 max-w-md text-lg leading-relaxed text-white/75">
-            ¿Ya viste el tuyo? Escríbenos hoy y te confirmamos al momento si sigue disponible.
-          </p>
-          <ul className="mt-6 space-y-2.5">
-            {FUDS.map((f) => (
-              <li key={f} className="flex items-center gap-2.5 text-white/90">
-                <Check className="size-4 text-brand-glow" strokeWidth={2.5} />
-                {f}
-              </li>
-            ))}
-          </ul>
-          <div className="mt-9 flex flex-wrap gap-3">
-            <WhatsAppCta message={GENERAL_MESSAGE}>Escríbenos por WhatsApp</WhatsAppCta>
-            <CtaLink href="/autos" light>
-              Ver inventario
-            </CtaLink>
-          </div>
         </div>
+      </div>
 
-        <div className="reveal flex flex-col rounded-lg bg-card p-7 ring-1 ring-line sm:p-10">
-          <p className="font-tech text-[11px] text-dim">Visítanos</p>
-          <p className="font-display mt-4 text-[1.75rem]">{site.address.street}</p>
-          <p className="mt-2 text-mute">
-            {site.address.neighborhood}, {site.address.city}, {site.address.state}
-          </p>
-          <p className="mt-1 text-sm text-mute">{site.hours}</p>
-          <div className="mt-7 grid gap-2.5 sm:grid-cols-2">
-            <a href={site.mapsUrl} target="_blank" rel="noopener" className="btn btn-dark group">
+      {/* Visítanos: la oficina existe y se puede visitar (para confirmar que es un negocio real) */}
+      <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20">
+        <div className="reveal grid gap-8 rounded-lg bg-card p-6 ring-1 ring-line sm:p-10 lg:grid-cols-[1fr_auto] lg:items-center">
+          <div>
+            <p className="font-tech text-[11px] text-dim">Visítanos</p>
+            <p className="font-display mt-3 text-[1.9rem] sm:text-4xl">{site.address.street}</p>
+            <p className="mt-2 text-mute">
+              {site.address.neighborhood}, {site.address.city}, {site.address.state} · {site.hours}
+            </p>
+            <div className="mt-5 flex items-center gap-2">
+              {SOCIALS.map(({ href, label, Icon }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener"
+                  aria-label={label}
+                  className="grid size-11 place-items-center rounded-md ring-1 ring-line transition-all duration-300 hover:-translate-y-0.5 hover:ring-fg/40"
+                >
+                  <Icon className="size-5" />
+                </a>
+              ))}
+            </div>
+          </div>
+          <div className="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-1">
+            <a href={site.mapsUrl} target="_blank" rel="noopener" className="btn btn-dark">
               <Navigation className="size-4" /> Cómo llegar
             </a>
             <a href={site.phoneHref} className="btn btn-outline">
               <Phone className="size-4" /> {site.phoneDisplay}
             </a>
-          </div>
-          <div className="mt-auto flex items-center gap-2 border-t border-line pt-6">
-            <p className="font-tech mr-auto text-[10px] text-dim">Síguenos</p>
-            {SOCIALS.map(({ href, label, Icon }) => (
-              <a
-                key={label}
-                href={href}
-                target="_blank"
-                rel="noopener"
-                aria-label={label}
-                className="grid size-11 place-items-center rounded-md ring-1 ring-line transition-all duration-300 hover:-translate-y-0.5 hover:ring-fg/40"
-              >
-                <Icon className="size-5" />
-              </a>
-            ))}
           </div>
         </div>
       </div>

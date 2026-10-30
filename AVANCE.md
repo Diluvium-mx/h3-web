@@ -2,6 +2,15 @@
 
 Lo más reciente va arriba.
 
+## 30 de octubre de 2026 (noche) — versión 2 con los cambios del dueño
+
+- Hero con fotos fijas que se deslizan y cambian solas, sin luces; paleta natural y letra Albert Sans.
+- Beneficios divididos en «Al comprar un auto» y «Al vender tu auto»; inventario en 2 columnas; íconos y
+  pie de página nuevos; «Vende tu auto» con imagen de Arcads.
+- Los autos se ven con cita (ya no dice «Ven a conocerlo»); fotos solo Exterior e Interior.
+
+Falta: que el dueño revise la versión 2 en la vista previa #1; después, la versión 1 (Scrollcraft).
+
 ## 30 de octubre de 2026 (noche) — análisis de Scrollcraft
 
 - Se analizó Scrollcraft, el skill de diseño que mandó el dueño. Está completo y gratis en GitHub (licencia

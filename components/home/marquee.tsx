@@ -15,7 +15,7 @@ export function Marquee({ items }: { items: string[] }) {
             {row.map((item, i) => (
               <Fragment key={`${copy}-${i}`}>
                 {item === "Ready to drive" ? (
-                  <span className="font-display text-gradient-dark px-7 text-2xl tracking-[0.04em] whitespace-nowrap uppercase sm:text-3xl">
+                  <span className="font-display px-7 text-brand text-2xl tracking-[0.04em] whitespace-nowrap uppercase sm:text-3xl">
                     {item}
                   </span>
                 ) : (

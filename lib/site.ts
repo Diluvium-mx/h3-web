@@ -3,7 +3,7 @@ export const site = {
   name: "H3 Seminuevos",
   tagline: "Ready to drive",
   description:
-    "Autos seminuevos premium en Villahermosa, Tabasco. Revisados a detalle, precios justos y atención personalizada por WhatsApp.",
+    "Autos seminuevos premium en Villahermosa, Tabasco. Autos verificados, con papeles en regla y precio justo. Te asesoramos por WhatsApp.",
   url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.h3seminuevos.com").replace(/\/$/, ""),
   // Número de WhatsApp en formato internacional, sin "+" ni espacios
   whatsapp: process.env.NEXT_PUBLIC_WHATSAPP ?? "529932467572",

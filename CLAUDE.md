@@ -51,3 +51,6 @@
    créditos al mes. Pasa los cambios a `main` solo cuando el dueño pida publicar.
    La vista previa (0 créditos) sale de la solicitud de cambios #1 (`desarrollo` → `main`):
    https://deploy-preview-1--h3-seminuevos.netlify.app. No la fusiones sin que el dueño diga «publica».
+   **Hay 2 versiones del diseño (30-oct):** la versión 2 (cambios del dueño) es `desarrollo` → vista previa #1;
+   la versión 1 (skill `/scroll-craft`) es la rama `version-scrollcraft` → solicitud #2 →
+   https://deploy-preview-2--h3-seminuevos.netlify.app. Los cambios de contenido van en las dos ramas.

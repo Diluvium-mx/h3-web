@@ -1,21 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import { Geist } from "next/font/google";
-import localFont from "next/font/local";
+import { Albert_Sans } from "next/font/google";
 import { site } from "@/lib/site";
 import "./globals.css";
 
-const geist = Geist({
-  variable: "--font-geist",
+// Una sola familia (pedido del dueño, 30-oct: la tipografía anterior se veía «hecha con IA").
+// Albert Sans: grotesca escandinava, sobria y natural; variable (todos los pesos en un archivo).
+const albert = Albert_Sans({
+  variable: "--font-albert",
   subsets: ["latin"],
-  display: "swap",
-});
-
-// Saira expandida en un solo corte estático (600): ~15 KB, para títulos y etiquetas
-const sairaTech = localFont({
-  src: "./fonts/saira-tech-600.woff2",
-  variable: "--font-saira-tech",
-  weight: "600",
-  style: "normal",
   display: "swap",
 });
 
@@ -47,7 +39,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f4f4f0",
+  themeColor: "#f4f3f0",
   colorScheme: "light",
 };
 
@@ -56,7 +48,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="es-MX"
       data-scroll-behavior="smooth"
-      className={`${geist.variable} ${sairaTech.variable} antialiased`}
+      className={`${albert.variable} antialiased`}
     >
       <body className="min-h-dvh">{children}</body>
     </html>

@@ -284,7 +284,7 @@ export function CatalogBrowser({ cars }: { cars: Car[] }) {
 
         {/* Tipos con ícono (acceso rápido) */}
         <div
-          className="no-scrollbar -mx-4 mt-5 flex snap-x scroll-px-4 gap-2.5 overflow-x-auto px-4 pt-1 pb-2 sm:mx-0 sm:scroll-px-0 sm:px-0"
+          className="no-scrollbar -mx-4 mt-5 flex snap-x scroll-px-4 gap-3.5 overflow-x-auto px-4 pt-1 pb-2 sm:mx-0 sm:scroll-px-0 sm:px-0"
           role="group"
           aria-label="Tipo de auto"
         >
@@ -314,10 +314,10 @@ export function CatalogBrowser({ cars }: { cars: Car[] }) {
 
         <h2 className="sr-only">Resultados</h2>
         {results.length > 0 ? (
-          <div key={filterKey} className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <div key={filterKey} className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-3">
             {results.map((car, i) => (
               <div key={car.id} className="animate-rise" style={{ animationDelay: `${Math.min(i, 8) * 60}ms` }}>
-                <CarCard car={car} preload={i < 2} sizes="(min-width: 1280px) 28vw, (min-width: 640px) 45vw, 50vw" />
+                <CarCard car={car} preload={i < 2} className="h-full" sizes="(min-width: 1280px) 28vw, (min-width: 640px) 45vw, 50vw" />
               </div>
             ))}
           </div>

@@ -3,6 +3,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { Redis } from "@upstash/redis";
 import type { Car } from "./cars";
+import { normalizePhotoSections } from "./equipment";
 import type { Review } from "./reviews";
 import seed from "@/data/seed.json";
 
@@ -29,7 +30,7 @@ const LOCAL_FILE = path.join(/*turbopackIgnore: true*/ process.cwd(), "data", "c
 
 export async function getSeedCars(): Promise<Car[]> {
   // El tipo que TypeScript deduce del JSON es demasiado específico (una variante por auto)
-  return structuredClone(seed) as unknown as Car[];
+  return (structuredClone(seed) as unknown as Car[]).map(upgrade);
 }
 
 async function readFileCars(): Promise<Car[]> {
@@ -52,17 +53,22 @@ async function writeFileCars(cars: Car[]) {
   await fs.writeFile(/*turbopackIgnore: true*/ LOCAL_FILE, JSON.stringify(cars, null, 2));
 }
 
+// Datos guardados con esquemas anteriores se leen ya convertidos
+function upgrade(car: Car): Car {
+  return { ...car, photoSections: normalizePhotoSections(car.photoSections) };
+}
+
 export async function listCars(): Promise<Car[]> {
   if (redis) {
     const all = await redis.hgetall<Record<string, Car>>(KEY);
-    return all ? Object.values(all) : [];
+    return all ? Object.values(all).map(upgrade) : [];
   }
-  return readFileCars();
+  return (await readFileCars()).map(upgrade);
 }
 
 export async function getCar(id: string): Promise<Car | null> {
-  if (redis) return (await redis.hget<Car>(KEY, id)) ?? null;
-  return (await readFileCars()).find((c) => c.id === id) ?? null;
+  const car = redis ? await redis.hget<Car>(KEY, id) : (await readFileCars()).find((c) => c.id === id);
+  return car ? upgrade(car) : null;
 }
 
 export async function putCar(car: Car) {
