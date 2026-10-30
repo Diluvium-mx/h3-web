@@ -61,7 +61,8 @@ Estados de un auto:
 
 - Next.js 16 (App Router, Cache Components) + React 19 + Tailwind CSS 4.
 - **Netlify Free** para publicar el sitio.
-- **Upstash Redis Free** para guardar el inventario.
+- **Netlify Blobs** (incluido en Netlify Free, sin cuenta extra) para guardar el inventario, las reseñas y
+  la contraseña del panel. Opcional: Upstash Redis Free; si se conecta, se usa en su lugar.
 - **Cloudinary Free** para guardar y servir las fotos. Las fotos salen directo de Cloudinary ya
   optimizadas (AVIF/WebP), así no gastan créditos de Netlify.
 
@@ -75,8 +76,8 @@ Se hace en dos etapas.
 
 ### Etapa 1: tener el enlace (solo Netlify, ≈ 15 minutos)
 
-El sitio público queda completo con el inventario actual. El panel deja entrar, pero **no guarda cambios**
-hasta la etapa 2.
+El sitio público queda completo con el inventario actual y **el panel ya guarda cambios** en Netlify Blobs
+(30-oct). Las fotos nuevas necesitan Cloudinary (etapa 2).
 
 1. **Cuenta:** entra a [app.netlify.com](https://app.netlify.com/signup), elige **GitHub** para registrarte
    y acepta el plan **Free**.
@@ -101,18 +102,22 @@ hasta la etapa 2.
       AUTH_SECRET=texto-largo-y-aleatorio
       ```
    - Para el `AUTH_SECRET`, en la Terminal de la Mac corre `openssl rand -base64 32`.
+   - El `AUTH_SECRET` es opcional desde el 30-oct: sin él, el panel crea una llave al azar y la guarda en
+     Netlify Blobs.
    - La contraseña inicial del panel es `12345` (decisión del dueño). Como el repositorio es público,
-     cualquiera puede saberla: **cámbiala en Panel → Ajustes** en cuanto conectes Upstash (etapa 2).
+     cualquiera puede saberla: **cámbiala en Panel → Ajustes** (se guarda cifrada en Netlify Blobs y vale
+     para producción y las vistas previas).
    - Opcional: si agregas `ADMIN_PASSWORD`, esa reemplaza a `12345` desde el principio. Usa 4 palabras al
      azar que **no aparezcan en el sitio**; Netlify revisa que las contraseñas no se filtren en el código
      publicado, y una palabra común podría detener la publicación.
 6. **Vuelve a publicar** para que tome el secreto: **Deploys → Trigger deploy → Deploy project**.
 7. Abre `https://NOMBRE.netlify.app` en el celular. El panel está en `/admin`.
 
-### Etapa 2: que el panel guarde cambios y las fotos salgan de Cloudinary
+### Etapa 2: que las fotos nuevas salgan de Cloudinary
 
-1. **Upstash** ([upstash.com](https://upstash.com)): crea una cuenta y luego una base de datos Redis en el
-   plan Free. En la pestaña **REST API** copia `UPSTASH_REDIS_REST_URL` y `UPSTASH_REDIS_REST_TOKEN`.
+1. **Upstash (opcional):** ya no hace falta; el panel guarda en Netlify Blobs. Si algún día se quiere usar
+   Upstash ([upstash.com](https://upstash.com)), crea una base de datos Redis Free y copia
+   `UPSTASH_REDIS_REST_URL` y `UPSTASH_REDIS_REST_TOKEN` (ojo: los datos de Netlify Blobs no se pasan solos).
 2. **Cloudinary** ([cloudinary.com](https://cloudinary.com)): crea una cuenta gratis. En el **Dashboard**
    copia la «API environment variable», que tiene esta forma: `CLOUDINARY_URL=cloudinary://…`.
 3. Agrégalas en **Project configuration → Environment variables**, igual que en la etapa 1, y vuelve a
@@ -154,7 +159,10 @@ publicaciones de ramas («branch deploys») **no gastan créditos**; solo las de
 4. El proyecto debe ser **público** (paso 4) para que el dueño lo abra sin cuenta.
 
 En la vista previa los enlaces de WhatsApp apuntan a la misma vista previa y Google no la indexa
-(`robots.txt` y `X-Robots-Tag: noindex`). El panel funciona en modo demo: no guarda cambios hasta la etapa 2.
+(`robots.txt` y `X-Robots-Tag: noindex`). El panel funciona y guarda en Netlify Blobs: **el mismo
+inventario y la misma contraseña** en producción y en las 2 vistas previas. Para probarlo:
+`node scripts/e2e-panel-netlify.mjs https://deploy-preview-1--h3-seminuevos.netlify.app` (cambia un precio
+y lo regresa).
 
 ### Para no gastar créditos de más
 

@@ -309,11 +309,13 @@ Notas:
 | --- | --- | --- |
 | Hosting | **Netlify** | Free |
 | Fotos | **Cloudinary** | Free |
-| Inventario | **Upstash Redis** | Free |
+| Inventario, reseñas y contraseña del panel | **Netlify Blobs** (desde el 30-oct); Upstash Redis opcional | Incluido en Netlify Free |
 
 **Código**
 - Next.js 16.4 (App Router con Cache Components), React 19.3, TypeScript y Tailwind CSS 4.
-- **Inventario:** Upstash Redis. Sin Redis, el sitio corre en «modo demo» con `data/seed.json`.
+- **Inventario:** Netlify Blobs (incluido en Netlify Free, sin cuenta extra; el mismo almacén para
+  producción y las vistas previas). Si se conecta Upstash Redis, se usa ese. En otro hosting sin ninguno, el
+  sitio corre en «modo demo» con `data/seed.json`.
 - **Fotos:** Cloudinary (desde el 27-oct; antes era Vercel Blob).
   - El panel sube cada foto **directo del navegador a Cloudinary** con una firma que da el servidor solo
     a administradores.
@@ -502,7 +504,8 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
      https://deploy-preview-1--h3-seminuevos.netlify.app (solicitud #1) y versión 1 (Scrollcraft) en
      https://deploy-preview-2--h3-seminuevos.netlify.app (solicitud #2). Ninguna se fusiona hasta que el
      dueño elija una y diga «publica».
-   - Después Upstash y Cloudinary, para que el panel guarde cambios.
+   - **El panel ya guarda en Netlify Blobs** (30-oct): entra con `12345` en las 2 vistas previas (misma
+     contraseña y mismo inventario). Falta Cloudinary para subir fotos nuevas. Upstash ya no hace falta.
    - Las crea quien lleva el proyecto. Con qué correo: **sin decidir**.
 2. **Publicar en Netlify y verificar con las cuentas reales:**
    - Subir una foto desde el panel.
@@ -599,6 +602,11 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
   - Netlify publica la rama `main`. El trabajo diario va a la rama `desarrollo` y solo se pasa a `main`
     cuando el dueño dice «publica», para no gastar créditos: cada publicación cuesta 15 de 300 al mes.
 - Seguimiento en un repo público temporal, con `CONTEXTO.md` y `AVANCE.md`.
+
+- **Panel en Netlify sin cuentas extra (30-oct):** el dueño pidió que el panel funcione en las 2 versiones
+  con la misma contraseña. Se usa **Netlify Blobs** (incluido en el plan Free; según la documentación de
+  Netlify no se cobra en créditos) en lugar de Upstash. La llave de la sesión se crea al azar y se guarda ahí.
+  Las fotos nuevas siguen necesitando Cloudinary.
 
 **Descartadas**
 - Seguir en Shopify: cuesta $19 USD al mes y su carrito no sirve para vender autos.
