@@ -8,6 +8,13 @@ const shown = new WeakSet<Element>();
 let booted = false;
 
 function keyframes(el: Element): Keyframe[] {
+  // Cortinilla: la imagen se descubre de izquierda a derecha
+  if (el.classList.contains("reveal-wipe")) {
+    return [
+      { clipPath: "inset(0 100% 0 0)", transform: "scale(1.06)" },
+      { clipPath: "inset(0 0% 0 0)", transform: "none" },
+    ];
+  }
   const from = el.classList.contains("reveal-zoom")
     ? "scale(0.96)"
     : el.classList.contains("reveal-left")
@@ -51,7 +58,11 @@ export function Reveal() {
           continue;
         }
         const i = Number(getComputedStyle(el).getPropertyValue("--i")) || 0;
-        const anim = el.animate(keyframes(el), { duration: 800, easing: EASE, delay: i * 70, fill: "backwards" });
+        const wipe = el.classList.contains("reveal-wipe");
+        // La cortinilla se aplica a la foto de adentro: si se recorta el elemento vigilado, el navegador
+        // no detecta cuándo entra en pantalla
+        const target = (wipe && el.querySelector("img")) || el;
+        const anim = target.animate(keyframes(el), { duration: wipe ? 1300 : 800, easing: EASE, delay: i * 70, fill: "backwards" });
         if (inView) {
           shown.add(el);
         } else {

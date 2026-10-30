@@ -100,46 +100,33 @@ No se busca vender en línea: no hay carrito ni pagos.
 
 ## 3. Secciones de la página (en orden)
 
-**Inicio (`/`)** — estructura del método de los 2 videos de landing pages que mandó el dueño (análisis en
-`ANALISIS-VIDEOS.md`), con los cambios del dueño del 30-oct (**versión 2**). Acción principal: ver un auto y
-mandar WhatsApp.
-1. **Encabezado fijo:** logo, Inventario, Vende tu auto, Contacto y botón de WhatsApp. Arriba de las páginas
-   con franja oscura va en blanco. En celular lleva un menú oscuro de pantalla completa.
-2. **Hero** (30-oct): sin luces, sin resplandores de colores y sin zoom.
-   - **Carrusel de fotos reales** de los autos destacados: se desliza con el dedo y cambia solo cada 5
-     segundos (se pausa si el visitante lo toca). El auto que se ve, con su precio, va **abajo a la derecha
-     de la foto** (enlace a su ficha).
-   - Título «**Autos seminuevos premium en Villahermosa.**» y subtítulo «Verificados, con papeles en regla y
-     a precio justo. Escríbenos y te asesoramos por WhatsApp.».
-   - Botones «Ver inventario» y «WhatsApp». **Se quitó «¿Qué buscas?»** (se repetía con las categorías).
-   - Quita-miedos (✓ Autos verificados ✓ Papeles en regla ✓ Precio a la vista) solo en pantallas grandes.
-   - Si hay reseñas reales, la calificación va arriba del título.
-3. **Franja de marcas en movimiento** con el **logo** y el nombre de cada marca del inventario.
-4. **«Autos listos para manejar»:** categorías con íconos nuevos (siluetas sólidas, más separadas) y
-   **8 autos en 2 columnas** en celular (4 en computadora), con «Ver todos» abajo.
-5. **«Lo que hacemos por ti»: beneficios divididos en 2** (30-oct): «Al comprar un auto» (tarjeta clara,
-   botón «Ver autos disponibles») y «Al vender tu auto» (tarjeta oscura, botones «Vender mi auto» y
-   «Preguntar»).
-6. **«Autos verificados»:** carrusel de tarjetas grandes con foto (se desliza hacia la derecha). Reemplaza
-   la foto de la Mercedes con «Ver la ficha de este auto».
-7. **«Vende tu auto» — «Sácale más valor a tu vehículo.»:** imagen hecha con Arcads (llave, carpeta y
-   pluma), «Ganas más que en un lote», 3 pasos y botones.
-8. **Reseñas de clientes:** solo aparece si el dueño agrega reseñas **reales** en el panel.
-9. **«Compra con certeza, no a ciegas.»** (antes «Comprar un seminuevo no tiene que ser una apuesta»): 5
-   comparaciones con **palomitas verdes**, incluida «Sin lote: costos menores y precio justo».
-10. **Atención 1 a 1:** ilustración animada del WhatsApp que se manda, con el texto real.
-11. **«Tu próximo auto en 3 pasos»:** elige, escríbenos y **agenda tu cita** (línea de tiempo).
-12. **«Recién vendidos»:** solo aparece si hay autos marcados como vendidos.
-13. **Preguntas frecuentes** (7), contestadas solo con datos confirmados (ver con cita, precios justos por
-    no tener lote, papeles en regla, cómo vender).
-14. **Cierre rediseñado:** «Cada auto es único. Cuando se vende, ya no vuelve.», palomitas verdes, WhatsApp,
-    inventario y 3 autos reales del inventario. Abajo, la tarjeta **«Visítanos»** con la dirección de la
-    oficina, horario, redes, «Cómo llegar» y teléfono.
-15. **Pie de página nuevo** (30-oct): logo grande, frase, redes, 3 tarjetas de contacto (WhatsApp, llamar y
-    oficina), enlaces de Compra y Vende, «Los autos se ven con cita», el nombre gigante de fondo y «Volver
-    arriba». Enlace discreto «Administración». **Botón flotante de WhatsApp.**
-16. **Animaciones de entrada** en todo el sitio: cada bloque aparece al llegar a él (Web Animations, sin
-    cambiar el HTML; con «reducir movimiento» no se anima).
+**Inicio (`/`)** — más corto y simple desde el 31-oct (pedido del dueño: «la estamos complicando mucho»).
+Acción principal: ver un auto y, ya en su ficha, mandar WhatsApp.
+1. **Encabezado fijo:** logo, Inventario, Vende tu auto, Contacto y botón de WhatsApp.
+2. **Hero:** carrusel de fotos reales con **más zoom** (se desliza y cambia solo cada 5 s; el auto y su precio
+   abajo a la derecha). **Sin degradado oscuro:** el texto va en una hoja clara que se monta sobre la foto (en
+   computadora, una tarjeta). El título sube palabra por palabra y **«premium» va en cursiva roja** con un
+   trazo a mano. La foto se mueve más lento al bajar.
+3. **Franja de marcas** con logos.
+4. **Inventario:** categorías con la **foto real de un auto de cada tipo** (ya no íconos dibujados) y 8 autos
+   en 2 columnas con «Ver todos». Las tarjetas **ya no llevan botón de WhatsApp**: toda la tarjeta abre la
+   ficha y ahí se escribe.
+5. **Beneficios («Lo que hacemos por ti»), sin botones:**
+   - «Al comprar un auto»: imagen de la entrega de la llave (hecha con Arcads) y asesoramiento, autos
+     confiables, papeles en regla y precio justo.
+   - «Al vender tu auto» (fondo oscuro): la imagen de la llave y la carpeta con «Ganas más que en un lote», y
+     sácale más valor, evita estafas, sin citas con desconocidos, papeleo y placas y precio correcto.
+   - Las imágenes aparecen con un efecto de cortinilla.
+6. **Autos verificados:** carrusel de tarjetas grandes.
+7. **Reseñas:** solo si el dueño agrega reseñas reales.
+8. **«Compra con certeza, no a ciegas.»:** tabla comparativa simple «Lo de siempre» contra «En H3».
+9. **Preguntas frecuentes**, con «¿No ves tu pregunta? Pregúntanos por WhatsApp» hasta abajo.
+10. **Cierre:** «Cada auto es único. Cuando se vende, ya no vuelve.» y un carrusel donde la tarjeta del centro
+    se ve completa y más grande y las de los lados se alcanzan a ver. Después, la tarjeta «Visítanos».
+11. **Pie de página nuevo:** centrado, con el logo real de H3 (sin el nombre escrito en otra letra), enlaces,
+    WhatsApp, teléfono, cómo llegar, redes, dirección y horario.
+- **Se quitaron (31-oct):** «Un toque y ya estás hablando con nosotros», «Tu próximo auto en 3 pasos», la
+  sección aparte de «Vende tu auto» (su imagen pasó a los beneficios) y «Recién vendidos».
 
 **Catálogo (`/autos`)** — título «Inventario» sobre una franja oscura, empezando por celular. **Autos en 2
 columnas** también en celular (30-oct):
@@ -255,7 +242,8 @@ imagen de Arcads en pantallas grandes (30-oct).
 | Colores | Tema claro premium desde el 28-oct | `app/globals.css` (`@theme`) |
 | Íconos de categorías | Dibujados para el sitio (SUV, deportivo, blindado, pickup…) | `components/body-icons.tsx` |
 | Logos de marcas (franja en movimiento) | Simple Icons, licencia CC0, en un solo color; Aodes no tiene y va solo con su nombre | `components/brand-logos.tsx` |
-| Tipografía (versión 2, 30-oct) | **Albert Sans** para títulos y texto (Saira y Geist se veían «muy IA») | `app/layout.tsx` |
+| Tipografía (31-oct) | **Instrument Sans** para títulos y texto; **Instrument Serif** en cursiva solo para resaltar palabras («premium»). Antes: Saira/Geist y Albert Sans, que no convencieron | `app/layout.tsx` |
+| Imagen de «Al comprar un auto» | Hecha con Arcads: entrega de la llave dentro de un auto (sin caras ni marcas). 43 KB | `public/img/comprar-tu-auto.webp` |
 | Imagen de «Vende tu auto» | Hecha con Arcads: llave, carpeta y pluma (sin autos, para no chocar con «fotos reales»). Única imagen decorativa (61 KB) servida por el hosting; las fotos de autos siguen en Cloudinary | `public/img/vende-tu-auto.webp` |
 | Datos del negocio | Teléfono, dirección, horario y redes | `lib/site.ts` |
 | Inventario inicial | 13 autos de Shopify con datos revisados | `data/seed.json` |
@@ -590,6 +578,11 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
   con la misma contraseña. Se usa **Netlify Blobs** (incluido en el plan Free; según la documentación de
   Netlify no se cobra en créditos) en lugar de Upstash. La llave de la sesión se crea al azar y se guarda ahí.
   Las fotos nuevas siguen necesitando Cloudinary.
+
+- **Una sola versión (31-oct):** el dueño eligió la versión 2 y pidió no hacer dos. La versión 1
+  (`version-scrollcraft`) quedó congelada.
+- **Inicio más corto (31-oct):** hero → marcas → inventario → beneficios → autos verificados → (reseñas) →
+  comparativa → preguntas → cierre. Tarjetas sin botón de WhatsApp. Categorías con fotos reales.
 
 **Descartadas**
 - Seguir en Shopify: cuesta $19 USD al mes y su carrito no sirve para vender autos.

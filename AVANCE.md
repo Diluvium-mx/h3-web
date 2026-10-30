@@ -2,6 +2,14 @@
 
 Lo más reciente va arriba.
 
+## 31 de octubre de 2026 — una sola versión, más corta y simple
+
+- Hero con más zoom y sin degradado (hoja clara sobre la foto); letra Instrument Sans y «premium» en cursiva roja.
+- Categorías con fotos reales; tarjetas sin botón de WhatsApp; beneficios con 2 imágenes y sin botones.
+- Inicio más corto: tabla comparativa, preguntas, cierre con carrusel y pie de página nuevo con el logo real.
+
+Falta: que el dueño lo revise en la vista previa #1; conectar Cloudinary; cambiar la contraseña `12345`.
+
 ## 30 de octubre de 2026 (noche) — el panel funciona en las 2 vistas previas
 
 - El panel ya no pide Upstash: en Netlify guarda en Netlify Blobs, incluido en el plan gratis.

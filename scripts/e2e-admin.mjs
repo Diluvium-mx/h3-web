@@ -84,9 +84,9 @@ const PASSWORD = process.env.ADMIN_PASSWORD || '12345';
     await page.goto(B + '/autos');
     await page.getByText('13 autos encontrados').waitFor({ timeout: 30000 });
     step('marcado como vendido → sale del catálogo');
-    await page.goto(B + '/');
-    await page.getByText('Recién vendidos').waitFor({ timeout: 30000 });
-    step('aparece en "Recién vendidos" en inicio');
+    await page.goto(B + '/autos/porsche-cayenne-coupe-platinum-2022');
+    await page.getByText('Búscame uno similar').first().waitFor({ timeout: 30000 });
+    step('su ficha queda como vendido y ofrece «Búscame uno similar»');
 
     await page.goto(B + '/admin/autos/' + (await (async () => {
       await page.goto(B + '/admin');

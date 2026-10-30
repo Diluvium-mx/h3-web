@@ -3,7 +3,7 @@
 import { useEffect, useLayoutEffect, useMemo, useState, type ReactNode } from "react";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import { CarCard } from "@/components/car-card";
-import { CategoryTileContent, categoryTileClass } from "@/components/category-tile";
+import { categoriesOf, CategoryTileContent, categoryTileClass, type Category } from "@/components/category-tile";
 import { WhatsAppIcon } from "@/components/icons";
 import type { Car } from "@/lib/cars";
 import { site, whatsappUrl } from "@/lib/site";
@@ -95,21 +95,11 @@ function Chip({
   );
 }
 
-// Categoría con ícono propio, la misma del inicio
-function TypeTile({
-  type,
-  count,
-  active,
-  onClick,
-}: {
-  type: string;
-  count: number;
-  active: boolean;
-  onClick: () => void;
-}) {
+// Categoría con la foto real de un auto de ese tipo, la misma del inicio
+function TypeTile({ category, active, onClick }: { category: Category; active: boolean; onClick: () => void }) {
   return (
     <button type="button" onClick={onClick} aria-pressed={active} className={categoryTileClass(active)}>
-      <CategoryTileContent type={type} count={count} active={active} />
+      <CategoryTileContent category={category} active={active} />
     </button>
   );
 }
@@ -150,13 +140,7 @@ export function CatalogBrowser({ cars }: { cars: Car[] }) {
   const results = useMemo(() => applyFilters(cars, f), [cars, f]);
   const set = (k: keyof Filters, v: string) => setF((prev) => ({ ...prev, [k]: prev[k] === v ? EMPTY[k] : v }));
 
-  const types = useMemo(() => {
-    const m = new Map<string, number>();
-    for (const c of cars) {
-      for (const t of c.armored ? [c.body, "Blindado"] : [c.body]) m.set(t, (m.get(t) ?? 0) + 1);
-    }
-    return [...m.entries()].sort((a, b) => b[1] - a[1]);
-  }, [cars]);
+  const categories = useMemo(() => categoriesOf(cars), [cars]);
   const brands = useMemo(() => {
     const m = new Map<string, number>();
     for (const c of cars) m.set(c.brand, (m.get(c.brand) ?? 0) + 1);
@@ -288,9 +272,9 @@ export function CatalogBrowser({ cars }: { cars: Car[] }) {
           role="group"
           aria-label="Tipo de auto"
         >
-          <TypeTile type="Todos" count={cars.length} active={!f.tipo} onClick={() => setF((p) => ({ ...p, tipo: "" }))} />
-          {types.map(([t, count]) => (
-            <TypeTile key={t} type={t} count={count} active={f.tipo === t} onClick={() => set("tipo", t)} />
+          <TypeTile category={categories.all} active={!f.tipo} onClick={() => setF((p) => ({ ...p, tipo: "" }))} />
+          {categories.types.map((c) => (
+            <TypeTile key={c.type} category={c} active={f.tipo === c.type} onClick={() => set("tipo", c.type)} />
           ))}
         </div>
 

@@ -2,9 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ViewTransition } from "react";
 import { ArrowUpRight } from "lucide-react";
-import { WhatsAppIcon } from "@/components/icons";
-import { carTitle, carWhatsApp, formatKm, formatPrice, highlightBadges, type Car } from "@/lib/cars";
-import { vars } from "@/lib/ui";
+import { formatKm, formatPrice, highlightBadges, type Car } from "@/lib/cars";
 
 type Props = {
   car: Car;
@@ -48,22 +46,8 @@ function CardImage({ car, sizes, preload, className = "" }: { car: Car; sizes: s
   );
 }
 
-function WhatsAppMini({ car, className = "" }: { car: Car; className?: string }) {
-  return (
-    <a
-      href={carWhatsApp(car)}
-      target="_blank"
-      rel="noopener"
-      aria-label={`Escribir por WhatsApp sobre el ${carTitle(car)}`}
-      className={`btn-wa btn-shine relative z-[2] grid shrink-0 place-items-center rounded-md transition-transform duration-300 hover:scale-105 active:scale-95 ${className}`}
-      style={vars({ "--shine-delay": `${(car.year % 5) * 0.7}s` })}
-    >
-      <WhatsAppIcon className="size-[1.1rem]" />
-    </a>
-  );
-}
-
-// Enlace que cubre toda la tarjeta (el botón de WhatsApp queda por encima)
+// Enlace que cubre toda la tarjeta. Sin botón de WhatsApp (pedido del dueño, 31-oct): primero ven el auto y
+// desde la ficha escriben si les interesa.
 function CardLink({ car, children }: { car: Car; children: React.ReactNode }) {
   return (
     <Link href={`/autos/${car.slug}`} prefetch className="outline-none after:absolute after:inset-0 after:z-[1] after:content-['']">
@@ -103,7 +87,12 @@ export function CarCard({
           {specs.length > 0 && <p className="mt-1 truncate text-[13px] text-white/70">{specs.slice(0, 2).join(" · ")}</p>}
           <div className="mt-3 flex items-center justify-between gap-3 border-t border-white/15 pt-3">
             <p className={`font-display text-xl ${sold ? "text-white/60 line-through" : ""}`}>{formatPrice(car.price)}</p>
-            <WhatsAppMini car={car} className="size-10" />
+            <span
+              className="grid size-10 shrink-0 place-items-center rounded-md bg-white/10 ring-1 ring-white/20 transition-colors duration-500 group-hover:bg-white group-hover:text-night"
+              aria-hidden="true"
+            >
+              <ArrowUpRight className="size-4 transition-transform duration-500 group-hover:rotate-45" />
+            </span>
           </div>
         </div>
         <span className="rule-accent absolute inset-x-0 bottom-0 h-0.5 origin-left scale-x-0 transition-transform duration-700 ease-[var(--ease-out-expo)] group-hover:scale-x-100" />
@@ -154,15 +143,12 @@ export function CarCard({
           <p className={`font-display text-[1.05rem] @[15rem]:text-[1.3rem] ${sold ? "text-dim line-through" : "text-fg"}`}>
             {formatPrice(car.price)}
           </p>
-          <div className="flex items-center gap-2">
-            <WhatsAppMini car={car} className="size-9 @[15rem]:size-10" />
-            <span
-              className="hidden size-10 shrink-0 place-items-center rounded-md ring-1 ring-line transition-all duration-500 ease-[var(--ease-out-expo)] group-hover:bg-night group-hover:text-white group-hover:ring-night @[15rem]:grid"
-              aria-hidden="true"
-            >
-              <ArrowUpRight className="size-4 transition-transform duration-500 group-hover:rotate-45" />
-            </span>
-          </div>
+          <span
+            className="grid size-8 shrink-0 place-items-center rounded-md ring-1 ring-line transition-all duration-500 ease-[var(--ease-out-expo)] group-hover:bg-night group-hover:text-white group-hover:ring-night @[15rem]:size-10"
+            aria-hidden="true"
+          >
+            <ArrowUpRight className="size-4 transition-transform duration-500 group-hover:rotate-45" />
+          </span>
         </div>
       </div>
       <span className="rule-accent absolute inset-x-0 bottom-0 h-0.5 origin-left scale-x-0 transition-transform duration-700 ease-[var(--ease-out-expo)] group-hover:scale-x-100" />

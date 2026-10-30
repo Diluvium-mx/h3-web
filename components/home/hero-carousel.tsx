@@ -76,7 +76,7 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
         {slides.map((s, i) => (
           <div
             key={`${s.slug}-${i}`}
-            className="relative h-full w-full shrink-0 snap-center"
+            className="relative h-full w-full shrink-0 snap-center overflow-hidden"
             role="group"
             aria-roledescription="auto"
             aria-label={`${i + 1} de ${slides.length}`}
@@ -85,18 +85,18 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
               src={s.image}
               alt={s.alt}
               fill
-              sizes="(min-width: 1024px) 62vw, 100vw"
+              sizes="100vw"
               quality={70}
               preload={i === 0}
               fetchPriority={i === 0 ? "high" : "auto"}
               loading={i === 0 ? "eager" : "lazy"}
-              className="object-cover object-[50%_62%]"
+              className="scale-[1.14] object-cover object-[50%_60%] lg:scale-100 lg:object-[50%_64%]"
             />
             {/* El auto que se ve, abajo a la derecha de la foto */}
             <Link
               href={`/autos/${s.slug}`}
               tabIndex={i === index ? 0 : -1}
-              className="group absolute right-4 bottom-12 z-10 flex max-w-[78%] items-center gap-3 rounded-md bg-night/70 py-2 pr-2.5 pl-3.5 text-white shadow-[0_10px_30px_-12px_rgb(0_0_0/0.6)] ring-1 ring-white/10 transition-colors hover:bg-night/85 sm:right-6 lg:bottom-8"
+              className="group absolute right-4 bottom-12 z-10 flex max-w-[78%] items-center gap-3 rounded-md bg-night/70 py-2 pr-2.5 pl-3.5 text-white shadow-[0_10px_30px_-12px_rgb(0_0_0/0.6)] ring-1 ring-white/10 backdrop-blur-sm transition-colors hover:bg-night/85 sm:right-6 lg:bottom-14"
             >
               <span className="min-w-0 text-right">
                 <span className="block text-[11px] font-medium text-white/65">{s.eyebrow}</span>
@@ -114,7 +114,7 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
 
       {/* Indicadores: tocar uno lleva a ese auto */}
       {slides.length > 1 && (
-        <div className="absolute bottom-14 left-4 z-10 flex items-center gap-1.5 sm:left-6 lg:bottom-10">
+        <div className="absolute bottom-14 left-4 z-10 flex items-center gap-1.5 sm:left-6 lg:top-24 lg:right-6 lg:bottom-auto lg:left-auto">
           {slides.map((s, i) => (
             <button
               key={`${s.slug}-dot-${i}`}

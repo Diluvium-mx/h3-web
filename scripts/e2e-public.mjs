@@ -60,30 +60,52 @@ const step = (m) => console.log('✔', m);
     if (Math.abs(c1.y - c2.y) > 2 || c2.x <= c1.x) throw new Error('el inventario del inicio debería ir en 2 columnas');
     await page.locator('section[aria-labelledby=destacados] a', { hasText: 'Ver todos' }).last().waitFor();
     step('inventario: 8 autos en 2 columnas y «Ver todos» abajo');
-    // Beneficios divididos en 2 (30-oct): al comprar y al vender
+    // 31-oct: categorías con la foto real de un auto (sin íconos dibujados)
+    const tiles = page.locator('nav[aria-label="Explora por tipo"] a');
+    if ((await tiles.count()) < 3 || (await tiles.first().locator('img').count()) < 1) throw new Error('las categorías deberían llevar foto');
+    step('categorías con foto real de un auto de cada tipo');
+    // Beneficios divididos en 2: una imagen para comprar y otra para vender, con sus puntos y sin botones
     const buy = page.locator('article[aria-labelledby=al-comprar]');
     const sellBox = page.locator('article[aria-labelledby=al-vender]');
     for (const t of ['Asesoramiento', 'Autos confiables', 'Papeles en regla', 'Precio justo']) await buy.getByRole('heading', { name: t, exact: true }).waitFor();
-    for (const t of ['Ganas más que en un lote', 'Evita estafas', 'Sin citas con desconocidos', 'Papeleo y placas', 'Precio correcto']) await sellBox.getByRole('heading', { name: t, exact: true }).waitFor();
+    for (const t of ['Sácale más valor', 'Evita estafas', 'Sin citas con desconocidos', 'Papeleo y placas', 'Precio correcto']) await sellBox.getByRole('heading', { name: t, exact: true }).waitFor();
+    if (!(await buy.locator('img[src*="comprar-tu-auto"]').count()) || !(await sellBox.locator('img[src*="vende-tu-auto"]').count())) throw new Error('cada beneficio debe llevar su imagen');
+    await sellBox.getByText('Ganas más que en un lote').waitFor();
+    if (await page.locator('section[aria-labelledby=beneficios] a').count()) throw new Error('los beneficios no deben llevar botones');
+    step('beneficios en 2 con imagen (al comprar / al vender, con «Ganas más que en un lote») y sin botones');
     if ((await page.locator('section[aria-labelledby=compra] article').count()) < 4) throw new Error('falta el carrusel de autos verificados');
     if (await page.getByText('Ver la ficha de este auto').count()) throw new Error('debería haberse quitado «Ver la ficha de este auto»');
-    const sell = page.getByRole('heading', { name: 'Sácale más valor a tu vehículo.' });
-    const diff = page.locator('#diferencia');
-    if ((await sell.boundingBox()).y > (await diff.boundingBox()).y) throw new Error('«Vende tu auto» debe ir más arriba');
-    step('beneficios en 2 (al comprar / al vender), carrusel de autos verificados y «Vende tu auto»');
+    // Comparativa en tabla
+    const rows = page.locator('#diferencia ~ div table tbody tr');
+    if ((await rows.count()) !== 5) throw new Error('la comparativa debe ser una tabla de 5 filas, hay ' + (await rows.count()));
+    step('carrusel de autos verificados y comparativa en tabla');
+    // 31-oct: página más corta
+    for (const gone of ['Un toque y ya estás hablando con nosotros.', 'Tu próximo auto en 3 pasos.', 'Recién vendidos', 'Sácale más valor a tu vehículo.']) {
+      if (await page.getByRole('heading', { name: gone }).count()) throw new Error('debería haberse quitado: ' + gone);
+    }
     if (await page.getByText('Ven a conocerlo').count()) throw new Error('los autos no están en un lote: no debe decir «Ven a conocerlo»');
-    await page.getByRole('heading', { name: 'Agenda tu cita' }).waitFor();
     const faq = page.locator('details', { hasText: '¿Puedo ver el auto en persona?' });
     await faq.locator('summary').click();
     await faq.getByText('Sí, con cita.').waitFor();
-    step('se ven con cita (sin «Ven a conocerlo») y las preguntas frecuentes abren');
+    const askBox = await page.locator('a', { hasText: 'Pregúntanos por WhatsApp' }).boundingBox();
+    const lastQ = await page.locator('details').last().boundingBox();
+    if (askBox.y < lastQ.y) throw new Error('«¿No ves tu pregunta?» debe ir abajo de las preguntas');
+    step('sin «Un toque…», «3 pasos» ni vendidos; preguntas abren y «¿No ves tu pregunta?» va abajo');
+    // Cierre: carrusel con la tarjeta del centro más grande
+    const flow = page.locator('[aria-label="Algunos autos disponibles"]');
+    await flow.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(500);
+    const sizes = await flow.locator('a').evaluateAll((els) => els.slice(0, 3).map((e) => Math.round(e.getBoundingClientRect().height)));
+    if (!(sizes[1] > sizes[0] && sizes[1] > sizes[2])) throw new Error('la tarjeta del centro debe ser la más grande: ' + sizes);
+    step('cierre: carrusel con la tarjeta del centro más grande (' + sizes.join(' / ') + ')');
     await page.locator('a[href="/autos?tipo=Blindado"]').first().click();
     await page.getByText('2 autos encontrados').waitFor({ timeout: 30000 });
     step('categoría «Blindados» del inicio filtra el catálogo → 2');
     await page.goto(B + '/');
     await page.locator('footer a[href="/admin/login"]', { hasText: 'Administración' }).waitFor();
-    for (const t of ['Escríbenos', 'Llámanos', 'Oficina']) await page.locator('footer').getByText(t, { exact: true }).waitFor();
-    step('pie de página: contacto directo y acceso discreto al panel');
+    await page.locator('footer img[alt="H3 Seminuevos"]').waitFor({ state: 'attached' });
+    for (const t of ['WhatsApp', 'Cómo llegar']) await page.locator('footer').getByText(t, { exact: true }).waitFor({ state: 'attached' });
+    step('pie de página nuevo: logo, contacto directo y acceso discreto al panel');
 
     // Catálogo con filtro desde URL
     await page.goto(B + '/autos?tipo=Deportivo');
@@ -166,12 +188,12 @@ const step = (m) => console.log('✔', m);
     if (await ficha.locator('dt', { hasText: 'Servicios' }).count()) throw new Error('servicios sin dato no debe salir');
     step('ficha: factura y blindaje confirmados como filas; sin «Tus dudas» ni filas vacías');
 
-    // Tarjetas: botón directo de WhatsApp con el auto
+    // 31-oct: las tarjetas ya no llevan botón de WhatsApp; toda la tarjeta abre la ficha
     await page.goto(B + '/autos');
-    const cardWa = page.locator('article').first().locator('a[aria-label^="Escribir por WhatsApp"]');
-    const cardMsg = decodeURIComponent(await cardWa.getAttribute('href', { timeout: 30000 }));
-    if (!cardMsg.includes('Me interesa el')) throw new Error('el WhatsApp de la tarjeta no lleva el auto: ' + cardMsg);
-    step('tarjetas: WhatsApp directo con el auto en el mensaje');
+    await page.locator('article').first().waitFor({ timeout: 30000 });
+    if (await page.locator('article a[aria-label^="Escribir por WhatsApp"]').count()) throw new Error('las tarjetas no deben llevar WhatsApp');
+    if (!(await page.locator('article').first().locator('a[href^="/autos/"]').count())) throw new Error('la tarjeta debe abrir la ficha');
+    step('tarjetas sin WhatsApp: abren la ficha del auto');
 
     // Detalle + galería
     await page.goto(B + '/autos/bmw-m3-2018');

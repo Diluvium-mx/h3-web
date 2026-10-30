@@ -139,10 +139,8 @@ cambios [Diluvium-mx/h3-web#1](https://github.com/Diluvium-mx/h3-web/pull/1) (`d
 reconstruye sola con cada cambio que se sube a `desarrollo`, sin gastar créditos. **No fusionarla** hasta que el
 dueño diga «publica»: al fusionarla se publica `main` (15 créditos).
 
-**Dos versiones del diseño (30-oct):** la versión 2 (cambios del dueño) está en la vista previa de arriba; la
-versión 1 (hecha con la skill `/scroll-craft`) sale de la rama `version-scrollcraft` y de la solicitud
-[Diluvium-mx/h3-web#2](https://github.com/Diluvium-mx/h3-web/pull/2):
-https://deploy-preview-2--h3-seminuevos.netlify.app. Ninguna se fusiona hasta que el dueño elija.
+**Una sola versión desde el 31-oct:** la vista previa de arriba. La rama `version-scrollcraft` (versión 1, con la
+skill `/scroll-craft`) quedó congelada.
 
 Otra forma, sin solicitud de cambios, es activar las publicaciones de la rama:
 

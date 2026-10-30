@@ -1,13 +1,21 @@
 import type { Metadata, Viewport } from "next";
-import { Albert_Sans } from "next/font/google";
+import { Instrument_Sans, Instrument_Serif } from "next/font/google";
 import { site } from "@/lib/site";
 import "./globals.css";
 
-// Una sola familia (pedido del dueño, 30-oct: la tipografía anterior se veía «hecha con IA").
-// Albert Sans: grotesca escandinava, sobria y natural; variable (todos los pesos en un archivo).
-const albert = Albert_Sans({
-  variable: "--font-albert",
+// Letra del sitio (pedido del dueño, 31-oct: cambiar otra vez la tipografía): Instrument Sans, grotesca con
+// carácter y muy legible en celular. Instrument Serif en cursiva solo para resaltar palabras (p. ej. «premium»).
+const sans = Instrument_Sans({
+  variable: "--font-instrument",
   subsets: ["latin"],
+  axes: ["wdth"],
+  display: "swap",
+});
+const serif = Instrument_Serif({
+  variable: "--font-instrument-serif",
+  subsets: ["latin"],
+  weight: "400",
+  style: "italic",
   display: "swap",
 });
 
@@ -48,7 +56,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="es-MX"
       data-scroll-behavior="smooth"
-      className={`${albert.variable} antialiased`}
+      className={`${sans.variable} ${serif.variable} antialiased`}
     >
       <body className="min-h-dvh">{children}</body>
     </html>
