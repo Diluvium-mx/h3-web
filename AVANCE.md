@@ -2,6 +2,15 @@
 
 Lo más reciente va arriba.
 
+## 30 de octubre de 2026 (noche) — análisis de Scrollcraft
+
+- Se analizó Scrollcraft, el skill de diseño que mandó el dueño. Está completo y gratis en GitHub (licencia
+  MIT), así que no hizo falta dejar un correo. Resumen y propuestas en `ANALISIS-SCROLLCRAFT.md`.
+- Según su lista, todavía delatan IA en H3: el texto con degradado, la etiqueta sobre cada título, los 3
+  pasos en tarjetas iguales, las etiquetas sobre fotos y la paleta crema con champaña.
+
+Falta: que el dueño elija qué propuestas hacer (limpieza, hero con capas, «el mensaje se escribe solo»).
+
 ## 30 de octubre de 2026 (tarde) — sitio en Netlify, público y con vista previa
 
 - Netlify conectado: el proyecto se llama `h3-seminuevos` y ya es público (antes pedía iniciar sesión).
