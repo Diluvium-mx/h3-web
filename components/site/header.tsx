@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { ArrowRight, MapPin, Phone } from "lucide-react";
 import { site, whatsappUrl } from "@/lib/site";
 import { WhatsAppIcon } from "@/components/icons";
@@ -17,8 +17,21 @@ const NAV = [
 
 const DARK_TOP = new Set(["/", "/autos", "/vende-tu-auto"]);
 
+// La ruta solo se conoce al pedir la página (autos que no estaban generados de antemano): mientras llega,
+// se muestra el encabezado claro. Sin <Suspense>, Netlify no puede armar esas páginas.
 export function Header() {
-  const pathname = usePathname();
+  return (
+    <Suspense fallback={<HeaderView pathname={null} />}>
+      <HeaderWithPath />
+    </Suspense>
+  );
+}
+
+function HeaderWithPath() {
+  return <HeaderView pathname={usePathname()} />;
+}
+
+function HeaderView({ pathname }: { pathname: string | null }) {
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
@@ -50,7 +63,7 @@ export function Header() {
   }, [open]);
 
   // Arriba de todo, en las páginas que empiezan con una franja oscura, el encabezado va en blanco
-  const dark = (DARK_TOP.has(pathname) && !scrolled) || open;
+  const dark = (pathname !== null && DARK_TOP.has(pathname) && !scrolled) || open;
 
   return (
     <>

@@ -8,6 +8,8 @@ Lo más reciente va arriba.
 - Beneficios divididos en «Al comprar un auto» y «Al vender tu auto»; inventario en 2 columnas; íconos y
   pie de página nuevos; «Vende tu auto» con imagen de Arcads.
 - Los autos se ven con cita (ya no dice «Ven a conocerlo»); fotos solo Exterior e Interior.
+- Se corrigió un error 500 en Netlify al abrir el enlace de un auto que ya no existe (el encabezado leía la
+  ruta fuera de `<Suspense>`). Probado con la herramienta de Netlify en local.
 
 Falta: que el dueño revise la versión 2 en la vista previa #1; después, la versión 1 (Scrollcraft).
 

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import { usePathname } from "next/navigation";
 
 const EASE = "cubic-bezier(0.16, 1, 0.3, 1)";
 // Lo que ya apareció no se vuelve a animar (por ejemplo, el pie de página al cambiar de página)
@@ -23,13 +22,11 @@ function keyframes(el: Element): Keyframe[] {
 // Animación de entrada para todo lo que tenga la clase .reveal: aparece cuando entra en pantalla.
 // Usa Web Animations para no tocar las clases ni los estilos del HTML (así React no ve diferencias al
 // hidratar). Funciona en cualquier navegador; sin JavaScript o con «reducir movimiento», todo se ve normal.
+// No usa la ruta: al cambiar de página, el contenido nuevo llega como cambio del DOM y se procesa igual.
 export function Reveal() {
-  const pathname = usePathname();
-
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    // Al abrir el sitio, lo que ya se ve no se anima (no parpadea); al navegar, sí
-    const firstLoad = !booted;
+    // Al abrir el sitio, lo que ya se ve no se anima (no parpadea); lo que llega al navegar, sí
     const timer = window.setTimeout(() => (booted = true));
     const waiting = new Map<Element, Animation>();
     const io = new IntersectionObserver(
@@ -49,7 +46,7 @@ export function Reveal() {
         if (shown.has(el) || waiting.has(el)) continue;
         const r = el.getBoundingClientRect();
         const inView = r.top < window.innerHeight && r.bottom > 0;
-        if (inView && firstLoad) {
+        if (inView && !booted) {
           shown.add(el);
           continue;
         }
@@ -65,7 +62,7 @@ export function Reveal() {
       }
     };
     watch();
-    // El contenido que llega después (carga por partes) también se anima
+    // El contenido que llega después (carga por partes o al navegar) también se anima
     const mo = new MutationObserver(watch);
     mo.observe(document.body, { childList: true, subtree: true });
     return () => {
@@ -74,7 +71,7 @@ export function Reveal() {
       mo.disconnect();
       for (const anim of waiting.values()) anim.cancel();
     };
-  }, [pathname]);
+  }, []);
 
   return null;
 }

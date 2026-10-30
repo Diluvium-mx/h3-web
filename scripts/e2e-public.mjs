@@ -8,6 +8,11 @@ const step = (m) => console.log('✔', m);
 (async () => {
   const browser = await chromium.launch();
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+  // En las vistas previas, Netlify agrega su barra abajo y tapa botones: se oculta solo para la prueba
+  await ctx.addInitScript(() => {
+    const css = '[data-netlify-deploy-id]{display:none!important}';
+    document.addEventListener('DOMContentLoaded', () => { const st = document.createElement('style'); st.textContent = css; document.head.append(st); });
+  });
   const page = await ctx.newPage();
   const errors = [];
   page.on('pageerror', e => errors.push('PAGEERROR ' + e.message));
