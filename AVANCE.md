@@ -2,6 +2,14 @@
 
 Lo más reciente va arriba.
 
+## 31 de octubre de 2026 (tarde) — hero fijo, íconos y menos botones de WhatsApp
+
+- Hero: la foto ya no tiembla; se queda fija y la hoja blanca sube encima. Categorías con íconos a dos tonos.
+- Tarjetas con detalles de color; títulos con palabras en cursiva roja, subrayados y línea de avance al bajar.
+- Ficha del auto: íconos en cuadros de color y solo 3 WhatsApp (principal, «Mándaselo» y barra fija).
+
+Falta: que el dueño lo revise en la vista previa #1; conectar Cloudinary; cambiar la contraseña `12345`.
+
 ## 31 de octubre de 2026 — una sola versión, más corta y simple
 
 - Hero con más zoom y sin degradado (hoja clara sobre la foto); letra Instrument Sans y «premium» en cursiva roja.

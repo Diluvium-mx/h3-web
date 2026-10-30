@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { CarCard } from "@/components/car-card";
 import { categoriesOf, CategoryTileContent, categoryTileClass } from "@/components/category-tile";
+import { Accent } from "@/components/accent";
 import { SectionHeading } from "@/components/section-heading";
 import { SOCIALS } from "@/components/site/footer";
 import { WhatsAppIcon } from "@/components/icons";
@@ -67,7 +68,11 @@ export function Inventory({ cars, featured }: { cars: Car[]; featured: Car[] }) 
         <SectionHeading
           id="destacados"
           eyebrow="Inventario"
-          title="Autos listos para manejar"
+          title={
+            <>
+              Autos listos para <Accent underline>manejar</Accent>
+            </>
+          }
           action={{ href: "/autos", label: "Ver todos" }}
         />
       </div>
@@ -127,7 +132,7 @@ function BenefitList({ items, dark }: { items: typeof BUY_BENEFITS; dark?: boole
         <li key={title} className="reveal group flex gap-4" style={vars({ "--i": i })}>
           <span
             className={`grid size-11 shrink-0 place-items-center rounded-md transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:-translate-y-0.5 ${
-              dark ? "bg-white/[0.08] text-white ring-1 ring-white/10" : "bg-night text-white"
+              dark ? "bg-white/[0.08] text-brand-glow ring-1 ring-white/10" : "bg-brand-soft text-brand"
             }`}
           >
             <Icon className="size-5" strokeWidth={1.75} />
@@ -146,7 +151,14 @@ export function Benefits() {
   return (
     <section className="pb-20 sm:pb-28" aria-labelledby="beneficios">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <SectionHeading id="beneficios" title={<>Lo que hacemos <span className="font-accent text-brand">por ti</span></>} />
+        <SectionHeading
+          id="beneficios"
+          title={
+            <>
+              Lo que hacemos <Accent underline>por ti</Accent>
+            </>
+          }
+        />
         <div className="space-y-5 lg:space-y-8">
           {/* Al comprar */}
           <article
@@ -214,11 +226,10 @@ export function BuySection({ cars }: { cars: Car[] }) {
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="reveal flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
           <h2 id="compra" className="font-display max-w-xl text-[2.1rem] sm:text-5xl">
-            Autos verificados, con sus papeles en regla.
+            Autos <Accent>verificados,</Accent> con sus papeles <Accent underline>en regla.</Accent>
           </h2>
           <p className="max-w-md text-lg leading-relaxed text-mute">
             Toca el que te guste y te agendamos una cita para que lo veas en persona.
-            <span className="mt-1 block text-sm text-dim lg:hidden">Desliza para ver más →</span>
           </p>
         </div>
       </div>
@@ -258,7 +269,7 @@ export function Comparison() {
     <section className="py-20 sm:py-28" aria-labelledby="diferencia">
       <div className="mx-auto max-w-4xl px-4 sm:px-6">
         <h2 id="diferencia" className="reveal font-display text-[2.1rem] sm:text-5xl">
-          Compra con certeza, <span className="font-accent text-brand">no a ciegas.</span>
+          Compra con certeza, <Accent underline>no a ciegas.</Accent>
         </h2>
         <div className="reveal mt-8 overflow-hidden rounded-xl bg-card ring-1 ring-line">
           <table className="w-full table-fixed text-left text-[13px] sm:text-base">
@@ -373,7 +384,14 @@ export function Faq() {
     <section id="preguntas-frecuentes" className="scroll-mt-20 bg-card py-20 sm:py-28" aria-labelledby="preguntas">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
         <div className="lg:sticky lg:top-28 lg:self-start">
-          <SectionHeading id="preguntas" title="Preguntas frecuentes" />
+          <SectionHeading
+            id="preguntas"
+            title={
+              <>
+                Preguntas <Accent>frecuentes</Accent>
+              </>
+            }
+          />
         </div>
         <div>
           <div className="border-t border-line">
@@ -382,7 +400,7 @@ export function Faq() {
                 <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-4 py-5 font-semibold [&::-webkit-details-marker]:hidden">
                   {q}
                   <Plus
-                    className="size-5 shrink-0 text-dim transition-transform duration-500 ease-[var(--ease-out-expo)] group-open:rotate-45 group-open:text-fg"
+                    className="size-5 shrink-0 text-dim transition-transform duration-500 ease-[var(--ease-out-expo)] group-open:rotate-45 group-open:text-brand"
                     aria-hidden="true"
                   />
                 </summary>

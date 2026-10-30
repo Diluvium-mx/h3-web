@@ -45,12 +45,10 @@ import {
   ctaLabel,
   formatKm,
   formatPrice,
-  infoMessage,
   MISSING_INFO_TEXT,
   missingSpecs,
   parseVideo,
   slugify,
-  visitMessage,
   type Car,
 } from "@/lib/cars";
 import { getAllCars, getCarBySlug, getReviews, similarCars } from "@/lib/data";
@@ -270,17 +268,7 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
                   </li>
                 ))}
               </ul>
-              <div className={`grid gap-2 ${sold ? "grid-cols-2" : "grid-cols-3"}`}>
-                {!sold && (
-                  <a
-                    href={whatsappUrl(visitMessage(car))}
-                    target="_blank"
-                    rel="noopener"
-                    className="inline-flex h-12 items-center justify-center gap-1.5 rounded-md border border-line bg-card text-sm font-semibold transition-colors hover:border-fg/40"
-                  >
-                    <CalendarCheck className="size-4" /> Cita
-                  </a>
-                )}
+              <div className="grid grid-cols-2 gap-2">
                 <a
                   href={site.phoneHref}
                   className="inline-flex h-12 items-center justify-center gap-1.5 rounded-md border border-line bg-card text-sm font-semibold transition-colors hover:border-fg/40"
@@ -291,60 +279,49 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
               </div>
             </div>
 
-            {/* Confianza: lo que es cierto de este auto y del negocio */}
+            {/* Confianza: lo que es cierto de este auto y del negocio. Solo «Mándaselo por WhatsApp» es enlace
+                (pedido del dueño, 31-oct: menos llamadas a la acción) */}
             <ul className="mt-6 divide-y divide-line border-t border-line text-sm">
-              <li className="flex gap-3 py-3.5">
-                <ShieldCheck className="mt-0.5 size-[1.15rem] shrink-0 text-brand" />
-                <span>
-                  <b>Verificado y probado.</b>{" "}
-                  <span className="text-mute">Papeles originales, documentación en regla y fotos reales de este auto.</span>
-                </span>
-              </li>
+              <TrustItem Icon={ShieldCheck}>
+                <b>Verificado y probado.</b>{" "}
+                <span className="text-mute">Papeles originales, documentación en regla y fotos reales de este auto.</span>
+              </TrustItem>
               {rating.count > 0 && (
-                <li>
-                  <Link href="/#resenas" className="flex gap-3 py-3.5">
-                    <span className="mt-0.5 shrink-0">
-                      <Stars value={rating.avg} className="size-3.5" />
+                <li className="flex items-center gap-3 py-3">
+                  <span className="grid size-9 shrink-0 place-items-center rounded-md bg-gold-soft">
+                    <Stars value={rating.avg} className="size-2.5" />
+                  </span>
+                  <span>
+                    <b>{rating.avg.toFixed(1)} de 5</b>{" "}
+                    <span className="text-mute">
+                      en {rating.count} {rating.count === 1 ? "reseña" : "reseñas"} de clientes
                     </span>
-                    <span>
-                      <b>{rating.avg.toFixed(1)} de 5</b>{" "}
-                      <span className="text-mute underline underline-offset-4">
-                        en {rating.count} {rating.count === 1 ? "reseña" : "reseñas"} de clientes
-                      </span>
-                    </span>
-                  </Link>
+                  </span>
                 </li>
               )}
               <li>
-                <a href={shareToSomeone} target="_blank" rel="noopener" className="flex gap-3 py-3.5">
-                  <Send className="mt-0.5 size-[1.15rem] shrink-0 text-brand" />
+                <a href={shareToSomeone} target="_blank" rel="noopener" className="group flex items-center gap-3 py-3">
+                  <span className="grid size-9 shrink-0 place-items-center rounded-md bg-ok-soft text-wa-dark transition-transform duration-500 group-hover:-rotate-6">
+                    <Send className="size-[1.05rem]" />
+                  </span>
                   <span>
                     <b>¿Lo decides con alguien más?</b>{" "}
-                    <span className="text-mute underline underline-offset-4">Mándaselo por WhatsApp</span>
+                    <span className="font-semibold text-wa-dark underline underline-offset-4">Mándaselo por WhatsApp</span>
                   </span>
                 </a>
               </li>
               {!sold && (
-                <li>
-                  <a href={whatsappUrl(visitMessage(car))} target="_blank" rel="noopener" className="flex gap-3 py-3.5">
-                    <CalendarCheck className="mt-0.5 size-[1.15rem] shrink-0 text-brand" />
-                    <span>
-                      <b>Míralo con cita.</b>{" "}
-                      <span className="text-mute underline underline-offset-4">Agéndala por WhatsApp</span>
-                    </span>
-                  </a>
-                </li>
+                <TrustItem Icon={CalendarCheck}>
+                  <b>Míralo con cita.</b> <span className="text-mute">No tenemos lote: te agendamos una cita para verlo.</span>
+                </TrustItem>
               )}
-              <li className="flex gap-3 py-3.5">
-                <MapPin className="mt-0.5 size-[1.15rem] shrink-0 text-brand" />
-                <span>
-                  <b>Oficina:</b>{" "}
-                  <a href={site.mapsUrl} target="_blank" rel="noopener" className="text-mute underline underline-offset-4">
-                    {site.address.street}, {site.address.city}
-                  </a>
-                  <span className="block text-mute">{site.hours}</span>
+              <TrustItem Icon={MapPin}>
+                <b>Oficina:</b>{" "}
+                <span className="text-mute">
+                  {site.address.street}, {site.address.city}
                 </span>
-              </li>
+                <span className="block text-mute">{site.hours}</span>
+              </TrustItem>
             </ul>
           </div>
         </div>
@@ -411,19 +388,11 @@ async function CarDetail({ params }: { params: PageProps<"/autos/[slug]">["param
                 ))}
               </dl>
               {missing.length > 0 && (
-                <div className="mt-3 flex flex-col gap-4 rounded-lg bg-card p-5 ring-1 ring-line sm:flex-row sm:items-center">
-                  <p className="flex-1 text-sm text-fg">
+                <div className="mt-3 rounded-lg bg-card p-5 ring-1 ring-line">
+                  <p className="text-sm text-fg">
                     <b>{MISSING_INFO_TEXT}</b>
                     <span className="mt-1 block text-mute">Datos por confirmar: {missing.join(", ").toLowerCase()}.</span>
                   </p>
-                  <a
-                    href={whatsappUrl(infoMessage(car, missing))}
-                    target="_blank"
-                    rel="noopener"
-                    className="btn btn-wa btn-shine shrink-0"
-                  >
-                    <WhatsAppIcon className="size-5" /> Preguntar
-                  </a>
                 </div>
               )}
             </section>
@@ -661,14 +630,6 @@ function NextSteps({ car }: { car: Car }) {
           </li>
         ))}
       </ol>
-      <div className="mt-6 flex flex-wrap gap-3">
-        <a href={carWhatsApp(car)} target="_blank" rel="noopener" className="btn btn-wa btn-shine">
-          <WhatsAppIcon className="size-5" /> {ctaLabel(car)}
-        </a>
-        <a href={whatsappUrl(visitMessage(car))} target="_blank" rel="noopener" className="btn btn-outline">
-          <CalendarCheck className="size-4" /> Agendar cita
-        </a>
-      </div>
     </section>
   );
 }
@@ -724,16 +685,28 @@ function SectionTitle({ id, eyebrow, children }: { id: string; eyebrow: string; 
   );
 }
 
+// Renglón de la lista de confianza: ícono en un cuadro de color y texto (sin enlace)
+function TrustItem({ Icon, children }: { Icon: typeof Calendar; children: ReactNode }) {
+  return (
+    <li className="flex items-center gap-3 py-3">
+      <span className="grid size-9 shrink-0 place-items-center rounded-md bg-brand-soft text-brand" aria-hidden="true">
+        <Icon className="size-[1.05rem]" />
+      </span>
+      <span>{children}</span>
+    </li>
+  );
+}
+
 // Dato del resumen (kilometraje, transmisión, combustible). Solo se usa con datos confirmados.
 function QuickSpec({ spec }: { spec: Spec }) {
   const { Icon, label, value } = spec;
   return (
     <li className="min-w-0 px-3 py-3.5 first:pl-0 last:pr-0">
-      <span className="font-tech flex items-center gap-1.5 text-[9px] text-dim">
-        <Icon className="hidden size-3.5 shrink-0 text-brand sm:block" aria-hidden="true" />
-        <span className="truncate">{label}</span>
+      <span className="grid size-8 place-items-center rounded-md bg-brand-soft text-brand" aria-hidden="true">
+        <Icon className="size-4" strokeWidth={2} />
       </span>
-      <span className="mt-1.5 block truncate text-[15px] font-semibold">{value}</span>
+      <span className="font-tech mt-2 block truncate text-[9px] text-dim">{label}</span>
+      <span className="mt-1 block truncate text-[15px] font-semibold">{value}</span>
     </li>
   );
 }

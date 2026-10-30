@@ -1,4 +1,5 @@
-import Image from "next/image";
+import { SquaresFourIcon } from "@phosphor-icons/react/dist/ssr";
+import { VehicleIcon } from "@/components/vehicle-icons";
 import type { Car } from "@/lib/cars";
 
 export const TYPE_LABEL: Record<string, string> = {
@@ -9,73 +10,49 @@ export const TYPE_LABEL: Record<string, string> = {
   Pickup: "Pickups",
 };
 
-export type Category = { type: string; count: number; images: string[] };
+export type Category = { type: string; count: number };
 
-// Categorías del inventario con la foto real de un auto de cada tipo (pedido del dueño, 31-oct: los íconos
-// dibujados no gustaron). Los blindados cuentan también como su carrocería. Primero los destacados.
+// Categorías del inventario con su número de autos. Los blindados cuentan también como su carrocería.
 export function categoriesOf(cars: Car[]): { all: Category; types: Category[] } {
-  const ordered = [...cars].sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)));
   const map = new Map<string, Category>();
-  for (const car of ordered) {
+  for (const car of cars) {
     for (const t of car.armored ? [car.body, "Blindado"] : [car.body]) {
-      const c = map.get(t) ?? { type: t, count: 0, images: [] };
+      const c = map.get(t) ?? { type: t, count: 0 };
       c.count += 1;
-      if (car.images[0] && c.images.length < 1) c.images.push(car.images[0]);
       map.set(t, c);
     }
   }
   const types = [...map.values()].sort((a, b) => b.count - a.count);
-  const all = {
-    type: "Todos",
-    count: cars.length,
-    images: ordered.flatMap((c) => (c.images[0] ? [c.images[0]] : [])).slice(0, 4),
-  };
-  return { all, types };
+  return { all: { type: "Todos", count: cars.length }, types };
 }
 
+// Categoría con ícono a dos tonos en un cuadro de color (31-oct: el dueño prefiere íconos, no fotos)
 export function CategoryTileContent({ category, active }: { category: Category; active?: boolean }) {
-  const { type, count, images } = category;
+  const { type, count } = category;
   const label = type === "Todos" ? "Todos" : (TYPE_LABEL[type] ?? type);
   return (
     <>
-      <span className="relative block aspect-[4/3] w-full overflow-hidden rounded-md bg-soft">
-        {type === "Todos" && images.length > 1 ? (
-          // Mosaico de 4 autos
-          <span className="grid h-full grid-cols-2 gap-0.5">
-            {images.map((src) => (
-              <span key={src} className="relative overflow-hidden">
-                <Image
-                  src={src}
-                  alt=""
-                  fill
-                  sizes="76px"
-                  quality={70}
-                  className="object-cover transition-transform duration-700 ease-[var(--ease-out-expo)] group-hover:scale-110"
-                />
-              </span>
-            ))}
-          </span>
-        ) : images[0] ? (
-          <Image
-            src={images[0]}
-            alt=""
-            fill
-            sizes="152px"
-            quality={70}
-            className="object-cover object-[50%_60%] transition-transform duration-700 ease-[var(--ease-out-expo)] group-hover:scale-110"
-          />
-        ) : null}
+      <span
+        className={`grid size-14 place-items-center rounded-lg transition-[transform,background-color,color] duration-500 ease-[var(--ease-out-expo)] group-hover:-translate-y-0.5 group-hover:scale-105 ${
+          active ? "bg-white/10 text-white" : "bg-brand-soft text-brand group-hover:bg-brand group-hover:text-white"
+        }`}
+      >
+        {type === "Todos" ? (
+          <SquaresFourIcon weight="duotone" className="size-8" aria-hidden="true" />
+        ) : (
+          <VehicleIcon type={type} className="size-8" />
+        )}
       </span>
-      <span className="mt-2.5 flex w-full items-baseline justify-between gap-2 px-1">
-        <span className="text-sm font-semibold">{label}</span>
-        <span className={`text-xs tabular-nums ${active ? "text-white/70" : "text-dim"}`}>{count}</span>
+      <span className="mt-3 text-sm font-semibold">{label}</span>
+      <span className={`text-xs tabular-nums ${active ? "text-white/70" : "text-dim"}`}>
+        {count} {count === 1 ? "auto" : "autos"}
       </span>
     </>
   );
 }
 
 export function categoryTileClass(active?: boolean) {
-  return `group relative flex w-[9.5rem] shrink-0 snap-start flex-col rounded-lg p-1.5 pb-2.5 ring-1 transition-[transform,box-shadow,background-color] duration-500 ease-[var(--ease-out-expo)] hover:-translate-y-0.5 active:scale-[0.97] ${
+  return `group relative flex w-[7.75rem] shrink-0 snap-start flex-col items-center rounded-xl px-3 pt-4 pb-3.5 ring-1 transition-[transform,box-shadow,background-color] duration-500 ease-[var(--ease-out-expo)] hover:-translate-y-0.5 active:scale-[0.97] ${
     active
       ? "bg-night text-white shadow-[0_16px_34px_-18px_rgb(20_20_20/0.6)] ring-night"
       : "bg-card text-fg ring-line hover:shadow-[0_16px_34px_-20px_rgb(20_20_20/0.4)] hover:ring-fg/25"

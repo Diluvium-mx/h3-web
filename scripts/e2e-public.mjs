@@ -60,10 +60,10 @@ const step = (m) => console.log('✔', m);
     if (Math.abs(c1.y - c2.y) > 2 || c2.x <= c1.x) throw new Error('el inventario del inicio debería ir en 2 columnas');
     await page.locator('section[aria-labelledby=destacados] a', { hasText: 'Ver todos' }).last().waitFor();
     step('inventario: 8 autos en 2 columnas y «Ver todos» abajo');
-    // 31-oct: categorías con la foto real de un auto (sin íconos dibujados)
+    // 31-oct: categorías con ícono (no foto)
     const tiles = page.locator('nav[aria-label="Explora por tipo"] a');
-    if ((await tiles.count()) < 3 || (await tiles.first().locator('img').count()) < 1) throw new Error('las categorías deberían llevar foto');
-    step('categorías con foto real de un auto de cada tipo');
+    if ((await tiles.count()) < 3 || !(await tiles.first().locator('svg').count()) || (await tiles.locator('img').count())) throw new Error('las categorías deben llevar ícono, no foto');
+    step('categorías con ícono');
     // Beneficios divididos en 2: una imagen para comprar y otra para vender, con sus puntos y sin botones
     const buy = page.locator('article[aria-labelledby=al-comprar]');
     const sellBox = page.locator('article[aria-labelledby=al-vender]');
@@ -139,12 +139,20 @@ const step = (m) => console.log('✔', m);
     // Dato faltante: no aparece en el resumen ni en la ficha; abajo hay un aviso con botón para preguntarlo
     if (await page.getByText('Pregúntanos').count()) throw new Error('la ficha no debe mostrar «Pregúntanos»');
     if (await page.locator('section[aria-labelledby=ficha] dt', { hasText: 'Kilometraje' }).count()) throw new Error('el kilometraje sin dato no debe salir en la ficha');
-    const ask = page.locator('section[aria-labelledby=ficha] a', { hasText: 'Preguntar' });
-    const askHref = decodeURIComponent(await ask.getAttribute('href'));
-    if (!askHref.includes('kilometraje') || !askHref.includes('Ford Mustang GT Premium 2022')) throw new Error('mensaje de dato faltante: ' + askHref);
+    // 31-oct: sin botón «Preguntar» en la ficha técnica; solo el aviso con los datos por confirmar
+    await page.locator('section[aria-labelledby=ficha]').getByText('Datos por confirmar: kilometraje').waitFor();
+    if (await page.locator('section[aria-labelledby=ficha] a').count()) throw new Error('la ficha técnica no debe llevar botones');
+    // Menos llamadas a la acción: sin «Cita» ni «Agendar cita»; en el contenido, solo el botón principal y «Mándaselo por WhatsApp»
+    for (const gone of ['Agendar cita', 'Agéndala por WhatsApp']) {
+      if (await page.getByText(gone).count()) throw new Error('debería haberse quitado: ' + gone);
+    }
+    if (await page.locator('main a', { hasText: /^\s*Cita\s*$/ }).count()) throw new Error('debería haberse quitado el botón «Cita»');
+    // Quedan el botón principal, «Mándaselo por WhatsApp» y la barra fija de abajo
+    const waInMain = await page.locator('main a[href*="wa.me"]').count();
+    if (waInMain !== 3) throw new Error('en la ficha solo deben quedar 3 enlaces de WhatsApp (principal, «Mándaselo» y barra fija), hay ' + waInMain);
     const ld = await page.locator('script[type="application/ld+json"]').allTextContents();
     if (!ld.some((t) => t.includes('BreadcrumbList'))) throw new Error('faltan migas de pan para Google');
-    step('detalle: botón en el primer pantallazo, sin filas vacías, aviso para preguntar y migas de pan');
+    step('detalle: botón en el primer pantallazo, sin filas vacías, aviso de datos por confirmar, solo 3 WhatsApp (principal, «Mándaselo» y barra fija) y migas de pan');
     await page.locator('button[aria-label="Ver foto 3 de 10"]').click();
     const dialog = page.getByRole('dialog', { name: 'Galería' });
     await dialog.getByText('3 / 10').waitFor();

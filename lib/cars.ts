@@ -102,11 +102,6 @@ export function missingSpecs(car: Car) {
   return KEY_SPECS.filter(({ key }) => car[key] == null || car[key] === "").map((s) => s.label);
 }
 
-export function infoMessage(car: Car, fields: string[]) {
-  const what = fields.length ? fields.map((f) => f.toLowerCase()).join(", ") : "más detalles";
-  return `Hola ${site.name} 👋 Me interesa el *${carTitle(car)}*. ¿Me pueden dar información de: ${what}?\n${carUrl(car)}`;
-}
-
 export function shortPrice(n: number) {
   if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(n % 1_000_000 === 0 ? 0 : 1)}M`;
   return `$${Math.round(n / 1000)}k`;
@@ -149,10 +144,6 @@ export function sortNewest(a: Car, b: Car) {
 
 export function interestMessage(car: Car) {
   return `Hola ${site.name} 👋 Me interesa el *${carTitle(car)}* (${formatPrice(car.price)}) que vi en su página.\n${carUrl(car)}\n¿Sigue disponible?`;
-}
-
-export function visitMessage(car: Car) {
-  return `Hola 👋 Me gustaría agendar una cita para ver el *${carTitle(car)}*. ¿Qué días tienen disponibles?\n${carUrl(car)}`;
 }
 
 export function similarMessage(car: Car) {

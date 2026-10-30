@@ -35,12 +35,12 @@ export function Reveal() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     // Al abrir el sitio, lo que ya se ve no se anima (no parpadea); lo que llega al navegar, sí
     const timer = window.setTimeout(() => (booted = true));
-    const waiting = new Map<Element, Animation>();
+    const waiting = new Map<Element, Animation[]>();
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
           if (!e.isIntersecting) continue;
-          waiting.get(e.target)?.play();
+          for (const anim of waiting.get(e.target) ?? []) anim.play();
           waiting.delete(e.target);
           shown.add(e.target);
           io.unobserve(e.target);
@@ -62,12 +62,23 @@ export function Reveal() {
         // La cortinilla se aplica a la foto de adentro: si se recorta el elemento vigilado, el navegador
         // no detecta cuándo entra en pantalla
         const target = (wipe && el.querySelector("img")) || el;
-        const anim = target.animate(keyframes(el), { duration: wipe ? 1300 : 800, easing: EASE, delay: i * 70, fill: "backwards" });
+        const anims = [
+          target.animate(keyframes(el), { duration: wipe ? 1300 : 800, easing: EASE, delay: i * 70, fill: "backwards" }),
+          // Trazos a mano (subrayados) que se dibujan después de que aparece el título
+          ...Array.from(el.querySelectorAll("[data-draw]"), (path) =>
+            path.animate([{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], {
+              duration: 900,
+              easing: EASE,
+              delay: 450 + i * 70,
+              fill: "backwards",
+            }),
+          ),
+        ];
         if (inView) {
           shown.add(el);
         } else {
-          anim.pause(); // se queda oculto hasta que entre en pantalla
-          waiting.set(el, anim);
+          for (const anim of anims) anim.pause(); // se queda oculto hasta que entre en pantalla
+          waiting.set(el, anims);
           io.observe(el);
         }
       }
@@ -80,7 +91,7 @@ export function Reveal() {
       window.clearTimeout(timer);
       io.disconnect();
       mo.disconnect();
-      for (const anim of waiting.values()) anim.cancel();
+      for (const anims of waiting.values()) for (const anim of anims) anim.cancel();
     };
   }, []);
 

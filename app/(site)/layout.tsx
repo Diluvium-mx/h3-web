@@ -3,6 +3,7 @@ import { Footer } from "@/components/site/footer";
 import { WhatsAppFab } from "@/components/site/whatsapp-fab";
 import { LocalBusinessJsonLd } from "@/components/site/json-ld";
 import { Reveal } from "@/components/reveal";
+import { ScrollProgress } from "@/components/scroll-progress";
 
 export default function SiteLayout({ children }: LayoutProps<"/">) {
   return (
@@ -13,6 +14,7 @@ export default function SiteLayout({ children }: LayoutProps<"/">) {
       >
         Saltar al contenido
       </a>
+      <ScrollProgress />
       <Header />
       <main id="contenido">{children}</main>
       <Footer />

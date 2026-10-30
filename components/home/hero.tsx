@@ -2,7 +2,6 @@ import Link from "next/link";
 import { ArrowRight, Star } from "lucide-react";
 import { WhatsAppIcon } from "@/components/icons";
 import { HeroCarousel, type HeroSlide } from "@/components/home/hero-carousel";
-import { HeroParallax } from "@/components/home/hero-parallax";
 import { formatPrice, type Car } from "@/lib/cars";
 import { site, whatsappUrl } from "@/lib/site";
 import { vars } from "@/lib/ui";
@@ -25,6 +24,7 @@ const TITLE: { text: string; accent?: boolean }[] = [
 // Hero (pedido del dueño, 31-oct): fotos reales con más zoom, en un carrusel que se desliza y cambia solo.
 // Sin degradado oscuro: el texto va en una hoja clara que se monta sobre la foto (en computadora, una
 // tarjeta). El título sube palabra por palabra y «premium» va en cursiva roja con un trazo a mano.
+// La foto no se mueve al bajar (31-oct: el movimiento la hacía temblar).
 export function Hero({ featured, rating }: { featured: Car[]; rating: Rating }) {
   const slides: HeroSlide[] = featured
     .filter((c) => c.images[0])
@@ -41,16 +41,17 @@ export function Hero({ featured, rating }: { featured: Car[]; rating: Rating }) 
   return (
     <section className="relative bg-paper" aria-labelledby="hero-title">
       {/* Fotos */}
-      <div className="relative h-[62svh] min-h-[400px] overflow-hidden bg-night lg:h-[88svh]">
-        <HeroParallax className="absolute inset-0">
+      {/* En celular la foto se queda fija y la hoja blanca sube por encima al bajar (sin mover la foto) */}
+      <div className="relative h-[57svh] min-h-[380px] overflow-hidden bg-night max-lg:sticky max-lg:top-0 lg:h-[88svh]">
+        <div className="absolute inset-0">
           <HeroCarousel slides={slides} />
-        </HeroParallax>
+        </div>
         {/* Sombra mínima arriba, solo para que se lea el encabezado */}
         <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/40 to-transparent" />
       </div>
 
       {/* Texto: hoja clara sobre la foto */}
-      <div className="relative z-10 -mt-7 rounded-t-[1.75rem] bg-paper px-5 pt-8 pb-10 sm:px-6 lg:absolute lg:bottom-14 lg:left-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))] lg:mt-0 lg:w-[35rem] lg:rounded-2xl lg:p-11 lg:shadow-[0_40px_80px_-30px_rgb(20_20_20/0.55)]">
+      <div className="relative z-10 -mt-7 rounded-t-[1.75rem] bg-paper px-5 pt-7 pb-10 sm:px-6 lg:absolute lg:bottom-14 lg:left-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))] lg:mt-0 lg:w-[35rem] lg:rounded-2xl lg:p-11 lg:shadow-[0_40px_80px_-30px_rgb(20_20_20/0.55)]">
         <p className="font-tech flex items-center gap-3 text-[11px] text-dim">
           <span className="draw-line rule-accent h-px w-8" />
           {rating.count > 0 ? (

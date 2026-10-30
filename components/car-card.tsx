@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ViewTransition } from "react";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Cog, Fuel, Gauge, Sparkles } from "lucide-react";
 import { formatKm, formatPrice, highlightBadges, type Car } from "@/lib/cars";
 
 type Props = {
@@ -66,6 +66,12 @@ export function CarCard({
   const badges = highlightBadges(car);
   const sold = car.status === "vendido";
   const specs = [car.mileage != null && formatKm(car.mileage), car.transmission, car.fuel].filter(Boolean) as string[];
+  // Datos con su ícono de color (31-oct: «un pequeño destello de color» en las tarjetas)
+  const specItems = [
+    car.mileage != null && { Icon: Gauge, text: formatKm(car.mileage) },
+    car.transmission && { Icon: Cog, text: car.transmission },
+    car.fuel && { Icon: Fuel, text: car.fuel },
+  ].filter(Boolean) as { Icon: typeof Gauge; text: string }[];
 
   if (variant === "foto") {
     return (
@@ -88,7 +94,7 @@ export function CarCard({
           <div className="mt-3 flex items-center justify-between gap-3 border-t border-white/15 pt-3">
             <p className={`font-display text-xl ${sold ? "text-white/60 line-through" : ""}`}>{formatPrice(car.price)}</p>
             <span
-              className="grid size-10 shrink-0 place-items-center rounded-md bg-white/10 ring-1 ring-white/20 transition-colors duration-500 group-hover:bg-white group-hover:text-night"
+              className="grid size-10 shrink-0 place-items-center rounded-md bg-brand text-white shadow-[0_8px_18px_-8px_rgb(200_16_46/0.8)] transition-colors duration-500 group-hover:bg-white group-hover:text-night"
               aria-hidden="true"
             >
               <ArrowUpRight className="size-4 transition-transform duration-500 group-hover:rotate-45" />
@@ -113,8 +119,9 @@ export function CarCard({
           {badges.slice(0, 1).map((b) => (
             <span
               key={b}
-              className="hidden rounded-sm bg-night/75 px-2 py-1 text-[10px] font-semibold tracking-wide text-white uppercase @[15rem]:inline"
+              className="inline-flex items-center gap-1 rounded-sm bg-brand px-1.5 py-1 text-[9px] font-semibold tracking-wide text-white uppercase shadow-[0_6px_16px_-6px_rgb(200_16_46/0.7)] @[15rem]:px-2 @[15rem]:text-[10px]"
             >
+              <Sparkles className="size-3" aria-hidden="true" />
               {b}
             </span>
           ))}
@@ -128,11 +135,14 @@ export function CarCard({
           <CardLink car={car}>{car.model}</CardLink>
         </h3>
         {car.version && <p className="mt-0.5 truncate text-xs text-mute @[15rem]:text-sm">{car.version}</p>}
-        {specs.length > 0 && (
-          <ul className="mt-2 flex flex-wrap items-center text-[11px] text-mute @[15rem]:mt-3 @[15rem]:text-[13px]" aria-label="Características">
-            {specs.map((text, i) => (
-              <li key={text} className={`flex items-center ${i === 2 ? "hidden @[15rem]:flex" : ""}`}>
-                {i > 0 && <span className="mx-1.5 h-3 w-px bg-line @[15rem]:mx-2.5" aria-hidden="true" />}
+        {specItems.length > 0 && (
+          <ul
+            className="mt-2 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[11px] text-mute @[15rem]:mt-3 @[15rem]:gap-x-3.5 @[15rem]:text-[13px]"
+            aria-label="Características"
+          >
+            {specItems.map(({ Icon, text }, i) => (
+              <li key={text} className={`flex items-center gap-1 ${i === 2 ? "hidden @[15rem]:flex" : ""}`}>
+                <Icon className="size-3 shrink-0 text-brand @[15rem]:size-3.5" aria-hidden="true" />
                 {text}
               </li>
             ))}
@@ -144,7 +154,7 @@ export function CarCard({
             {formatPrice(car.price)}
           </p>
           <span
-            className="grid size-8 shrink-0 place-items-center rounded-md ring-1 ring-line transition-all duration-500 ease-[var(--ease-out-expo)] group-hover:bg-night group-hover:text-white group-hover:ring-night @[15rem]:size-10"
+            className="grid size-8 shrink-0 place-items-center rounded-md bg-brand text-white shadow-[0_8px_18px_-8px_rgb(200_16_46/0.8)] transition-all duration-500 ease-[var(--ease-out-expo)] group-hover:bg-night group-hover:shadow-none @[15rem]:size-10"
             aria-hidden="true"
           >
             <ArrowUpRight className="size-4 transition-transform duration-500 group-hover:rotate-45" />

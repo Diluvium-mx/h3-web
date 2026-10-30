@@ -106,18 +106,21 @@ Acción principal: ver un auto y, ya en su ficha, mandar WhatsApp.
 2. **Hero:** carrusel de fotos reales con **más zoom** (se desliza y cambia solo cada 5 s; el auto y su precio
    abajo a la derecha). **Sin degradado oscuro:** el texto va en una hoja clara que se monta sobre la foto (en
    computadora, una tarjeta). El título sube palabra por palabra y **«premium» va en cursiva roja** con un
-   trazo a mano. La foto se mueve más lento al bajar.
+   trazo a mano. En celular la foto **se queda fija** y la hoja sube por encima al bajar (31-oct: el
+   movimiento de la foto la hacía temblar).
 3. **Franja de marcas** con logos.
-4. **Inventario:** categorías con la **foto real de un auto de cada tipo** (ya no íconos dibujados) y 8 autos
-   en 2 columnas con «Ver todos». Las tarjetas **ya no llevan botón de WhatsApp**: toda la tarjeta abre la
-   ficha y ahí se escribe.
+4. **Inventario:** categorías con **íconos a dos tonos** en un cuadro rojo claro (Phosphor Icons, MIT; la
+   pickup se dibujó con el mismo estilo; Recreativos usa montañas) y 8 autos en 2 columnas con «Ver todos».
+   Las tarjetas **no llevan botón de WhatsApp** (toda la tarjeta abre la ficha) y tienen detalles de color:
+   etiqueta roja sobre la foto (p. ej. «Único dueño»), íconos rojos en los datos y la flecha en rojo.
 5. **Beneficios («Lo que hacemos por ti»), sin botones:**
    - «Al comprar un auto»: imagen de la entrega de la llave (hecha con Arcads) y asesoramiento, autos
      confiables, papeles en regla y precio justo.
    - «Al vender tu auto» (fondo oscuro): la imagen de la llave y la carpeta con «Ganas más que en un lote», y
      sácale más valor, evita estafas, sin citas con desconocidos, papeleo y placas y precio correcto.
    - Las imágenes aparecen con un efecto de cortinilla.
-6. **Autos verificados:** carrusel de tarjetas grandes.
+6. **«Autos verificados, con sus papeles en regla.»** (palabras en cursiva roja y subrayado a mano):
+   carrusel de tarjetas grandes.
 7. **Reseñas:** solo si el dueño agrega reseñas reales.
 8. **«Compra con certeza, no a ciegas.»:** tabla comparativa simple «Lo de siempre» contra «En H3».
 9. **Preguntas frecuentes**, con «¿No ves tu pregunta? Pregúntanos por WhatsApp» hasta abajo.
@@ -125,6 +128,8 @@ Acción principal: ver un auto y, ya en su ficha, mandar WhatsApp.
     se ve completa y más grande y las de los lados se alcanzan a ver. Después, la tarjeta «Visítanos».
 11. **Pie de página nuevo:** centrado, con el logo real de H3 (sin el nombre escrito en otra letra), enlaces,
     WhatsApp, teléfono, cómo llegar, redes, dirección y horario.
+- **Microanimaciones (31-oct):** línea roja arriba que avanza al bajar, subrayados que se dibujan cuando la
+  sección aparece y palabras resaltadas en cursiva roja en los títulos.
 - **Se quitaron (31-oct):** «Un toque y ya estás hablando con nosotros», «Tu próximo auto en 3 pasos», la
   sección aparte de «Vende tu auto» (su imagen pasó a los beneficios) y «Recién vendidos».
 
@@ -152,12 +157,14 @@ y las ideas de la investigación de repos (`INVESTIGACION-REPOS.md`).
   - Botón principal de WhatsApp. Cambia según el estado: «Me interesa este auto», «Avísame si se libera»
     (apartado) o «Búscame uno similar» (vendido).
   - Quita-miedos: ✓ Te respondemos de inmediato ✓ El mensaje ya lleva este auto ✓ Sin registros.
-  - Botones de cita, llamar y compartir.
+  - Botones de llamar y compartir (el de cita se quitó el 31-oct: era lo mismo que WhatsApp).
 - **Confianza:**
   - «Verificado y probado. Papeles originales, documentación en regla y fotos reales de este auto.»
   - Calificación real si hay reseñas.
   - «¿Lo decides con alguien más? Mándaselo por WhatsApp» (lo manda a quien el cliente elija).
-  - «Míralo con cita. Agéndala por WhatsApp» (30-oct) y la dirección de la oficina con horario.
+  - «Míralo con cita» y la dirección de la oficina con horario, **como texto, sin enlace** (31-oct: solo
+    «Mándaselo por WhatsApp» es enlace). Cada renglón lleva su ícono en un cuadro de color, igual que
+    transmisión y combustible.
 - **«N fotos reales»:** todas las fotos en cuadrícula (en celular). Al tocar una se abre en pantalla
   completa, con un botón blanco **«✕ Cerrar»** bien visible arriba a la derecha (29-oct).
 - **Fotos por sección** (desde el 28-oct; **solo Exterior e Interior desde el 30-oct**: las fotos que tenían
@@ -177,8 +184,9 @@ y las ideas de la investigación de repos (`INVESTIGACION-REPOS.md`).
   mensaje; te respondemos de inmediato.», qué datos faltan y el botón «Preguntar» (27-oct). Nunca se
   inventa el dato.
 - «Lo que destaca» y descripción.
-- **«Así de fácil»:** 3 pasos (escríbenos, te respondemos de inmediato y **agenda tu cita**) con botones
-  de WhatsApp y «Agendar cita».
+- **«Así de fácil»:** 3 pasos (escríbenos, te respondemos de inmediato y **agenda tu cita**), **sin
+  botones** (31-oct). Tampoco hay botón en la ficha técnica: WhatsApp queda arriba, en el encabezado y en
+  la barra fija de abajo.
 - **«Tus dudas, resueltas» se quitó** (29-oct): tenía muchos botones «Pregúntanos». Lo que el dueño confirma
   (dueños, factura, servicios, papeles y nivel de blindaje) ahora sale como filas de la ficha técnica.
 - Reseñas reales, si hay.
