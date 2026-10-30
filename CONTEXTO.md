@@ -450,7 +450,8 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
 ## 7. Lo que falta (en orden)
 
 1. **Crear las cuentas gratuitas** y poner sus variables en Netlify (ver README, etapas 1 y 2):
-   - **Netlify primero:** da el enlace para el celular (en curso, 28-oct).
+   - **Netlify primero:** da el enlace para el celular y para el dueño, con la vista previa de la rama
+     `desarrollo` (README → «Enlace de vista previa»). Pendiente de que se cree la cuenta.
    - Después Upstash y Cloudinary, para que el panel guarde cambios.
    - Las crea quien lleva el proyecto. Con qué correo: **sin decidir**.
 2. **Publicar en Netlify y verificar con las cuentas reales:**
@@ -494,6 +495,10 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
   con buscador fijo y WhatsApp en cada tarjeta, pie de página oscuro.
 - **Ficha (29-oct):** sin «Tus dudas» y sin «Pregúntanos» en tablas; lo que falta no se muestra (queda
   el aviso con botón «Preguntar»). Botón «Cerrar» claro en pantalla completa.
+- **Enlace para ver el sitio desde cualquier celular y mandárselo al dueño (30-oct):** vista previa de la rama
+  `desarrollo` en Netlify (`https://desarrollo--NOMBRE.netlify.app`). Se actualiza sola con cada cambio y no
+  gasta créditos. Se descartaron Vercel Hobby (no permite uso comercial) y los artefactos de Claude (no
+  alojan un sitio con servidor y panel).
 - **Imágenes con IA (Arcads): no se usaron** (29-oct). Las fotos reales lucen bien con el tratamiento de cine.
   Además, autos generados chocarían con la promesa «Fotos reales de cada auto» y suelen verse hechos con
   IA. Si el dueño quiere un fondo o ambiente generado, se puede agregar.

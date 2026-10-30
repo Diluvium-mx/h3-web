@@ -2,6 +2,15 @@
 
 Lo más reciente va arriba.
 
+## 30 de octubre de 2026 — enlace de vista previa para cualquier celular
+
+- Se eligió la vista previa de la rama `desarrollo` en Netlify: enlace https fijo que se actualiza solo
+  y no gasta créditos (las publicaciones de ramas cuestan 0, según la documentación de Netlify).
+- El sitio ya está listo para eso: en la vista previa sus enlaces apuntan a ella misma y Google no la indexa.
+  Pasos en el README.
+
+Falta: crear la cuenta de Netlify, importar el repositorio y activar la rama `desarrollo` (unos 5 minutos).
+
 ## 29 de octubre de 2026 — más impacto, color sutil y ficha más limpia
 
 - Hero a pantalla completa en celular con fotos reales, tratamiento de cine, estelas de luz y accesos

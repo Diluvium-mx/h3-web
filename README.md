@@ -127,6 +127,23 @@ hasta la etapa 2.
 6. Cuando todo funcione, **cancela Shopify**. Importa las fotos **antes**, porque después desaparecen.
    El dominio se conecta después (sin decidir).
 
+### Enlace de vista previa (rama `desarrollo`, 0 créditos)
+
+Sirve para ver los cambios desde cualquier celular, en cualquier parte, y para mandárselo al dueño. Se
+actualiza solo cada vez que se suben cambios a `desarrollo`. Según la documentación de Netlify, las
+publicaciones de ramas («branch deploys») **no gastan créditos**; solo las de producción (`main`) cuestan 15.
+
+1. Haz la etapa 1 (pasos 1 a 4). La primera publicación de `main` sí cuesta 15 créditos, una sola vez.
+2. En el proyecto: **Project configuration → Build & deploy → Continuous deployment → Branches and deploy
+   contexts → Configure → Let me add individual branches**, escribe `desarrollo` y **Save**. (En algunas
+   cuentas el menú dice **Developer settings** en lugar de **Build & deploy**.)
+3. El enlace queda así: `https://desarrollo--NOMBRE.netlify.app` (NOMBRE es el del paso 3.3). Aparece en
+   **Deploys** después del siguiente cambio que se suba a `desarrollo`.
+4. El proyecto debe ser **público** (paso 4) para que el dueño lo abra sin cuenta.
+
+En la vista previa los enlaces de WhatsApp apuntan a la misma vista previa y Google no la indexa
+(`robots.txt` y `X-Robots-Tag: noindex`). El panel funciona en modo demo: no guarda cambios hasta la etapa 2.
+
 ### Para no gastar créditos de más
 
 - **Cada vez que algo llega a la rama `main`, Netlify publica y gasta 15 créditos** (de 300 al mes). Por

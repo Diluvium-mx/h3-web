@@ -7,6 +7,10 @@ const devHosts = (process.env.H3_DEV_HOSTS ?? "")
   .map((h) => h.trim())
   .filter(Boolean);
 
+// Vista previa de una rama en Netlify (p. ej. https://desarrollo--h3-seminuevos.netlify.app): no gasta
+// créditos, sus enlaces apuntan a ella misma y Google no la indexa.
+const preview = process.env.CONTEXT === "branch-deploy" || process.env.CONTEXT === "deploy-preview";
+
 const nextConfig: NextConfig = {
   // En modo celular se oculta el botón «N» de Next.js, que tapa botones en pantallas chicas
   ...(devHosts.length && { allowedDevOrigins: devHosts, devIndicators: false }),
@@ -27,9 +31,14 @@ const nextConfig: NextConfig = {
     inlineCss: true,
   },
   env: {
-    // En Netlify, mientras no se conecte el dominio, se usa la dirección que Netlify asigna (URL)
+    // En Netlify, mientras no se conecte el dominio, se usa la dirección que Netlify asigna (URL);
+    // en una vista previa, la de la rama (DEPLOY_PRIME_URL)
     NEXT_PUBLIC_SITE_URL:
-      process.env.NEXT_PUBLIC_SITE_URL || process.env.URL || "https://www.h3seminuevos.com",
+      (preview && process.env.DEPLOY_PRIME_URL) ||
+      process.env.NEXT_PUBLIC_SITE_URL ||
+      process.env.URL ||
+      "https://www.h3seminuevos.com",
+    NEXT_PUBLIC_PREVIEW: preview ? "1" : "",
   },
   images: {
     // Las fotos se sirven optimizadas desde Cloudinary (ver lib/image-loader.ts),
@@ -52,7 +61,8 @@ const nextConfig: NextConfig = {
         ],
       },
       {
-        source: "/admin/:path*",
+        // En la vista previa, todo; en producción, solo el panel
+        source: preview ? "/:path*" : "/admin/:path*",
         headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
       },
     ];

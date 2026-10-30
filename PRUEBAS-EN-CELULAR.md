@@ -8,7 +8,7 @@ mientras se desarrolla y la 4 antes de publicar cada cambio grande.
 | 1. Pruebas automáticas en tamaño de celular (desde la nube o la Mac) | Media: Chrome que imita un celular | Nada | $0 |
 | 2. **Tu celular en el mismo Wi-Fi que la Mac** (`npm run movil`) | Alta: tu teléfono real | La Mac y el celular en la misma red | $0 |
 | 3. Simulador de iPhone (Xcode) o de Android en la Mac | Alta: motor real de Safari o Android | Instalar Xcode (~15 GB) o Android Studio | $0 |
-| 4. **Vista previa de Netlify** (https, desde cualquier red) | La más alta: es el sitio publicado | Cuenta de Netlify | $0: las vistas previas no gastan créditos |
+| 4. **Vista previa de Netlify** (https, desde cualquier red y cualquier celular) | La más alta: es el sitio publicado | Cuenta de Netlify (ver README → «Enlace de vista previa») | $0: las publicaciones de ramas no gastan créditos |
 
 ## 1. Pruebas automáticas en tamaño de celular
 
