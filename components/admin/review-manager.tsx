@@ -8,7 +8,7 @@ import { REVIEW_SOURCES, type Review, type ReviewSource } from "@/lib/reviews";
 import { uploadPhoto } from "@/lib/upload-client";
 
 const field =
-  "h-12 w-full rounded-xl border border-line bg-soft px-4 text-fg placeholder:text-dim focus:border-brand focus:outline-none";
+  "h-12 w-full rounded-md border border-line bg-soft px-4 text-fg placeholder:text-dim focus:border-fg/50 focus:outline-none";
 
 function Field({ label, hint, children }: { label: string; hint?: string; children: ReactNode }) {
   return (
@@ -80,13 +80,13 @@ export function ReviewManager({
 
   return (
     <div className="mt-8 space-y-6">
-      <div className="rounded-2xl bg-volt-soft p-4 text-sm leading-relaxed text-fg/85 ring-1 ring-volt/60">
+      <div className="rounded-lg bg-paper p-4 text-sm leading-relaxed text-fg/85 ring-1 ring-line">
         Publica solo reseñas <b>reales</b> y con <b>permiso del cliente</b>, sobre todo si pones su foto o su
         nombre completo. Puedes copiarlas de Google, Facebook o de un mensaje de WhatsApp.
       </div>
 
       {open ? (
-        <section className="rounded-3xl border border-line bg-card p-4 sm:p-6" aria-label="Nueva reseña">
+        <section className="rounded-lg border border-line bg-card p-4 sm:p-6" aria-label="Nueva reseña">
           <div className="flex items-center justify-between">
             <h2 className="font-display text-xl">Nueva reseña</h2>
             {reviews.length > 0 && (
@@ -113,9 +113,9 @@ export function ReviewManager({
                     aria-checked={v.stars === n}
                     aria-label={`${n} ${n === 1 ? "estrella" : "estrellas"}`}
                     onClick={() => set("stars", n)}
-                    className="grid size-11 place-items-center rounded-xl bg-soft"
+                    className="grid size-11 place-items-center rounded-md bg-soft"
                   >
-                    <Star className={`size-6 ${n <= v.stars ? "fill-volt text-volt" : "text-dim"}`} />
+                    <Star className={`size-6 ${n <= v.stars ? "fill-current text-fg" : "text-dim"}`} />
                   </button>
                 ))}
               </div>
@@ -148,8 +148,8 @@ export function ReviewManager({
                     role="radio"
                     aria-checked={v.source === s}
                     onClick={() => set("source", v.source === s ? undefined : s)}
-                    className={`h-10 rounded-full border px-4 text-sm font-medium transition-colors ${
-                      v.source === s ? "border-brand bg-brand text-white" : "border-line bg-soft text-fg/80"
+                    className={`h-10 rounded-md border px-4 text-sm font-medium transition-colors ${
+                      v.source === s ? "border-night bg-night text-white" : "border-line bg-soft text-fg/80"
                     }`}
                   >
                     {s}
@@ -169,7 +169,7 @@ export function ReviewManager({
                   onChange={(e) => pickPhoto(e.target.files?.[0])}
                 />
                 {photo ? (
-                  <div className="relative size-28 overflow-hidden rounded-2xl bg-soft">
+                  <div className="relative size-28 overflow-hidden rounded-lg bg-soft">
                     {/* eslint-disable-next-line @next/next/no-img-element -- vista previa local */}
                     <img src={photo.preview} alt="" className="size-full object-cover" />
                     {!photo.url && (
@@ -181,7 +181,7 @@ export function ReviewManager({
                       type="button"
                       onClick={() => setPhoto(null)}
                       aria-label="Quitar foto"
-                      className="absolute top-1 right-1 grid size-7 place-items-center rounded-full bg-night/70 text-white"
+                      className="absolute top-1 right-1 grid size-7 place-items-center rounded-md bg-night/70 text-white"
                     >
                       <X className="size-4" />
                     </button>
@@ -190,19 +190,19 @@ export function ReviewManager({
                   <button
                     type="button"
                     onClick={() => fileInput.current?.click()}
-                    className="flex h-12 items-center gap-2 rounded-xl border border-dashed border-line px-4 text-sm font-medium text-fg/80"
+                    className="flex h-12 items-center gap-2 rounded-md border border-dashed border-line px-4 text-sm font-medium text-fg/80"
                   >
                     <ImagePlus className="size-5 text-brand" /> Agregar foto
                   </button>
                 )}
               </div>
             )}
-            {error && <p className="rounded-xl bg-brand-soft px-4 py-3 text-sm text-brand-hi">{error}</p>}
+            {error && <p className="rounded-md bg-brand-soft px-4 py-3 text-sm text-brand-hi">{error}</p>}
             <button
               type="button"
               onClick={save}
               disabled={saving}
-              className="btn-shine flex h-14 w-full items-center justify-center gap-2 rounded-full bg-brand font-semibold text-white disabled:opacity-60"
+              className="btn btn-dark btn-shine h-14 w-full disabled:opacity-60"
             >
               {saving && <Loader2 className="size-5 animate-spin" />} Publicar reseña
             </button>
@@ -212,24 +212,24 @@ export function ReviewManager({
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="flex h-14 w-full items-center justify-center gap-2 rounded-full border border-line bg-card font-semibold"
+          className="flex h-14 w-full items-center justify-center gap-2 rounded-md border border-line bg-card font-semibold"
         >
           <Plus className="size-5" /> Agregar reseña
         </button>
       )}
 
-      {!open && error && <p className="rounded-xl bg-brand-soft px-4 py-3 text-sm text-brand-hi">{error}</p>}
+      {!open && error && <p className="rounded-md bg-brand-soft px-4 py-3 text-sm text-brand-hi">{error}</p>}
 
       <ul className="space-y-3">
         {reviews.map((r) => (
-          <li key={r.id} className="flex gap-3 rounded-2xl border border-line bg-card p-4">
+          <li key={r.id} className="flex gap-3 rounded-lg border border-line bg-card p-4">
             {r.photo && (
-              <div className="relative size-16 shrink-0 overflow-hidden rounded-xl bg-soft">
+              <div className="relative size-16 shrink-0 overflow-hidden rounded-md bg-soft">
                 <Image src={r.photo} alt="" fill sizes="64px" className="object-cover" />
               </div>
             )}
             <div className="min-w-0 flex-1">
-              <p className="flex items-center gap-1 text-volt" aria-label={`${r.stars} de 5 estrellas`}>
+              <p className="flex items-center gap-1 text-white" aria-label={`${r.stars} de 5 estrellas`}>
                 {Array.from({ length: r.stars }, (_, i) => (
                   <Star key={i} className="size-3.5 fill-current" />
                 ))}
@@ -246,7 +246,7 @@ export function ReviewManager({
                   type="button"
                   onClick={() => remove(r.id)}
                   disabled={saving}
-                  className="rounded-full bg-brand px-3 py-1.5 text-xs font-semibold text-white"
+                  className="rounded-md bg-brand px-3 py-1.5 text-xs font-semibold text-white"
                 >
                   Eliminar
                 </button>
@@ -259,7 +259,7 @@ export function ReviewManager({
                 type="button"
                 onClick={() => setConfirm(r.id)}
                 aria-label="Eliminar"
-                className="grid size-10 shrink-0 place-items-center rounded-full text-mute hover:bg-soft hover:text-brand-hi"
+                className="grid size-10 shrink-0 place-items-center rounded-md text-mute hover:bg-soft hover:text-brand-hi"
               >
                 <Trash2 className="size-4" />
               </button>

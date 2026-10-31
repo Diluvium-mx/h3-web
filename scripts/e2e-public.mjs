@@ -8,36 +8,104 @@ const step = (m) => console.log('✔', m);
 (async () => {
   const browser = await chromium.launch();
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+  // En las vistas previas, Netlify agrega su barra abajo y tapa botones: se oculta solo para la prueba
+  await ctx.addInitScript(() => {
+    const css = '[data-netlify-deploy-id]{display:none!important}';
+    document.addEventListener('DOMContentLoaded', () => { const st = document.createElement('style'); st.textContent = css; document.head.append(st); });
+  });
   const page = await ctx.newPage();
   const errors = [];
   page.on('pageerror', e => errors.push('PAGEERROR ' + e.message));
   page.on('console', m => { if (m.type() === 'error') errors.push(m.text().slice(0, 300)); });
   try {
-    // Inicio: estructura de landing (hero con prueba social, CTA, sin miedos, preguntas)
+    // Inicio: estructura de landing (título claro, CTA, quita-miedos, confianza, inventario, vende tu auto)
     await page.goto(B + '/');
-    await page.getByRole('heading', { level: 1 }).filter({ hasText: 'sin sorpresas' }).waitFor({ timeout: 30000 });
-    await page.getByText('13 autos disponibles hoy').first().waitFor();
-    for (const t of ['Precio a la vista', 'Fotos reales de cada auto', 'Respuesta inmediata']) await page.getByText(t).first().waitFor();
+    await page.getByRole('heading', { level: 1 }).filter({ hasText: 'Autos seminuevos seleccionados' }).waitFor({ timeout: 30000 });
+    // Los quita-miedos van en el cierre (y en el hero en pantallas grandes)
+    for (const t of ['Autos verificados', 'Papeles en regla', 'Precio a la vista']) await page.locator('#contacto').getByText(t, { exact: true }).waitFor();
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     if (overflow > 0) throw new Error('scroll horizontal en inicio: ' + overflow + 'px');
-    const heroCta = page.locator('a', { hasText: 'Ver los 13 autos' }).first();
+    const heroCta = page.locator('a', { hasText: 'Ver inventario' }).first();
     if (!(await heroCta.isVisible())) throw new Error('el botón principal no se ve sin hacer scroll');
     const box = await heroCta.boundingBox();
     if (box.y + box.height > 844) throw new Error('el botón principal queda abajo del primer pantallazo');
-    step('hero: prueba social, título, botón y quita-miedos en el primer pantallazo');
+    // 30-oct (versión 2): fotos en carrusel que se desliza y cambia solo; el auto va abajo a la derecha; sin «¿Qué buscas?»
+    const slides = page.locator('[aria-roledescription="carrusel de autos"] > [aria-roledescription="auto"]');
+    if ((await slides.count()) < 3) throw new Error('el hero debería tener un carrusel de autos');
+    const caption = slides.first().locator('a[href^="/autos/"]');
+    const cap = await caption.boundingBox();
+    const hero = await page.locator('[aria-roledescription="carrusel de autos"]').boundingBox();
+    if (cap.x + cap.width < hero.x + hero.width * 0.75 || cap.y < hero.y + hero.height / 2) throw new Error('el auto debería ir abajo a la derecha de la foto');
+    if (await page.getByText('¿Qué buscas?').count()) throw new Error('debería haberse quitado «¿Qué buscas?» del hero');
+    await page.waitForFunction(() => document.querySelector('[aria-roledescription="carrusel de autos"]').scrollLeft > 0, null, { timeout: 9000 });
+    step('hero: título y botón en el primer pantallazo; carrusel que avanza solo con el auto abajo a la derecha');
+    // Lo que el dueño pidió quitar (28-oct)
+    for (const gone of ['autos disponibles hoy', '¿Cuál es tu presupuesto?', 'Ver del más barato al más caro']) {
+      if (await page.getByText(gone).count()) throw new Error('debería haberse quitado: ' + gone);
+    }
+    if (await page.locator('a[href*="waze"]').count()) throw new Error('debería haberse quitado el botón de Waze');
+    if (await page.locator('a[href="/autos?precio=0-300000"]').count()) throw new Error('debería haberse quitado el presupuesto');
+    step('sin «N autos disponibles hoy», sin presupuesto y sin Waze');
+    // 29-oct: se quitaron los números de confianza; la franja de marcas lleva logos
+    for (const gone of ['Autos entregados', 'Años de experiencia', 'Tiempo de respuesta']) {
+      if (await page.getByText(gone).count()) throw new Error('debería haberse quitado: ' + gone);
+    }
+    const logos = await page.locator('section[aria-label="Marcas en inventario"] svg').count();
+    if (logos < 10) throw new Error('la franja de marcas debería llevar logos, hay ' + logos);
+    step(`sin números de confianza; franja de marcas con ${logos} logos`);
+    await page.getByRole('heading', { name: 'Autos listos para manejar' }).waitFor();
+    const grid = page.locator('section[aria-labelledby=destacados] article');
+    if ((await grid.count()) !== 8) throw new Error('el inventario del inicio debería mostrar 8 autos, hay ' + (await grid.count()));
+    const [c1, c2] = [await grid.nth(0).boundingBox(), await grid.nth(1).boundingBox()];
+    if (Math.abs(c1.y - c2.y) > 2 || c2.x <= c1.x) throw new Error('el inventario del inicio debería ir en 2 columnas');
+    await page.locator('section[aria-labelledby=destacados] a', { hasText: 'Ver todos' }).last().waitFor();
+    step('inventario: 8 autos en 2 columnas y «Ver todos» abajo');
+    // 31-oct: categorías con ícono (no foto)
+    const tiles = page.locator('nav[aria-label="Explora por tipo"] a');
+    if ((await tiles.count()) < 3 || !(await tiles.first().locator('svg').count()) || (await tiles.locator('img').count())) throw new Error('las categorías deben llevar ícono, no foto');
+    step('categorías con ícono');
+    // Beneficios divididos en 2: una imagen para comprar y otra para vender, con sus puntos y sin botones
+    const buy = page.locator('article[aria-labelledby=al-comprar]');
+    const sellBox = page.locator('article[aria-labelledby=al-vender]');
+    for (const t of ['Asesoramiento', 'Autos confiables', 'Papeles en regla', 'Precio justo']) await buy.getByRole('heading', { name: t, exact: true }).waitFor();
+    for (const t of ['Sácale más valor', 'Evita estafas', 'Sin citas con desconocidos', 'Papeleo y placas', 'Precio correcto']) await sellBox.getByRole('heading', { name: t, exact: true }).waitFor();
+    if (!(await buy.locator('img[src*="comprar-tu-auto"]').count()) || !(await sellBox.locator('img[src*="vende-tu-auto"]').count())) throw new Error('cada beneficio debe llevar su imagen');
+    await sellBox.getByText('Ganas más que en un lote').waitFor();
+    if (await page.locator('section[aria-labelledby=beneficios] a').count()) throw new Error('los beneficios no deben llevar botones');
+    step('beneficios en 2 con imagen (al comprar / al vender, con «Ganas más que en un lote») y sin botones');
+    if ((await page.locator('section[aria-labelledby=compra] article').count()) < 4) throw new Error('falta el carrusel de autos verificados');
+    if (await page.getByText('Ver la ficha de este auto').count()) throw new Error('debería haberse quitado «Ver la ficha de este auto»');
+    // Comparativa en tabla
+    const rows = page.locator('#diferencia ~ div table tbody tr');
+    if ((await rows.count()) !== 5) throw new Error('la comparativa debe ser una tabla de 5 filas, hay ' + (await rows.count()));
+    step('carrusel de autos verificados y comparativa en tabla');
+    // 31-oct: página más corta
+    for (const gone of ['Un toque y ya estás hablando con nosotros.', 'Tu próximo auto en 3 pasos.', 'Recién vendidos', 'Sácale más valor a tu vehículo.']) {
+      if (await page.getByRole('heading', { name: gone }).count()) throw new Error('debería haberse quitado: ' + gone);
+    }
+    if (await page.getByText('Ven a conocerlo').count()) throw new Error('los autos no están en un lote: no debe decir «Ven a conocerlo»');
     const faq = page.locator('details', { hasText: '¿Puedo ver el auto en persona?' });
     await faq.locator('summary').click();
-    await faq.getByText('de lunes a sábado de').waitFor();
-    step('preguntas frecuentes abren');
+    await faq.getByText('Sí, con cita.').waitFor();
+    const askBox = await page.locator('a', { hasText: 'Pregúntanos por WhatsApp' }).boundingBox();
+    const lastQ = await page.locator('details').last().boundingBox();
+    if (askBox.y < lastQ.y) throw new Error('«¿No ves tu pregunta?» debe ir abajo de las preguntas');
+    step('sin «Un toque…», «3 pasos» ni vendidos; preguntas abren y «¿No ves tu pregunta?» va abajo');
+    // Cierre: carrusel con la tarjeta del centro más grande
+    const flow = page.locator('[aria-label="Algunos autos disponibles"]');
+    await flow.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(500);
+    const sizes = await flow.locator('a').evaluateAll((els) => els.slice(0, 3).map((e) => Math.round(e.getBoundingClientRect().height)));
+    if (!(sizes[1] > sizes[0] && sizes[1] > sizes[2])) throw new Error('la tarjeta del centro debe ser la más grande: ' + sizes);
+    step('cierre: carrusel con la tarjeta del centro más grande (' + sizes.join(' / ') + ')');
     await page.locator('a[href="/autos?tipo=Blindado"]').first().click();
     await page.getByText('2 autos encontrados').waitFor({ timeout: 30000 });
-    step('historia «Blindados» del inicio filtra el catálogo → 2');
+    step('categoría «Blindados» del inicio filtra el catálogo → 2');
     await page.goto(B + '/');
-    const budget = page.locator('a[href="/autos?precio=0-300000"]');
-    const label = (await budget.innerText()).match(/(\d+) autos?/)[1];
-    await budget.click();
-    await page.getByText(`${label} ${label === '1' ? 'auto encontrado' : 'autos encontrados'}`).waitFor({ timeout: 30000 });
-    step(`presupuesto «Hasta $300k» del inicio coincide con el catálogo → ${label}`);
+    await page.locator('footer a[href="/admin/login"]', { hasText: 'Administración' }).waitFor();
+    await page.locator('footer img[alt="H3 Seminuevos"]').waitFor({ state: 'attached' });
+    for (const t of ['WhatsApp', 'Cómo llegar']) await page.locator('footer').getByText(t, { exact: true }).waitFor({ state: 'attached' });
+    step('pie de página nuevo: logo, contacto directo y acceso discreto al panel');
 
     // Catálogo con filtro desde URL
     await page.goto(B + '/autos?tipo=Deportivo');
@@ -68,16 +136,34 @@ const step = (m) => console.log('✔', m);
     const cb = await cta.boundingBox();
     if (cb.y + cb.height > 844) throw new Error('el botón de WhatsApp queda abajo del primer pantallazo: ' + Math.round(cb.y + cb.height));
     await page.getByText('Te respondemos de inmediato').first().waitFor();
-    const ask = page.locator('a', { hasText: 'Kilometraje: pregúntanos' });
-    const askHref = decodeURIComponent(await ask.getAttribute('href'));
-    if (!askHref.includes('kilometraje') || !askHref.includes('Ford Mustang GT Premium 2022')) throw new Error('mensaje de dato faltante: ' + askHref);
+    // Dato faltante: no aparece en el resumen ni en la ficha; abajo hay un aviso con botón para preguntarlo
+    if (await page.getByText('Pregúntanos').count()) throw new Error('la ficha no debe mostrar «Pregúntanos»');
+    if (await page.locator('section[aria-labelledby=ficha] dt', { hasText: 'Kilometraje' }).count()) throw new Error('el kilometraje sin dato no debe salir en la ficha');
+    // 31-oct: sin botón «Preguntar» en la ficha técnica; solo el aviso con los datos por confirmar
+    await page.locator('section[aria-labelledby=ficha]').getByText('Datos por confirmar: kilometraje').waitFor();
+    if (await page.locator('section[aria-labelledby=ficha] a').count()) throw new Error('la ficha técnica no debe llevar botones');
+    // Menos llamadas a la acción: sin «Cita» ni «Agendar cita»; en el contenido, solo el botón principal y «Mándaselo por WhatsApp»
+    for (const gone of ['Agendar cita', 'Agéndala por WhatsApp']) {
+      if (await page.getByText(gone).count()) throw new Error('debería haberse quitado: ' + gone);
+    }
+    if (await page.locator('main a', { hasText: /^\s*Cita\s*$/ }).count()) throw new Error('debería haberse quitado el botón «Cita»');
+    // Quedan el botón principal, «Mándaselo por WhatsApp» y la barra fija de abajo
+    const waInMain = await page.locator('main a[href*="wa.me"]').count();
+    if (waInMain !== 3) throw new Error('en la ficha solo deben quedar 3 enlaces de WhatsApp (principal, «Mándaselo» y barra fija), hay ' + waInMain);
     const ld = await page.locator('script[type="application/ld+json"]').allTextContents();
     if (!ld.some((t) => t.includes('BreadcrumbList'))) throw new Error('faltan migas de pan para Google');
-    step('detalle: botón y quita-miedos en el primer pantallazo, «Kilometraje: pregúntanos» y migas de pan');
+    step('detalle: botón en el primer pantallazo, sin filas vacías, aviso de datos por confirmar, solo 3 WhatsApp (principal, «Mándaselo» y barra fija) y migas de pan');
     await page.locator('button[aria-label="Ver foto 3 de 10"]').click();
-    await page.getByRole('dialog', { name: 'Galería' }).getByText('3 / 10').waitFor();
+    const dialog = page.getByRole('dialog', { name: 'Galería' });
+    await dialog.getByText('3 / 10').waitFor();
+    const close = dialog.getByRole('button', { name: 'Cerrar galería' });
+    const closeColors = await close.evaluate((e) => [getComputedStyle(e).backgroundColor, getComputedStyle(e).color]);
+    if (closeColors[0] !== 'rgb(255, 255, 255)' || !(await close.innerText()).includes('Cerrar')) throw new Error('el botón Cerrar no es claro: ' + closeColors);
+    await close.click();
+    await dialog.waitFor({ state: 'detached' });
+    await page.locator('button[aria-label="Ver foto 3 de 10"]').click();
     await page.keyboard.press('Escape');
-    await page.getByRole('dialog', { name: 'Galería' }).waitFor({ state: 'detached' });
+    await dialog.waitFor({ state: 'detached' });
     await page.click('button:has-text("Ver las 10 fotos")');
     await page.locator('button[aria-label="Ver foto 10 de 10"]').waitFor();
     step('cuadrícula de fotos: abre la foto tocada y muestra todas');
@@ -88,7 +174,11 @@ const step = (m) => console.log('✔', m);
     await page.locator('section[aria-labelledby=fotos]').getByRole('tab', { name: /Interior/ }).click();
     await page.click('button:has-text("Ver las 10 fotos")');
     if ((await page.locator('section[aria-labelledby=fotos] ul button[aria-label$="de 10"]').count()) !== 10) throw new Error('la pestaña Interior no muestra 10 fotos');
-    step('fotos por sección: «Interior» del M3 muestra sus 10 fotos');
+    const tabs = await page.locator('section[aria-labelledby=fotos] [role=tab]').allInnerTexts();
+    if (tabs.some((t) => /Detalles|Motor/.test(t))) throw new Error('solo deben quedar Exterior e Interior: ' + tabs.join(', '));
+    if (await page.getByText('Ven a conocerlo').count()) throw new Error('la ficha no debe decir «Ven a conocerlo»');
+    await page.getByText('Míralo con cita.').waitFor();
+    step('fotos por sección: solo Exterior e Interior (Interior del M3 con 10 fotos); se ve con cita');
     await page.goto(B + '/autos/ford-expedition-platinum-4x4-2017');
     await page.locator('a[href="#equipamiento"]', { hasText: 'Equipamiento (9)' }).waitFor({ timeout: 30000 });
     const eqItems = await page.locator('section#equipamiento li').count();
@@ -96,16 +186,22 @@ const step = (m) => console.log('✔', m);
     if (await page.locator('section[aria-labelledby=destaca]').getByText('Asientos con calefacción y ventilación').count()) throw new Error('«Lo que destaca» repite el equipamiento');
     step('equipamiento: 9 elementos agrupados y sin repetir en «Lo que destaca»');
 
-    // «Tus dudas, resueltas»: contesta con datos reales o pregunta por WhatsApp
+    // 29-oct: sin «Tus dudas»; los documentos confirmados salen como filas de la ficha técnica
     await page.goto(B + '/autos/toyota-land-cruiser-blindada-2014');
-    const dudas = page.locator('#dudas');
-    await dudas.waitFor({ timeout: 30000 });
-    await dudas.getByText('Factura de empresa.').waitFor();
-    await dudas.getByText('Nivel 3 Plus (BS Blindaje).').waitFor();
-    const askServ = dudas.locator('div', { hasText: '¿Tiene sus servicios?' }).locator('a').first();
-    const askMsg = decodeURIComponent(await askServ.getAttribute('href'));
-    if (!askMsg.includes('¿Tiene sus servicios?') || !askMsg.includes('Toyota Land Cruiser')) throw new Error('pregunta sin el auto: ' + askMsg);
-    step('dudas: factura y blindaje contestados; lo que falta pregunta por WhatsApp con el auto');
+    const ficha = page.locator('section[aria-labelledby=ficha]');
+    await ficha.waitFor({ timeout: 30000 });
+    await ficha.locator('div', { hasText: 'Factura' }).getByText('De empresa').waitFor();
+    await ficha.getByText('Nivel 3 Plus (BS Blindaje)').waitFor();
+    if (await page.locator('#dudas').count()) throw new Error('la sección «Tus dudas» debería haberse quitado');
+    if (await ficha.locator('dt', { hasText: 'Servicios' }).count()) throw new Error('servicios sin dato no debe salir');
+    step('ficha: factura y blindaje confirmados como filas; sin «Tus dudas» ni filas vacías');
+
+    // 31-oct: las tarjetas ya no llevan botón de WhatsApp; toda la tarjeta abre la ficha
+    await page.goto(B + '/autos');
+    await page.locator('article').first().waitFor({ timeout: 30000 });
+    if (await page.locator('article a[aria-label^="Escribir por WhatsApp"]').count()) throw new Error('las tarjetas no deben llevar WhatsApp');
+    if (!(await page.locator('article').first().locator('a[href^="/autos/"]').count())) throw new Error('la tarjeta debe abrir la ficha');
+    step('tarjetas sin WhatsApp: abren la ficha del auto');
 
     // Detalle + galería
     await page.goto(B + '/autos/bmw-m3-2018');

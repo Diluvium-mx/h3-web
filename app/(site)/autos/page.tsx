@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { MapPin } from "lucide-react";
 import { CatalogBrowser } from "@/components/catalog/catalog-browser";
 import { cardData } from "@/lib/cars";
 import { getPublicCars } from "@/lib/data";
@@ -15,30 +14,26 @@ export const metadata: Metadata = {
 export default async function CatalogPage() {
   const cars = await getPublicCars();
   return (
-    <div className="relative overflow-hidden">
-      {/* Franjas de carreras en los colores de la marca */}
-      <div className="pointer-events-none absolute -top-10 -right-24 h-56 w-[28rem] -rotate-12 sm:-right-10 lg:top-8" aria-hidden="true">
-        <span className="absolute top-8 left-0 h-6 w-full origin-right -skew-x-12 bg-volt animate-[stripe_0.9s_var(--ease-out-expo)_both]" />
-        <span className="absolute top-16 left-10 h-6 w-full origin-right -skew-x-12 bg-brand animate-[stripe_0.9s_var(--ease-out-expo)_0.12s_both]" />
-        <span className="absolute top-24 left-20 h-2 w-full origin-right -skew-x-12 bg-night animate-[stripe_0.9s_var(--ease-out-expo)_0.24s_both]" />
-      </div>
-      <div className="relative mx-auto max-w-7xl px-4 pt-24 pb-24 sm:px-6 sm:pt-28">
-        <header className="stagger mb-6">
-          <p className="flex w-fit items-center gap-1.5 rounded-full bg-card px-3 py-1.5 text-xs font-semibold text-fg shadow-sm ring-1 ring-line">
-            <MapPin className="size-3.5 text-brand" />
+    <>
+      {/* Franja oscura como el inicio; el buscador queda flotando sobre su borde */}
+      <header className="glow-night relative overflow-hidden px-4 pt-24 pb-14 text-white sm:px-6 sm:pt-32 sm:pb-20">
+        <div className="stagger relative mx-auto max-w-7xl">
+          <p className="font-tech flex items-center gap-3 text-[11px] text-white/65" style={vars({ "--i": 0 })}>
+            <span className="draw-line rule-accent h-px w-8" />
             Villahermosa, Tabasco
           </p>
-          <h1 className="font-display relative isolate mt-4 inline-block text-[3.4rem] sm:text-7xl" style={vars({ "--i": 1 })}>
-            <span className="absolute inset-x-[-0.15em] bottom-[0.08em] -z-10 h-[0.38em] -skew-x-12 bg-volt" />
-            Catálogo
+          <h1 className="font-display mt-4 text-[2.8rem] sm:text-7xl" style={vars({ "--i": 1 })}>
+            Inventario
           </h1>
-          <p className="mt-3 max-w-xl text-mute" style={vars({ "--i": 2 })}>
-            <b className="text-fg">{cars.length} autos</b> listos para rodar. Toca el que te guste y escríbenos directo
-            por WhatsApp.
+          <p className="mt-3 max-w-xl text-white/70" style={vars({ "--i": 2 })}>
+            Autos verificados y con papeles en regla. Toca el que te guste y escríbenos por WhatsApp para agendar tu cita.
           </p>
-        </header>
+        </div>
+      </header>
+      {/* En celular el buscador flota sobre el borde de la franja; en computadora todo empieza debajo de ella */}
+      <div className="relative z-10 mx-auto -mt-7 max-w-7xl px-4 pb-24 sm:px-6 lg:mt-12">
         <CatalogBrowser cars={cars.map(cardData)} />
       </div>
-    </div>
+    </>
   );
 }

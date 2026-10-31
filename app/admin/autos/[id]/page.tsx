@@ -8,7 +8,7 @@ import { uploadMode } from "@/lib/upload-mode";
 
 export default function EditCarPage(props: PageProps<"/admin/autos/[id]">) {
   return (
-    <FormShell eyebrow="Editar" title="Editar auto">
+    <FormShell wide eyebrow="Editar" title="Editar auto">
       <Suspense fallback={<FormSkeleton />}>
         <EditCar params={props.params} />
       </Suspense>
