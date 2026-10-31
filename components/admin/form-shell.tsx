@@ -2,9 +2,20 @@ import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 import type { ReactNode } from "react";
 
-export function FormShell({ title, eyebrow, children }: { title: string; eyebrow: string; children: ReactNode }) {
+export function FormShell({
+  title,
+  eyebrow,
+  wide,
+  children,
+}: {
+  title: string;
+  eyebrow: string;
+  /** Más ancho en computadora (formulario de auto con vista previa a la derecha) */
+  wide?: boolean;
+  children: ReactNode;
+}) {
   return (
-    <div className="mx-auto max-w-3xl px-4 pt-6">
+    <div className={`mx-auto px-4 pt-6 ${wide ? "max-w-3xl lg:max-w-6xl" : "max-w-3xl"}`}>
       <Link href="/admin" className="inline-flex items-center gap-1 text-sm text-mute hover:text-fg">
         <ChevronLeft className="size-4" /> Inventario
       </Link>

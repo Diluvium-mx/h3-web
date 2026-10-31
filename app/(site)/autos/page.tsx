@@ -30,7 +30,8 @@ export default async function CatalogPage() {
           </p>
         </div>
       </header>
-      <div className="mx-auto -mt-7 max-w-7xl px-4 pb-24 sm:px-6">
+      {/* En celular el buscador flota sobre el borde de la franja; en computadora todo empieza debajo de ella */}
+      <div className="relative z-10 mx-auto -mt-7 max-w-7xl px-4 pb-24 sm:px-6 lg:mt-12">
         <CatalogBrowser cars={cars.map(cardData)} />
       </div>
     </>

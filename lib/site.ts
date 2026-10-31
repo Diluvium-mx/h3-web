@@ -20,6 +20,8 @@ export const site = {
   },
   // Enlace de Google Maps que dio el dueño (31-oct): lo usan «Cómo llegar» y los demás botones del mapa
   mapsUrl: "https://maps.app.goo.gl/dqzfUgVbiPhQqCmJ9",
+  // Mapa incrustado en «Visítanos» (Google Maps, sin llave), en el punto exacto del enlace del dueño
+  mapsEmbed: "https://www.google.com/maps/embed?origin=mfe&pb=!1m3!2m1!1s17.9849894,-92.9234282!6i17",
   // Horario de atención (se muestra en el sitio y en Google como datos estructurados)
   hours: "Lun a Sáb 9:00–17:00 · Dom cerrado",
   openingHours: {

@@ -1,6 +1,19 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { CalendarCheck, Camera, ClipboardList, FileText, Gauge, Handshake, ShieldCheck, TrendingUp, UserX } from "lucide-react";
+import {
+  Aperture,
+  BadgeCheck,
+  CalendarCheck,
+  Camera,
+  ClipboardList,
+  FileText,
+  Gauge,
+  Handshake,
+  SearchCheck,
+  ShieldCheck,
+  TrendingUp,
+  UserX,
+} from "lucide-react";
 import { SellForm } from "@/components/sell/sell-form";
 import { vars } from "@/lib/ui";
 
@@ -20,10 +33,13 @@ const BENEFITS = [
   { Icon: Gauge, title: "Evaluación correcta", text: "Valuamos tu auto como debe ser." },
 ];
 
+// Pasos (31-oct, pedido del dueño: evaluación en sitio, fotos para publicar y valoración final)
 const STEPS = [
   { Icon: ClipboardList, title: "Cuéntanos de tu auto", text: "Marca, modelo, año y kilometraje. Toma menos de un minuto." },
   { Icon: Camera, title: "Mándanos fotos por WhatsApp", text: "El mensaje se arma solo; tú agregas las fotos." },
-  { Icon: Gauge, title: "Te damos una evaluación correcta", text: "Revisamos tus datos y fotos y te decimos cuánto vale tu auto." },
+  { Icon: SearchCheck, title: "Evaluamos tu auto en sitio", text: "Lo revisamos en persona para conocer su estado real." },
+  { Icon: Aperture, title: "Tomamos las fotos para publicarlo", text: "Nosotros hacemos las fotos con las que se va a anunciar." },
+  { Icon: BadgeCheck, title: "Valoración final", text: "Con la revisión hecha, te damos el precio correcto de tu auto." },
   {
     Icon: Handshake,
     title: "Nos encargamos de la venta",

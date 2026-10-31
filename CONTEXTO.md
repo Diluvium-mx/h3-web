@@ -105,12 +105,12 @@ No se busca vender en línea: no hay carrito ni pagos.
 **Inicio (`/`)** — más corto y simple desde el 31-oct (pedido del dueño: «la estamos complicando mucho»).
 Acción principal: ver un auto y, ya en su ficha, mandar WhatsApp.
 1. **Encabezado fijo:** logo, Inventario, Vende tu auto, Contacto y botón de WhatsApp.
-2. **Hero:** carrusel de fotos reales con **más zoom** (se desliza y cambia solo cada 5 s; el auto y su precio
-   abajo a la derecha). **Sin degradado oscuro:** el texto va en una hoja clara que se monta sobre la foto (en
-   computadora, una tarjeta). El título sube palabra por palabra y **«premium» va en cursiva roja** con un
-   trazo a mano. En celular la foto **se queda fija** y la hoja sube por encima al bajar (31-oct: el
-   movimiento de la foto la hacía temblar).
-3. **Franja de marcas** con logos.
+2. **Hero:** «Autos seminuevos **seleccionados** en Villahermosa» (31-oct: se quitó «premium»; la palabra va
+   en cursiva roja con un trazo a mano). En **celular**, carrusel de fotos reales con zoom que cambia solo
+   cada 5 s; la foto **se queda fija** y la hoja clara sube por encima al bajar. En **computadora**, una sola
+   **foto fija** (sin carrusel) con el auto y su precio abajo a la derecha, y el texto en una tarjeta.
+   Sin degradado oscuro.
+3. **Franja de marcas** con logos, **recta** y pegada justo debajo del hero (31-oct).
 4. **Inventario:** categorías con **íconos a dos tonos** en un cuadro rojo claro (Phosphor Icons, MIT; la
    pickup se dibujó con el mismo estilo; Recreativos usa montañas) y 8 autos en 2 columnas con «Ver todos».
    Las tarjetas **no llevan botón de WhatsApp** (toda la tarjeta abre la ficha) y tienen detalles de color:
@@ -119,15 +119,19 @@ Acción principal: ver un auto y, ya en su ficha, mandar WhatsApp.
    - «Al comprar un auto»: imagen de la entrega de la llave (hecha con Arcads) y asesoramiento, autos
      confiables, papeles en regla y precio justo.
    - «Al vender tu auto» (fondo oscuro): la imagen de la llave y la carpeta con «Ganas más que en un lote», y
-     sácale más valor, evita estafas, sin citas con desconocidos, papeleo y placas y precio correcto.
+     sácale más valor, evita estafas, sin citas con desconocidos, papeleo y placas y precio correcto. Aquí
+     los íconos van en **verde** (31-oct).
    - Las imágenes aparecen con un efecto de cortinilla.
 6. **«Autos verificados, con sus papeles en regla.»** (palabras en cursiva roja y subrayado a mano):
-   carrusel de tarjetas grandes.
+   carrusel de tarjetas grandes, sin texto abajo del título (31-oct).
 7. **Reseñas:** solo si el dueño agrega reseñas reales.
 8. **«Compra con certeza, no a ciegas.»:** tabla comparativa simple «Lo de siempre» contra «En H3».
 9. **Preguntas frecuentes**, con «¿No ves tu pregunta? Pregúntanos por WhatsApp» hasta abajo.
-10. **Cierre:** «Cada auto es único. Cuando se vende, ya no vuelve.» y un carrusel donde la tarjeta del centro
-    se ve completa y más grande y las de los lados se alcanzan a ver. Después, la tarjeta «Visítanos».
+10. **Cierre:** «Cada auto es **único**. Cuando se vende, **ya no vuelve**.» («único» en cursiva con trazo y
+    «ya no vuelve» con un marcador rojo detrás) y un carrusel donde la tarjeta del centro se ve completa y más
+    grande. Después, **«Visítanos»** rediseñada (31-oct): tarjeta oscura con «Nuestra oficina», dirección,
+    horario, «Los autos se ven con cita», botones «Cómo llegar» y teléfono, redes y el **mapa de Google** con
+    el punto exacto de la oficina (`site.mapsEmbed` en `lib/site.ts`).
 11. **Pie de página nuevo:** centrado, con el logo real de H3 (sin el nombre escrito en otra letra), enlaces,
     WhatsApp, teléfono, cómo llegar, redes, dirección y horario.
 - **Celular (31-oct):** el encabezado ya no deja una línea (negra en el inicio, blanca en las fichas) sobre las
@@ -206,11 +210,14 @@ y las ideas de la investigación de repos (`INVESTIGACION-REPOS.md`).
 **Vende tu auto (`/vende-tu-auto`)** — título «Sácale más valor a tu vehículo.» sobre franja oscura, con la
 imagen de Arcads en pantallas grandes (30-oct).
 - En celular, el formulario va primero; después «Por qué vender con H3» (ganas más que en un lote, evita
-  estafas, sin citas con desconocidos, papeleo y placas, evaluación correcta) y «Cómo funciona»:
+  estafas, sin citas con desconocidos, papeleo y placas, evaluación correcta) y «Cómo funciona» (6 pasos
+  desde el 31-oct):
   1. Cuéntanos de tu auto.
   2. Mándanos fotos por WhatsApp.
-  3. Te damos una evaluación correcta.
-  4. Nos encargamos de la venta (filtramos interesados, agendamos citas, papeleo y placas).
+  3. Evaluamos tu auto en sitio.
+  4. Tomamos las fotos para publicarlo.
+  5. Valoración final.
+  6. Nos encargamos de la venta (filtramos interesados, agendamos citas, papeleo y placas).
 - Formulario de 3 partes:
   1. Datos del auto.
   2. Detalles.
@@ -226,6 +233,15 @@ imagen de Arcads en pantallas grandes (30-oct).
 - Inventario con búsqueda y pestañas: Disponibles, Apartados y Vendidos.
 - **Formulario de auto en 4 pasos:** 1) fotos, 2) datos del auto (marca, modelo, año, precio, km, tipo,
   transmisión), 3) descripción y 4) publicar. Todo lo demás va plegado en «Más detalles (opcional)».
+- **Pensado para subir autos fácil (31-oct):**
+  - **«Así se verá en la página»:** la tarjeta del auto tal como sale en el sitio, mientras se llena.
+  - **«Dónde va a aparecer»:** inventario, su categoría (y «Blindados» si aplica), inicio (destacado sale
+    primero), etiqueta «Apartado» o, si está vendido, que sale del inventario y su enlace dice «Vendido».
+  - Barra fija abajo con **«Falta: Fotos, Precio…»** (al tocar, lleva al campo) o «Todo listo para publicar».
+  - En computadora el formulario va a 2 columnas (formulario y vista previa fija); en celular, uno debajo
+    del otro.
+  - Al publicar: **«¡Listo! Tu auto ya está en la página»** con «Ver en la página», «Compartir por WhatsApp»
+    y «Publicar otro».
 - Alta y edición de autos con fotos (se comprimen en el teléfono).
 - Importar de Shopify.
 - **Sección de cada foto** (exterior o interior, desde el 30-oct): un selector debajo de cada foto.
@@ -256,7 +272,7 @@ imagen de Arcads en pantallas grandes (30-oct).
 | Colores | Tema claro premium desde el 28-oct | `app/globals.css` (`@theme`) |
 | Íconos de categorías | Dibujados para el sitio (SUV, deportivo, blindado, pickup…) | `components/body-icons.tsx` |
 | Logos de marcas (franja en movimiento) | Simple Icons, licencia CC0, en un solo color; Aodes no tiene y va solo con su nombre | `components/brand-logos.tsx` |
-| Tipografía (31-oct) | **Instrument Sans** para títulos y texto; **Instrument Serif** en cursiva solo para resaltar palabras («premium»). Antes: Saira/Geist y Albert Sans, que no convencieron | `app/layout.tsx` |
+| Tipografía (31-oct) | **Instrument Sans** para títulos y texto; **Instrument Serif** en cursiva solo para resaltar palabras («seleccionados», «único»). Antes: Saira/Geist y Albert Sans, que no convencieron | `app/layout.tsx` |
 | Imagen de «Al comprar un auto» | Hecha con Arcads: entrega de la llave dentro de un auto (sin caras ni marcas). 43 KB | `public/img/comprar-tu-auto.webp` |
 | Imagen de «Vende tu auto» | Hecha con Arcads: llave, carpeta y pluma (sin autos, para no chocar con «fotos reales»). Única imagen decorativa (61 KB) servida por el hosting; las fotos de autos siguen en Cloudinary | `public/img/vende-tu-auto.webp` |
 | Datos del negocio | Teléfono, dirección, horario y redes | `lib/site.ts` |
@@ -595,6 +611,8 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
 
 - **Una sola versión (31-oct):** el dueño eligió la versión 2 y pidió no hacer dos. La versión 1
   (`version-scrollcraft`) quedó congelada.
+- **Inventario en computadora (31-oct):** la franja oscura y la parte blanca ya cuadran; los filtros y las
+  categorías tienen su espacio y no quedan detrás de lo negro.
 - **Inicio más corto (31-oct):** hero → marcas → inventario → beneficios → autos verificados → (reseñas) →
   comparativa → preguntas → cierre. Tarjetas sin botón de WhatsApp. Categorías con fotos reales.
 

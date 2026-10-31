@@ -5,7 +5,7 @@ import { BrandLogo, hasBrandLogo } from "@/components/brand-logos";
 export function Marquee({ items }: { items: string[] }) {
   const row = [...items, "Ready to drive"];
   return (
-    <div className="relative -rotate-1 overflow-hidden border-y border-line bg-card py-4" aria-hidden="true">
+    <div className="relative overflow-hidden border-y border-line bg-card py-4" aria-hidden="true">
       {/* Bordes que se desvanecen */}
       <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-12 bg-gradient-to-r from-card to-transparent sm:w-24" />
       <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-gradient-to-l from-card to-transparent sm:w-24" />

@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ArrowRight, Star } from "lucide-react";
+import Image from "next/image";
+import { ArrowRight, ArrowUpRight, Star } from "lucide-react";
 import { WhatsAppIcon } from "@/components/icons";
 import { HeroCarousel, type HeroSlide } from "@/components/home/hero-carousel";
 import { formatPrice, type Car } from "@/lib/cars";
@@ -16,14 +17,15 @@ export type Rating = { count: number; avg: number };
 const TITLE: { text: string; accent?: boolean }[] = [
   { text: "Autos" },
   { text: "seminuevos" },
-  { text: "premium", accent: true },
+  { text: "seleccionados", accent: true },
   { text: "en" },
   { text: "Villahermosa." },
 ];
 
 // Hero (pedido del dueño, 31-oct): fotos reales con más zoom, en un carrusel que se desliza y cambia solo.
 // Sin degradado oscuro: el texto va en una hoja clara que se monta sobre la foto (en computadora, una
-// tarjeta). El título sube palabra por palabra y «premium» va en cursiva roja con un trazo a mano.
+// tarjeta). El título sube palabra por palabra y «seleccionados» (antes «premium», cambio del dueño 31-oct)
+// va en cursiva roja con un trazo a mano. En computadora va una sola foto fija, sin carrusel (31-oct).
 // La foto no se mueve al bajar (31-oct: el movimiento la hacía temblar).
 export function Hero({ featured, rating }: { featured: Car[]; rating: Rating }) {
   const slides: HeroSlide[] = featured
@@ -43,9 +45,36 @@ export function Hero({ featured, rating }: { featured: Car[]; rating: Rating }) 
       {/* Fotos */}
       {/* En celular la foto se queda fija y la hoja blanca sube por encima al bajar (sin mover la foto) */}
       <div className="relative h-[57svh] min-h-[380px] overflow-hidden bg-night max-lg:sticky max-lg:top-0 lg:h-[88svh]">
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 lg:hidden">
           <HeroCarousel slides={slides} />
         </div>
+        {/* Computadora: una sola foto fija con el auto y su precio abajo a la derecha */}
+        {slides[0] && (
+          <div className="absolute inset-0 hidden lg:block">
+            <Image
+              src={slides[0].image}
+              alt={slides[0].alt}
+              fill
+              sizes="100vw"
+              quality={70}
+              className="object-cover object-[50%_64%]"
+            />
+            <Link
+              href={`/autos/${slides[0].slug}`}
+              className="group absolute right-6 bottom-14 z-10 flex items-center gap-3 rounded-md bg-night/70 py-2 pr-2.5 pl-3.5 text-white shadow-[0_10px_30px_-12px_rgb(0_0_0/0.6)] ring-1 ring-white/10 backdrop-blur-sm transition-colors hover:bg-night/85"
+            >
+              <span className="text-right">
+                <span className="block text-[11px] font-medium text-white/65">{slides[0].eyebrow}</span>
+                <span className="block text-sm font-semibold">
+                  {slides[0].model} · {slides[0].price}
+                </span>
+              </span>
+              <span className="grid size-8 place-items-center rounded-sm bg-white text-night transition-transform duration-300 group-hover:rotate-45">
+                <ArrowUpRight className="size-4" />
+              </span>
+            </Link>
+          </div>
+        )}
         {/* Sombra mínima arriba, solo para que se lea el encabezado */}
         <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/40 to-transparent" />
       </div>
@@ -71,7 +100,7 @@ export function Hero({ featured, rating }: { featured: Car[]; rating: Rating }) 
                   {accent ? (
                     <>
                       <span className="font-accent pr-1 text-[1.12em] text-brand">{text}</span>
-                      {/* Trazo a mano bajo «premium» */}
+                      {/* Trazo a mano bajo «seleccionados» */}
                       <svg
                         className="pointer-events-none absolute -bottom-[0.02em] left-0 h-[0.22em] w-full text-brand"
                         viewBox="0 0 200 20"

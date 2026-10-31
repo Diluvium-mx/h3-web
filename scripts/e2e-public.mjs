@@ -20,7 +20,7 @@ const step = (m) => console.log('✔', m);
   try {
     // Inicio: estructura de landing (título claro, CTA, quita-miedos, confianza, inventario, vende tu auto)
     await page.goto(B + '/');
-    await page.getByRole('heading', { level: 1 }).filter({ hasText: 'Autos seminuevos premium' }).waitFor({ timeout: 30000 });
+    await page.getByRole('heading', { level: 1 }).filter({ hasText: 'Autos seminuevos seleccionados' }).waitFor({ timeout: 30000 });
     // Los quita-miedos van en el cierre (y en el hero en pantallas grandes)
     for (const t of ['Autos verificados', 'Papeles en regla', 'Precio a la vista']) await page.locator('#contacto').getByText(t, { exact: true }).waitFor();
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);

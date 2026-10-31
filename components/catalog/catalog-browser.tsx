@@ -268,7 +268,7 @@ export function CatalogBrowser({ cars }: { cars: Car[] }) {
 
         {/* Tipos con ícono (acceso rápido) */}
         <div
-          className="no-scrollbar -mx-4 mt-5 flex snap-x scroll-px-4 gap-3.5 overflow-x-auto px-4 pt-1 pb-2 sm:mx-0 sm:scroll-px-0 sm:px-0"
+          className="no-scrollbar -mx-4 mt-5 flex snap-x scroll-px-4 gap-3.5 overflow-x-auto px-4 pt-1 pb-5 sm:mx-0 sm:scroll-px-0 sm:px-0"
           role="group"
           aria-label="Tipo de auto"
         >

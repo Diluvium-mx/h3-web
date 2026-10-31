@@ -2,6 +2,14 @@
 
 Lo más reciente va arriba.
 
+## 31 de octubre de 2026 (cierre) — correcciones del sitio y panel más fácil
+
+- Hero con «seleccionados» y foto fija en computadora; franja de marcas recta bajo el hero; íconos verdes al vender.
+- «Cómo funciona» con evaluación en sitio, fotos para publicar y valoración final; cierre con énfasis y «Visítanos» con mapa.
+- Panel: vista previa de la tarjeta, «Dónde va a aparecer», barra «Falta: …» y confirmación con «Ver», «Compartir» y «Publicar otro».
+
+Falta: que el dueño lo valide en la vista previa #1; conectar Cloudinary; cambiar la contraseña `12345`.
+
 ## 31 de octubre de 2026 (noche) — dirección nueva y detalles del celular
 
 - Dirección nueva (C. Pedro C. Colorado 216) y su enlace de Google Maps en todos los botones del mapa.

@@ -21,7 +21,7 @@ export default async function HomePage() {
     <>
       <Hero featured={featured.slice(0, 5)} rating={rating} />
       {brands.length > 0 && (
-        <section aria-label="Marcas en inventario" className="overflow-hidden pt-10 pb-2 sm:pt-14">
+        <section aria-label="Marcas en inventario" className="relative z-10 overflow-hidden">
           <Marquee items={brands} />
         </section>
       )}

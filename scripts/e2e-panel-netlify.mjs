@@ -44,7 +44,7 @@ const digits = (s) => s.replace(/[^\d]/g, "");
     const changed = String(Number(digits(original)) + 1000);
     await page.fill('input[placeholder="650,000"]', changed);
     await page.click('button:has-text("Guardar cambios")');
-    await page.waitForURL(B + "/admin", { timeout: 30000 });
+    await page.waitForURL(/\/admin\?(publicado|guardado)=/, { timeout: 30000 });
     step(`precio guardado: ${original} → ${changed}`);
 
     const pub = await browser.newPage();
@@ -69,7 +69,7 @@ const digits = (s) => s.replace(/[^\d]/g, "");
         await page.getByText("Guardar cambios").waitFor({ timeout: 30000 });
         await page.fill('input[placeholder="650,000"]', digits(original));
         await page.click('button:has-text("Guardar cambios")');
-        await page.waitForURL(B + "/admin", { timeout: 30000 });
+        await page.waitForURL(/\/admin\?(publicado|guardado)=/, { timeout: 30000 });
         step("precio regresado a " + original);
       } catch (e) {
         console.log("✘ no se pudo regresar el precio:", e.message);

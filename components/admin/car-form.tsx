@@ -4,7 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useTransition, type ReactNode } from "react";
-import { ArrowLeft, ArrowRight, ImagePlus, Loader2, Plus, Star, Trash2, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, ImagePlus, Loader2, Plus, Star, Trash2, X } from "lucide-react";
+import { CarPreview } from "@/components/admin/car-preview";
 import { saveCarAction, type CarInput } from "@/lib/actions";
 import {
   BODY_TYPES,
@@ -45,9 +46,21 @@ const FEATURE_IDEAS = [
 const field =
   "h-12 w-full rounded-md border border-line bg-paper px-4 text-fg placeholder:text-dim focus:border-fg/50 focus:bg-card focus:ring-4 focus:ring-fg/5 focus:outline-none";
 
-function Section({ step, title, hint, children }: { step?: number; title: string; hint?: string; children: ReactNode }) {
+function Section({
+  step,
+  title,
+  hint,
+  id,
+  children,
+}: {
+  step?: number;
+  title: string;
+  hint?: string;
+  id?: string;
+  children: ReactNode;
+}) {
   return (
-    <section className="rounded-lg bg-card p-4 ring-1 ring-line sm:p-6">
+    <section id={id} className="scroll-mt-20 rounded-lg bg-card p-4 ring-1 ring-line sm:p-6">
       <h2 className="flex items-center gap-3 font-display text-xl">
         {step && (
           <span className="grid size-8 shrink-0 place-items-center rounded-md bg-night text-sm text-white">{step}</span>
@@ -68,7 +81,7 @@ function MoreDetails({ open, children }: { open: boolean; children: ReactNode })
         <span>
           <span className="block font-display text-xl">Más detalles (opcional)</span>
           <span className="mt-1 block text-sm text-mute">
-            Motor, color, documentos, equipamiento, video… Lo que no llenes aparece como «Pregúntanos».
+            Motor, color, documentos, equipamiento, video… Lo que no llenes no aparece en la página.
           </span>
         </span>
         <Plus className="size-5 shrink-0 transition-transform duration-300 group-open:rotate-45" aria-hidden="true" />
@@ -204,6 +217,16 @@ export function CarForm({
   }, [dirty]);
 
   const uploading = photos.some((p) => !p.url && !p.error);
+  const coverUrl = photos.find((p) => p.url)?.url;
+  // Lo indispensable para que el auto se vea completo en la página
+  const missing = [
+    !coverUrl && { label: "Fotos", target: "paso-fotos" },
+    !v.brand.trim() && { label: "Marca", target: "paso-datos" },
+    !v.model.trim() && { label: "Modelo", target: "paso-datos" },
+    !v.year && { label: "Año", target: "paso-datos" },
+    !v.price && { label: "Precio", target: "paso-datos" },
+    !v.body && { label: "Tipo", target: "paso-datos" },
+  ].filter(Boolean) as { label: string; target: string }[];
 
   async function addFiles(files: FileList | null) {
     if (!files?.length || uploadMode === "none") return;
@@ -295,7 +318,7 @@ export function CarForm({
         return;
       }
       setDirty(false);
-      router.push("/admin");
+      router.push(`/admin?${initial ? "guardado" : "publicado"}=${res.id}`);
     });
   }
 
@@ -305,8 +328,9 @@ export function CarForm({
         e.preventDefault();
         save();
       }}
-      className="space-y-4"
+      className="lg:grid lg:grid-cols-[minmax(0,1fr)_19rem] lg:items-start lg:gap-8"
     >
+      <div className="min-w-0 space-y-4">
       {error && (
         <p className="rounded-md border-l-2 border-brand bg-brand-soft px-4 py-3 text-sm text-brand-hi" role="alert">
           {error}
@@ -315,8 +339,9 @@ export function CarForm({
 
       <Section
         step={1}
+        id="paso-fotos"
         title="Fotos"
-        hint="La primera es la portada. Se comprimen solas antes de subir. Si quieres, marca si cada foto es del exterior o del interior."
+        hint="La primera es la portada (la que sale en el inicio y en el inventario): usa una del exterior, de frente o de lado. Ordénalas con las flechas y marca si cada una es del exterior o del interior. Se comprimen solas antes de subir."
       >
         {uploadMode === "none" ? (
           <p className="rounded-md bg-paper p-4 text-sm text-mute">
@@ -451,7 +476,7 @@ export function CarForm({
         )}
       </Section>
 
-      <Section step={2} title="Datos del auto">
+      <Section step={2} id="paso-datos" title="Datos del auto">
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label="Marca">
             <input className={field} value={v.brand} onChange={(e) => set("brand", e.target.value)} list="brands" placeholder="Ej. BMW" required />
@@ -476,7 +501,7 @@ export function CarForm({
               <input className={`${field} pl-8`} value={withCommas(v.price)} onChange={(e) => set("price", digits(e.target.value).slice(0, 9))} inputMode="numeric" placeholder="650,000" required />
             </div>
           </Field>
-          <Field label="Kilometraje" hint="Vacío = «Pregúntanos» por WhatsApp">
+          <Field label="Kilometraje" hint="Si no lo sabes, déjalo vacío (no se muestra)">
             <input className={field} value={withCommas(v.mileage)} onChange={(e) => set("mileage", digits(e.target.value).slice(0, 7))} inputMode="numeric" placeholder="45,000" />
           </Field>
         </div>
@@ -643,7 +668,7 @@ export function CarForm({
         <p className="-mt-2 text-xs text-dim">
           {STATUS_LABEL[v.status]}:{" "}
           {v.status === "vendido"
-            ? "se oculta del catálogo y aparece en «Recién vendidos»."
+            ? "sale del inventario; su enlace dice «Vendido» y ofrece autos parecidos."
             : v.status === "apartado"
               ? "sigue visible con la etiqueta «Apartado»."
               : "visible en el catálogo."}
@@ -651,13 +676,58 @@ export function CarForm({
         <label className="flex items-center justify-between gap-4 rounded-md bg-paper p-4">
           <span>
             <span className="block font-medium">Destacado</span>
-            <span className="text-sm text-mute">Aparece primero en el inicio</span>
+            <span className="text-sm text-mute">Sale primero en el inicio y puede salir en las fotos de arriba</span>
           </span>
           <input type="checkbox" checked={v.featured} onChange={(e) => set("featured", e.target.checked)} className="size-6 accent-[var(--color-brand)]" />
         </label>
       </Section>
 
-      <div className="sticky bottom-0 z-30 -mx-4 border-t border-line bg-paper/90 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur-xl">
+      </div>
+
+      {/* Vista previa y dónde va a aparecer (en computadora queda fija a la derecha) */}
+      <aside className="mt-4 lg:sticky lg:top-6 lg:mt-0">
+        <CarPreview
+          values={{
+            brand: v.brand,
+            model: v.model,
+            version: v.version,
+            year: v.year,
+            price: v.price,
+            mileage: v.mileage,
+            transmission: v.transmission,
+            fuel: v.fuel,
+            body: v.body,
+            armored: v.armored,
+            status: v.status,
+            featured: v.featured,
+            cover: coverUrl,
+          }}
+        />
+      </aside>
+
+      <div className="sticky bottom-0 z-30 -mx-4 border-t border-line bg-paper/90 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur-xl lg:col-span-2 lg:mx-0 lg:mt-4 lg:rounded-t-lg">
+        {/* Qué falta para publicar: cada dato lleva a su sección */}
+        <p className="mb-2.5 flex flex-wrap items-center gap-1.5 text-xs" aria-live="polite">
+          {missing.length > 0 ? (
+            <>
+              <span className="text-mute">Falta:</span>
+              {missing.map((m) => (
+                <button
+                  key={m.label}
+                  type="button"
+                  onClick={() => document.getElementById(m.target)?.scrollIntoView({ behavior: "smooth", block: "start" })}
+                  className="rounded-sm bg-brand-soft px-2 py-1 font-semibold text-brand-hi"
+                >
+                  {m.label}
+                </button>
+              ))}
+            </>
+          ) : (
+            <span className="flex items-center gap-1.5 font-semibold text-wa-dark">
+              <Check className="size-3.5" strokeWidth={3} /> Todo listo para {initial ? "guardar" : "publicar"}
+            </span>
+          )}
+        </p>
         <div className="flex gap-3">
           <Link href="/admin" className="btn btn-outline h-14">
             Cancelar

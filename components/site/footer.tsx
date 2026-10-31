@@ -29,7 +29,7 @@ export function Footer() {
           <Image src="/brand/logo.png" alt={site.name} width={344} height={220} className="mx-auto h-24 w-auto sm:h-28" />
         </Link>
         <p className="reveal mx-auto mt-6 max-w-md leading-relaxed text-white/65">
-          Autos seminuevos premium en Villahermosa, Tabasco. Verificados, con papeles en regla y a precio justo.
+          Autos seminuevos seleccionados en Villahermosa, Tabasco. Verificados, con papeles en regla y a precio justo.
         </p>
 
         <nav aria-label="Pie de página" className="mt-10">

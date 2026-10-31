@@ -1,16 +1,18 @@
 import { Suspense } from "react";
 import Link from "next/link";
-import { Download, KeyRound, MessageSquareQuote, Plus, Settings } from "lucide-react";
+import Image from "next/image";
+import { CheckCircle2, Download, ExternalLink, KeyRound, MessageSquareQuote, Plus, Settings, X } from "lucide-react";
+import { WhatsAppIcon } from "@/components/icons";
 import { AdminCarList } from "@/components/admin/car-list";
 import { StorageBanner } from "@/components/admin/storage-banner";
 import { LogoutButton } from "@/components/admin/logout-button";
 import { usingDefaultPassword } from "@/lib/admin-password";
 import { requireAdmin } from "@/lib/auth";
-import { sortNewest } from "@/lib/cars";
+import { carTitle, carUrl, formatPrice, sortNewest, type Car } from "@/lib/cars";
 import { cloudinaryEnabled } from "@/lib/images";
 import { getStorageMode, listCars } from "@/lib/storage";
 
-export default function AdminPage() {
+export default function AdminPage({ searchParams }: PageProps<"/admin">) {
   return (
     <div className="mx-auto max-w-5xl px-4 pt-8 pb-32">
       <div className="mb-6 flex items-end justify-between gap-4">
@@ -50,7 +52,7 @@ export default function AdminPage() {
         </Link>
       </div>
       <Suspense fallback={<ListSkeleton />}>
-        <Dashboard />
+        <Dashboard searchParams={searchParams} />
       </Suspense>
       <Link
         href="/admin/autos/nuevo"
@@ -62,12 +64,16 @@ export default function AdminPage() {
   );
 }
 
-async function Dashboard() {
+async function Dashboard({ searchParams }: { searchParams: PageProps<"/admin">["searchParams"] }) {
   await requireAdmin();
-  const [list, isDefault] = await Promise.all([listCars(), usingDefaultPassword()]);
+  const [list, isDefault, sp] = await Promise.all([listCars(), usingDefaultPassword(), searchParams]);
   const cars = list.sort(sortNewest);
+  // Confirmación después de publicar o guardar un auto (?publicado=id o ?guardado=id)
+  const doneId = typeof sp.publicado === "string" ? sp.publicado : typeof sp.guardado === "string" ? sp.guardado : null;
+  const done = doneId ? cars.find((c) => c.id === doneId) : undefined;
   return (
     <>
+      {done && <SavedCard car={done} created={typeof sp.publicado === "string"} />}
       {isDefault && (
         <Link
           href="/admin/ajustes"
@@ -104,6 +110,42 @@ async function Dashboard() {
         <LogoutButton />
       </div>
     </>
+  );
+}
+
+// Qué sigue después de publicar: verlo, compartirlo o subir el siguiente
+function SavedCard({ car, created }: { car: Car; created: boolean }) {
+  const share = `https://wa.me/?text=${encodeURIComponent(`${carTitle(car)} · ${formatPrice(car.price)}\n${carUrl(car)}`)}`;
+  return (
+    <div className="relative mb-5 overflow-hidden rounded-lg bg-card ring-1 ring-ok/40" role="status">
+      <p className="flex items-center gap-2 bg-ok px-4 py-2.5 pr-12 text-sm font-semibold text-white">
+        <CheckCircle2 className="size-4 shrink-0" />
+        {created ? "¡Listo! Tu auto ya está en la página." : "Cambios guardados. La página ya se actualizó."}
+      </p>
+      <Link href="/admin" aria-label="Cerrar aviso" className="absolute top-1.5 right-1.5 grid size-8 place-items-center rounded-md text-white/85 hover:bg-white/15">
+        <X className="size-4" />
+      </Link>
+      <div className="flex items-center gap-4 p-4">
+        <span className="relative h-16 w-24 shrink-0 overflow-hidden rounded-md bg-soft">
+          {car.images[0] && <Image src={car.images[0]} alt="" fill sizes="96px" quality={70} className="object-cover" />}
+        </span>
+        <span className="min-w-0">
+          <b className="block truncate">{carTitle(car)}</b>
+          <span className="text-sm text-mute">{formatPrice(car.price)}</span>
+        </span>
+      </div>
+      <div className="grid gap-2 px-4 pb-4 sm:grid-cols-3">
+        <a href={`/autos/${car.slug}`} target="_blank" rel="noopener" className="btn btn-dark min-h-11 text-sm">
+          <ExternalLink className="size-4" /> Ver en la página
+        </a>
+        <a href={share} target="_blank" rel="noopener" className="btn btn-wa min-h-11 text-sm">
+          <WhatsAppIcon className="size-4" /> Compartir por WhatsApp
+        </a>
+        <Link href="/admin/autos/nuevo" className="btn btn-outline min-h-11 text-sm">
+          <Plus className="size-4" /> Publicar otro
+        </Link>
+      </div>
+    </div>
   );
 }
 

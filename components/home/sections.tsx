@@ -3,12 +3,15 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import {
   ArrowRight,
+  CalendarCheck,
   Check,
   CircleDollarSign,
+  Clock,
   FileCheck,
   FileText,
   Gauge,
   Headset,
+  MapPin,
   Navigation,
   Phone,
   Plus,
@@ -19,7 +22,7 @@ import {
 } from "lucide-react";
 import { CarCard } from "@/components/car-card";
 import { categoriesOf, CategoryTileContent, categoryTileClass } from "@/components/category-tile";
-import { Accent } from "@/components/accent";
+import { Accent, Highlight } from "@/components/accent";
 import { SectionHeading } from "@/components/section-heading";
 import { SOCIALS } from "@/components/site/footer";
 import { WhatsAppIcon } from "@/components/icons";
@@ -132,7 +135,7 @@ function BenefitList({ items, dark }: { items: typeof BUY_BENEFITS; dark?: boole
         <li key={title} className="reveal group flex gap-4" style={vars({ "--i": i })}>
           <span
             className={`grid size-11 shrink-0 place-items-center rounded-md transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:-translate-y-0.5 ${
-              dark ? "bg-white/[0.08] text-brand-glow ring-1 ring-white/10" : "bg-brand-soft text-brand"
+              dark ? "bg-white/[0.08] text-wa ring-1 ring-white/10" : "bg-brand-soft text-brand"
             }`}
           >
             <Icon className="size-5" strokeWidth={1.75} />
@@ -228,9 +231,6 @@ export function BuySection({ cars }: { cars: Car[] }) {
           <h2 id="compra" className="font-display max-w-xl text-[2.1rem] sm:text-5xl">
             Autos <Accent>verificados,</Accent> con sus papeles <Accent underline>en regla.</Accent>
           </h2>
-          <p className="max-w-md text-lg leading-relaxed text-mute">
-            Toca el que te guste y te agendamos una cita para que lo veas en persona.
-          </p>
         </div>
       </div>
       <div className="no-scrollbar mt-10 flex snap-x snap-mandatory scroll-px-4 gap-4 overflow-x-auto px-4 pb-2 sm:scroll-px-6 sm:px-6 lg:scroll-px-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))] lg:px-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))]">
@@ -355,7 +355,8 @@ const FAQ: { q: string; a: ReactNode }[] = [
     q: "Quiero vender mi auto. ¿Cómo funciona?",
     a: (
       <>
-        Nos cuentas de tu auto y lo evaluamos. Filtramos a los interesados, nos encargamos de las citas y te ayudamos
+        Nos cuentas de tu auto, lo evaluamos en sitio, tomamos las fotos para publicarlo y te damos la valoración
+        final. Después filtramos a los interesados, nos encargamos de las citas y te ayudamos
         con el papeleo y las placas. Normalmente ganas más que vendiéndolo a un lote.{" "}
         <Link href="/vende-tu-auto" className="font-semibold text-fg underline underline-offset-4">
           Vender mi auto
@@ -451,9 +452,15 @@ export function Closer({ rating, cars }: { rating: Rating; cars: Car[] }) {
                 {rating.avg.toFixed(1)} · {rating.count} {rating.count === 1 ? "reseña" : "reseñas"}
               </div>
             )}
-            <h2 id="contacto-title" className="font-display text-[2.6rem] leading-[1] sm:text-7xl">
-              Cada auto es único.
-              <span className="mt-2 block text-white/45">Cuando se vende, ya no vuelve.</span>
+            {/* Énfasis en «único» y en «ya no vuelve» (31-oct) */}
+            <h2 id="contacto-title" className="font-display text-[2.6rem] leading-[1.05] sm:text-7xl">
+              Cada auto es{" "}
+              <Accent underline onDark>
+                único.
+              </Accent>
+              <span className="mt-3 block text-white/50">
+                Cuando se vende, <span className="text-white"><Highlight>ya no vuelve.</Highlight></span>
+              </span>
             </h2>
             <p className="mt-6 max-w-md text-lg leading-relaxed text-white/72">
               ¿Ya viste el tuyo? Escríbenos hoy y te confirmamos al momento si sigue disponible.
@@ -482,17 +489,56 @@ export function Closer({ rating, cars }: { rating: Rating; cars: Car[] }) {
         )}
       </div>
 
-      {/* Visítanos: la oficina existe y se puede visitar (para confirmar que es un negocio real) */}
+      {/* Visítanos (rediseño 31-oct): datos de la oficina y el mapa real, para confirmar que es un negocio real */}
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20">
-        <div className="reveal grid gap-8 rounded-lg bg-card p-6 ring-1 ring-line sm:p-10 lg:grid-cols-[1fr_auto] lg:items-center">
-          <div>
-            <p className="font-tech text-[11px] text-dim">Visítanos</p>
-            <p className="font-display mt-3 text-[1.9rem] sm:text-4xl">{site.address.street}</p>
-            <p className="mt-2 text-mute">
-              {site.address.neighborhood}, {site.address.postalCode} {site.address.city}, {site.address.state} ·{" "}
-              {site.hours}
+        <div
+          className="reveal overflow-hidden rounded-2xl bg-night text-white shadow-[0_40px_80px_-40px_rgb(20_20_20/0.7)] lg:grid lg:grid-cols-[0.95fr_1.05fr]"
+          aria-labelledby="visitanos"
+        >
+          <div className="relative p-7 sm:p-10 lg:p-14">
+            <p className="font-tech flex items-center gap-3 text-[11px] text-white/55">
+              <span className="rule-accent h-px w-8" />
+              Visítanos
             </p>
-            <div className="mt-5 flex items-center gap-2">
+            <h2 id="visitanos" className="font-display mt-4 text-[2.2rem] sm:text-5xl">
+              Nuestra{" "}
+              <Accent underline onDark>
+                oficina
+              </Accent>
+            </h2>
+            <ul className="mt-8 space-y-5">
+              {[
+                {
+                  Icon: MapPin,
+                  title: site.address.street,
+                  text: `${site.address.neighborhood}, ${site.address.postalCode} ${site.address.city}, ${site.address.state}`,
+                },
+                { Icon: Clock, title: "Horario", text: site.hours },
+                { Icon: CalendarCheck, title: "Los autos se ven con cita", text: "Escríbenos y te la agendamos." },
+              ].map(({ Icon, title, text }, i) => (
+                <li key={title} className="reveal flex gap-4" style={vars({ "--i": i })}>
+                  <span className="grid size-11 shrink-0 place-items-center rounded-md bg-white/[0.08] text-brand-glow ring-1 ring-white/10">
+                    <Icon className="size-5" strokeWidth={1.75} />
+                  </span>
+                  <span>
+                    <b className="block font-semibold">{title}</b>
+                    <span className="text-sm text-white/65">{text}</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-9 flex flex-wrap gap-3">
+              <a href={site.mapsUrl} target="_blank" rel="noopener" className="btn btn-light btn-shine group">
+                <Navigation className="size-4 transition-transform duration-500 group-hover:rotate-12" /> Cómo llegar
+              </a>
+              <a
+                href={site.phoneHref}
+                className="btn text-white ring-1 ring-white/20 transition-colors hover:bg-white hover:text-night"
+              >
+                <Phone className="size-4" /> {site.phoneDisplay}
+              </a>
+            </div>
+            <div className="mt-7 flex items-center gap-2">
               {SOCIALS.map(({ href, label, Icon }) => (
                 <a
                   key={label}
@@ -500,19 +546,31 @@ export function Closer({ rating, cars }: { rating: Rating; cars: Car[] }) {
                   target="_blank"
                   rel="noopener"
                   aria-label={label}
-                  className="grid size-11 place-items-center rounded-md ring-1 ring-line transition-all duration-300 hover:-translate-y-0.5 hover:ring-fg/40"
+                  className="grid size-11 place-items-center rounded-md text-white/75 ring-1 ring-white/15 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:text-night"
                 >
                   <Icon className="size-5" />
                 </a>
               ))}
             </div>
           </div>
-          <div className="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-1">
-            <a href={site.mapsUrl} target="_blank" rel="noopener" className="btn btn-dark">
-              <Navigation className="size-4" /> Cómo llegar
-            </a>
-            <a href={site.phoneHref} className="btn btn-outline">
-              <Phone className="size-4" /> {site.phoneDisplay}
+          {/* Mapa real (se carga solo al acercarse) */}
+          <div className="relative min-h-[300px] bg-graphite sm:min-h-[380px]">
+            <iframe
+              title={`Mapa de la oficina de ${site.name}`}
+              src={site.mapsEmbed}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="absolute inset-0 h-full w-full border-0"
+            />
+            <a
+              href={site.mapsUrl}
+              target="_blank"
+              rel="noopener"
+              className="group absolute bottom-4 left-4 flex items-center gap-2.5 rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-night shadow-[0_14px_30px_-12px_rgb(0_0_0/0.5)] sm:bottom-6 sm:left-6"
+            >
+              <MapPin className="size-4 text-brand" />
+              Abrir en Google Maps
+              <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
             </a>
           </div>
         </div>
