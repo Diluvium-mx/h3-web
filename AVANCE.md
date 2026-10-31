@@ -2,6 +2,14 @@
 
 Lo más reciente va arriba.
 
+## 31 de octubre de 2026 (última) — hero de computadora con imagen de Arcads
+
+- Hero en computadora: imagen hecha con Arcads de la G63 real del inventario en una sala de exhibición, con su precio.
+- El celular no descarga esa imagen (sigue con el carrusel de fotos reales).
+- «Al comprar un auto»: íconos en verde, igual que «Al vender tu auto».
+
+Falta: que el dueño lo valide en la vista previa #1; conectar Cloudinary; cambiar la contraseña `12345`.
+
 ## 31 de octubre de 2026 (cierre) — correcciones del sitio y panel más fácil
 
 - Hero con «seleccionados» y foto fija en computadora; franja de marcas recta bajo el hero; íconos verdes al vender.

@@ -108,8 +108,10 @@ Acción principal: ver un auto y, ya en su ficha, mandar WhatsApp.
 2. **Hero:** «Autos seminuevos **seleccionados** en Villahermosa» (31-oct: se quitó «premium»; la palabra va
    en cursiva roja con un trazo a mano). En **celular**, carrusel de fotos reales con zoom que cambia solo
    cada 5 s; la foto **se queda fija** y la hoja clara sube por encima al bajar. En **computadora**, una sola
-   **foto fija** (sin carrusel) con el auto y su precio abajo a la derecha, y el texto en una tarjeta.
-   Sin degradado oscuro.
+   **imagen fija hecha con Arcads** (sin carrusel): la **G63 real del inventario** en una sala de exhibición
+   al atardecer, con su tarjeta (año, modelo y precio) abajo a la derecha y el texto en una tarjeta a la
+   izquierda. Si la G63 se vende, su tarjeta se oculta sola; la imagen se queda hasta cambiarla (con qué
+   imagen reemplazarla: **sin decidir**). El celular no descarga esta imagen. Sin degradado oscuro.
 3. **Franja de marcas** con logos, **recta** y pegada justo debajo del hero (31-oct).
 4. **Inventario:** categorías con **íconos a dos tonos** en un cuadro rojo claro (Phosphor Icons, MIT; la
    pickup se dibujó con el mismo estilo; Recreativos usa montañas) y 8 autos en 2 columnas con «Ver todos».
@@ -117,7 +119,7 @@ Acción principal: ver un auto y, ya en su ficha, mandar WhatsApp.
    etiqueta roja sobre la foto (p. ej. «Único dueño»), íconos rojos en los datos y la flecha en rojo.
 5. **Beneficios («Lo que hacemos por ti»), sin botones:**
    - «Al comprar un auto»: imagen de la entrega de la llave (hecha con Arcads) y asesoramiento, autos
-     confiables, papeles en regla y precio justo.
+     confiables, papeles en regla y precio justo. Íconos en **verde** (31-oct).
    - «Al vender tu auto» (fondo oscuro): la imagen de la llave y la carpeta con «Ganas más que en un lote», y
      sácale más valor, evita estafas, sin citas con desconocidos, papeleo y placas y precio correcto. Aquí
      los íconos van en **verde** (31-oct).
@@ -274,6 +276,7 @@ imagen de Arcads en pantallas grandes (30-oct).
 | Logos de marcas (franja en movimiento) | Simple Icons, licencia CC0, en un solo color; Aodes no tiene y va solo con su nombre | `components/brand-logos.tsx` |
 | Tipografía (31-oct) | **Instrument Sans** para títulos y texto; **Instrument Serif** en cursiva solo para resaltar palabras («seleccionados», «único»). Antes: Saira/Geist y Albert Sans, que no convencieron | `app/layout.tsx` |
 | Imagen de «Al comprar un auto» | Hecha con Arcads: entrega de la llave dentro de un auto (sin caras ni marcas). 43 KB | `public/img/comprar-tu-auto.webp` |
+| Imagen del hero en computadora (31-oct) | Hecha con Arcads a partir de la foto real de la G63: la misma camioneta en una sala de exhibición, sin placa. 2 tamaños en WebP (28 KB y 48 KB); el celular no la descarga | `public/img/hero-escritorio-1440.webp` y `-2048.webp` |
 | Imagen de «Vende tu auto» | Hecha con Arcads: llave, carpeta y pluma (sin autos, para no chocar con «fotos reales»). Única imagen decorativa (61 KB) servida por el hosting; las fotos de autos siguen en Cloudinary | `public/img/vende-tu-auto.webp` |
 | Datos del negocio | Teléfono, dirección, horario y redes | `lib/site.ts` |
 | Inventario inicial | 13 autos de Shopify con datos revisados | `data/seed.json` |
@@ -555,7 +558,9 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
   alojan un sitio con servidor y panel).
 - **Imágenes con IA (Arcads):** el 29-oct no se usaron. El 30-oct el dueño pidió una para «Vende tu auto»:
   se usa **una sola** (llave, carpeta y pluma), **sin autos generados**, para no chocar con la promesa
-  «Fotos reales de cada auto».
+  «Fotos reales de cada auto». El 31-oct pidió una imagen de Arcads «más profesional» para el hero en
+  computadora: se hizo **a partir de la foto real de la G63 del inventario** (el auto es el que se vende; solo
+  cambia el lugar). Las fichas de cada auto siguen solo con fotos reales.
 - **Dos versiones del diseño (30-oct)**, cada una con su enlace público de vista previa (0 créditos):
   - **Versión 2 (cambios del dueño):** rama `desarrollo`, solicitud de cambios #1 →
     https://deploy-preview-1--h3-seminuevos.netlify.app.

@@ -39,6 +39,25 @@ const step = (m) => console.log('✔', m);
     if (await page.getByText('¿Qué buscas?').count()) throw new Error('debería haberse quitado «¿Qué buscas?» del hero');
     await page.waitForFunction(() => document.querySelector('[aria-roledescription="carrusel de autos"]').scrollLeft > 0, null, { timeout: 9000 });
     step('hero: título y botón en el primer pantallazo; carrusel que avanza solo con el auto abajo a la derecha');
+    // 31-oct: en computadora, una sola imagen fija hecha con Arcads (la G63 real en una sala), sin carrusel;
+    // el celular no la descarga
+    {
+      const desk = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+      const dp = await desk.newPage();
+      await dp.goto(B + '/');
+      const img = dp.locator('section[aria-labelledby=hero-title] picture img');
+      await img.waitFor();
+      await dp.waitForFunction(() => {
+        const i = document.querySelector('section[aria-labelledby=hero-title] picture img');
+        return i && i.complete && i.currentSrc.includes('hero-escritorio');
+      }, null, { timeout: 15000 });
+      if (await dp.locator('[aria-roledescription="carrusel de autos"]').isVisible()) throw new Error('en computadora no debe verse el carrusel del hero');
+      await dp.locator('section[aria-labelledby=hero-title] a[href="/autos/mercedes-benz-g63-amg-2021"]:visible').waitFor();
+      await desk.close();
+      const mobileGot = await page.evaluate(() => performance.getEntriesByType('resource').some((r) => r.name.includes('hero-escritorio')));
+      if (mobileGot) throw new Error('el celular no debería descargar la imagen del hero de computadora');
+    }
+    step('hero en computadora: imagen fija de Arcads con la tarjeta de la G63; el celular no la descarga');
     // Lo que el dueño pidió quitar (28-oct)
     for (const gone of ['autos disponibles hoy', '¿Cuál es tu presupuesto?', 'Ver del más barato al más caro']) {
       if (await page.getByText(gone).count()) throw new Error('debería haberse quitado: ' + gone);
@@ -72,7 +91,13 @@ const step = (m) => console.log('✔', m);
     if (!(await buy.locator('img[src*="comprar-tu-auto"]').count()) || !(await sellBox.locator('img[src*="vende-tu-auto"]').count())) throw new Error('cada beneficio debe llevar su imagen');
     await sellBox.getByText('Ganas más que en un lote').waitFor();
     if (await page.locator('section[aria-labelledby=beneficios] a').count()) throw new Error('los beneficios no deben llevar botones');
-    step('beneficios en 2 con imagen (al comprar / al vender, con «Ganas más que en un lote») y sin botones');
+    // 31-oct: los íconos de los 2 lados van en verde
+    for (const box of [buy, sellBox]) {
+      const color = await box.locator('li svg').first().evaluate((el) => getComputedStyle(el).color);
+      const [r, g, b] = color.match(/\d+/g).map(Number);
+      if (!(g > r + 40 && g > b + 20)) throw new Error('los íconos de los beneficios deben ser verdes: ' + color);
+    }
+    step('beneficios en 2 con imagen (al comprar / al vender, con «Ganas más que en un lote»), íconos verdes y sin botones');
     if ((await page.locator('section[aria-labelledby=compra] article').count()) < 4) throw new Error('falta el carrusel de autos verificados');
     if (await page.getByText('Ver la ficha de este auto').count()) throw new Error('debería haberse quitado «Ver la ficha de este auto»');
     // Comparativa en tabla

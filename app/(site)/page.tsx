@@ -1,4 +1,4 @@
-import { Hero } from "@/components/home/hero";
+import { HERO_DESKTOP, Hero } from "@/components/home/hero";
 import { Marquee } from "@/components/home/marquee";
 import { ReviewsWall } from "@/components/home/reviews";
 import { Benefits, BuySection, Closer, Comparison, Faq, Inventory } from "@/components/home/sections";
@@ -19,7 +19,11 @@ export default async function HomePage() {
 
   return (
     <>
-      <Hero featured={featured.slice(0, 5)} rating={rating} />
+      <Hero
+        featured={featured.slice(0, 5)}
+        showcase={cars.find((c) => c.slug === HERO_DESKTOP.slug && c.status !== "vendido")}
+        rating={rating}
+      />
       {brands.length > 0 && (
         <section aria-label="Marcas en inventario" className="relative z-10 overflow-hidden">
           <Marquee items={brands} />

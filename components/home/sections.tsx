@@ -135,7 +135,7 @@ function BenefitList({ items, dark }: { items: typeof BUY_BENEFITS; dark?: boole
         <li key={title} className="reveal group flex gap-4" style={vars({ "--i": i })}>
           <span
             className={`grid size-11 shrink-0 place-items-center rounded-md transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:-translate-y-0.5 ${
-              dark ? "bg-white/[0.08] text-wa ring-1 ring-white/10" : "bg-brand-soft text-brand"
+              dark ? "bg-white/[0.08] text-wa ring-1 ring-white/10" : "bg-ok-soft text-ok"
             }`}
           >
             <Icon className="size-5" strokeWidth={1.75} />
