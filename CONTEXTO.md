@@ -1,6 +1,6 @@
 # Contexto del proyecto: página web de H3 Seminuevos
 
-Última actualización: 28 de octubre de 2026 (respuestas del dueño a las 3 preguntas, dudas por auto y pruebas en celular).
+Última actualización: 31 de octubre de 2026 (versión final aprobada por el dueño). **Para publicar, ver `ENTREGA.md`.**
 Regla: aquí no se inventa nada. Lo que no está decidido dice **«sin decidir»**.
 
 ---
@@ -156,8 +156,8 @@ columnas** también en celular (30-oct):
   - Foto, «año · marca», modelo y versión, y máximo una etiqueta (por ejemplo «Único dueño»).
   - **Características resumidas** separadas por líneas finas: kilometraje, transmisión y combustible. Lo
     que no se tiene no se muestra.
-  - Precio, **botón directo de WhatsApp** con el auto en el mensaje (29-oct) y flecha a la ficha. Al abrir
-    la ficha, la foto se transforma en la de la ficha (animación que le gustó al dueño).
+  - Precio y flecha a la ficha. **Sin botón de WhatsApp desde el 31-oct**: toda la tarjeta abre la ficha.
+    Al abrir la ficha, la foto se transforma en la de la ficha (animación que le gustó al dueño).
 - Si no hay resultados, se ofrece «Búscame uno» por WhatsApp.
 
 **Detalle de cada auto (`/autos/<nombre-del-auto>`)** — rediseñado el 28-oct con el método de los videos
@@ -229,7 +229,7 @@ imagen de Arcads en pantallas grandes (30-oct).
 **Panel (`/admin`, con contraseña)**
 - **Entrada:** enlace discreto «Administración» al final del pie de página.
 - **Contraseña inicial: `12345`** (decisión del dueño, 28-oct). Se cambia en **Panel → Ajustes**; la nueva
-  se guarda cifrada en Upstash, nunca en el repositorio. Al cambiarla se cierran las sesiones abiertas en
+  se guarda cifrada en Netlify Blobs, nunca en el repositorio. Al cambiarla se cierran las sesiones abiertas en
   otros teléfonos o computadoras. Mientras se use la inicial, el panel muestra un aviso para cambiarla.
 - **Ajustes** (`/admin/ajustes`): contraseña del panel. (Los números de confianza se quitaron el 29-oct.)
 - Inventario con búsqueda y pestañas: Disponibles, Apartados y Vendidos.
@@ -254,13 +254,13 @@ imagen de Arcads en pantallas grandes (30-oct).
   enlaces se rechazan.
 - **Reseñas** (`/admin/resenas`, desde el 28-oct):
   - Datos: nombre, auto que compró, estrellas, texto, frase destacada, origen y foto opcional.
-  - Se guardan en Upstash Redis, **nunca en el repositorio**.
+  - Se guardan en Netlify Blobs, **nunca en el repositorio**.
   - El panel recuerda publicar solo reseñas reales y con permiso del cliente.
 
 **Estados de un auto**
 - **Disponible:** se ve en el catálogo.
 - **Apartado:** se ve con la etiqueta «Apartado».
-- **Vendido:** sale del catálogo y aparece en «Recién vendidos».
+- **Vendido:** sale del catálogo y del inicio; su enlace sigue abierto, dice «Vendido» y ofrece autos parecidos.
 
 ## 4. Textos, logo, colores, tipografías y fotos
 
@@ -514,7 +514,8 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
 2. **Publicar en Netlify y verificar con las cuentas reales:**
    - Subir una foto desde el panel.
    - Comprobar que el sitio se actualiza sin volver a desplegar.
-3. **Importar el inventario desde Shopify a Cloudinary** antes de cancelar Shopify.
+3. **Pasar las fotos de Shopify a Cloudinary** antes de cancelar Shopify. **Ojo:** el importador del panel marca
+   los 13 autos actuales como «Ya importado» y no copia sus fotos; ver `ENTREGA.md`, paso 7.
 4. **En Panel → Ajustes:** cambiar la contraseña `12345`.
 5. **Agregar reseñas reales** en el panel (con permiso de los clientes), cuando existan.
 6. **Grabar videos de los autos** y pegar el enlace en el panel (opcional).
@@ -619,7 +620,7 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
 - **Inventario en computadora (31-oct):** la franja oscura y la parte blanca ya cuadran; los filtros y las
   categorías tienen su espacio y no quedan detrás de lo negro.
 - **Inicio más corto (31-oct):** hero → marcas → inventario → beneficios → autos verificados → (reseñas) →
-  comparativa → preguntas → cierre. Tarjetas sin botón de WhatsApp. Categorías con fotos reales.
+  comparativa → preguntas → cierre. Tarjetas sin botón de WhatsApp. Categorías con íconos (no fotos).
 
 **Descartadas**
 - Seguir en Shopify: cuesta $19 USD al mes y su carrito no sirve para vender autos.
@@ -653,7 +654,7 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
    en Villahermosa».
 10. Dominio: ¿dónde está registrado y cuándo se conecta?
 11. ¿Quién va a administrar el panel? La contraseña inicial es `12345` (decisión del dueño); hay que
-    cambiarla en Panel → Ajustes en cuanto el panel guarde en Upstash. La nueva **no** se sube a este
+    cambiarla en Panel → Ajustes en cuanto se publique (se guarda en Netlify Blobs). La nueva **no** se sube a este
     repositorio.
 12. **Rebajas:** cuando baja el precio de un auto, ¿quieren mostrar «antes / ahora»?
 13. **Equipamiento:** ¿falta alguna opción en la lista fija? Se agrega en `lib/equipment.ts`.

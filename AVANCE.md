@@ -2,6 +2,14 @@
 
 Lo más reciente va arriba.
 
+## 31 de octubre de 2026 (entrega) — versión final aprobada y guía para publicar
+
+- El dueño dio por terminada la versión; otra cuenta de Claude Code la va a publicar en la web oficial.
+- Nuevo `ENTREGA.md`: repositorio, ramas, Netlify, dominio (hoy en Shopify), variables, imágenes y pasos exactos.
+- Se encontró que el importador no pasa a Cloudinary las fotos de los 13 autos actuales; quedó documentado (paso 7).
+
+Falta: que el dueño diga «publica»; conectar Cloudinary y el dominio; cambiar la contraseña `12345`.
+
 ## 31 de octubre de 2026 (última) — hero de computadora con imagen de Arcads
 
 - Hero en computadora: imagen hecha con Arcads de la G63 real del inventario en una sala de exhibición, con su precio.

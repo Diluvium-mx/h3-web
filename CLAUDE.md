@@ -3,6 +3,7 @@
 @AGENTS.md
 
 1. Antes de empezar, lee `CONTEXTO.md` (qué es H3, qué está decidido y qué no) y `AVANCE.md`.
+   **Si vas a publicar el sitio, lee primero `ENTREGA.md`** (repositorio, Netlify, dominio y pasos exactos).
 2. No inventes datos del negocio. Si algo no está decidido, escríbelo como «sin decidir» y pregúntalo.
 3. **El repositorio es público:** nunca subas llaves, contraseñas, tokens, `.env` ni datos de clientes.
 4. Cada vez que avances, agrega una entrada **arriba** en `AVANCE.md` con:

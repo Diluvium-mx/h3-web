@@ -1,5 +1,8 @@
 # H3 Seminuevos — sitio web + panel de administración
 
+> **¿Vas a publicar el sitio? Lee primero [`ENTREGA.md`](ENTREGA.md)** (31-oct-2026): repositorio, ramas,
+> Netlify, dominio, variables, imágenes y pasos exactos. Si algo de este README lo contradice, manda `ENTREGA.md`.
+
 Sitio para **H3 Seminuevos** (Villahermosa, Tabasco) que reemplaza la tienda de Shopify.
 Muestra el catálogo de autos, manda a los interesados a WhatsApp con el auto ya escrito en el
 mensaje, recibe solicitudes de "Vende tu auto" y tiene un panel donde el dueño sube y edita
@@ -7,55 +10,39 @@ autos desde el celular.
 
 ## Qué incluye
 
-**Sitio público** (pensado primero para celular)
-- **Inicio**: landing hecha con el método de los 2 videos analizados (ver `ANALISIS-VIDEOS.md`):
-  - Hero con prueba social real, título de beneficio, subtítulo de dolor a solución, un botón principal,
-    quita-miedos y fotos del inventario.
-  - Números reales del inventario y franja de marcas.
-  - Autos destacados con tipos como «historias».
-  - Reseñas, solo si el dueño las agrega.
-  - «Lo de siempre» contra «en H3».
-  - 3 beneficios con imagen y «Tu próximo auto en 3 pasos».
-  - «Recién vendidos», «Vende tu auto», preguntas frecuentes y cierre con contacto y horario.
-- **Catálogo** (`/autos`): búsqueda, filtros (tipo, marca, precio, año, transmisión) y orden. Los
+**Sitio público** (pensado primero para celular; detalle completo en `CONTEXTO.md`, sección 3)
+- **Inicio**: hero «Autos seminuevos *seleccionados* en Villahermosa.» (carrusel de fotos reales en celular,
+  imagen fija hecha con Arcads en computadora), franja de marcas, inventario con categorías, beneficios
+  «al comprar» y «al vender», autos verificados, reseñas (solo si hay reales), tabla comparativa, preguntas
+  frecuentes, cierre con carrusel y «Visítanos» con mapa.
+- **Inventario** (`/autos`): búsqueda, categorías, filtros (marca, precio, año, transmisión) y orden. Los
   filtros viven en el URL (`/autos?tipo=SUV`), así que se pueden compartir.
-- **Detalle de cada auto** (`/autos/bmw-m3-2018`):
-  - En la primera pantalla del celular: foto, precio, resumen, botón de WhatsApp según el estado y
-    quita-miedos.
-  - Todas las fotos en cuadrícula y pantalla completa, con pestañas por sección (exterior, interior,
-    motor y detalles).
-  - Equipamiento agrupado con íconos (confort, tecnología, seguridad y exterior).
-  - Video opcional (YouTube dentro de la página; TikTok, Instagram y Facebook como enlace).
-  - Ficha técnica, «pregúntanos» para datos faltantes, descripción y «Así de fácil» en 3 pasos.
-  - «Tus dudas, resueltas»: dueños, factura, servicios, papeles, blindaje y más. Lo que falta se pregunta
-    por WhatsApp con un toque.
-  - Reseñas, si hay, y autos similares.
-  - «Mándaselo por WhatsApp» a otra persona y barra fija en celular.
-  - Si el enlace es de un auto que ya no existe, ofrece autos de la misma marca.
-- **Vende tu auto** (`/vende-tu-auto`): formulario de 3 pasos que arma el mensaje de WhatsApp con los
-  datos del auto. Guarda el borrador en el teléfono.
-- Microanimaciones: aparición al hacer scroll, destellos en botones, transición de la foto de la
-  tarjeta al detalle, líneas de velocidad, etc. Se respetan las preferencias de "reducir movimiento".
+- **Ficha de cada auto** (`/autos/bmw-m3-2018`): galería con pantalla completa, precio, WhatsApp con el auto
+  en el mensaje, fotos por sección (Exterior e Interior), equipamiento, video opcional, ficha técnica (solo
+  filas con dato), autos parecidos y barra fija de WhatsApp en celular. Si el auto ya no existe, ofrece
+  autos de la misma marca.
+- **Vende tu auto** (`/vende-tu-auto`): formulario de 3 partes que arma el mensaje de WhatsApp y «Cómo
+  funciona» en 6 pasos. Guarda el borrador en el teléfono.
+- Microanimaciones discretas; se respeta «reducir movimiento».
 - SEO local: títulos y descripciones por auto, datos estructurados (AutoDealer y Car), `sitemap.xml`,
-  `robots.txt`, imagen para compartir en redes y metadatos en español de México.
+  `robots.txt`, imagen para compartir y metadatos en español de México.
 
 **Panel** (`/admin`, protegido con contraseña)
 - Lista del inventario con búsqueda y pestañas (Disponibles / Apartados / Vendidos).
 - Cambiar estado y marcar como destacado con un toque.
-- Alta y edición de autos: fotos (se comprimen solas en el teléfono antes de subir, ~300 KB c/u),
-  reordenar y elegir portada, sección de cada foto, datos, equipamiento (lista fija), características,
-  etiquetas, descripción y video opcional.
-- **Importar de Shopify**: copia los autos y sus fotos del Shopify actual al sitio nuevo con un clic.
-- **Reseñas** (`/admin/resenas`): agrega lo que dicen tus clientes (nombre, estrellas, texto, auto, origen y
-  foto opcional). Aparecen en el inicio; si no hay ninguna, la sección no se muestra. Publica solo reseñas
-  reales y con permiso.
+- Alta y edición de autos con vista previa de la tarjeta, «Dónde va a aparecer», barra «Falta: …» y
+  confirmación al publicar. Fotos (se comprimen solas en el teléfono, ~300 KB c/u), orden y portada, sección
+  de cada foto, datos, equipamiento (lista fija), documentos, descripción y video opcional.
+- **Importar de Shopify**: copia autos nuevos de la tienda (los 13 actuales ya cuentan como importados; para
+  sus fotos ver `ENTREGA.md`, paso 7).
+- **Reseñas** (`/admin/resenas`): solo reales y con permiso. Si no hay ninguna, la sección no se muestra.
 - Al guardar, el sitio público se actualiza al instante.
 
 Estados de un auto:
 - **Disponible**: visible en el catálogo.
 - **Apartado**: visible con etiqueta amarilla "Apartado".
-- **Vendido**: sale del catálogo y aparece en "Recién vendidos" en el inicio (prueba social). Su página
-  sigue existiendo y el botón cambia a "Búscame uno similar".
+- **Vendido**: sale del catálogo y del inicio. Su página sigue existiendo, dice «Vendido» y el botón cambia
+  a "Búscame uno similar".
 
 ## Tecnología
 
@@ -125,10 +112,9 @@ El sitio público queda completo con el inventario actual y **el panel ya guarda
    - `NEXT_PUBLIC_SITE_URL`: no la agregues mientras no se conecte el dominio; el sitio usa sola la
      dirección `*.netlify.app`. Cuando se conecte, pon `https://www.h3seminuevos.com`.
 4. Entra a `https://NOMBRE.netlify.app/admin` (el enlace discreto «Administración» está al final del
-   pie de página). Ve primero a **Ajustes**: cambia la contraseña `12345` y pon los números reales del
-   inicio (por ejemplo, autos entregados o años de experiencia).
-5. En el panel, ve a **Importar de Shopify → Buscar → Importar seleccionados**. Las fotos se copian de
-   Shopify a Cloudinary.
+   pie de página). Ve primero a **Ajustes** y cambia la contraseña `12345`.
+5. Pasa las fotos de Shopify a Cloudinary: ver **`ENTREGA.md`, paso 7** (el importador solo copia autos
+   nuevos; los 13 actuales ya cuentan como importados).
 6. Cuando todo funcione, **cancela Shopify**. Importa las fotos **antes**, porque después desaparecen.
    El dominio se conecta después (sin decidir).
 
