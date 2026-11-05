@@ -21,11 +21,12 @@ const TITLE: { text: string; accent?: boolean }[] = [
   { text: "Villahermosa." },
 ];
 
-// Imagen del hero en computadora (pedido del dueño, 31-oct): hecha con Arcads a partir de la foto real de la
-// G63 del inventario, en una sala de exhibición. Si ese auto ya no está a la venta, se oculta su tarjeta.
+// Imagen del hero en computadora (cambiada por el dueño el 5-nov por una más impactante): hecha con Arcads
+// (Nano Banana 2.1) a partir de la foto real de la G63 del inventario, en un estudio oscuro con reflector y luz
+// roja. Si ese auto ya no está a la venta, se oculta su tarjeta.
 export const HERO_DESKTOP = {
   slug: "mercedes-benz-g63-amg-2021",
-  alt: "Mercedes-Benz G63 AMG gris mate en una sala de exhibición",
+  alt: "Mercedes-Benz G63 AMG gris mate en un estudio oscuro con reflector y luz roja",
 };
 // Pixel transparente: en celular el <picture> no descarga la imagen de computadora
 const BLANK = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
@@ -70,7 +71,7 @@ export function Hero({ featured, showcase, rating }: { featured: Car[]; showcase
               src={BLANK}
               alt={HERO_DESKTOP.alt}
               fetchPriority="high"
-              className="absolute inset-0 h-full w-full object-cover object-[78%_60%]"
+              className="absolute inset-0 h-full w-full object-cover object-[60%_60%]"
             />
           </picture>
           {showcase && (

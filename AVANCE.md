@@ -2,6 +2,14 @@
 
 Lo más reciente va arriba.
 
+## 5 de noviembre de 2026 (noche) — hero de computadora más impactante y dominio conectado
+
+- `h3seminuevos.com` ya apunta a Netlify (GoDaddy: @ → A 75.2.60.5; www → CNAME). Dominio principal: `h3seminuevos.com`; `www` redirige.
+- Hero de computadora: imagen nueva hecha con Arcads (Nano Banana 2.1) a partir de la foto real de la G63, en un estudio oscuro con reflector y luz roja. Se recorrió el encuadre (`object-[60%_60%]`) para que el auto no choque con la tarjeta del texto.
+- El dueño agregó `CLOUDINARY_URL` en Netlify; entra con la siguiente publicación.
+
+Falta: publicar (fusionar la solicitud nueva); comprobar subida de fotos en el panel; cambiar la contraseña `12345`; pasar las fotos de Shopify a Cloudinary antes de cancelar Shopify.
+
 ## 5 de noviembre de 2026 (publicado) — versión final en producción
 
 - El dueño pidió publicar: se fusionó #1 y la versión final ya está en `luminous-rolypoly-293a41.netlify.app`.
