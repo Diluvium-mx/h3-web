@@ -2,6 +2,14 @@
 
 Lo más reciente va arriba.
 
+## 5 de noviembre de 2026 — el sitio pasa a una cuenta de Netlify del dueño
+
+- Se descartó Vercel: el plan gratis no permite uso comercial y el Pro cuesta 20 USD al mes.
+- El dueño creó su propia cuenta de Netlify (plan Free) y conectó este repositorio: `luminous-rolypoly-293a41.netlify.app`.
+- Esa cuenta tiene su propio almacén de Netlify Blobs (vacío), así que muestra los 13 autos de `data/seed.json`.
+
+Falta: dejar pública la visibilidad del sitio nuevo; que el dueño diga «publica»; Cloudinary; dominio en GoDaddy; borrar el sitio viejo `h3-seminuevos`.
+
 ## 31 de octubre de 2026 (entrega) — versión final aprobada y guía para publicar
 
 - El dueño dio por terminada la versión; otra cuenta de Claude Code la va a publicar en la web oficial.

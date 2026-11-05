@@ -4,6 +4,10 @@ Para la cuenta de Claude Code que va a publicar el sitio. Escrito el **31 de oct
 el dueño dio por terminada la versión («Listo, ya quedó finalmente») y pidió que otra cuenta lo suba a la
 web oficial.
 
+> **Actualización 5-nov-2026:** el sitio pasa a una cuenta de Netlify **del dueño**:
+> `luminous-rolypoly-293a41.netlify.app` (vista previa: `deploy-preview-1--luminous-rolypoly-293a41.netlify.app`).
+> El proyecto `h3-seminuevos` de abajo es la cuenta anterior y se va a borrar. El dominio está en **GoDaddy**.
+
 **Lee este documento completo antes de tocar nada.** Después lee `CLAUDE.md`, `AGENTS.md`, `CONTEXTO.md`
 y `AVANCE.md`, en ese orden. Si algo de `README.md` o `CONTEXTO.md` contradice este documento, **manda este
 documento** (algunas partes de esos archivos son de antes del 31-oct).
