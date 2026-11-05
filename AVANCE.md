@@ -2,6 +2,14 @@
 
 Lo más reciente va arriba.
 
+## 5 de noviembre de 2026 (publicado) — versión final en producción
+
+- El dueño pidió publicar: se fusionó #1 y la versión final ya está en `luminous-rolypoly-293a41.netlify.app`.
+- Pruebas: sitio y panel pasaron en la vista previa. En producción Netlify agrega la etiqueta «Powered by Netlify», que tapa los botones de abajo en celular; se quita en Project configuration → General.
+- DNS en GoDaddy: www → CNAME `luminous-rolypoly-293a41.netlify.app`, @ → A `75.2.60.5` (pendiente de que se aplique).
+
+Falta: quitar la etiqueta de Netlify; que el dominio apunte a Netlify y volver a publicar (Trigger deploy); cambiar la contraseña `12345`; Cloudinary antes de cancelar Shopify.
+
 ## 5 de noviembre de 2026 — el sitio pasa a una cuenta de Netlify del dueño
 
 - Se descartó Vercel: el plan gratis no permite uso comercial y el Pro cuesta 20 USD al mes.
