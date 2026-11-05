@@ -2,6 +2,14 @@
 
 Lo más reciente va arriba.
 
+## 5 de noviembre de 2026 (cierre) — hero de cochera y botón para pasar fotos a Cloudinary
+
+- El dueño descartó el estudio oscuro: hero de computadora con una cochera moderna al atardecer, palmeras y tres camionetas (Arcads). En AVIF (76 KB) con WebP de respaldo.
+- Panel: aviso con botón «Pasar fotos a Cloudinary» mientras queden fotos en Shopify (8 por llamada, auto por auto; solo cambia las URLs de `images` y `photoSections`).
+- Peso medido: el inicio en celular baja de 6.9 MB (Shopify) a 2.3 MB; lo más pesado que queda son las fotos JPG de Shopify.
+
+Falta: publicar; correr «Pasar fotos a Cloudinary» en el panel y comprobar que las fichas usen `res.cloudinary.com`; cambiar la contraseña `12345`; después, cancelar Shopify.
+
 ## 5 de noviembre de 2026 (noche) — hero de computadora más impactante y dominio conectado
 
 - `h3seminuevos.com` ya apunta a Netlify (GoDaddy: @ → A 75.2.60.5; www → CNAME). Dominio principal: `h3seminuevos.com`; `www` redirige.

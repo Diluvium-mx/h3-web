@@ -12,6 +12,8 @@ import {
   TRANSMISSIONS,
   parseVideo,
   slugify,
+  isShopifyPhoto,
+  swapPhotos,
   type Car,
   type CarStatus,
 } from "./cars";
@@ -33,7 +35,7 @@ import {
   removeCar,
   removeReview,
 } from "./storage";
-import { deleteImages, isAllowedImageUrl, saveImage, storeRemoteImage } from "./images";
+import { cloudinaryEnabled, deleteImages, isAllowedImageUrl, saveImage, storeRemoteImage } from "./images";
 import { shopifyToCar, type ShopifyProduct } from "./shopify";
 
 export type ActionResult<T = object> = ({ ok: true } & T) | { ok: false; error: string };
@@ -365,6 +367,32 @@ export async function listShopifyAction(store: string): Promise<ActionResult<{ i
     };
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : "No se pudo leer la tienda" };
+  }
+}
+
+// ---------- Pasar fotos de Shopify a Cloudinary ----------
+
+// Pocas fotos por llamada para no pasar el límite de tiempo de la función; el panel repite hasta terminar.
+// Cloudinary descarga cada foto directo de Shopify (no pasa por el hosting). Solo cambian las URLs.
+const PHOTOS_PER_CALL = 8;
+
+export async function moveCarPhotosAction(id: string): Promise<ActionResult<{ moved: number; remaining: number }>> {
+  await requireAdmin();
+  if (!cloudinaryEnabled) return { ok: false, error: "Conecta Cloudinary primero." };
+  try {
+    const car = await getCar(id);
+    if (!car) return { ok: false, error: "El auto ya no existe" };
+    const pending = car.images.filter(isShopifyPhoto);
+    const batch = pending.slice(0, PHOTOS_PER_CALL);
+    const fresh = await mapLimit(batch, 4, (src, i) => storeRemoteImage(src, `${car.slug}-${i + 1}`).catch(() => null));
+    const map = new Map(batch.flatMap((src, i) => (fresh[i] ? [[src, fresh[i]] as const] : [])));
+    if (map.size) {
+      await putCar(swapPhotos(car, map));
+      changed();
+    }
+    return { ok: true, moved: map.size, remaining: pending.length - map.size };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : "No se pudieron pasar las fotos" };
   }
 }
 

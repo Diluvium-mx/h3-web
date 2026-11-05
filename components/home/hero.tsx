@@ -21,12 +21,12 @@ const TITLE: { text: string; accent?: boolean }[] = [
   { text: "Villahermosa." },
 ];
 
-// Imagen del hero en computadora (cambiada por el dueño el 5-nov por una más impactante): hecha con Arcads
-// (Nano Banana 2.1) a partir de la foto real de la G63 del inventario, en un estudio oscuro con reflector y luz
-// roja. Si ese auto ya no está a la venta, se oculta su tarjeta.
+// Imagen del hero en computadora (elegida por el dueño el 5-nov): hecha con Arcads (Nano Banana 2.1), una
+// cochera moderna al atardecer con palmeras y tres camionetas (G-Class, Wrangler y Land Cruiser). La tarjeta
+// de abajo a la derecha es de la G63 real del inventario; si se vende, se oculta sola.
 export const HERO_DESKTOP = {
   slug: "mercedes-benz-g63-amg-2021",
-  alt: "Mercedes-Benz G63 AMG gris mate en un estudio oscuro con reflector y luz roja",
+  alt: "Cochera moderna al atardecer con palmeras y tres camionetas seminuevas",
 };
 // Pixel transparente: en celular el <picture> no descarga la imagen de computadora
 const BLANK = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
@@ -62,16 +62,22 @@ export function Hero({ featured, showcase, rating }: { featured: Car[]; showcase
           <picture>
             <source
               media="(min-width: 1024px)"
+              srcSet="/img/hero-escritorio-1440.avif 1440w, /img/hero-escritorio-2048.avif 2048w"
+              sizes="100vw"
+              type="image/avif"
+            />
+            <source
+              media="(min-width: 1024px)"
               srcSet="/img/hero-escritorio-1440.webp 1440w, /img/hero-escritorio-2048.webp 2048w"
               sizes="100vw"
               type="image/webp"
             />
-            {/* Imagen local ya optimizada (2 tamaños en WebP) */}
+            {/* Imagen local ya optimizada (2 tamaños en AVIF y, de respaldo, en WebP) */}
             <img
               src={BLANK}
               alt={HERO_DESKTOP.alt}
               fetchPriority="high"
-              className="absolute inset-0 h-full w-full object-cover object-[60%_60%]"
+              className="absolute inset-0 h-full w-full object-cover object-[80%_60%]"
             />
           </picture>
           {showcase && (
@@ -94,7 +100,7 @@ export function Hero({ featured, showcase, rating }: { featured: Car[]; showcase
           )}
         </div>
         {/* Sombra mínima arriba, solo para que se lea el encabezado */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/40 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/40 to-transparent lg:h-32 lg:from-black/55" />
       </div>
 
       {/* Texto: hoja clara sobre la foto */}

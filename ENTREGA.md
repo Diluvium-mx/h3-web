@@ -253,6 +253,8 @@ para producción y vistas previas; al cambiarla se cierran las demás sesiones. 
 ningún archivo ni se sube al repositorio.**
 
 ### Paso 7. Pasar las fotos de Shopify a Cloudinary (antes de cancelar Shopify)
+> **5-nov-2026:** ya existe el botón **«Pasar fotos a Cloudinary»** en el panel (`moveCarPhotosAction`). Aparece mientras queden fotos en Shopify.
+
 **Problema conocido (revisado en el código el 31-oct):** el importador del panel (Panel → Importar de
 Shopify) **no sirve para los 13 autos actuales**. Los reconoce por su `shopifyHandle` y los marca
 «Ya importado» (`importShopifyAction` en `lib/actions.ts` y `components/admin/shopify-import.tsx`). Solo

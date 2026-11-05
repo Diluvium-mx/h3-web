@@ -5,10 +5,11 @@ import { CheckCircle2, Download, ExternalLink, KeyRound, MessageSquareQuote, Plu
 import { WhatsAppIcon } from "@/components/icons";
 import { AdminCarList } from "@/components/admin/car-list";
 import { StorageBanner } from "@/components/admin/storage-banner";
+import { MovePhotos } from "@/components/admin/move-photos";
 import { LogoutButton } from "@/components/admin/logout-button";
 import { usingDefaultPassword } from "@/lib/admin-password";
 import { requireAdmin } from "@/lib/auth";
-import { carTitle, carUrl, formatPrice, sortNewest, type Car } from "@/lib/cars";
+import { carTitle, carUrl, formatPrice, isShopifyPhoto, sortNewest, type Car } from "@/lib/cars";
 import { cloudinaryEnabled } from "@/lib/images";
 import { getStorageMode, listCars } from "@/lib/storage";
 
@@ -87,6 +88,7 @@ async function Dashboard({ searchParams }: { searchParams: PageProps<"/admin">["
         </Link>
       )}
       <StorageBanner mode={getStorageMode()} photos={cloudinaryEnabled} />
+      {cloudinaryEnabled && <PendingPhotos cars={cars} />}
       {cars.length === 0 ? (
         <div className="rounded-lg bg-card p-10 text-center ring-1 ring-line">
           <p className="font-display text-2xl">Aún no hay autos</p>
@@ -147,6 +149,13 @@ function SavedCard({ car, created }: { car: Car; created: boolean }) {
       </div>
     </div>
   );
+}
+
+function PendingPhotos({ cars }: { cars: Car[] }) {
+  const pending = cars
+    .map((c) => ({ id: c.id, title: carTitle(c), photos: c.images.filter(isShopifyPhoto).length }))
+    .filter((c) => c.photos > 0);
+  return pending.length ? <MovePhotos cars={pending} /> : null;
 }
 
 function ListSkeleton() {
