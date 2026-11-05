@@ -3,6 +3,7 @@
 @AGENTS.md
 
 1. Antes de empezar, lee `CONTEXTO.md` (qué es H3, qué está decidido y qué no) y `AVANCE.md`.
+   **Si vas a publicar el sitio, lee primero `ENTREGA.md`** (repositorio, Netlify, dominio y pasos exactos).
 2. No inventes datos del negocio. Si algo no está decidido, escríbelo como «sin decidir» y pregúntalo.
 3. **El repositorio es público:** nunca subas llaves, contraseñas, tokens, `.env` ni datos de clientes.
 4. Cada vez que avances, agrega una entrada **arriba** en `AVANCE.md` con:
@@ -30,11 +31,18 @@
    node scripts/e2e-admin.mjs http://localhost:3000
    ```
 
-   La prueba del panel usa la contraseña de desarrollo local y modifica `data/cars.local.json` y
-   `data/reviews.local.json`; los dos están ignorados por git.
+   La prueba del panel usa la contraseña inicial `12345` (o `ADMIN_PASSWORD`) y modifica
+   `data/cars.local.json`, `data/reviews.local.json` y `data/settings.local.json` (este último lo respalda y
+   lo restaura al terminar); los tres están ignorados por git.
 
    En celular (ver `PRUEBAS-EN-CELULAR.md`): `npm run movil` para un teléfono real en el mismo Wi-Fi y
    `node scripts/recorrido-movil.mjs http://localhost:3000` para grabar el recorrido en video.
+
+   Panel publicado en Netlify (Netlify Blobs; cambia un precio y lo regresa):
+
+   ```bash
+   node scripts/e2e-panel-netlify.mjs https://deploy-preview-1--h3-seminuevos.netlify.app
+   ```
 
    Fotos en Cloudinary (con datos de prueba, nunca los reales):
 
@@ -48,3 +56,7 @@
    fotos siempre desde Cloudinary (nunca por el hosting).
 9. **Ramas:** trabaja y sube en la rama `desarrollo`. Netlify publica `main`, y cada vez gasta 15 de 300
    créditos al mes. Pasa los cambios a `main` solo cuando el dueño pida publicar.
+   La vista previa (0 créditos) sale de la solicitud de cambios #1 (`desarrollo` → `main`):
+   https://deploy-preview-1--h3-seminuevos.netlify.app. No la fusiones sin que el dueño diga «publica».
+   **Desde el 31-oct hay una sola versión** (la 2, en `desarrollo`). La rama `version-scrollcraft` (versión 1,
+   solicitud #2) quedó congelada: no se le suben más cambios.

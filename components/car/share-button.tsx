@@ -30,9 +30,9 @@ export function ShareButton({ title, url, className = "" }: { title: string; url
     <button
       type="button"
       onClick={share}
-      className={`inline-flex h-12 items-center justify-center gap-1.5 rounded-full border border-line bg-soft px-2 text-sm font-semibold transition-all hover:border-fg/30 active:scale-95 ${className}`}
+      className={`inline-flex h-12 items-center justify-center gap-1.5 rounded-md border border-line bg-card px-2 text-sm font-semibold transition-all hover:border-fg/40 active:scale-95 ${className}`}
     >
-      {copied ? <Check className="size-4 text-wa-dark" /> : <Share2 className="size-4 text-brand-hi" />}
+      {copied ? <Check className="size-4 text-wa-dark" /> : <Share2 className="size-4" />}
       {copied ? "¡Copiado!" : "Compartir"}
     </button>
   );

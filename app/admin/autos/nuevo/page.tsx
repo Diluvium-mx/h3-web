@@ -6,7 +6,7 @@ import { uploadMode } from "@/lib/upload-mode";
 
 export default function NewCarPage() {
   return (
-    <FormShell eyebrow="Nuevo" title="Publicar auto">
+    <FormShell wide eyebrow="Nuevo" title="Publicar auto">
       <Suspense fallback={<FormSkeleton />}>
         <NewCar />
       </Suspense>

@@ -1,5 +1,8 @@
 # H3 Seminuevos — sitio web + panel de administración
 
+> **¿Vas a publicar el sitio? Lee primero [`ENTREGA.md`](ENTREGA.md)** (31-oct-2026): repositorio, ramas,
+> Netlify, dominio, variables, imágenes y pasos exactos. Si algo de este README lo contradice, manda `ENTREGA.md`.
+
 Sitio para **H3 Seminuevos** (Villahermosa, Tabasco) que reemplaza la tienda de Shopify.
 Muestra el catálogo de autos, manda a los interesados a WhatsApp con el auto ya escrito en el
 mensaje, recibe solicitudes de "Vende tu auto" y tiene un panel donde el dueño sube y edita
@@ -7,61 +10,46 @@ autos desde el celular.
 
 ## Qué incluye
 
-**Sitio público** (pensado primero para celular)
-- **Inicio**: landing hecha con el método de los 2 videos analizados (ver `ANALISIS-VIDEOS.md`):
-  - Hero con prueba social real, título de beneficio, subtítulo de dolor a solución, un botón principal,
-    quita-miedos y fotos del inventario.
-  - Números reales del inventario y franja de marcas.
-  - Autos destacados con tipos como «historias».
-  - Reseñas, solo si el dueño las agrega.
-  - «Lo de siempre» contra «en H3».
-  - 3 beneficios con imagen y «Tu próximo auto en 3 pasos».
-  - «Recién vendidos», «Vende tu auto», preguntas frecuentes y cierre con contacto y horario.
-- **Catálogo** (`/autos`): búsqueda, filtros (tipo, marca, precio, año, transmisión) y orden. Los
+**Sitio público** (pensado primero para celular; detalle completo en `CONTEXTO.md`, sección 3)
+- **Inicio**: hero «Autos seminuevos *seleccionados* en Villahermosa.» (carrusel de fotos reales en celular,
+  imagen fija hecha con Arcads en computadora), franja de marcas, inventario con categorías, beneficios
+  «al comprar» y «al vender», autos verificados, reseñas (solo si hay reales), tabla comparativa, preguntas
+  frecuentes, cierre con carrusel y «Visítanos» con mapa.
+- **Inventario** (`/autos`): búsqueda, categorías, filtros (marca, precio, año, transmisión) y orden. Los
   filtros viven en el URL (`/autos?tipo=SUV`), así que se pueden compartir.
-- **Detalle de cada auto** (`/autos/bmw-m3-2018`):
-  - En la primera pantalla del celular: foto, precio, resumen, botón de WhatsApp según el estado y
-    quita-miedos.
-  - Todas las fotos en cuadrícula y pantalla completa, con pestañas por sección (exterior, interior,
-    motor y detalles).
-  - Equipamiento agrupado con íconos (confort, tecnología, seguridad y exterior).
-  - Video opcional (YouTube dentro de la página; TikTok, Instagram y Facebook como enlace).
-  - Ficha técnica, «pregúntanos» para datos faltantes, descripción y «Así de fácil» en 3 pasos.
-  - «Tus dudas, resueltas»: dueños, factura, servicios, papeles, blindaje y más. Lo que falta se pregunta
-    por WhatsApp con un toque.
-  - Reseñas, si hay, y autos similares.
-  - «Mándaselo por WhatsApp» a otra persona y barra fija en celular.
-  - Si el enlace es de un auto que ya no existe, ofrece autos de la misma marca.
-- **Vende tu auto** (`/vende-tu-auto`): formulario de 3 pasos que arma el mensaje de WhatsApp con los
-  datos del auto. Guarda el borrador en el teléfono.
-- Microanimaciones: aparición al hacer scroll, destellos en botones, transición de la foto de la
-  tarjeta al detalle, líneas de velocidad, etc. Se respetan las preferencias de "reducir movimiento".
+- **Ficha de cada auto** (`/autos/bmw-m3-2018`): galería con pantalla completa, precio, WhatsApp con el auto
+  en el mensaje, fotos por sección (Exterior e Interior), equipamiento, video opcional, ficha técnica (solo
+  filas con dato), autos parecidos y barra fija de WhatsApp en celular. Si el auto ya no existe, ofrece
+  autos de la misma marca.
+- **Vende tu auto** (`/vende-tu-auto`): formulario de 3 partes que arma el mensaje de WhatsApp y «Cómo
+  funciona» en 6 pasos. Guarda el borrador en el teléfono.
+- Microanimaciones discretas; se respeta «reducir movimiento».
 - SEO local: títulos y descripciones por auto, datos estructurados (AutoDealer y Car), `sitemap.xml`,
-  `robots.txt`, imagen para compartir en redes y metadatos en español de México.
+  `robots.txt`, imagen para compartir y metadatos en español de México.
 
 **Panel** (`/admin`, protegido con contraseña)
 - Lista del inventario con búsqueda y pestañas (Disponibles / Apartados / Vendidos).
 - Cambiar estado y marcar como destacado con un toque.
-- Alta y edición de autos: fotos (se comprimen solas en el teléfono antes de subir, ~300 KB c/u),
-  reordenar y elegir portada, sección de cada foto, datos, equipamiento (lista fija), características,
-  etiquetas, descripción y video opcional.
-- **Importar de Shopify**: copia los autos y sus fotos del Shopify actual al sitio nuevo con un clic.
-- **Reseñas** (`/admin/resenas`): agrega lo que dicen tus clientes (nombre, estrellas, texto, auto, origen y
-  foto opcional). Aparecen en el inicio; si no hay ninguna, la sección no se muestra. Publica solo reseñas
-  reales y con permiso.
+- Alta y edición de autos con vista previa de la tarjeta, «Dónde va a aparecer», barra «Falta: …» y
+  confirmación al publicar. Fotos (se comprimen solas en el teléfono, ~300 KB c/u), orden y portada, sección
+  de cada foto, datos, equipamiento (lista fija), documentos, descripción y video opcional.
+- **Importar de Shopify**: copia autos nuevos de la tienda (los 13 actuales ya cuentan como importados; para
+  sus fotos ver `ENTREGA.md`, paso 7).
+- **Reseñas** (`/admin/resenas`): solo reales y con permiso. Si no hay ninguna, la sección no se muestra.
 - Al guardar, el sitio público se actualiza al instante.
 
 Estados de un auto:
 - **Disponible**: visible en el catálogo.
 - **Apartado**: visible con etiqueta amarilla "Apartado".
-- **Vendido**: sale del catálogo y aparece en "Recién vendidos" en el inicio (prueba social). Su página
-  sigue existiendo y el botón cambia a "Búscame uno similar".
+- **Vendido**: sale del catálogo y del inicio. Su página sigue existiendo, dice «Vendido» y el botón cambia
+  a "Búscame uno similar".
 
 ## Tecnología
 
 - Next.js 16 (App Router, Cache Components) + React 19 + Tailwind CSS 4.
 - **Netlify Free** para publicar el sitio.
-- **Upstash Redis Free** para guardar el inventario.
+- **Netlify Blobs** (incluido en Netlify Free, sin cuenta extra) para guardar el inventario, las reseñas y
+  la contraseña del panel. Opcional: Upstash Redis Free; si se conecta, se usa en su lugar.
 - **Cloudinary Free** para guardar y servir las fotos. Las fotos salen directo de Cloudinary ya
   optimizadas (AVIF/WebP), así no gastan créditos de Netlify.
 
@@ -75,8 +63,8 @@ Se hace en dos etapas.
 
 ### Etapa 1: tener el enlace (solo Netlify, ≈ 15 minutos)
 
-El sitio público queda completo con el inventario actual. El panel deja entrar, pero **no guarda cambios**
-hasta la etapa 2.
+El sitio público queda completo con el inventario actual y **el panel ya guarda cambios** en Netlify Blobs
+(30-oct). Las fotos nuevas necesitan Cloudinary (etapa 2).
 
 1. **Cuenta:** entra a [app.netlify.com](https://app.netlify.com/signup), elige **GitHub** para registrarte
    y acepta el plan **Free**.
@@ -94,33 +82,71 @@ hasta la etapa 2.
    6. Confirma con **Deploy** (o **Publish**). Tarda de 3 a 5 minutos.
 4. **Hazlo público**, si quedó privado: usa el botón **Make public** o ve a **Project configuration →
    General → Visitor access → Project visibility → Public**.
-5. **Contraseñas del panel**, si no las pusiste en el paso 3:
+5. **Secreto del panel**, si no lo pusiste en el paso 3:
    1. Ve a **Project configuration → Environment variables → Add a variable → Import from a .env file**.
-   2. Pega estas dos líneas con tus valores y toca **Import variables**:
+   2. Pega esta línea con tu valor y toca **Import variables**:
       ```
-      ADMIN_PASSWORD=tu-contraseña-larga
       AUTH_SECRET=texto-largo-y-aleatorio
       ```
    - Para el `AUTH_SECRET`, en la Terminal de la Mac corre `openssl rand -base64 32`.
-   - Para `ADMIN_PASSWORD`, usa 4 palabras al azar que **no aparezcan en el sitio**. Netlify revisa que las
-     contraseñas no se filtren en el código publicado, y una palabra común podría detener la publicación.
-6. **Vuelve a publicar** para que tome las contraseñas: **Deploys → Trigger deploy → Deploy project**.
+   - El `AUTH_SECRET` es opcional desde el 30-oct: sin él, el panel crea una llave al azar y la guarda en
+     Netlify Blobs.
+   - La contraseña inicial del panel es `12345` (decisión del dueño). Como el repositorio es público,
+     cualquiera puede saberla: **cámbiala en Panel → Ajustes** (se guarda cifrada en Netlify Blobs y vale
+     para producción y las vistas previas).
+   - Opcional: si agregas `ADMIN_PASSWORD`, esa reemplaza a `12345` desde el principio. Usa 4 palabras al
+     azar que **no aparezcan en el sitio**; Netlify revisa que las contraseñas no se filtren en el código
+     publicado, y una palabra común podría detener la publicación.
+6. **Vuelve a publicar** para que tome el secreto: **Deploys → Trigger deploy → Deploy project**.
 7. Abre `https://NOMBRE.netlify.app` en el celular. El panel está en `/admin`.
 
-### Etapa 2: que el panel guarde cambios y las fotos salgan de Cloudinary
+### Etapa 2: que las fotos nuevas salgan de Cloudinary
 
-1. **Upstash** ([upstash.com](https://upstash.com)): crea una cuenta y luego una base de datos Redis en el
-   plan Free. En la pestaña **REST API** copia `UPSTASH_REDIS_REST_URL` y `UPSTASH_REDIS_REST_TOKEN`.
+1. **Upstash (opcional):** ya no hace falta; el panel guarda en Netlify Blobs. Si algún día se quiere usar
+   Upstash ([upstash.com](https://upstash.com)), crea una base de datos Redis Free y copia
+   `UPSTASH_REDIS_REST_URL` y `UPSTASH_REDIS_REST_TOKEN` (ojo: los datos de Netlify Blobs no se pasan solos).
 2. **Cloudinary** ([cloudinary.com](https://cloudinary.com)): crea una cuenta gratis. En el **Dashboard**
    copia la «API environment variable», que tiene esta forma: `CLOUDINARY_URL=cloudinary://…`.
 3. Agrégalas en **Project configuration → Environment variables**, igual que en la etapa 1, y vuelve a
    publicar.
    - `NEXT_PUBLIC_SITE_URL`: no la agregues mientras no se conecte el dominio; el sitio usa sola la
      dirección `*.netlify.app`. Cuando se conecte, pon `https://www.h3seminuevos.com`.
-4. Entra a `https://NOMBRE.netlify.app/admin`, ve a **Importar de Shopify → Buscar → Importar
-   seleccionados**. Las fotos se copian de Shopify a Cloudinary.
-5. Cuando todo funcione, **cancela Shopify**. Importa las fotos **antes**, porque después desaparecen.
+4. Entra a `https://NOMBRE.netlify.app/admin` (el enlace discreto «Administración» está al final del
+   pie de página). Ve primero a **Ajustes** y cambia la contraseña `12345`.
+5. Pasa las fotos de Shopify a Cloudinary: ver **`ENTREGA.md`, paso 7** (el importador solo copia autos
+   nuevos; los 13 actuales ya cuentan como importados).
+6. Cuando todo funcione, **cancela Shopify**. Importa las fotos **antes**, porque después desaparecen.
    El dominio se conecta después (sin decidir).
+
+### Enlace de vista previa (rama `desarrollo`, 0 créditos)
+
+**Enlace actual (30-oct): https://deploy-preview-1--h3-seminuevos.netlify.app**. Sale de la solicitud de
+cambios [Diluvium-mx/h3-web#1](https://github.com/Diluvium-mx/h3-web/pull/1) (`desarrollo` → `main`). Netlify la
+reconstruye sola con cada cambio que se sube a `desarrollo`, sin gastar créditos. **No fusionarla** hasta que el
+dueño diga «publica»: al fusionarla se publica `main` (15 créditos).
+
+**Una sola versión desde el 31-oct:** la vista previa de arriba. La rama `version-scrollcraft` (versión 1, con la
+skill `/scroll-craft`) quedó congelada.
+
+Otra forma, sin solicitud de cambios, es activar las publicaciones de la rama:
+
+Sirve para ver los cambios desde cualquier celular, en cualquier parte, y para mandárselo al dueño. Se
+actualiza solo cada vez que se suben cambios a `desarrollo`. Según la documentación de Netlify, las
+publicaciones de ramas («branch deploys») **no gastan créditos**; solo las de producción (`main`) cuestan 15.
+
+1. Haz la etapa 1 (pasos 1 a 4). La primera publicación de `main` sí cuesta 15 créditos, una sola vez.
+2. En el proyecto: **Project configuration → Build & deploy → Continuous deployment → Branches and deploy
+   contexts → Configure → Let me add individual branches**, escribe `desarrollo` y **Save**. (En algunas
+   cuentas el menú dice **Developer settings** en lugar de **Build & deploy**.)
+3. El enlace queda así: `https://desarrollo--NOMBRE.netlify.app` (NOMBRE es el del paso 3.3). Aparece en
+   **Deploys** después del siguiente cambio que se suba a `desarrollo`.
+4. El proyecto debe ser **público** (paso 4) para que el dueño lo abra sin cuenta.
+
+En la vista previa los enlaces de WhatsApp apuntan a la misma vista previa y Google no la indexa
+(`robots.txt` y `X-Robots-Tag: noindex`). El panel funciona y guarda en Netlify Blobs: **el mismo
+inventario y la misma contraseña** en producción y en las 2 vistas previas. Para probarlo:
+`node scripts/e2e-panel-netlify.mjs https://deploy-preview-1--h3-seminuevos.netlify.app` (cambia un precio
+y lo regresa).
 
 ### Para no gastar créditos de más
 
@@ -156,7 +182,7 @@ npm run dev
 ```
 
 - Sin variables de entorno, el sitio usa `data/seed.json` (el inventario actual).
-- En local, el panel (`/admin`, contraseña `h3admin`) guarda en `data/cars.local.json` y
+- En local, el panel (`/admin`, contraseña inicial `12345`, que se cambia en Panel → Ajustes) guarda en `data/cars.local.json` y
   `data/reviews.local.json`, y las fotos en `public/uploads/` (todo ignorado por git).
 - Para usar los servicios reales en local, copia `.env.example` como `.env.local` y llénalo
   (no lo subas al repositorio).

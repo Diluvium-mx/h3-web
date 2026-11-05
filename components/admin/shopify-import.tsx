@@ -53,21 +53,21 @@ export function ShopifyImport({ defaultStore }: { defaultStore: string }) {
 
   return (
     <div className="space-y-5">
-      <div className="rounded-3xl border border-line bg-card p-4 sm:p-6">
+      <div className="rounded-lg border border-line bg-card p-4 sm:p-6">
         <label className="block">
           <span className="mb-1.5 block text-sm font-medium">Dirección de la tienda Shopify</span>
           <div className="flex gap-2">
             <input
               value={store}
               onChange={(e) => setStore(e.target.value)}
-              className="h-12 w-full rounded-xl border border-line bg-soft px-4 focus:border-brand focus:outline-none"
+              className="h-12 w-full rounded-md border border-line bg-soft px-4 focus:border-fg/50 focus:outline-none"
               placeholder="https://www.h3seminuevos.com"
             />
             <button
               type="button"
               onClick={load}
               disabled={loading || running}
-              className="inline-flex h-12 shrink-0 items-center gap-2 rounded-xl bg-night px-4 font-semibold text-white disabled:opacity-60"
+              className="inline-flex h-12 shrink-0 items-center gap-2 rounded-md bg-night px-4 font-semibold text-white disabled:opacity-60"
             >
               {loading && <Loader2 className="size-4 animate-spin" />}
               Buscar
@@ -92,7 +92,7 @@ export function ShopifyImport({ defaultStore }: { defaultStore: string }) {
               type="button"
               onClick={run}
               disabled={running || selected.size === 0}
-              className="btn-shine inline-flex h-12 items-center gap-2 rounded-full bg-brand px-5 font-semibold text-white disabled:opacity-50"
+              className="btn btn-dark btn-shine disabled:opacity-50"
             >
               {running ? <Loader2 className="size-4 animate-spin" /> : <Download className="size-4" />}
               {running ? "Importando…" : "Importar seleccionados"}
@@ -103,7 +103,7 @@ export function ShopifyImport({ defaultStore }: { defaultStore: string }) {
               const st = status[item.handle];
               const disabled = item.imported || st?.state === "done";
               return (
-                <li key={item.handle} className="flex items-center gap-3 rounded-2xl border border-line bg-card p-3">
+                <li key={item.handle} className="flex items-center gap-3 rounded-lg border border-line bg-card p-3">
                   <input
                     type="checkbox"
                     checked={selected.has(item.handle)}

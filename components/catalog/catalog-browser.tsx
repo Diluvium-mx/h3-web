@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useMemo, useState, type ReactNode } from "react";
-import Image from "next/image";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import { CarCard } from "@/components/car-card";
+import { categoriesOf, CategoryTileContent, categoryTileClass, type Category } from "@/components/category-tile";
 import { WhatsAppIcon } from "@/components/icons";
 import type { Car } from "@/lib/cars";
 import { site, whatsappUrl } from "@/lib/site";
@@ -85,68 +85,21 @@ function Chip({
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className={`inline-flex h-10 shrink-0 items-center gap-1.5 rounded-full border px-4 text-sm font-medium transition-all duration-300 active:scale-95 ${
-        active
-          ? "border-brand bg-brand text-white shadow-[0_6px_20px_-6px_rgb(227_20_31/0.8)]"
-          : "border-line bg-card text-fg/80 hover:border-fg/30 hover:text-fg"
+      className={`inline-flex h-10 shrink-0 items-center gap-1.5 rounded-md border px-3.5 text-sm font-medium transition-all duration-300 active:scale-95 ${
+        active ? "border-night bg-night text-white" : "border-line bg-card text-fg/80 hover:border-fg/40 hover:text-fg"
       }`}
     >
       {children}
-      {count != null && <span className={`text-xs ${active ? "text-white" : "text-dim"}`}>{count}</span>}
+      {count != null && <span className={`text-xs ${active ? "text-white/70" : "text-dim"}`}>{count}</span>}
     </button>
   );
 }
 
-const TYPE_LABEL: Record<string, string> = { Deportivo: "Deportivos", Blindado: "Blindados" };
-
-// Categorías como "historias": foto redonda con anillo rojo-amarillo al elegirla
-function TypeStory({
-  label,
-  count,
-  cover,
-  active,
-  onClick,
-}: {
-  label: string;
-  count: number;
-  cover?: string;
-  active: boolean;
-  onClick: () => void;
-}) {
+// Categoría con la foto real de un auto de ese tipo, la misma del inicio
+function TypeTile({ category, active, onClick }: { category: Category; active: boolean; onClick: () => void }) {
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-pressed={active}
-      className="group flex w-[4.75rem] shrink-0 snap-start flex-col items-center gap-1.5"
-    >
-      <span className="relative grid size-[4.5rem] place-items-center transition-transform duration-300 ease-[var(--ease-spring)] group-active:scale-90">
-        <span
-          className={`absolute inset-0 rounded-full transition-opacity duration-300 ${
-            active
-              ? "animate-[spin_4s_linear_infinite] bg-[conic-gradient(var(--color-brand),var(--color-volt),var(--color-brand))] opacity-100"
-              : "bg-soft-2 opacity-100"
-          }`}
-        />
-        <span className="relative size-[calc(100%-6px)] overflow-hidden rounded-full border-[3px] border-paper bg-brand">
-          {cover ? (
-            <Image
-              src={cover}
-              alt=""
-              fill
-              sizes="72px"
-              quality={70}
-              className="object-cover transition-transform duration-500 group-hover:scale-110"
-            />
-          ) : (
-            <Image src="/brand/mark.png" alt="" width={344} height={186} className="absolute inset-0 m-auto w-3/5" />
-          )}
-        </span>
-        <span className="absolute -right-0.5 -bottom-0.5 grid h-6 min-w-6 place-items-center rounded-full bg-brand px-1.5 text-[11px] font-bold text-white ring-2 ring-paper">
-          {count}
-        </span>
-      </span>
-      <span className={`text-xs font-semibold ${active ? "text-brand-hi" : "text-fg/80"}`}>{label}</span>
+    <button type="button" onClick={onClick} aria-pressed={active} className={categoryTileClass(active)}>
+      <CategoryTileContent category={category} active={active} />
     </button>
   );
 }
@@ -187,18 +140,7 @@ export function CatalogBrowser({ cars }: { cars: Car[] }) {
   const results = useMemo(() => applyFilters(cars, f), [cars, f]);
   const set = (k: keyof Filters, v: string) => setF((prev) => ({ ...prev, [k]: prev[k] === v ? EMPTY[k] : v }));
 
-  const types = useMemo(() => {
-    const m = new Map<string, { count: number; cover?: string }>();
-    const add = (t: string, c: Car) => {
-      const prev = m.get(t);
-      m.set(t, { count: (prev?.count ?? 0) + 1, cover: prev?.cover ?? c.images[0] });
-    };
-    for (const c of cars) {
-      add(c.body, c);
-      if (c.armored) add("Blindado", c);
-    }
-    return [...m.entries()].sort((a, b) => b[1].count - a[1].count);
-  }, [cars]);
+  const categories = useMemo(() => categoriesOf(cars), [cars]);
   const brands = useMemo(() => {
     const m = new Map<string, number>();
     for (const c of cars) m.set(c.brand, (m.get(c.brand) ?? 0) + 1);
@@ -271,7 +213,7 @@ export function CatalogBrowser({ cars }: { cars: Car[] }) {
             <button
               type="button"
               onClick={() => setF((p) => ({ ...EMPTY, q: p.q, orden: p.orden }))}
-              className="mt-7 text-sm font-semibold text-brand-hi hover:underline"
+              className="mt-7 text-sm font-semibold underline underline-offset-4 hover:text-brand-hi"
             >
               Limpiar filtros
             </button>
@@ -280,8 +222,8 @@ export function CatalogBrowser({ cars }: { cars: Car[] }) {
       </aside>
 
       <div className="min-w-0">
-        {/* Buscador + orden */}
-        <div className="flex gap-2">
+        {/* Buscador + orden: se queda fijo arriba al bajar (en celular), justo debajo del encabezado */}
+        <div className="sticky top-[4.5rem] z-30 flex gap-2 transition-[top] duration-500 ease-[var(--ease-out-expo)] in-data-[header=oculto]:top-2 lg:static">
           <label className="relative flex-1">
             <span className="sr-only">Buscar auto</span>
             <Search className="pointer-events-none absolute top-1/2 left-4 size-5 -translate-y-1/2 text-dim" />
@@ -290,20 +232,20 @@ export function CatalogBrowser({ cars }: { cars: Car[] }) {
               value={f.q}
               onChange={(e) => setF((p) => ({ ...p, q: e.target.value }))}
               placeholder="Busca marca, modelo o año…"
-              className="h-12 w-full rounded-full border border-line bg-card pr-4 pl-12 text-fg shadow-sm placeholder:text-dim focus:border-brand focus:ring-4 focus:ring-brand/10 focus:outline-none"
+              className="h-12 w-full rounded-md border border-line bg-card pr-4 pl-12 text-fg shadow-[0_14px_32px_-18px_rgb(10_15_26/0.45)] placeholder:text-dim focus:border-fg/50 focus:ring-4 focus:ring-fg/5 focus:outline-none"
             />
           </label>
           <button
             type="button"
             onClick={() => setSheet(true)}
-            className={`relative inline-flex h-12 items-center gap-2 rounded-full border px-4 font-medium transition-colors lg:hidden ${
-              activeCount > 0 ? "border-brand bg-brand text-white" : "border-line bg-card"
+            className={`relative inline-flex h-12 items-center gap-2 rounded-md border px-4 font-medium shadow-[0_14px_32px_-18px_rgb(10_15_26/0.45)] transition-colors lg:hidden ${
+              activeCount > 0 ? "border-night bg-night text-white" : "border-line bg-card"
             }`}
           >
             <SlidersHorizontal className="size-5" />
             <span className="sr-only sm:not-sr-only">Filtros</span>
             {activeCount > 0 && (
-              <span className="absolute -top-1 -right-1 grid size-5 place-items-center rounded-full bg-volt text-[11px] font-bold text-night">
+              <span className="absolute -top-1.5 -right-1.5 grid size-5 place-items-center rounded-sm bg-brand text-[11px] font-bold text-white">
                 {activeCount}
               </span>
             )}
@@ -313,7 +255,7 @@ export function CatalogBrowser({ cars }: { cars: Car[] }) {
             <select
               value={f.orden}
               onChange={(e) => setF((p) => ({ ...p, orden: e.target.value }))}
-              className="h-12 rounded-full border border-line bg-card px-4 pr-8 text-fg focus:border-brand focus:outline-none"
+              className="h-12 rounded-md border border-line bg-card px-4 pr-8 text-fg focus:border-fg/50 focus:outline-none"
             >
               {SORTS.map((s) => (
                 <option key={s.value} value={s.value}>
@@ -324,31 +266,21 @@ export function CatalogBrowser({ cars }: { cars: Car[] }) {
           </label>
         </div>
 
-        {/* Tipos como historias (acceso rápido) */}
+        {/* Tipos con ícono (acceso rápido) */}
         <div
-          className="no-scrollbar -mx-4 mt-5 flex snap-x gap-3 overflow-x-auto px-4 pt-1 pb-2 sm:mx-0 sm:px-0"
+          className="no-scrollbar -mx-4 mt-5 flex snap-x scroll-px-4 gap-3.5 overflow-x-auto px-4 pt-1 pb-5 sm:mx-0 sm:scroll-px-0 sm:px-0"
           role="group"
           aria-label="Tipo de auto"
         >
-          <TypeStory label="Todos" count={cars.length} active={!f.tipo} onClick={() => setF((p) => ({ ...p, tipo: "" }))} />
-          {types.map(([t, { count, cover }]) => (
-            <TypeStory
-              key={t}
-              label={TYPE_LABEL[t] ?? t}
-              count={count}
-              cover={cover}
-              active={f.tipo === t}
-              onClick={() => set("tipo", t)}
-            />
+          <TypeTile category={categories.all} active={!f.tipo} onClick={() => setF((p) => ({ ...p, tipo: "" }))} />
+          {categories.types.map((c) => (
+            <TypeTile key={c.type} category={c} active={f.tipo === c.type} onClick={() => set("tipo", c.type)} />
           ))}
         </div>
 
         <div className="mt-6 mb-4 flex items-center justify-between gap-3">
-          <p className="flex items-center gap-2 text-sm text-mute" aria-live="polite">
-            <span
-              key={results.length}
-              className="font-display inline-grid h-7 min-w-7 -skew-x-6 place-items-center rounded-md bg-volt px-1.5 text-base text-night animate-rise"
-            >
+          <p className="flex items-baseline gap-2 text-sm text-mute" aria-live="polite">
+            <span key={results.length} className="font-display inline-block text-2xl text-fg animate-rise">
               {results.length}
             </span>{" "}
             {results.length === 1 ? "auto encontrado" : "autos encontrados"}
@@ -357,7 +289,7 @@ export function CatalogBrowser({ cars }: { cars: Car[] }) {
             <button
               type="button"
               onClick={() => setF((p) => ({ ...EMPTY, orden: p.orden }))}
-              className="inline-flex items-center gap-1 text-sm font-semibold text-brand-hi"
+              className="inline-flex items-center gap-1 text-sm font-semibold underline-offset-4 hover:underline"
             >
               <X className="size-4" /> Limpiar
             </button>
@@ -366,15 +298,15 @@ export function CatalogBrowser({ cars }: { cars: Car[] }) {
 
         <h2 className="sr-only">Resultados</h2>
         {results.length > 0 ? (
-          <div key={filterKey} className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <div key={filterKey} className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-3">
             {results.map((car, i) => (
               <div key={car.id} className="animate-rise" style={{ animationDelay: `${Math.min(i, 8) * 60}ms` }}>
-                <CarCard car={car} preload={i < 2} sizes="(min-width: 1280px) 28vw, (min-width: 640px) 45vw, 50vw" />
+                <CarCard car={car} preload={i < 2} className="h-full" sizes="(min-width: 1280px) 28vw, (min-width: 640px) 45vw, 50vw" />
               </div>
             ))}
           </div>
         ) : (
-          <div className="rounded-3xl border border-dashed border-line px-6 py-14 text-center">
+          <div className="rounded-lg bg-card px-6 py-14 text-center ring-1 ring-line">
             <p className="font-display text-3xl">Sin resultados… por ahora.</p>
             <p className="mx-auto mt-3 max-w-sm text-mute">
               Nuestro inventario cambia rápido. Dinos qué buscas y te avisamos cuando llegue.
@@ -386,14 +318,14 @@ export function CatalogBrowser({ cars }: { cars: Car[] }) {
                 )}
                 target="_blank"
                 rel="noopener"
-                className="btn-shine inline-flex h-12 items-center gap-2 rounded-full bg-wa px-6 font-semibold text-night"
+                className="btn btn-wa btn-shine"
               >
                 <WhatsAppIcon className="size-5" /> Búscame uno
               </a>
               <button
                 type="button"
                 onClick={() => setF(EMPTY)}
-                className="inline-flex h-12 items-center rounded-full border border-line px-6 font-semibold"
+                className="btn btn-outline"
               >
                 Ver todos
               </button>
@@ -411,14 +343,14 @@ export function CatalogBrowser({ cars }: { cars: Car[] }) {
             onClick={() => setSheet(false)}
             aria-label="Cerrar filtros"
           />
-          <div className="absolute inset-x-0 bottom-0 flex max-h-[88dvh] flex-col rounded-t-[2rem] border-t border-line bg-card animate-sheet">
-            <div className="mx-auto mt-3 h-1.5 w-12 rounded-full bg-soft-2" />
+          <div className="absolute inset-x-0 bottom-0 flex max-h-[88dvh] flex-col rounded-t-xl border-t border-line bg-card animate-sheet">
+            <div className="mx-auto mt-3 h-1 w-10 rounded-sm bg-soft-2" />
             <div className="flex items-center justify-between px-5 pt-4 pb-2">
               <p className="font-display text-2xl">Filtros</p>
               <button
                 type="button"
                 onClick={() => setSheet(false)}
-                className="grid size-10 place-items-center rounded-full bg-soft"
+                className="grid size-10 place-items-center rounded-md bg-soft"
                 aria-label="Cerrar"
               >
                 <X className="size-5" />
@@ -441,14 +373,14 @@ export function CatalogBrowser({ cars }: { cars: Car[] }) {
               <button
                 type="button"
                 onClick={() => setF((p) => ({ ...EMPTY, q: p.q }))}
-                className="h-14 rounded-full border border-line px-6 font-semibold"
+                className="btn btn-outline"
               >
                 Limpiar
               </button>
               <button
                 type="button"
                 onClick={() => setSheet(false)}
-                className="btn-shine h-14 flex-1 rounded-full bg-brand font-semibold text-white"
+                className="btn btn-dark btn-shine flex-1"
               >
                 Ver {results.length} {results.length === 1 ? "auto" : "autos"}
               </button>

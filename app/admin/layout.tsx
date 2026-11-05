@@ -20,7 +20,7 @@ export default function AdminLayout({ children }: LayoutProps<"/admin">) {
           <Link
             href="/"
             target="_blank"
-            className="inline-flex items-center gap-1.5 rounded-full border border-line px-3 py-1.5 text-xs font-medium text-fg/80 hover:text-fg"
+            className="inline-flex items-center gap-1.5 rounded-md border border-line px-3 py-1.5 text-xs font-medium text-fg/80 transition-colors hover:border-fg/40 hover:text-fg"
           >
             Ver sitio <ExternalLink className="size-3.5" />
           </Link>

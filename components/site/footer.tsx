@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import { MapPin, Phone } from "lucide-react";
+import { ArrowUp, MapPin, Phone } from "lucide-react";
 import { site, whatsappUrl } from "@/lib/site";
+import { vars } from "@/lib/ui";
 import { FacebookIcon, InstagramIcon, TikTokIcon, WhatsAppIcon } from "@/components/icons";
 
 export const SOCIALS = [
@@ -10,80 +11,121 @@ export const SOCIALS = [
   { href: site.socials.tiktok, label: "TikTok", Icon: TikTokIcon },
 ];
 
+const LINKS = [
+  { href: "/autos", label: "Inventario" },
+  { href: "/vende-tu-auto", label: "Vende tu auto" },
+  { href: "/#preguntas-frecuentes", label: "Preguntas frecuentes" },
+  { href: "/#contacto", label: "Contacto" },
+];
+
+// Pie de página (rediseño 31-oct): centrado y sencillo, con el logo real de H3 (su propia letra) como
+// protagonista, los enlaces en una línea, 3 formas de contacto y las redes.
 export function Footer() {
   return (
-    <footer className="relative overflow-hidden border-t border-line bg-card">
-      <div className="h-1.5 bg-gradient-to-r from-brand from-60% to-volt" aria-hidden="true" />
-      <div className="pointer-events-none absolute -bottom-6 left-0 right-0 select-none overflow-hidden">
-        <p className="font-display text-outline whitespace-nowrap text-[22vw] leading-none opacity-[0.07] md:text-[16vw]">
-          Ready to drive
+    <footer className="relative overflow-hidden bg-night text-white">
+      <div className="draw-line rule-accent mx-auto h-0.5 w-full" aria-hidden="true" />
+      <div className="mx-auto max-w-4xl px-4 pt-16 pb-12 text-center sm:px-6 sm:pt-20">
+        <Link href="/" aria-label={`${site.name}, inicio`} className="reveal reveal-zoom inline-block">
+          <Image src="/brand/logo.png" alt={site.name} width={344} height={220} className="mx-auto h-24 w-auto sm:h-28" />
+        </Link>
+        <p className="reveal mx-auto mt-6 max-w-md leading-relaxed text-white/65">
+          Autos seminuevos seleccionados en Villahermosa, Tabasco. Verificados, con papeles en regla y a precio justo.
+        </p>
+
+        <nav aria-label="Pie de página" className="mt-10">
+          <ul className="flex flex-wrap justify-center gap-x-7 gap-y-3 text-sm">
+            {LINKS.map((l, i) => (
+              <li key={l.href} className="reveal" style={vars({ "--i": i })}>
+                <Link
+                  href={l.href}
+                  className="text-white/80 hover:text-white bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_1px] bg-left-bottom bg-no-repeat pb-0.5 transition-[background-size,color] duration-500 hover:bg-[length:100%_1px]"
+                >
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div className="mt-10 flex flex-wrap justify-center gap-3">
+          <a
+            href={whatsappUrl(`Hola ${site.name} 👋`)}
+            target="_blank"
+            rel="noopener"
+            className="reveal btn btn-wa btn-shine"
+            style={vars({ "--i": 0 })}
+          >
+            <WhatsAppIcon className="size-5" /> WhatsApp
+          </a>
+          <a
+            href={site.phoneHref}
+            className="reveal btn text-white ring-1 ring-white/20 hover:bg-white hover:text-night"
+            style={vars({ "--i": 1 })}
+          >
+            <Phone className="size-4" /> {site.phoneDisplay}
+          </a>
+          <a
+            href={site.mapsUrl}
+            target="_blank"
+            rel="noopener"
+            className="reveal btn text-white ring-1 ring-white/20 hover:bg-white hover:text-night"
+            style={vars({ "--i": 2 })}
+          >
+            <MapPin className="size-4" /> Cómo llegar
+          </a>
+        </div>
+
+        <div className="mt-8 flex justify-center gap-2">
+          {SOCIALS.map(({ href, label, Icon }, i) => (
+            <a
+              key={label}
+              href={href}
+              target="_blank"
+              rel="noopener"
+              aria-label={label}
+              className="reveal grid size-11 place-items-center rounded-md text-white/75 transition-all duration-500 ease-[var(--ease-out-expo)] hover:-translate-y-1 hover:bg-white/10 hover:text-white"
+              style={vars({ "--i": i })}
+            >
+              <Icon className="size-5" />
+            </a>
+          ))}
+        </div>
+
+        {/* En celular: dirección (en 2 renglones parejos), horario y «Los autos se ven con cita», cada uno en su
+            renglón (pedido del dueño, 31-oct). En computadora queda igual: dirección y luego horario · cita. */}
+        <p className="mt-8 text-sm leading-relaxed text-white/55">
+          <span className="block">
+            <span className="block sm:inline">
+              {site.address.street}, {site.address.neighborhood},
+            </span>{" "}
+            <span className="block sm:inline">
+              {site.address.postalCode} {site.address.city}, {site.address.state}
+            </span>
+          </span>
+          <span className="block">
+            {site.hours}
+            <span className="hidden sm:inline"> · </span>
+            <span className="block sm:inline">Los autos se ven con cita</span>
+          </span>
         </p>
       </div>
-      <div className="relative mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr]">
-        <div>
-          <Image src="/brand/logo-dark.png" alt={site.name} width={344} height={220} className="h-16 w-auto" />
-          <p className="mt-5 max-w-sm text-sm leading-relaxed text-mute">{site.description}</p>
-          <div className="mt-6 flex gap-2">
-            {SOCIALS.map(({ href, label, Icon }) => (
-              <a
-                key={label}
-                href={href}
-                target="_blank"
-                rel="noopener"
-                aria-label={label}
-                className="grid size-11 place-items-center rounded-full border border-line text-fg/80 transition-all duration-300 hover:-translate-y-0.5 hover:border-brand hover:text-fg"
-              >
-                <Icon className="size-5" />
-              </a>
-            ))}
-          </div>
-        </div>
-        <div>
-          <h2 className="font-tech text-xs text-dim">Explora</h2>
-          <ul className="mt-4 space-y-3 text-sm">
-            <li><Link href="/autos" className="hover:text-brand-hi">Catálogo completo</Link></li>
-            <li><Link href="/autos?tipo=SUV" className="hover:text-brand-hi">SUVs y camionetas</Link></li>
-            <li><Link href="/autos?tipo=Deportivo" className="hover:text-brand-hi">Deportivos</Link></li>
-            <li><Link href="/autos?tipo=Blindado" className="hover:text-brand-hi">Blindados</Link></li>
-            <li><Link href="/vende-tu-auto" className="hover:text-brand-hi">Vende tu auto</Link></li>
-          </ul>
-        </div>
-        <div>
-          <h2 className="font-tech text-xs text-dim">Visítanos</h2>
-          <ul className="mt-4 space-y-3 text-sm text-fg/90">
-            <li>
-              <a href={site.mapsUrl} target="_blank" rel="noopener" className="flex gap-2 hover:text-brand-hi">
-                <MapPin className="mt-0.5 size-4 shrink-0 text-brand" />
-                <span>
-                  {site.address.street}, {site.address.neighborhood}
-                  <br />
-                  {site.address.city}, {site.address.state}
-                </span>
-              </a>
-            </li>
-            <li>
-              <a href={site.phoneHref} className="flex items-center gap-2 hover:text-brand-hi">
-                <Phone className="size-4 text-brand" /> {site.phoneDisplay}
-              </a>
-            </li>
-            <li>
-              <a
-                href={whatsappUrl(`Hola ${site.name} 👋`)}
-                target="_blank"
-                rel="noopener"
-                className="flex items-center gap-2 hover:text-wa-dark"
-              >
-                <WhatsAppIcon className="size-4 text-wa-dark" /> WhatsApp
-              </a>
-            </li>
-            {site.hours && <li className="text-mute">{site.hours}</li>}
-          </ul>
-        </div>
-      </div>
-      <div className="relative border-t border-line">
-        <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-6 text-xs text-dim sm:flex-row sm:justify-between sm:px-6">
-          <p>© {site.name} · Villahermosa, Tabasco, México</p>
-          <p>Precios en pesos mexicanos (MXN). Sujetos a cambio sin previo aviso.</p>
+
+      <div className="border-t border-white/10">
+        <div className="mx-auto flex max-w-7xl flex-col items-center gap-2 px-4 py-6 text-center text-xs text-white/45 sm:flex-row sm:justify-between sm:px-6 sm:text-left">
+          <p>
+            © {site.name} · Villahermosa, Tabasco, México · Precios en pesos mexicanos (MXN), sujetos a cambio sin
+            previo aviso.
+          </p>
+          <p className="flex items-center gap-4">
+            {/* Acceso discreto para el dueño */}
+            <Link href="/admin/login" rel="nofollow" className="text-white/40 underline-offset-2 hover:text-white/80 hover:underline">
+              Administración
+            </Link>
+            <a href="#" className="group inline-flex items-center gap-1.5 text-white/60 hover:text-white">
+              Volver arriba
+              <ArrowUp className="size-3.5 transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:-translate-y-0.5" />
+            </a>
+          </p>
         </div>
       </div>
     </footer>

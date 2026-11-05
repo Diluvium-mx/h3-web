@@ -59,7 +59,7 @@ next.stdout.on("data", (d) => {
   announced = true;
   if (ip) show("Abre esto en tu celular (conectado al mismo Wi-Fi):", `http://${ip}:${PORT}`);
   else console.log("\nNo encontré la IP de la red local. ¿La computadora está conectada a Wi-Fi?");
-  console.log("Panel: /admin · contraseña de desarrollo: h3admin (o la de ADMIN_PASSWORD en .env.local)\n");
+  console.log("Panel: /admin · contraseña inicial: 12345 (se cambia en Panel → Ajustes)\n");
   if (tunnel) startTunnel();
 });
 

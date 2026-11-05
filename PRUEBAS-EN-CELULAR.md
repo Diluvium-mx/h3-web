@@ -8,7 +8,7 @@ mientras se desarrolla y la 4 antes de publicar cada cambio grande.
 | 1. Pruebas automáticas en tamaño de celular (desde la nube o la Mac) | Media: Chrome que imita un celular | Nada | $0 |
 | 2. **Tu celular en el mismo Wi-Fi que la Mac** (`npm run movil`) | Alta: tu teléfono real | La Mac y el celular en la misma red | $0 |
 | 3. Simulador de iPhone (Xcode) o de Android en la Mac | Alta: motor real de Safari o Android | Instalar Xcode (~15 GB) o Android Studio | $0 |
-| 4. **Vista previa de Netlify** (https, desde cualquier red) | La más alta: es el sitio publicado | Cuenta de Netlify | $0: las vistas previas no gastan créditos |
+| 4. **Vista previa de Netlify** (https, desde cualquier red y cualquier celular) | La más alta: es el sitio publicado | Cuenta de Netlify (ver README → «Enlace de vista previa») | $0: las publicaciones de ramas no gastan créditos |
 
 ## 1. Pruebas automáticas en tamaño de celular
 
@@ -16,8 +16,8 @@ Ya existen y corren con cada cambio (ver `CLAUDE.md`):
 
 ```bash
 npm run dev
-node scripts/e2e-public.mjs http://localhost:3000   # 23 pruebas del sitio
-node scripts/e2e-admin.mjs http://localhost:3000    # 17 pruebas del panel
+node scripts/e2e-public.mjs http://localhost:3000   # 27 pruebas del sitio
+node scripts/e2e-admin.mjs http://localhost:3000    # 21 pruebas del panel
 ```
 
 Para **ver** el recorrido completo en video, en tamaño iPhone y Android:
@@ -34,16 +34,31 @@ WhatsApp y no usa la cámara real.
 
 ## 2. Tu celular en el mismo Wi-Fi (la forma diaria)
 
+**La forma más fácil (no necesita git):** abre la Terminal y pega esta línea. Baja la última versión de la
+rama `desarrollo` a la carpeta `~/h3-web-vista`, apaga el sitio viejo si seguía prendido, instala lo
+necesario y muestra el QR para el celular. Para ver cambios nuevos, vuelve a pegarla.
+
+```bash
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/Diluvium-mx/h3-web/desarrollo/scripts/ver-en-mac.sh)"
+```
+
+**Si trabajas con git en la carpeta del proyecto:**
+
 En la Mac, dentro de la carpeta del proyecto:
 
 ```bash
+npm run actualizar   # baja la última versión de la rama desarrollo
 npm run movil
 ```
+
+**Importante:** el celular y el navegador muestran **lo que hay en la carpeta de tu Mac**. Cuando se suben
+cambios a GitHub, tu Mac no los tiene hasta que corres `npm run actualizar`. Si `npm run movil` ya estaba
+corriendo, deténlo con `Ctrl + C`, actualiza, vuelve a correrlo y recarga la página.
 
 Muestra un enlace como `http://192.168.1.50:3000` y un **código QR**. Apunta la cámara del celular al QR
 y se abre el sitio.
 
-- El panel está en `/admin`. La contraseña en tu Mac es `h3admin`, o la de `ADMIN_PASSWORD` si creaste
+- El panel está en `/admin`. La contraseña inicial es `12345` (se cambia en Panel → Ajustes), o la de `ADMIN_PASSWORD` si creaste
   `.env.local`.
 - Todo lo que cambies en el código se ve en el celular al instante.
 - Si la Mac tiene varias redes y el enlace no abre: `H3_IP=192.168.1.50 npm run movil`, con la IP de tu

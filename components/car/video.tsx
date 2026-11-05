@@ -10,7 +10,7 @@ export function YouTubeVideo({ id, title, cover, vertical }: { id: string; title
   const [play, setPlay] = useState(false);
   return (
     <div
-      className={`relative mx-auto overflow-hidden rounded-3xl bg-night ring-1 ring-line ${
+      className={`relative mx-auto overflow-hidden rounded-lg bg-night ring-1 ring-line ${
         vertical ? "aspect-[9/16] max-w-sm" : "aspect-video"
       }`}
     >
@@ -40,7 +40,7 @@ export function YouTubeVideo({ id, title, cover, vertical }: { id: string; title
             />
           )}
           <span className="absolute inset-0 bg-gradient-to-t from-night/70 to-transparent" />
-          <span className="relative grid size-20 place-items-center rounded-full bg-brand text-white shadow-[0_14px_40px_-10px_rgb(227_20_31/0.9)] transition-transform duration-500 ease-[var(--ease-spring)] group-hover:scale-110">
+          <span className="relative grid size-20 place-items-center rounded-full bg-white/95 text-night shadow-[0_14px_40px_-10px_rgb(0_0_0/0.6)] ring-8 ring-white/20 transition-transform duration-500 ease-[var(--ease-spring)] group-hover:scale-110">
             <Play className="ml-1 size-9 fill-current" />
           </span>
         </button>

@@ -100,17 +100,34 @@ export function featuresWithoutEquipment(features: string[], keys: string[] = []
 
 // ---------- Fotos por sección ----------
 
-export const PHOTO_SECTIONS = ["exterior", "interior", "motor", "detalles"] as const;
+// Solo exterior e interior (pedido del dueño, 30-oct). Las fotos que antes se marcaban como «motor» o
+// «detalles» (rines, emblemas, escapes) se leen como exterior.
+export const PHOTO_SECTIONS = ["exterior", "interior"] as const;
 export type PhotoSection = (typeof PHOTO_SECTIONS)[number];
 export const PHOTO_SECTION_LABEL: Record<PhotoSection, string> = {
   exterior: "Exterior",
   interior: "Interior",
-  motor: "Motor",
-  detalles: "Detalles",
 };
+const LEGACY_SECTIONS: Record<string, PhotoSection> = { motor: "exterior", detalles: "exterior" };
 
 export function isPhotoSection(v: unknown): v is PhotoSection {
   return typeof v === "string" && (PHOTO_SECTIONS as readonly string[]).includes(v);
+}
+
+export function toPhotoSection(v: unknown): PhotoSection | undefined {
+  if (isPhotoSection(v)) return v;
+  return typeof v === "string" ? LEGACY_SECTIONS[v] : undefined;
+}
+
+// Convierte las secciones guardadas con el esquema anterior
+export function normalizePhotoSections(sections?: Record<string, string>) {
+  if (!sections) return undefined;
+  const out: Record<string, PhotoSection> = {};
+  for (const [src, v] of Object.entries(sections)) {
+    const sec = toPhotoSection(v);
+    if (sec) out[src] = sec;
+  }
+  return Object.keys(out).length ? out : undefined;
 }
 
 // Pestañas de fotos: «Todas» y cada sección con al menos una foto (índices dentro de images)

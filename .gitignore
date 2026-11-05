@@ -44,6 +44,7 @@ next-env.d.ts
 # datos locales de desarrollo
 /data/cars.local.json
 /data/reviews.local.json
+/data/settings.local.json
 /public/uploads/
 
 # Local Netlify folder
