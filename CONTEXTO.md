@@ -228,7 +228,7 @@ imagen de Arcads en pantallas grandes (30-oct).
 
 **Panel (`/admin`, con contraseña)**
 - **Entrada:** enlace discreto «Administración» al final del pie de página.
-- **Contraseña inicial: `12345`** (decisión del dueño, 28-oct). Se cambia en **Panel → Ajustes**; la nueva
+- **Contraseña del panel** (decisión del dueño, 28-oct y 6-nov): se queda la misma, guardada cifrada; **no se escribe en el repositorio**. Se cambia en **Panel → Ajustes**; la nueva
   se guarda cifrada en Netlify Blobs, nunca en el repositorio. Al cambiarla se cierran las sesiones abiertas en
   otros teléfonos o computadoras. Mientras se use la inicial, el panel muestra un aviso para cambiarla.
 - **Ajustes** (`/admin/ajustes`): contraseña del panel. (Los números de confianza se quitaron el 29-oct.)
@@ -417,7 +417,7 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
   que falta.
 - **SEO local** solo para Villahermosa, Tabasco: datos estructurados con horario, `sitemap.xml` y
   `robots.txt`.
-- **Seguridad del panel:** contraseña inicial `12345` que se cambia en el panel (se guarda cifrada),
+- **Seguridad del panel:** contraseña que se guarda cifrada en el panel (se guarda cifrada),
   sesión firmada que se cierra en otros dispositivos al cambiarla y límite de intentos de login.
 - **Pruebas:** 24 pruebas automáticas pasan; los scripts están en `scripts/`.
 - **27-oct:**
@@ -475,7 +475,7 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
     colores), título claro, sin «óvalos», categorías con íconos propios, tarjetas y ficha técnica más
     premium, «Vende tu auto» más grande y arriba, y sin presupuesto ni Waze.
   - Microanimaciones: números que cuentan, líneas que se dibujan, flechas y subrayados que se mueven.
-  - Panel: contraseña `12345` cambiable en **Ajustes**, números de confianza editables, enlace discreto en
+  - Panel: contraseña cambiable en **Ajustes**, números de confianza editables, enlace discreto en
     el pie de página y formulario de auto en 4 pasos con lo opcional plegado.
   - Pruebas: 26 del sitio, 23 del panel y 3 de Cloudinary simulado. Lighthouse no se corrió esta vez.
 - **30-oct (versión 2, cambios del dueño):**
@@ -508,7 +508,7 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
      https://deploy-preview-1--h3-seminuevos.netlify.app (solicitud #1) y versión 1 (Scrollcraft) en
      https://deploy-preview-2--h3-seminuevos.netlify.app (solicitud #2). Ninguna se fusiona hasta que el
      dueño elija una y diga «publica».
-   - **El panel ya guarda en Netlify Blobs** (30-oct): entra con `12345` en las 2 vistas previas (misma
+   - **El panel ya guarda en Netlify Blobs** (30-oct): entra con la contraseña del panel en las 2 vistas previas (misma
      contraseña y mismo inventario). Falta Cloudinary para subir fotos nuevas. Upstash ya no hace falta.
    - Las crea quien lleva el proyecto. Con qué correo: **sin decidir**.
 2. **Publicar en Netlify y verificar con las cuentas reales:**
@@ -516,7 +516,7 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
    - Comprobar que el sitio se actualiza sin volver a desplegar.
 3. **Pasar las fotos de Shopify a Cloudinary** antes de cancelar Shopify. **Ojo:** el importador del panel marca
    los 13 autos actuales como «Ya importado» y no copia sus fotos; ver `ENTREGA.md`, paso 7.
-4. **En Panel → Ajustes:** cambiar la contraseña `12345`.
+4. **En Panel → Ajustes:** guardar la contraseña cifrada en Ajustes.
 5. **Agregar reseñas reales** en el panel (con permiso de los clientes), cuando existan.
 6. **Grabar videos de los autos** y pegar el enlace en el panel (opcional).
 7. **Revisar en el panel** de cada auto:
@@ -574,7 +574,7 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
   nuevo y animaciones de entrada en todo el sitio.
 - **Skill `/scroll-craft`** (MIT, de nateherkai) instalada en `.claude/skills/scroll-craft/`: solo se usa
   cuando alguien escribe `/scroll-craft`; Claude no la carga solo.
-- **Panel con contraseña inicial `12345`**, que se cambia dentro del panel, y acceso discreto en el pie de
+- **Panel con contraseña del panel**, que se cambia dentro del panel, y acceso discreto en el pie de
   página (28-oct).
 - **Características de cada auto resumidas** y fáciles de entender (27-oct).
 - **Si falta un dato no se inventa.** Se pone «Para más información, mándanos un mensaje; te respondemos
@@ -653,7 +653,7 @@ el sitio usa la dirección `*.netlify.app` en los enlaces de WhatsApp.
 9. **Perfil de Google (Maps):** ¿tienen perfil de negocio con reseñas? Ayuda mucho a aparecer en «seminuevos
    en Villahermosa».
 10. Dominio: ¿dónde está registrado y cuándo se conecta?
-11. ¿Quién va a administrar el panel? La contraseña inicial es `12345` (decisión del dueño); hay que
+11. ¿Quién va a administrar el panel? La contraseña la decide el dueño (no se escribe aquí); hay que
     cambiarla en Panel → Ajustes en cuanto se publique (se guarda en Netlify Blobs). La nueva **no** se sube a este
     repositorio.
 12. **Rebajas:** cuando baja el precio de un auto, ¿quieren mostrar «antes / ahora»?

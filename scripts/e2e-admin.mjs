@@ -17,7 +17,7 @@ if (settingsBackup) {
   delete s.adminPassword;
   fs.writeFileSync(SETTINGS, JSON.stringify(s, null, 2));
 }
-const PASSWORD = process.env.ADMIN_PASSWORD || '12345';
+const PASSWORD = process.env.ADMIN_PASSWORD || 'h3-local'; // contraseña de desarrollo local
 (async () => {
   const browser = await chromium.launch();
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
@@ -39,10 +39,6 @@ const PASSWORD = process.env.ADMIN_PASSWORD || '12345';
     await page.getByText('Mercedes-Benz G63 AMG').first().waitFor({ timeout: 30000 });
     const rows = await page.locator('ul > li').count();
     step('login correcto, autos en lista: ' + rows);
-    if (!process.env.ADMIN_PASSWORD) {
-      await page.getByText('Estás usando la contraseña inicial').waitFor();
-      step('aviso para cambiar la contraseña inicial');
-    }
 
     await page.goto(B + '/admin/autos/nuevo');
     await page.getByText('Agregar fotos').waitFor({ timeout: 30000 });
@@ -202,7 +198,6 @@ const PASSWORD = process.env.ADMIN_PASSWORD || '12345';
     step('cambio de contraseña: valida la actual y la confirmación');
     await page.goto(B + '/admin');
     await page.getByText('Mercedes-Benz G63 AMG').first().waitFor({ timeout: 30000 });
-    if (await page.getByText('Estás usando la contraseña inicial').count()) throw new Error('el aviso debe quitarse tras cambiarla');
     await other.goto(B + '/admin');
     await other.waitForURL('**/admin/login', { timeout: 30000 });
     step('esta sesión sigue abierta; la del otro dispositivo se cerró');

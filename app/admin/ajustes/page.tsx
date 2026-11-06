@@ -2,7 +2,6 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { ArrowLeft, KeyRound } from "lucide-react";
 import { PasswordForm } from "@/components/admin/settings-forms";
-import { usingDefaultPassword } from "@/lib/admin-password";
 import { requireAdmin } from "@/lib/auth";
 
 export const metadata = { title: "Ajustes" };
@@ -27,21 +26,13 @@ export default function SettingsPage() {
 
 async function Settings() {
   await requireAdmin();
-  const isDefault = await usingDefaultPassword();
   return (
     <div className="mt-8 space-y-6">
       <section className="rounded-lg bg-card p-5 ring-1 ring-line sm:p-7" aria-labelledby="contrasena">
         <h2 id="contrasena" className="font-display flex items-center gap-2.5 text-2xl">
           <KeyRound className="size-5 text-brand" /> Contraseña del panel
         </h2>
-        {isDefault ? (
-          <p className="mt-2 text-sm text-brand-hi">
-            Estás usando la contraseña inicial. Cámbiala antes de publicar el sitio: cualquiera que la conozca
-            podría entrar.
-          </p>
-        ) : (
-          <p className="mt-2 text-sm text-mute">Usa una que no uses en otro lado y que sea fácil de recordar para ti.</p>
-        )}
+        <p className="mt-2 text-sm text-mute">Usa una que no uses en otro lado y que sea fácil de recordar para ti.</p>
         <div className="mt-6">
           <PasswordForm />
         </div>

@@ -103,7 +103,7 @@ una barra fija de WhatsApp en celular. Si el enlace es de un auto que ya no exis
 funciona» en 6 pasos (cuéntanos, fotos por WhatsApp, evaluación en sitio, fotos para publicar, valoración
 final, nos encargamos de la venta). **No dice que H3 compra autos** (decisión del dueño).
 
-**Panel (`/admin`):** contraseña inicial `12345` (ver paso 6). Inventario con pestañas, alta y edición de autos
+**Panel (`/admin`):** contraseña del panel (ver paso 6). Inventario con pestañas, alta y edición de autos
 con vista previa de la tarjeta, «Dónde va a aparecer», barra «Falta: …» y confirmación con «Ver en la
 página», «Compartir por WhatsApp» y «Publicar otro». También tiene reseñas (`/admin/resenas`), ajustes
 (contraseña) e importador de Shopify. Al guardar, el sitio se actualiza solo, **sin volver a publicar**.
@@ -194,7 +194,7 @@ Cuidados:
   previa ni contra producción.
 - **`e2e-panel-netlify.mjs` sí toca los datos reales** (Netlify Blobs es el mismo para la vista previa y
   producción): cambia el precio de la BMW M240i de 395,000 a 396,000 y lo regresa. Córrelo pocas veces.
-- Cuando el dueño cambie la contraseña `12345`, las pruebas del panel necesitan la nueva en la variable
+- Las pruebas del panel necesitan la nueva en la variable
   `ADMIN_PASSWORD` **solo en tu terminal** (`ADMIN_PASSWORD=… node scripts/…`). Nunca la escribas en un archivo.
 
 ---
@@ -220,7 +220,7 @@ Los valores reales nunca se escriben en el repositorio ni en el chat.
 | --- | --- | --- |
 | `CLOUDINARY_URL` | **Sí, para subir fotos nuevas** desde el panel y pasar las de Shopify. Formato `cloudinary://API_KEY:API_SECRET@CLOUD_NAME` (Cloudinary → Dashboard → «API environment variable»). | Sin ella el sitio funciona, pero el panel no puede subir fotos. |
 | `AUTH_SECRET` | Opcional. Texto largo al azar (`openssl rand -base64 32`). | Firma la sesión del panel. Sin ella, el panel crea una llave al azar y la guarda en Netlify Blobs. |
-| `ADMIN_PASSWORD` | Opcional. | Reemplaza la contraseña inicial `12345`. Es más simple cambiarla en Panel → Ajustes (paso 6). Si se usa, que **no** sean palabras que aparezcan en el sitio (Netlify revisa que no se filtren y podría detener la publicación). |
+| `ADMIN_PASSWORD` | Opcional. | Reemplaza la contraseña del panel. Es más simple cambiarla en Panel → Ajustes (paso 6). Si se usa, que **no** sean palabras que aparezcan en el sitio (Netlify revisa que no se filtren y podría detener la publicación). |
 | `NEXT_PUBLIC_SITE_URL` | Solo cuando el dominio ya esté conectado (paso 8): `https://www.h3seminuevos.com`. | Enlaces de WhatsApp, SEO, `sitemap.xml` e imagen para compartir. Se fija **al compilar**: después de agregarla hay que volver a publicar (15 créditos). Sin ella se usa la dirección principal de Netlify. |
 | `NEXT_PUBLIC_WHATSAPP` | No. | Cambia el número de WhatsApp. El número correcto ya está en `lib/site.ts`. |
 | `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` (o `KV_REST_API_URL`, `KV_REST_API_TOKEN`) | **No las agregues.** | Si existen, el sitio deja Netlify Blobs y usa Redis, y **el inventario que ya está en Blobs no se pasa solo**. |
@@ -247,7 +247,7 @@ en 3 a 5 minutos. No fusiones #2.
 4. Entra a `/admin` con la contraseña y comprueba que se ve el inventario (sin «modo demo»).
 
 ### Paso 6. Cambiar la contraseña del panel
-La contraseña inicial `12345` está escrita en este repositorio público: **cualquiera puede leerla**. En cuanto
+La contraseña del panel está escrita en este repositorio público: **cualquiera puede leerla**. En cuanto
 el sitio esté publicado, el dueño la cambia en **Panel → Ajustes**. Se guarda cifrada en Netlify Blobs y vale
 para producción y vistas previas; al cambiarla se cierran las demás sesiones. **La nueva no se escribe en
 ningún archivo ni se sube al repositorio.**
@@ -356,7 +356,7 @@ Cuándo cancelarlo: **sin decidir**, lo decide el dueño. Shopify cuesta 19 USD 
 | Pasar las 189 fotos a Cloudinary | Falta (paso 7; el importador actual no sirve para los 13 autos). |
 | Dónde está registrado el dominio y quién maneja su DNS | Sin decidir. Preguntar al dueño. |
 | Cuándo conectar el dominio y cancelar Shopify | Lo decide el dueño. |
-| Contraseña del panel | Sigue siendo `12345`: cambiarla al publicar (paso 6). |
+| Contraseña del panel | Se queda la misma (decisión del dueño, 6-nov), guardada cifrada en Ajustes; no se escribe en el repositorio. |
 | Reseñas reales | No hay. La sección aparece sola cuando el dueño las agrega en el panel, con permiso de los clientes. |
 | Imagen del hero en computadora si se vende la G63 | La tarjeta de precio se oculta sola. Con qué auto rehacer la imagen: sin decidir. |
 | Imagen para compartir (`app/opengraph-image.jpg`) | Sigue en el estilo oscuro anterior; cambiarla es opcional. |

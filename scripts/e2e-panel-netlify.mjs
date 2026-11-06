@@ -1,12 +1,13 @@
 // Prueba del panel publicado en Netlify (con Netlify Blobs). Uso:
 //   node scripts/e2e-panel-netlify.mjs https://deploy-preview-1--h3-seminuevos.netlify.app
-// Entra con la contraseña (12345 o ADMIN_PASSWORD), cambia el precio de un auto, revisa que la ficha
+// Entra con la contraseña (ADMIN_PASSWORD, solo en tu terminal), cambia el precio de un auto, revisa que la ficha
 // pública lo muestre y lo regresa a como estaba. Requiere Playwright (global o `npm i -D playwright`).
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 const { chromium } = require("playwright");
 const B = (process.argv[2] || "http://localhost:8888").replace(/\/$/, "");
-const PASSWORD = process.env.ADMIN_PASSWORD || "12345";
+const PASSWORD = process.env.ADMIN_PASSWORD;
+if (!PASSWORD) throw new Error("Pon la contraseña del panel en ADMIN_PASSWORD (solo en tu terminal, nunca en un archivo)");
 const SLUG = "bmw-m240i-2017";
 const step = (m) => console.log("✔", m);
 const digits = (s) => s.replace(/[^\d]/g, "");
