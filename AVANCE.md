@@ -2,6 +2,15 @@
 
 Lo más reciente va arriba.
 
+## 6 de noviembre de 2026 (noche) — publicado y fotos en Cloudinary
+
+- Se fusionó #4: encabezado sin parpadeo, WhatsApp flotante arriba de la etiqueta de Netlify y hero más realista.
+- La llave de Cloudinary ya funciona. «Pasar fotos a Cloudinary» pasó las 189 fotos de los 13 autos en unos 2 minutos; ninguna página usa ya `cdn.shopify.com` y cada galería conserva todas sus fotos (13 de 13).
+- Peso de imágenes: inicio en celular de 934 KB a 573 KB, en computadora de 1.55 MB a 0.98 MB, ficha de 347 KB a 181 KB.
+- Quedaron 2 imágenes de prueba de 1 px en `h3/autos` de Cloudinary (se pueden borrar).
+
+Falta: cambiar la contraseña `12345`; decidir Cloudflare (5 USD) o Netlify Personal (9 USD); la etiqueta de Netlify tapa el botón de los filtros y parte de la barra de WhatsApp de la ficha en celular; cancelar Shopify cuando el dueño decida (ya no hace falta para fotos ni dominio).
+
 ## 6 de noviembre de 2026 — encabezado sin parpadeo, hero más realista y WhatsApp arriba de la etiqueta
 
 - Encabezado: se oculta al bajar y aparece al subir solo después de moverse 12 px desde donde cambió de dirección; ignora el rebote de iOS. Antes, los pasitos de 1 a 4 px del scroll lo hacían aparecer y desaparecer (celular y computadora).
