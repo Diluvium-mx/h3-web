@@ -2,6 +2,14 @@
 
 Lo más reciente va arriba.
 
+## 5 de noviembre de 2026 (tarde-noche) — letra de acento y fotos de comprar/vender sin efecto
+
+- Palabras resaltadas en rojo: de Instrument Serif (muy delicada, según el dueño) a Saira inclinada y gruesa, con aire del logo.
+- Las imágenes de «Al comprar un auto» y «Al vender tu auto» ya no tienen la cortinilla (se veían tarde); el efecto pasó a sus títulos.
+- El dueño aprobó el hero de la cochera al atardecer.
+
+Falta: publicar; pasar las fotos a Cloudinary desde el panel; cambiar la contraseña `12345`.
+
 ## 5 de noviembre de 2026 (cierre) — hero de cochera y botón para pasar fotos a Cloudinary
 
 - El dueño descartó el estudio oscuro: hero de computadora con una cochera moderna al atardecer, palmeras y tres camionetas (Arcads). En AVIF (76 KB) con WebP de respaldo.

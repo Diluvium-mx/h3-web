@@ -1,21 +1,22 @@
 import type { Metadata, Viewport } from "next";
-import { Instrument_Sans, Instrument_Serif } from "next/font/google";
+import { Instrument_Sans, Saira } from "next/font/google";
 import { site } from "@/lib/site";
 import "./globals.css";
 
 // Letra del sitio (pedido del dueño, 31-oct: cambiar otra vez la tipografía): Instrument Sans, grotesca con
-// carácter y muy legible en celular. Instrument Serif en cursiva solo para resaltar palabras (p. ej. «premium»).
+// carácter y muy legible en celular. Para resaltar palabras en rojo (p. ej. «seleccionados»): Saira inclinada
+// y gruesa, con aire del logo (5-nov: el dueño cambió Instrument Serif porque se veía muy delicada).
 const sans = Instrument_Sans({
   variable: "--font-instrument",
   subsets: ["latin"],
   axes: ["wdth"],
   display: "swap",
 });
-const serif = Instrument_Serif({
-  variable: "--font-instrument-serif",
+const accent = Saira({
+  variable: "--font-saira",
   subsets: ["latin"],
-  weight: "400",
   style: "italic",
+  axes: ["wdth"],
   display: "swap",
 });
 
@@ -56,7 +57,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="es-MX"
       data-scroll-behavior="smooth"
-      className={`${sans.variable} ${serif.variable} antialiased`}
+      className={`${sans.variable} ${accent.variable} antialiased`}
     >
       <body className="min-h-dvh">{children}</body>
     </html>

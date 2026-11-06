@@ -168,7 +168,7 @@ export function Benefits() {
             className="grid overflow-hidden rounded-xl bg-card ring-1 ring-line lg:grid-cols-2"
             aria-labelledby="al-comprar"
           >
-            <div className="reveal reveal-wipe relative aspect-[16/10] bg-soft lg:aspect-auto lg:min-h-[30rem]">
+            <div className="relative aspect-[16/10] bg-soft lg:aspect-auto lg:min-h-[30rem]">
               <Image
                 src="/img/comprar-tu-auto.webp"
                 alt="Entrega de la llave de un auto: comprar tu auto con H3"
@@ -178,7 +178,7 @@ export function Benefits() {
               />
             </div>
             <div className="p-6 sm:p-10 lg:self-center lg:p-14">
-              <h3 id="al-comprar" className="font-display text-[1.9rem] sm:text-4xl">
+              <h3 id="al-comprar" className="reveal font-display text-[1.9rem] sm:text-4xl">
                 Al comprar un auto
               </h3>
               <BenefitList items={BUY_BENEFITS} />
@@ -190,7 +190,7 @@ export function Benefits() {
             className="grid overflow-hidden rounded-xl bg-night text-white lg:grid-cols-2"
             aria-labelledby="al-vender"
           >
-            <div className="reveal reveal-wipe relative aspect-[16/10] bg-graphite lg:order-2 lg:aspect-auto lg:min-h-[30rem]">
+            <div className="relative aspect-[16/10] bg-graphite lg:order-2 lg:aspect-auto lg:min-h-[30rem]">
               <Image
                 src="/img/vende-tu-auto.webp"
                 alt="Llave de un auto junto a una carpeta de documentos y una pluma: vender tu auto con el papeleo en orden"
@@ -207,7 +207,7 @@ export function Benefits() {
               </div>
             </div>
             <div className="p-6 sm:p-10 lg:self-center lg:p-14">
-              <h3 id="al-vender" className="font-display text-[1.9rem] sm:text-4xl">
+              <h3 id="al-vender" className="reveal font-display text-[1.9rem] sm:text-4xl">
                 Al vender tu auto
               </h3>
               <BenefitList items={SELL_BENEFITS} dark />

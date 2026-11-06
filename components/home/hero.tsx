@@ -123,7 +123,7 @@ export function Hero({ featured, showcase, rating }: { featured: Car[]; showcase
                 <span style={vars({ "--i": i })} className={accent ? "relative" : undefined}>
                   {accent ? (
                     <>
-                      <span className="font-accent pr-1 text-[1.12em] text-brand">{text}</span>
+                      <span className="font-accent pr-1 text-brand">{text}</span>
                       {/* Trazo a mano bajo «seleccionados» */}
                       <svg
                         className="pointer-events-none absolute -bottom-[0.02em] left-0 h-[0.22em] w-full text-brand"

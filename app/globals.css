@@ -33,7 +33,7 @@
   --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
   --font-tech: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
-  --font-accent: var(--font-instrument-serif), ui-serif, Georgia, serif;
+  --font-accent: var(--font-saira), ui-sans-serif, system-ui, sans-serif;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -209,11 +209,12 @@ body {
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
-/* Palabra resaltada dentro de un título: cursiva con serifa (p. ej. «premium» del hero) */
+/* Palabra resaltada dentro de un título: Saira inclinada, gruesa y un poco angosta (p. ej. «seleccionados») */
 .font-accent {
   font-family: var(--font-accent);
   font-style: italic;
-  font-weight: 400;
+  font-weight: 700;
+  font-stretch: 87.5%;
   letter-spacing: -0.01em;
 }
 .text-outline {
