@@ -21,8 +21,9 @@ const TITLE: { text: string; accent?: boolean }[] = [
   { text: "Villahermosa." },
 ];
 
-// Imagen del hero en computadora (elegida por el dueño el 5-nov): hecha con Arcads (Nano Banana 2.1), una
-// cochera moderna al atardecer con palmeras y tres camionetas (G-Class, Wrangler y Land Cruiser).
+// Imagen del hero en computadora (elegida por el dueño el 5-nov): una cochera moderna al atardecer con palmeras
+// y tres camionetas (G-Class, Wrangler y Land Cruiser). Hecha en Arcads con Nano Banana 2.1 y, el 6-nov, rehecha
+// más realista con GPT Image 2.5 Sunburst y agrandada 2x («h3_hero_cochera_atardecer_v5_realista_2x»).
 const HERO_DESKTOP_ALT = "Cochera moderna al atardecer con palmeras y tres camionetas seminuevas";
 // Pixel transparente: en celular el <picture> no descarga la imagen de computadora
 const BLANK = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";

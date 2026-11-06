@@ -2,13 +2,14 @@
 
 Lo más reciente va arriba.
 
-## 6 de noviembre de 2026 — encabezado sin parpadeo y WhatsApp arriba de la etiqueta de Netlify
+## 6 de noviembre de 2026 — encabezado sin parpadeo, hero más realista y WhatsApp arriba de la etiqueta
 
 - Encabezado: se oculta al bajar y aparece al subir solo después de moverse 12 px desde donde cambió de dirección; ignora el rebote de iOS. Antes, los pasitos de 1 a 4 px del scroll lo hacían aparecer y desaparecer (celular y computadora).
+- Hero de computadora: la misma cochera rehecha más realista con GPT Image 2.5 Sunburst (Arcads) y agrandada 2x.
 - Botón flotante de WhatsApp más arriba, para no quedar debajo de la etiqueta «Powered by Netlify» (solo se quita pagando).
 - La mudanza a Cloudflare quedó en pausa en la rama `cloudflare` (local): el plan gratis de Workers tiene un límite de 10 ms de CPU; el dueño decide entre Cloudflare (5 USD) o Netlify Personal (9 USD).
 
-Falta: publicar; corregir el API Secret de Cloudinary y volver a publicar para pasar las fotos; cambiar la contraseña `12345`.
+Falta: publicar (la llave de Cloudinary ya funciona en la vista previa #4); pasar las fotos a Cloudinary; cambiar la contraseña `12345`.
 
 ## 6 de noviembre de 2026 — publicado: hero de cochera, letra Saira, carrusel y botón nuevos
 
