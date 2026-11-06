@@ -52,12 +52,15 @@ const step = (m) => console.log('✔', m);
         return i && i.complete && i.currentSrc.includes('hero-escritorio');
       }, null, { timeout: 15000 });
       if (await dp.locator('[aria-roledescription="carrusel de autos"]').isVisible()) throw new Error('en computadora no debe verse el carrusel del hero');
-      await dp.locator('section[aria-labelledby=hero-title] a[href="/autos/mercedes-benz-g63-amg-2021"]:visible').waitFor();
+      // 5-nov: sin tarjeta de auto en el hero de computadora (los autos cambian)
+      if (await dp.locator('section[aria-labelledby=hero-title] a[href^="/autos/"]:visible').count()) {
+        throw new Error('en computadora el hero no debe llevar tarjeta de auto');
+      }
       await desk.close();
       const mobileGot = await page.evaluate(() => performance.getEntriesByType('resource').some((r) => r.name.includes('hero-escritorio')));
       if (mobileGot) throw new Error('el celular no debería descargar la imagen del hero de computadora');
     }
-    step('hero en computadora: imagen fija de Arcads con la tarjeta de la G63; el celular no la descarga');
+    step('hero en computadora: imagen fija de Arcads sin tarjeta de auto; el celular no la descarga');
     // Lo que el dueño pidió quitar (28-oct)
     for (const gone of ['autos disponibles hoy', '¿Cuál es tu presupuesto?', 'Ver del más barato al más caro']) {
       if (await page.getByText(gone).count()) throw new Error('debería haberse quitado: ' + gone);
@@ -77,8 +80,9 @@ const step = (m) => console.log('✔', m);
     if ((await grid.count()) !== 8) throw new Error('el inventario del inicio debería mostrar 8 autos, hay ' + (await grid.count()));
     const [c1, c2] = [await grid.nth(0).boundingBox(), await grid.nth(1).boundingBox()];
     if (Math.abs(c1.y - c2.y) > 2 || c2.x <= c1.x) throw new Error('el inventario del inicio debería ir en 2 columnas');
-    await page.locator('section[aria-labelledby=destacados] a', { hasText: 'Ver todos' }).last().waitFor();
-    step('inventario: 8 autos en 2 columnas y «Ver todos» abajo');
+    // 5-nov: botón rojo con miniaturas y cuántos autos hay
+    await page.locator('section[aria-labelledby=destacados] a', { hasText: /Ver los \d+ autos/ }).waitFor();
+    step('inventario: 8 autos en 2 columnas y «Ver los N autos» abajo');
     // 31-oct: categorías con ícono (no foto)
     const tiles = page.locator('nav[aria-label="Explora por tipo"] a');
     if ((await tiles.count()) < 3 || !(await tiles.first().locator('svg').count()) || (await tiles.locator('img').count())) throw new Error('las categorías deben llevar ícono, no foto');

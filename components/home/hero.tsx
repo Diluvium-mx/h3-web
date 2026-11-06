@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, Star } from "lucide-react";
+import { ArrowRight, Star } from "lucide-react";
 import { WhatsAppIcon } from "@/components/icons";
 import { HeroCarousel, type HeroSlide } from "@/components/home/hero-carousel";
 import { formatPrice, type Car } from "@/lib/cars";
@@ -22,12 +22,8 @@ const TITLE: { text: string; accent?: boolean }[] = [
 ];
 
 // Imagen del hero en computadora (elegida por el dueño el 5-nov): hecha con Arcads (Nano Banana 2.1), una
-// cochera moderna al atardecer con palmeras y tres camionetas (G-Class, Wrangler y Land Cruiser). La tarjeta
-// de abajo a la derecha es de la G63 real del inventario; si se vende, se oculta sola.
-export const HERO_DESKTOP = {
-  slug: "mercedes-benz-g63-amg-2021",
-  alt: "Cochera moderna al atardecer con palmeras y tres camionetas seminuevas",
-};
+// cochera moderna al atardecer con palmeras y tres camionetas (G-Class, Wrangler y Land Cruiser).
+const HERO_DESKTOP_ALT = "Cochera moderna al atardecer con palmeras y tres camionetas seminuevas";
 // Pixel transparente: en celular el <picture> no descarga la imagen de computadora
 const BLANK = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 
@@ -36,7 +32,7 @@ const BLANK = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAA
 // el texto va en una hoja clara que se monta sobre la foto (en computadora, una tarjeta). El título sube
 // palabra por palabra y «seleccionados» (antes «premium», cambio del dueño 31-oct) va en cursiva roja con un
 // trazo a mano. La foto no se mueve al bajar (31-oct: el movimiento la hacía temblar).
-export function Hero({ featured, showcase, rating }: { featured: Car[]; showcase?: Car; rating: Rating }) {
+export function Hero({ featured, total, rating }: { featured: Car[]; total: number; rating: Rating }) {
   const slides: HeroSlide[] = featured
     .filter((c) => c.images[0])
     .slice(0, 5)
@@ -55,9 +51,9 @@ export function Hero({ featured, showcase, rating }: { featured: Car[]; showcase
       {/* En celular la foto se queda fija y la hoja blanca sube por encima al bajar (sin mover la foto) */}
       <div className="relative h-[57svh] min-h-[380px] overflow-hidden bg-night max-lg:sticky max-lg:top-0 lg:h-[88svh]">
         <div className="absolute inset-0 lg:hidden">
-          <HeroCarousel slides={slides} />
+          <HeroCarousel slides={slides} total={total} />
         </div>
-        {/* Computadora: una sola imagen fija y, si el auto sigue a la venta, su tarjeta abajo a la derecha */}
+        {/* Computadora: una sola imagen fija, sin tarjeta de auto (5-nov: el dueño la quitó porque los autos cambian) */}
         <div className="absolute inset-0 hidden lg:block">
           <picture>
             <source
@@ -75,29 +71,11 @@ export function Hero({ featured, showcase, rating }: { featured: Car[]; showcase
             {/* Imagen local ya optimizada (2 tamaños en AVIF y, de respaldo, en WebP) */}
             <img
               src={BLANK}
-              alt={HERO_DESKTOP.alt}
+              alt={HERO_DESKTOP_ALT}
               fetchPriority="high"
               className="absolute inset-0 h-full w-full object-cover object-[80%_60%]"
             />
           </picture>
-          {showcase && (
-            <Link
-              href={`/autos/${showcase.slug}`}
-              className="group absolute right-6 bottom-14 z-10 flex items-center gap-3 rounded-md bg-night/70 py-2 pr-2.5 pl-3.5 text-white shadow-[0_10px_30px_-12px_rgb(0_0_0/0.6)] ring-1 ring-white/10 backdrop-blur-sm transition-colors hover:bg-night/85"
-            >
-              <span className="text-right">
-                <span className="block text-[11px] font-medium text-white/65">
-                  {showcase.year} · {showcase.brand}
-                </span>
-                <span className="block text-sm font-semibold">
-                  {showcase.model} · {formatPrice(showcase.price)}
-                </span>
-              </span>
-              <span className="grid size-8 place-items-center rounded-sm bg-white text-night transition-transform duration-300 group-hover:rotate-45">
-                <ArrowUpRight className="size-4" />
-              </span>
-            </Link>
-          )}
         </div>
         {/* Sombra mínima arriba, solo para que se lea el encabezado */}
         <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/40 to-transparent lg:h-32 lg:from-black/55" />

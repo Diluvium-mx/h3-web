@@ -64,6 +64,9 @@ function OkMark({ className = "" }: { className?: string }) {
 
 export function Inventory({ cars, featured }: { cars: Car[]; featured: Car[] }) {
   const { types } = categoriesOf(cars);
+  // Miniaturas del botón: primero autos que no salen en la cuadrícula, para invitar a ver los demás
+  const shown = new Set(featured.slice(0, 8).map((c) => c.id));
+  const thumbs = [...new Set([...cars.filter((c) => !shown.has(c.id)), ...cars].map((c) => c.images[0]).filter(Boolean))].slice(0, 3);
 
   return (
     <section className="pt-16 pb-16 sm:pt-24 sm:pb-24" aria-labelledby="destacados">
@@ -101,10 +104,23 @@ export function Inventory({ cars, featured }: { cars: Car[]; featured: Car[] }) 
           </div>
         ))}
       </div>
+      {/* Botón llamativo (pedido del dueño, 5-nov): rojo de la marca, miniaturas y cuántos autos hay */}
       <div className="mt-8 px-4 text-center sm:px-6">
-        <Link href="/autos" className="btn btn-dark btn-shine group w-full sm:w-auto">
-          Ver todos
-          <ArrowRight className="size-4 transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:translate-x-1" />
+        <Link
+          href="/autos"
+          className="btn btn-shine group min-h-14 w-full bg-brand px-5 text-base text-white shadow-[0_16px_32px_-14px_rgb(200_16_46/0.75)] hover:bg-brand-hi sm:w-auto"
+        >
+          {thumbs.length > 0 && (
+            <span className="flex -space-x-2.5" aria-hidden="true">
+              {thumbs.map((src) => (
+                <span key={src} className="relative size-8 overflow-hidden rounded-full ring-2 ring-brand">
+                  <Image src={src} alt="" fill sizes="32px" quality={60} className="object-cover" />
+                </span>
+              ))}
+            </span>
+          )}
+          Ver los {cars.length} autos
+          <ArrowRight className="size-5 transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:translate-x-1" />
         </Link>
       </div>
     </section>
