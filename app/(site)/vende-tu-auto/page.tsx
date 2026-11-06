@@ -73,7 +73,7 @@ export default function SellPage() {
               ))}
             </ul>
           </header>
-          <div className="reveal reveal-zoom relative hidden aspect-[16/10] overflow-hidden rounded-lg sm:block">
+          <div className="relative hidden aspect-[16/10] overflow-hidden rounded-lg sm:block">
             <Image
               src="/img/vende-tu-auto.webp"
               alt="Llave de un auto junto a una carpeta de documentos y una pluma"

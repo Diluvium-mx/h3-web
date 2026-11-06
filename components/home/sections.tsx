@@ -64,6 +64,9 @@ function OkMark({ className = "" }: { className?: string }) {
 
 export function Inventory({ cars, featured }: { cars: Car[]; featured: Car[] }) {
   const { types } = categoriesOf(cars);
+  // Miniaturas del botón: primero autos que no salen en la cuadrícula, para invitar a ver los demás
+  const shown = new Set(featured.slice(0, 8).map((c) => c.id));
+  const thumbs = [...new Set([...cars.filter((c) => !shown.has(c.id)), ...cars].map((c) => c.images[0]).filter(Boolean))].slice(0, 3);
 
   return (
     <section className="pt-16 pb-16 sm:pt-24 sm:pb-24" aria-labelledby="destacados">
@@ -101,10 +104,23 @@ export function Inventory({ cars, featured }: { cars: Car[]; featured: Car[] }) 
           </div>
         ))}
       </div>
+      {/* Botón llamativo (pedido del dueño, 5-nov): rojo de la marca y miniaturas; sin el número de autos */}
       <div className="mt-8 px-4 text-center sm:px-6">
-        <Link href="/autos" className="btn btn-dark btn-shine group w-full sm:w-auto">
-          Ver todos
-          <ArrowRight className="size-4 transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:translate-x-1" />
+        <Link
+          href="/autos"
+          className="btn btn-shine group min-h-14 w-full bg-brand px-5 text-base text-white shadow-[0_16px_32px_-14px_rgb(200_16_46/0.75)] hover:bg-brand-hi sm:w-auto"
+        >
+          {thumbs.length > 0 && (
+            <span className="flex -space-x-2.5" aria-hidden="true">
+              {thumbs.map((src) => (
+                <span key={src} className="relative size-8 overflow-hidden rounded-full ring-2 ring-brand">
+                  <Image src={src} alt="" fill sizes="32px" quality={60} className="object-cover" />
+                </span>
+              ))}
+            </span>
+          )}
+          Ver todos los autos
+          <ArrowRight className="size-5 transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:translate-x-1" />
         </Link>
       </div>
     </section>
@@ -168,7 +184,7 @@ export function Benefits() {
             className="grid overflow-hidden rounded-xl bg-card ring-1 ring-line lg:grid-cols-2"
             aria-labelledby="al-comprar"
           >
-            <div className="reveal reveal-wipe relative aspect-[16/10] bg-soft lg:aspect-auto lg:min-h-[30rem]">
+            <div className="relative aspect-[16/10] bg-soft lg:aspect-auto lg:min-h-[30rem]">
               <Image
                 src="/img/comprar-tu-auto.webp"
                 alt="Entrega de la llave de un auto: comprar tu auto con H3"
@@ -178,7 +194,7 @@ export function Benefits() {
               />
             </div>
             <div className="p-6 sm:p-10 lg:self-center lg:p-14">
-              <h3 id="al-comprar" className="font-display text-[1.9rem] sm:text-4xl">
+              <h3 id="al-comprar" className="reveal font-display text-[1.9rem] sm:text-4xl">
                 Al comprar un auto
               </h3>
               <BenefitList items={BUY_BENEFITS} />
@@ -190,7 +206,7 @@ export function Benefits() {
             className="grid overflow-hidden rounded-xl bg-night text-white lg:grid-cols-2"
             aria-labelledby="al-vender"
           >
-            <div className="reveal reveal-wipe relative aspect-[16/10] bg-graphite lg:order-2 lg:aspect-auto lg:min-h-[30rem]">
+            <div className="relative aspect-[16/10] bg-graphite lg:order-2 lg:aspect-auto lg:min-h-[30rem]">
               <Image
                 src="/img/vende-tu-auto.webp"
                 alt="Llave de un auto junto a una carpeta de documentos y una pluma: vender tu auto con el papeleo en orden"
@@ -207,7 +223,7 @@ export function Benefits() {
               </div>
             </div>
             <div className="p-6 sm:p-10 lg:self-center lg:p-14">
-              <h3 id="al-vender" className="font-display text-[1.9rem] sm:text-4xl">
+              <h3 id="al-vender" className="reveal font-display text-[1.9rem] sm:text-4xl">
                 Al vender tu auto
               </h3>
               <BenefitList items={SELL_BENEFITS} dark />

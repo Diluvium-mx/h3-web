@@ -134,6 +134,18 @@ export function cardData(car: Car): Car {
   return { ...car, description: "", images: car.images.slice(0, 1), photoSections: undefined };
 }
 
+// Fotos que siguen en el CDN de Shopify (desaparecen al cancelar Shopify: hay que pasarlas a Cloudinary)
+export function isShopifyPhoto(url: string) {
+  return url.startsWith("https://cdn.shopify.com/");
+}
+
+// Cambia las URLs de las fotos (lista y secciones) sin tocar nada más del auto
+export function swapPhotos(car: Car, map: Map<string, string>): Car {
+  const swap = (u: string) => map.get(u) ?? u;
+  const sections = car.photoSections && Object.entries(car.photoSections).map(([u, s]) => [swap(u), s]);
+  return { ...car, images: car.images.map(swap), photoSections: sections && Object.fromEntries(sections) };
+}
+
 export function isPublic(car: Car) {
   return car.status !== "vendido";
 }

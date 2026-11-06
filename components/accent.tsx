@@ -1,12 +1,12 @@
 import type { ReactNode } from "react";
 
-// Palabra resaltada en un título: cursiva roja y, si se pide, un trazo a mano debajo que se dibuja cuando la
+// Palabra resaltada en un título: Saira inclinada en rojo y, si se pide, un trazo a mano debajo que se dibuja cuando la
 // sección entra en pantalla (lo anima components/reveal.tsx; sin JavaScript se ve completo).
 // `onDark`: rojo más claro para fondos oscuros.
 export function Accent({ children, underline, onDark }: { children: ReactNode; underline?: boolean; onDark?: boolean }) {
   return (
     <span
-      className={`font-accent relative inline-block pr-[0.06em] text-[1.06em] ${onDark ? "text-brand-glow" : "text-brand"}`}
+      className={`font-accent relative inline-block pr-[0.06em] ${onDark ? "text-brand-glow" : "text-brand"}`}
     >
       {children}
       {underline && (

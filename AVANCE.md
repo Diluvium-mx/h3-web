@@ -2,6 +2,46 @@
 
 Lo más reciente va arriba.
 
+## 5 de noviembre de 2026 (noche, 2) — carrusel del celular, hero sin tarjeta y botón «Ver todos los autos»
+
+- Hero de computadora sin la tarjeta de la G63 (los autos cambian).
+- Carrusel del celular: puntos centrados, tarjeta del auto un poco más arriba y una tarjeta final «Hay más autos esperándote · Ver inventario».
+- Inventario del inicio: el botón «Ver todos» ahora es rojo, con miniaturas y «Ver todos los autos» (sin el número: el dueño no quiere mostrarlo). Pruebas `e2e-public` actualizadas.
+
+Falta: publicar; pasar las fotos a Cloudinary desde el panel; cambiar la contraseña `12345`.
+
+## 5 de noviembre de 2026 (tarde-noche) — letra de acento y fotos de comprar/vender sin efecto
+
+- Palabras resaltadas en rojo: de Instrument Serif (muy delicada, según el dueño) a Saira inclinada y gruesa, con aire del logo.
+- Las imágenes de «Al comprar un auto» y «Al vender tu auto» ya no tienen la cortinilla (se veían tarde); el efecto pasó a sus títulos.
+- El dueño aprobó el hero de la cochera al atardecer.
+
+Falta: publicar; pasar las fotos a Cloudinary desde el panel; cambiar la contraseña `12345`.
+
+## 5 de noviembre de 2026 (cierre) — hero de cochera y botón para pasar fotos a Cloudinary
+
+- El dueño descartó el estudio oscuro: hero de computadora con una cochera moderna al atardecer, palmeras y tres camionetas (Arcads). En AVIF (76 KB) con WebP de respaldo.
+- Panel: aviso con botón «Pasar fotos a Cloudinary» mientras queden fotos en Shopify (8 por llamada, auto por auto; solo cambia las URLs de `images` y `photoSections`).
+- Peso medido: el inicio en celular baja de 6.9 MB (Shopify) a 2.3 MB; lo más pesado que queda son las fotos JPG de Shopify.
+
+Falta: publicar; correr «Pasar fotos a Cloudinary» en el panel y comprobar que las fichas usen `res.cloudinary.com`; cambiar la contraseña `12345`; después, cancelar Shopify.
+
+## 5 de noviembre de 2026 (noche) — hero de computadora más impactante y dominio conectado
+
+- `h3seminuevos.com` ya apunta a Netlify (GoDaddy: @ → A 75.2.60.5; www → CNAME). Dominio principal: `h3seminuevos.com`; `www` redirige.
+- Hero de computadora: imagen nueva hecha con Arcads (Nano Banana 2.1) a partir de la foto real de la G63, en un estudio oscuro con reflector y luz roja. Se recorrió el encuadre (`object-[60%_60%]`) para que el auto no choque con la tarjeta del texto.
+- El dueño agregó `CLOUDINARY_URL` en Netlify; entra con la siguiente publicación.
+
+Falta: publicar (fusionar la solicitud nueva); comprobar subida de fotos en el panel; cambiar la contraseña `12345`; pasar las fotos de Shopify a Cloudinary antes de cancelar Shopify.
+
+## 5 de noviembre de 2026 (publicado) — versión final en producción
+
+- El dueño pidió publicar: se fusionó #1 y la versión final ya está en `luminous-rolypoly-293a41.netlify.app`.
+- Pruebas: sitio y panel pasaron en la vista previa. En producción Netlify agrega la etiqueta «Powered by Netlify», que tapa los botones de abajo en celular; se quita en Project configuration → General.
+- DNS en GoDaddy: www → CNAME `luminous-rolypoly-293a41.netlify.app`, @ → A `75.2.60.5` (pendiente de que se aplique).
+
+Falta: quitar la etiqueta de Netlify; que el dominio apunte a Netlify y volver a publicar (Trigger deploy); cambiar la contraseña `12345`; Cloudinary antes de cancelar Shopify.
+
 ## 5 de noviembre de 2026 — el sitio pasa a una cuenta de Netlify del dueño
 
 - Se descartó Vercel: el plan gratis no permite uso comercial y el Pro cuesta 20 USD al mes.

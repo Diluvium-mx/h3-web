@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, Star } from "lucide-react";
+import { ArrowRight, Star } from "lucide-react";
 import { WhatsAppIcon } from "@/components/icons";
 import { HeroCarousel, type HeroSlide } from "@/components/home/hero-carousel";
 import { formatPrice, type Car } from "@/lib/cars";
@@ -21,12 +21,9 @@ const TITLE: { text: string; accent?: boolean }[] = [
   { text: "Villahermosa." },
 ];
 
-// Imagen del hero en computadora (pedido del dueño, 31-oct): hecha con Arcads a partir de la foto real de la
-// G63 del inventario, en una sala de exhibición. Si ese auto ya no está a la venta, se oculta su tarjeta.
-export const HERO_DESKTOP = {
-  slug: "mercedes-benz-g63-amg-2021",
-  alt: "Mercedes-Benz G63 AMG gris mate en una sala de exhibición",
-};
+// Imagen del hero en computadora (elegida por el dueño el 5-nov): hecha con Arcads (Nano Banana 2.1), una
+// cochera moderna al atardecer con palmeras y tres camionetas (G-Class, Wrangler y Land Cruiser).
+const HERO_DESKTOP_ALT = "Cochera moderna al atardecer con palmeras y tres camionetas seminuevas";
 // Pixel transparente: en celular el <picture> no descarga la imagen de computadora
 const BLANK = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 
@@ -35,7 +32,7 @@ const BLANK = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAA
 // el texto va en una hoja clara que se monta sobre la foto (en computadora, una tarjeta). El título sube
 // palabra por palabra y «seleccionados» (antes «premium», cambio del dueño 31-oct) va en cursiva roja con un
 // trazo a mano. La foto no se mueve al bajar (31-oct: el movimiento la hacía temblar).
-export function Hero({ featured, showcase, rating }: { featured: Car[]; showcase?: Car; rating: Rating }) {
+export function Hero({ featured, rating }: { featured: Car[]; rating: Rating }) {
   const slides: HeroSlide[] = featured
     .filter((c) => c.images[0])
     .slice(0, 5)
@@ -56,44 +53,32 @@ export function Hero({ featured, showcase, rating }: { featured: Car[]; showcase
         <div className="absolute inset-0 lg:hidden">
           <HeroCarousel slides={slides} />
         </div>
-        {/* Computadora: una sola imagen fija y, si el auto sigue a la venta, su tarjeta abajo a la derecha */}
+        {/* Computadora: una sola imagen fija, sin tarjeta de auto (5-nov: el dueño la quitó porque los autos cambian) */}
         <div className="absolute inset-0 hidden lg:block">
           <picture>
+            <source
+              media="(min-width: 1024px)"
+              srcSet="/img/hero-escritorio-1440.avif 1440w, /img/hero-escritorio-2048.avif 2048w"
+              sizes="100vw"
+              type="image/avif"
+            />
             <source
               media="(min-width: 1024px)"
               srcSet="/img/hero-escritorio-1440.webp 1440w, /img/hero-escritorio-2048.webp 2048w"
               sizes="100vw"
               type="image/webp"
             />
-            {/* Imagen local ya optimizada (2 tamaños en WebP) */}
+            {/* Imagen local ya optimizada (2 tamaños en AVIF y, de respaldo, en WebP) */}
             <img
               src={BLANK}
-              alt={HERO_DESKTOP.alt}
+              alt={HERO_DESKTOP_ALT}
               fetchPriority="high"
-              className="absolute inset-0 h-full w-full object-cover object-[78%_60%]"
+              className="absolute inset-0 h-full w-full object-cover object-[80%_60%]"
             />
           </picture>
-          {showcase && (
-            <Link
-              href={`/autos/${showcase.slug}`}
-              className="group absolute right-6 bottom-14 z-10 flex items-center gap-3 rounded-md bg-night/70 py-2 pr-2.5 pl-3.5 text-white shadow-[0_10px_30px_-12px_rgb(0_0_0/0.6)] ring-1 ring-white/10 backdrop-blur-sm transition-colors hover:bg-night/85"
-            >
-              <span className="text-right">
-                <span className="block text-[11px] font-medium text-white/65">
-                  {showcase.year} · {showcase.brand}
-                </span>
-                <span className="block text-sm font-semibold">
-                  {showcase.model} · {formatPrice(showcase.price)}
-                </span>
-              </span>
-              <span className="grid size-8 place-items-center rounded-sm bg-white text-night transition-transform duration-300 group-hover:rotate-45">
-                <ArrowUpRight className="size-4" />
-              </span>
-            </Link>
-          )}
         </div>
         {/* Sombra mínima arriba, solo para que se lea el encabezado */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/40 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/40 to-transparent lg:h-32 lg:from-black/55" />
       </div>
 
       {/* Texto: hoja clara sobre la foto */}
@@ -116,7 +101,7 @@ export function Hero({ featured, showcase, rating }: { featured: Car[]; showcase
                 <span style={vars({ "--i": i })} className={accent ? "relative" : undefined}>
                   {accent ? (
                     <>
-                      <span className="font-accent pr-1 text-[1.12em] text-brand">{text}</span>
+                      <span className="font-accent pr-1 text-brand">{text}</span>
                       {/* Trazo a mano bajo «seleccionados» */}
                       <svg
                         className="pointer-events-none absolute -bottom-[0.02em] left-0 h-[0.22em] w-full text-brand"
