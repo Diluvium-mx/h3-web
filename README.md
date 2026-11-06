@@ -91,12 +91,10 @@ El sitio público queda completo con el inventario actual y **el panel ya guarda
    - Para el `AUTH_SECRET`, en la Terminal de la Mac corre `openssl rand -base64 32`.
    - El `AUTH_SECRET` es opcional desde el 30-oct: sin él, el panel crea una llave al azar y la guarda en
      Netlify Blobs.
-   - La contraseña inicial del panel es `12345` (decisión del dueño). Como el repositorio es público,
-     cualquiera puede saberla: **cámbiala en Panel → Ajustes** (se guarda cifrada en Netlify Blobs y vale
-     para producción y las vistas previas).
-   - Opcional: si agregas `ADMIN_PASSWORD`, esa reemplaza a `12345` desde el principio. Usa 4 palabras al
-     azar que **no aparezcan en el sitio**; Netlify revisa que las contraseñas no se filtren en el código
-     publicado, y una palabra común podría detener la publicación.
+   - La contraseña del panel **no se escribe en el repositorio** (es público). Se guarda cifrada desde
+     **Panel → Ajustes** (Netlify Blobs; vale para producción y las vistas previas). En producción no hay
+     contraseña de respaldo; en desarrollo local es `h3-local`.
+   - `ADMIN_PASSWORD` es solo para pruebas: también firma las sesiones, así que no la uses en producción.
 6. **Vuelve a publicar** para que tome el secreto: **Deploys → Trigger deploy → Deploy project**.
 7. Abre `https://NOMBRE.netlify.app` en el celular. El panel está en `/admin`.
 
@@ -112,7 +110,7 @@ El sitio público queda completo con el inventario actual y **el panel ya guarda
    - `NEXT_PUBLIC_SITE_URL`: no la agregues mientras no se conecte el dominio; el sitio usa sola la
      dirección `*.netlify.app`. Cuando se conecte, pon `https://www.h3seminuevos.com`.
 4. Entra a `https://NOMBRE.netlify.app/admin` (el enlace discreto «Administración» está al final del
-   pie de página). Ve primero a **Ajustes** y cambia la contraseña `12345`.
+   pie de página). Ve primero a **Ajustes** y guarda la contraseña.
 5. Pasa las fotos de Shopify a Cloudinary: ver **`ENTREGA.md`, paso 7** (el importador solo copia autos
    nuevos; los 13 actuales ya cuentan como importados).
 6. Cuando todo funcione, **cancela Shopify**. Importa las fotos **antes**, porque después desaparecen.
@@ -182,7 +180,7 @@ npm run dev
 ```
 
 - Sin variables de entorno, el sitio usa `data/seed.json` (el inventario actual).
-- En local, el panel (`/admin`, contraseña inicial `12345`, que se cambia en Panel → Ajustes) guarda en `data/cars.local.json` y
+- En local, el panel (`/admin`, contraseña de desarrollo `h3-local`) guarda en `data/cars.local.json` y
   `data/reviews.local.json`, y las fotos en `public/uploads/` (todo ignorado por git).
 - Para usar los servicios reales en local, copia `.env.example` como `.env.local` y llénalo
   (no lo subas al repositorio).

@@ -1,11 +1,11 @@
 import "server-only";
 import { getSetting, putSetting } from "./storage";
 
-// Contraseña del panel.
-// 1. Si el dueño la cambió en el panel, vale la guardada (cifrada con PBKDF2, nunca en texto).
-// 2. Si no, la de la variable ADMIN_PASSWORD.
-// 3. Si no hay ninguna, la inicial: 12345 (decisión del dueño, 28-oct). El panel pide cambiarla.
-export const DEFAULT_ADMIN_PASSWORD = "12345";
+// Contraseña del panel. Nunca se escribe en el repositorio (es público).
+// 1. La que se guardó en Panel → Ajustes (cifrada con PBKDF2 en el almacén, nunca en texto).
+// 2. Si no, la de la variable ADMIN_PASSWORD (solo para pruebas: también firma las sesiones).
+// 3. En desarrollo local, sin ninguna de las dos: «h3-local». En producción no hay contraseña de respaldo.
+const DEV_PASSWORD = process.env.NODE_ENV === "production" ? null : "h3-local";
 const KEY = "adminPassword";
 const ITERATIONS = 210_000;
 const encoder = new TextEncoder();
@@ -31,7 +31,7 @@ function sameBytes(a: Uint8Array, b: Uint8Array) {
 }
 
 async function storedHash() {
-  // Si el almacén no responde, se marca el error: nunca se vuelve a la contraseña inicial por una falla
+  // Si el almacén no responde, se marca el error: nunca se entra sin contraseña por una falla
   return getSetting<string>(KEY);
 }
 
@@ -41,17 +41,14 @@ export async function passwordVersion() {
   return stored ? stored.split("$")[3].replace(/[^A-Za-z0-9]/g, "").slice(0, 10) : "0";
 }
 
-export async function usingDefaultPassword() {
-  return !(await storedHash()) && !process.env.ADMIN_PASSWORD;
-}
-
 export async function verifyAdminPassword(input: string) {
   const stored = await storedHash();
   if (stored) {
     const [, iterations, salt, hash] = stored.split("$");
     return sameBytes(await derive(input, fromB64(salt), Number(iterations)), fromB64(hash));
   }
-  const expected = process.env.ADMIN_PASSWORD || DEFAULT_ADMIN_PASSWORD;
+  const expected = process.env.ADMIN_PASSWORD || DEV_PASSWORD;
+  if (!expected) return false;
   // Se compara el derivado de ambas para que el tiempo no dependa del contenido
   const salt = encoder.encode("h3-comparacion");
   return sameBytes(await derive(input, salt, 1000), await derive(expected, salt, 1000));

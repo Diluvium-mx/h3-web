@@ -1,13 +1,12 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { CheckCircle2, Download, ExternalLink, KeyRound, MessageSquareQuote, Plus, Settings, X } from "lucide-react";
+import { CheckCircle2, Download, ExternalLink, MessageSquareQuote, Plus, Settings, X } from "lucide-react";
 import { WhatsAppIcon } from "@/components/icons";
 import { AdminCarList } from "@/components/admin/car-list";
 import { StorageBanner } from "@/components/admin/storage-banner";
 import { MovePhotos } from "@/components/admin/move-photos";
 import { LogoutButton } from "@/components/admin/logout-button";
-import { usingDefaultPassword } from "@/lib/admin-password";
 import { requireAdmin } from "@/lib/auth";
 import { carTitle, carUrl, formatPrice, isShopifyPhoto, sortNewest, type Car } from "@/lib/cars";
 import { cloudinaryEnabled } from "@/lib/images";
@@ -67,7 +66,7 @@ export default function AdminPage({ searchParams }: PageProps<"/admin">) {
 
 async function Dashboard({ searchParams }: { searchParams: PageProps<"/admin">["searchParams"] }) {
   await requireAdmin();
-  const [list, isDefault, sp] = await Promise.all([listCars(), usingDefaultPassword(), searchParams]);
+  const [list, sp] = await Promise.all([listCars(), searchParams]);
   const cars = list.sort(sortNewest);
   // Confirmación después de publicar o guardar un auto (?publicado=id o ?guardado=id)
   const doneId = typeof sp.publicado === "string" ? sp.publicado : typeof sp.guardado === "string" ? sp.guardado : null;
@@ -75,18 +74,6 @@ async function Dashboard({ searchParams }: { searchParams: PageProps<"/admin">["
   return (
     <>
       {done && <SavedCard car={done} created={typeof sp.publicado === "string"} />}
-      {isDefault && (
-        <Link
-          href="/admin/ajustes"
-          className="mb-4 flex items-center gap-3 rounded-md border-l-2 border-brand bg-card p-4 text-sm ring-1 ring-line"
-        >
-          <KeyRound className="size-5 shrink-0 text-brand" />
-          <span>
-            <b>Estás usando la contraseña inicial.</b>{" "}
-            <span className="text-mute underline underline-offset-4">Cámbiala en Ajustes</span>
-          </span>
-        </Link>
-      )}
       <StorageBanner mode={getStorageMode()} photos={cloudinaryEnabled} />
       {cloudinaryEnabled && <PendingPhotos cars={cars} />}
       {cars.length === 0 ? (

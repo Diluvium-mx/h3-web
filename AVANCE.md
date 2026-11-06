@@ -2,6 +2,14 @@
 
 Lo más reciente va arriba.
 
+## 6 de noviembre de 2026 (cierre) — la contraseña del panel ya no está en el código
+
+- El dueño decidió conservar su contraseña del panel. Se quitó del código y de los documentos: ya no hay contraseña inicial en producción; vale la que se guarda cifrada en Panel → Ajustes (en local, `h3-local`).
+- Se quitó el aviso «Estás usando la contraseña inicial». `ADMIN_PASSWORD` queda solo para pruebas (también firma las sesiones).
+- Ojo: la contraseña sigue en el historial de git de este repositorio público.
+
+Falta: que el dueño guarde su contraseña en Panel → Ajustes **antes** de publicar este cambio (si no, nadie puede entrar); decidir si el repositorio se vuelve privado; Netlify Personal (9 USD) o Cloudflare.
+
 ## 6 de noviembre de 2026 (noche) — publicado y fotos en Cloudinary
 
 - Se fusionó #4: encabezado sin parpadeo, WhatsApp flotante arriba de la etiqueta de Netlify y hero más realista.
@@ -9,7 +17,7 @@ Lo más reciente va arriba.
 - Peso de imágenes: inicio en celular de 934 KB a 573 KB, en computadora de 1.55 MB a 0.98 MB, ficha de 347 KB a 181 KB.
 - Quedaron 2 imágenes de prueba de 1 px en `h3/autos` de Cloudinary (se pueden borrar).
 
-Falta: cambiar la contraseña `12345`; decidir Cloudflare (5 USD) o Netlify Personal (9 USD); la etiqueta de Netlify tapa el botón de los filtros y parte de la barra de WhatsApp de la ficha en celular; cancelar Shopify cuando el dueño decida (ya no hace falta para fotos ni dominio).
+Falta: guardar la contraseña cifrada en Ajustes; decidir Cloudflare (5 USD) o Netlify Personal (9 USD); la etiqueta de Netlify tapa el botón de los filtros y parte de la barra de WhatsApp de la ficha en celular; cancelar Shopify cuando el dueño decida (ya no hace falta para fotos ni dominio).
 
 ## 6 de noviembre de 2026 — encabezado sin parpadeo, hero más realista y WhatsApp arriba de la etiqueta
 
@@ -18,7 +26,7 @@ Falta: cambiar la contraseña `12345`; decidir Cloudflare (5 USD) o Netlify Pers
 - Botón flotante de WhatsApp más arriba, para no quedar debajo de la etiqueta «Powered by Netlify» (solo se quita pagando).
 - La mudanza a Cloudflare quedó en pausa en la rama `cloudflare` (local): el plan gratis de Workers tiene un límite de 10 ms de CPU; el dueño decide entre Cloudflare (5 USD) o Netlify Personal (9 USD).
 
-Falta: publicar (la llave de Cloudinary ya funciona en la vista previa #4); pasar las fotos a Cloudinary; cambiar la contraseña `12345`.
+Falta: publicar (la llave de Cloudinary ya funciona en la vista previa #4); pasar las fotos a Cloudinary; guardar la contraseña cifrada en Ajustes.
 
 ## 6 de noviembre de 2026 — publicado: hero de cochera, letra Saira, carrusel y botón nuevos
 
@@ -26,7 +34,7 @@ Falta: publicar (la llave de Cloudinary ya funciona en la vista previa #4); pasa
 - «Pasar fotos a Cloudinary» falló en las 189 fotos sin cambiar nada: Cloudinary responde «Invalid Signature». La API Key y el nombre de la nube están bien; el API Secret guardado en `CLOUDINARY_URL` (Netlify) no coincide. También impide subir fotos nuevas desde el panel.
 - En producción Netlify sigue poniendo la etiqueta «Powered by Netlify» (tapa botones abajo a la derecha en celular). En la vista previa no sale.
 
-Falta: que el dueño corrija el API Secret en `CLOUDINARY_URL`, apague la etiqueta (Project configuration → General) y vuelva a publicar (Deploys → Trigger deploy); luego pasar las fotos; cambiar la contraseña `12345`.
+Falta: que el dueño corrija el API Secret en `CLOUDINARY_URL`, apague la etiqueta (Project configuration → General) y vuelva a publicar (Deploys → Trigger deploy); luego pasar las fotos; guardar la contraseña cifrada en Ajustes.
 
 ## 5 de noviembre de 2026 (noche, 2) — carrusel del celular, hero sin tarjeta y botón «Ver todos los autos»
 
@@ -34,7 +42,7 @@ Falta: que el dueño corrija el API Secret en `CLOUDINARY_URL`, apague la etique
 - Carrusel del celular: puntos centrados, tarjeta del auto un poco más arriba y una tarjeta final «Hay más autos esperándote · Ver inventario».
 - Inventario del inicio: el botón «Ver todos» ahora es rojo, con miniaturas y «Ver todos los autos» (sin el número: el dueño no quiere mostrarlo). Pruebas `e2e-public` actualizadas.
 
-Falta: publicar; pasar las fotos a Cloudinary desde el panel; cambiar la contraseña `12345`.
+Falta: publicar; pasar las fotos a Cloudinary desde el panel; guardar la contraseña cifrada en Ajustes.
 
 ## 5 de noviembre de 2026 (tarde-noche) — letra de acento y fotos de comprar/vender sin efecto
 
@@ -42,7 +50,7 @@ Falta: publicar; pasar las fotos a Cloudinary desde el panel; cambiar la contras
 - Las imágenes de «Al comprar un auto» y «Al vender tu auto» ya no tienen la cortinilla (se veían tarde); el efecto pasó a sus títulos.
 - El dueño aprobó el hero de la cochera al atardecer.
 
-Falta: publicar; pasar las fotos a Cloudinary desde el panel; cambiar la contraseña `12345`.
+Falta: publicar; pasar las fotos a Cloudinary desde el panel; guardar la contraseña cifrada en Ajustes.
 
 ## 5 de noviembre de 2026 (cierre) — hero de cochera y botón para pasar fotos a Cloudinary
 
@@ -50,7 +58,7 @@ Falta: publicar; pasar las fotos a Cloudinary desde el panel; cambiar la contras
 - Panel: aviso con botón «Pasar fotos a Cloudinary» mientras queden fotos en Shopify (8 por llamada, auto por auto; solo cambia las URLs de `images` y `photoSections`).
 - Peso medido: el inicio en celular baja de 6.9 MB (Shopify) a 2.3 MB; lo más pesado que queda son las fotos JPG de Shopify.
 
-Falta: publicar; correr «Pasar fotos a Cloudinary» en el panel y comprobar que las fichas usen `res.cloudinary.com`; cambiar la contraseña `12345`; después, cancelar Shopify.
+Falta: publicar; correr «Pasar fotos a Cloudinary» en el panel y comprobar que las fichas usen `res.cloudinary.com`; guardar la contraseña cifrada en Ajustes; después, cancelar Shopify.
 
 ## 5 de noviembre de 2026 (noche) — hero de computadora más impactante y dominio conectado
 
@@ -58,7 +66,7 @@ Falta: publicar; correr «Pasar fotos a Cloudinary» en el panel y comprobar que
 - Hero de computadora: imagen nueva hecha con Arcads (Nano Banana 2.1) a partir de la foto real de la G63, en un estudio oscuro con reflector y luz roja. Se recorrió el encuadre (`object-[60%_60%]`) para que el auto no choque con la tarjeta del texto.
 - El dueño agregó `CLOUDINARY_URL` en Netlify; entra con la siguiente publicación.
 
-Falta: publicar (fusionar la solicitud nueva); comprobar subida de fotos en el panel; cambiar la contraseña `12345`; pasar las fotos de Shopify a Cloudinary antes de cancelar Shopify.
+Falta: publicar (fusionar la solicitud nueva); comprobar subida de fotos en el panel; guardar la contraseña cifrada en Ajustes; pasar las fotos de Shopify a Cloudinary antes de cancelar Shopify.
 
 ## 5 de noviembre de 2026 (publicado) — versión final en producción
 
@@ -66,7 +74,7 @@ Falta: publicar (fusionar la solicitud nueva); comprobar subida de fotos en el p
 - Pruebas: sitio y panel pasaron en la vista previa. En producción Netlify agrega la etiqueta «Powered by Netlify», que tapa los botones de abajo en celular; se quita en Project configuration → General.
 - DNS en GoDaddy: www → CNAME `luminous-rolypoly-293a41.netlify.app`, @ → A `75.2.60.5` (pendiente de que se aplique).
 
-Falta: quitar la etiqueta de Netlify; que el dominio apunte a Netlify y volver a publicar (Trigger deploy); cambiar la contraseña `12345`; Cloudinary antes de cancelar Shopify.
+Falta: quitar la etiqueta de Netlify; que el dominio apunte a Netlify y volver a publicar (Trigger deploy); guardar la contraseña cifrada en Ajustes; Cloudinary antes de cancelar Shopify.
 
 ## 5 de noviembre de 2026 — el sitio pasa a una cuenta de Netlify del dueño
 
@@ -82,7 +90,7 @@ Falta: dejar pública la visibilidad del sitio nuevo; que el dueño diga «publi
 - Nuevo `ENTREGA.md`: repositorio, ramas, Netlify, dominio (hoy en Shopify), variables, imágenes y pasos exactos.
 - Se encontró que el importador no pasa a Cloudinary las fotos de los 13 autos actuales; quedó documentado (paso 7).
 
-Falta: que el dueño diga «publica»; conectar Cloudinary y el dominio; cambiar la contraseña `12345`.
+Falta: que el dueño diga «publica»; conectar Cloudinary y el dominio; guardar la contraseña cifrada en Ajustes.
 
 ## 31 de octubre de 2026 (última) — hero de computadora con imagen de Arcads
 
@@ -90,7 +98,7 @@ Falta: que el dueño diga «publica»; conectar Cloudinary y el dominio; cambiar
 - El celular no descarga esa imagen (sigue con el carrusel de fotos reales).
 - «Al comprar un auto»: íconos en verde, igual que «Al vender tu auto».
 
-Falta: que el dueño lo valide en la vista previa #1; conectar Cloudinary; cambiar la contraseña `12345`.
+Falta: que el dueño lo valide en la vista previa #1; conectar Cloudinary; guardar la contraseña cifrada en Ajustes.
 
 ## 31 de octubre de 2026 (cierre) — correcciones del sitio y panel más fácil
 
@@ -98,7 +106,7 @@ Falta: que el dueño lo valide en la vista previa #1; conectar Cloudinary; cambi
 - «Cómo funciona» con evaluación en sitio, fotos para publicar y valoración final; cierre con énfasis y «Visítanos» con mapa.
 - Panel: vista previa de la tarjeta, «Dónde va a aparecer», barra «Falta: …» y confirmación con «Ver», «Compartir» y «Publicar otro».
 
-Falta: que el dueño lo valide en la vista previa #1; conectar Cloudinary; cambiar la contraseña `12345`.
+Falta: que el dueño lo valide en la vista previa #1; conectar Cloudinary; guardar la contraseña cifrada en Ajustes.
 
 ## 31 de octubre de 2026 (noche) — dirección nueva y detalles del celular
 
@@ -106,7 +114,7 @@ Falta: que el dueño lo valide en la vista previa #1; conectar Cloudinary; cambi
 - La galería de la ficha asoma la 2ª foto al cargar; sin la línea bajo el encabezado sobre las fotos.
 - Pie de página en celular: dirección en 2 renglones, horario y «Los autos se ven con cita».
 
-Falta: que el dueño lo valide en la vista previa #1; conectar Cloudinary; cambiar la contraseña `12345`.
+Falta: que el dueño lo valide en la vista previa #1; conectar Cloudinary; guardar la contraseña cifrada en Ajustes.
 
 ## 31 de octubre de 2026 (tarde) — hero fijo, íconos y menos botones de WhatsApp
 
@@ -114,7 +122,7 @@ Falta: que el dueño lo valide en la vista previa #1; conectar Cloudinary; cambi
 - Tarjetas con detalles de color; títulos con palabras en cursiva roja, subrayados y línea de avance al bajar.
 - Ficha del auto: íconos en cuadros de color y solo 3 WhatsApp (principal, «Mándaselo» y barra fija).
 
-Falta: que el dueño lo revise en la vista previa #1; conectar Cloudinary; cambiar la contraseña `12345`.
+Falta: que el dueño lo revise en la vista previa #1; conectar Cloudinary; guardar la contraseña cifrada en Ajustes.
 
 ## 31 de octubre de 2026 — una sola versión, más corta y simple
 
@@ -122,15 +130,15 @@ Falta: que el dueño lo revise en la vista previa #1; conectar Cloudinary; cambi
 - Categorías con fotos reales; tarjetas sin botón de WhatsApp; beneficios con 2 imágenes y sin botones.
 - Inicio más corto: tabla comparativa, preguntas, cierre con carrusel y pie de página nuevo con el logo real.
 
-Falta: que el dueño lo revise en la vista previa #1; conectar Cloudinary; cambiar la contraseña `12345`.
+Falta: que el dueño lo revise en la vista previa #1; conectar Cloudinary; guardar la contraseña cifrada en Ajustes.
 
 ## 30 de octubre de 2026 (noche) — el panel funciona en las 2 vistas previas
 
 - El panel ya no pide Upstash: en Netlify guarda en Netlify Blobs, incluido en el plan gratis.
-- Las 2 versiones comparten inventario y contraseña (`12345` hasta que se cambie en Ajustes).
+- Las 2 versiones comparten inventario y contraseña (se cambia en Ajustes).
 - Prueba nueva `scripts/e2e-panel-netlify.mjs`: entra, cambia un precio, revisa la ficha y lo regresa.
 
-Falta: conectar Cloudinary para subir fotos nuevas; cambiar la contraseña `12345`.
+Falta: conectar Cloudinary para subir fotos nuevas; guardar la contraseña cifrada en Ajustes.
 
 ## 30 de octubre de 2026 (cierre) — las 2 versiones listas
 
@@ -216,10 +224,10 @@ Falta: que el dueño corra ese comando en su Mac y revise el estilo premium en e
   premium, y «¿Quieres vender tu auto?» más grande y arriba. Se quitaron «13 autos disponibles hoy», el
   presupuesto y el botón de Waze.
 - Números de confianza de ejemplo (solo se ven en desarrollo) y microanimaciones.
-- Panel: contraseña `12345` que se cambia en **Ajustes**, enlace discreto en el pie de página y formulario
+- Panel: contraseña que se cambia en **Ajustes**, enlace discreto en el pie de página y formulario
   de auto en 4 pasos. Pasan 26 pruebas del sitio, 23 del panel y 3 de Cloudinary.
 
-Falta: que el dueño revise en su celular, cambie `12345` y ponga los números reales cuando el panel
+Falta: que el dueño revise en su celular, cambie la contraseña y ponga los números reales cuando el panel
 guarde en Upstash.
 
 ## 28 de octubre de 2026 (noche) — pasos para publicar en Netlify
