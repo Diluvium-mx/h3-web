@@ -32,7 +32,7 @@ const BLANK = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAA
 // el texto va en una hoja clara que se monta sobre la foto (en computadora, una tarjeta). El título sube
 // palabra por palabra y «seleccionados» (antes «premium», cambio del dueño 31-oct) va en cursiva roja con un
 // trazo a mano. La foto no se mueve al bajar (31-oct: el movimiento la hacía temblar).
-export function Hero({ featured, total, rating }: { featured: Car[]; total: number; rating: Rating }) {
+export function Hero({ featured, rating }: { featured: Car[]; rating: Rating }) {
   const slides: HeroSlide[] = featured
     .filter((c) => c.images[0])
     .slice(0, 5)
@@ -51,7 +51,7 @@ export function Hero({ featured, total, rating }: { featured: Car[]; total: numb
       {/* En celular la foto se queda fija y la hoja blanca sube por encima al bajar (sin mover la foto) */}
       <div className="relative h-[57svh] min-h-[380px] overflow-hidden bg-night max-lg:sticky max-lg:top-0 lg:h-[88svh]">
         <div className="absolute inset-0 lg:hidden">
-          <HeroCarousel slides={slides} total={total} />
+          <HeroCarousel slides={slides} />
         </div>
         {/* Computadora: una sola imagen fija, sin tarjeta de auto (5-nov: el dueño la quitó porque los autos cambian) */}
         <div className="absolute inset-0 hidden lg:block">

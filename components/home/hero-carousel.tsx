@@ -20,7 +20,7 @@ const IDLE = 9000; // si el visitante toca o desliza, espera 9 s antes de seguir
 // Fotos de los autos destacados: se deslizan con el dedo hacia los lados y cambian solas.
 // Cada foto lleva abajo a la derecha el auto que se ve, con su precio (enlace a la ficha). Al final, una tarjeta
 // «Ver inventario» para que quien desliza no se tope sin saber qué hacer (pedido del dueño, 5-nov).
-export function HeroCarousel({ slides, total }: { slides: HeroSlide[]; total: number }) {
+export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
   const track = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
   const pausedUntil = useRef(0);
@@ -131,7 +131,7 @@ export function HeroCarousel({ slides, total }: { slides: HeroSlide[]; total: nu
           <div className="relative">
             <p className="font-tech text-[11px] text-white/70">¿Buscas otro?</p>
             <p className="font-display mt-3 text-[2rem] leading-tight">
-              Hay {total} {total === 1 ? "auto" : "autos"} esperándote
+              Hay más autos esperándote
             </p>
             <Link
               href="/autos"

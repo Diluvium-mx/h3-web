@@ -80,9 +80,9 @@ const step = (m) => console.log('✔', m);
     if ((await grid.count()) !== 8) throw new Error('el inventario del inicio debería mostrar 8 autos, hay ' + (await grid.count()));
     const [c1, c2] = [await grid.nth(0).boundingBox(), await grid.nth(1).boundingBox()];
     if (Math.abs(c1.y - c2.y) > 2 || c2.x <= c1.x) throw new Error('el inventario del inicio debería ir en 2 columnas');
-    // 5-nov: botón rojo con miniaturas y cuántos autos hay
-    await page.locator('section[aria-labelledby=destacados] a', { hasText: /Ver los \d+ autos/ }).waitFor();
-    step('inventario: 8 autos en 2 columnas y «Ver los N autos» abajo');
+    // 5-nov: botón rojo con miniaturas, sin el número de autos
+    await page.locator('section[aria-labelledby=destacados] a', { hasText: 'Ver todos los autos' }).waitFor();
+    step('inventario: 8 autos en 2 columnas y «Ver todos los autos» abajo');
     // 31-oct: categorías con ícono (no foto)
     const tiles = page.locator('nav[aria-label="Explora por tipo"] a');
     if ((await tiles.count()) < 3 || !(await tiles.first().locator('svg').count()) || (await tiles.locator('img').count())) throw new Error('las categorías deben llevar ícono, no foto');

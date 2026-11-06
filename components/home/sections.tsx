@@ -104,7 +104,7 @@ export function Inventory({ cars, featured }: { cars: Car[]; featured: Car[] }) 
           </div>
         ))}
       </div>
-      {/* Botón llamativo (pedido del dueño, 5-nov): rojo de la marca, miniaturas y cuántos autos hay */}
+      {/* Botón llamativo (pedido del dueño, 5-nov): rojo de la marca y miniaturas; sin el número de autos */}
       <div className="mt-8 px-4 text-center sm:px-6">
         <Link
           href="/autos"
@@ -119,7 +119,7 @@ export function Inventory({ cars, featured }: { cars: Car[]; featured: Car[] }) 
               ))}
             </span>
           )}
-          Ver los {cars.length} autos
+          Ver todos los autos
           <ArrowRight className="size-5 transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:translate-x-1" />
         </Link>
       </div>

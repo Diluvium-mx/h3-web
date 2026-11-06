@@ -2,11 +2,11 @@
 
 Lo más reciente va arriba.
 
-## 5 de noviembre de 2026 (noche, 2) — carrusel del celular, hero sin tarjeta y botón «Ver los N autos»
+## 5 de noviembre de 2026 (noche, 2) — carrusel del celular, hero sin tarjeta y botón «Ver todos los autos»
 
 - Hero de computadora sin la tarjeta de la G63 (los autos cambian).
-- Carrusel del celular: puntos centrados, tarjeta del auto un poco más arriba y una tarjeta final «Hay N autos esperándote · Ver inventario».
-- Inventario del inicio: el botón «Ver todos» ahora es rojo, con miniaturas y «Ver los N autos». Pruebas `e2e-public` actualizadas.
+- Carrusel del celular: puntos centrados, tarjeta del auto un poco más arriba y una tarjeta final «Hay más autos esperándote · Ver inventario».
+- Inventario del inicio: el botón «Ver todos» ahora es rojo, con miniaturas y «Ver todos los autos» (sin el número: el dueño no quiere mostrarlo). Pruebas `e2e-public` actualizadas.
 
 Falta: publicar; pasar las fotos a Cloudinary desde el panel; cambiar la contraseña `12345`.
 
