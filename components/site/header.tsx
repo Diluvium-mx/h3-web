@@ -36,18 +36,37 @@ function HeaderView({ pathname }: { pathname: string | null }) {
   const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
 
+  // Al bajar se oculta y al subir aparece (6-nov: antes parpadeaba en celular). Solo cambia después de moverse
+  // un tramo claro (STEP) desde el punto donde cambió de dirección, y no hace caso al rebote de iOS.
   useEffect(() => {
-    let last = window.scrollY;
-    const onScroll = () => {
-      const y = window.scrollY;
+    const STEP = 12;
+    let isHidden = false;
+    let turn = window.scrollY; // punto más bajo (visible) o más alto (oculto) desde el último cambio
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const max = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+      const y = Math.min(Math.max(window.scrollY, 0), max);
       setScrolled(y > 12);
-      setHidden(y > 160 && y > last + 4);
-      if (y < last - 4) setHidden(false);
-      last = y;
+      if (y < 80) {
+        isHidden = false;
+        turn = y;
+      } else if (isHidden) {
+        if (y < turn - STEP) [isHidden, turn] = [false, y];
+        else turn = Math.max(turn, y);
+      } else if (y > turn + STEP) [isHidden, turn] = [true, y];
+      else turn = Math.min(turn, y);
+      setHidden(isHidden);
     };
-    onScroll();
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(frame);
+    };
   }, []);
 
   // Avisa a otras barras fijas (p. ej. el buscador del inventario) si el encabezado está oculto
