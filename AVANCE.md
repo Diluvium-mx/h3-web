@@ -2,6 +2,23 @@
 
 Lo más reciente va arriba.
 
+## 6 de noviembre de 2026 — encabezado sin parpadeo, hero más realista y WhatsApp arriba de la etiqueta
+
+- Encabezado: se oculta al bajar y aparece al subir solo después de moverse 12 px desde donde cambió de dirección; ignora el rebote de iOS. Antes, los pasitos de 1 a 4 px del scroll lo hacían aparecer y desaparecer (celular y computadora).
+- Hero de computadora: la misma cochera rehecha más realista con GPT Image 2.5 Sunburst (Arcads) y agrandada 2x.
+- Botón flotante de WhatsApp más arriba, para no quedar debajo de la etiqueta «Powered by Netlify» (solo se quita pagando).
+- La mudanza a Cloudflare quedó en pausa en la rama `cloudflare` (local): el plan gratis de Workers tiene un límite de 10 ms de CPU; el dueño decide entre Cloudflare (5 USD) o Netlify Personal (9 USD).
+
+Falta: publicar (la llave de Cloudinary ya funciona en la vista previa #4); pasar las fotos a Cloudinary; cambiar la contraseña `12345`.
+
+## 6 de noviembre de 2026 — publicado: hero de cochera, letra Saira, carrusel y botón nuevos
+
+- Se fusionó #3 y quedó publicado en `h3seminuevos.com` (enlaces, `sitemap.xml` e imagen para compartir ya usan el dominio).
+- «Pasar fotos a Cloudinary» falló en las 189 fotos sin cambiar nada: Cloudinary responde «Invalid Signature». La API Key y el nombre de la nube están bien; el API Secret guardado en `CLOUDINARY_URL` (Netlify) no coincide. También impide subir fotos nuevas desde el panel.
+- En producción Netlify sigue poniendo la etiqueta «Powered by Netlify» (tapa botones abajo a la derecha en celular). En la vista previa no sale.
+
+Falta: que el dueño corrija el API Secret en `CLOUDINARY_URL`, apague la etiqueta (Project configuration → General) y vuelva a publicar (Deploys → Trigger deploy); luego pasar las fotos; cambiar la contraseña `12345`.
+
 ## 5 de noviembre de 2026 (noche, 2) — carrusel del celular, hero sin tarjeta y botón «Ver todos los autos»
 
 - Hero de computadora sin la tarjeta de la G63 (los autos cambian).
